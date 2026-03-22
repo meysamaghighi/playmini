@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import DownloadButton from "./DownloadButton";
 
 interface Obstacle {
   x: number;
@@ -489,6 +490,7 @@ export default function DinoRunner() {
                 >
                   Share
                 </button>
+                <DownloadButton canvasRef={canvasRef} filename="dino-score" label="Save" />
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import DownloadButton from "./DownloadButton";
 
 type Position = { x: number; y: number };
 type TetrominoType = "I" | "O" | "T" | "S" | "Z" | "J" | "L";
@@ -629,6 +630,7 @@ export default function BlockDrop() {
                 >
                   Share
                 </button>
+                <DownloadButton canvasRef={canvasRef} filename="blockdrop-score" label="Save" />
               </div>
             </div>
           )}

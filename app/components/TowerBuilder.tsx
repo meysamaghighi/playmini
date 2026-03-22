@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import DownloadButton from "./DownloadButton";
 
 type GameState = "start" | "playing" | "gameover";
 
@@ -13,15 +14,15 @@ interface Block {
 }
 
 const COLORS = [
-  "#FF6B6B", // Red
-  "#4ECDC4", // Teal
-  "#FFE66D", // Yellow
-  "#95E1D3", // Mint
-  "#F38181", // Pink
-  "#AA96DA", // Purple
-  "#FCBAD3", // Light Pink
-  "#A8E6CF", // Light Green
+  "#FF6B6B", "#4ECDC4", "#FFE66D", "#95E1D3",
+  "#F38181", "#AA96DA", "#FCBAD3", "#A8E6CF",
 ];
+
+const CW = 400;
+const CH = 600;
+const BH = 30; // block height
+const INIT_W = 120;
+const PERFECT_THRESH = 5;
 
 export default function TowerBuilder() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -29,322 +30,348 @@ export default function TowerBuilder() {
   const scoreRef = useRef(0);
   const bestRef = useRef(0);
   const blocksRef = useRef<Block[]>([]);
-  const currentBlockRef = useRef<Block | null>(null);
-  const swingDirectionRef = useRef(1);
-  const swingSpeedRef = useRef(3);
-  const cameraOffsetRef = useRef(0);
-  const animationIdRef = useRef<number>(0);
-  const perfectPopupRef = useRef<{ show: boolean; time: number }>({ show: false, time: 0 });
+  const curBlockRef = useRef<Block | null>(null);
+  const swingDirRef = useRef(1);
+  const swingSpeedRef = useRef(2.5);
+  const animIdRef = useRef(0);
+  const perfectRef = useRef<{ show: boolean; time: number }>({ show: false, time: 0 });
 
-  const [, setForceUpdate] = useState(0);
-
-  const CANVAS_WIDTH = 400;
-  const CANVAS_HEIGHT = 600;
-  const BLOCK_HEIGHT = 40;
-  const INITIAL_BLOCK_WIDTH = 100;
-  const SWING_RANGE = CANVAS_WIDTH - INITIAL_BLOCK_WIDTH;
-  const PERFECT_THRESHOLD = 5;
+  const [, forceUpdate] = useState(0);
+  const rerender = () => forceUpdate(n => n + 1);
 
   useEffect(() => {
-    const stored = localStorage.getItem("pb-tower");
-    if (stored) {
-      bestRef.current = parseInt(stored, 10);
-    }
+    const s = localStorage.getItem("pb-tower");
+    if (s) bestRef.current = parseInt(s, 10);
   }, []);
+
+  // Camera: scroll so the top of the tower is at a target screen position
+  const getCameraY = () => {
+    if (blocksRef.current.length === 0) return 0;
+    const topBlock = blocksRef.current[blocksRef.current.length - 1];
+    // We want the top block to appear at screen y ≈ 350 (lower half, showing tower growing up)
+    // But if tower is short, don't scroll
+    const targetScreenY = 350;
+    const offset = topBlock.y - targetScreenY;
+    return Math.max(0, offset); // only scroll up, never down
+  };
+
+  const getSwingY = () => {
+    // Swinging block appears above the tower top
+    const cam = getCameraY();
+    const topBlock = blocksRef.current[blocksRef.current.length - 1];
+    if (!topBlock) return 100;
+    const topScreenY = topBlock.y - cam;
+    return topScreenY - BH - 40; // 40px gap above tower
+  };
 
   const startGame = () => {
     stateRef.current = "playing";
     scoreRef.current = 0;
+    swingDirRef.current = 1;
+    swingSpeedRef.current = 2.5;
+    perfectRef.current = { show: false, time: 0 };
     blocksRef.current = [];
-    cameraOffsetRef.current = 0;
-    swingDirectionRef.current = 1;
-    swingSpeedRef.current = 3;
-    perfectPopupRef.current = { show: false, time: 0 };
 
-    // Ground block
+    // Ground (base) block - placed near bottom of canvas
     blocksRef.current.push({
-      x: CANVAS_WIDTH / 2 - INITIAL_BLOCK_WIDTH / 2,
-      y: CANVAS_HEIGHT - BLOCK_HEIGHT,
-      width: INITIAL_BLOCK_WIDTH,
-      height: BLOCK_HEIGHT,
+      x: CW / 2 - INIT_W / 2,
+      y: CH - BH - 20,
+      width: INIT_W,
+      height: BH,
       color: COLORS[0],
     });
 
     // First swinging block
-    currentBlockRef.current = {
+    curBlockRef.current = {
       x: 0,
-      y: 100,
-      width: INITIAL_BLOCK_WIDTH,
-      height: BLOCK_HEIGHT,
+      y: getSwingY(),
+      width: INIT_W,
+      height: BH,
       color: COLORS[1],
     };
 
-    setForceUpdate((n) => n + 1);
-    gameLoop();
+    rerender();
+    animIdRef.current = requestAnimationFrame(gameLoop);
   };
 
   const dropBlock = () => {
-    if (stateRef.current !== "playing" || !currentBlockRef.current) return;
+    if (stateRef.current !== "playing" || !curBlockRef.current) return;
 
-    const currentBlock = currentBlockRef.current;
-    const lastBlock = blocksRef.current[blocksRef.current.length - 1];
+    const cur = curBlockRef.current;
+    const last = blocksRef.current[blocksRef.current.length - 1];
 
-    // Calculate overlap
-    const leftOverlap = Math.max(currentBlock.x, lastBlock.x);
-    const rightOverlap = Math.min(
-      currentBlock.x + currentBlock.width,
-      lastBlock.x + lastBlock.width
-    );
-    const overlapWidth = rightOverlap - leftOverlap;
+    const leftOverlap = Math.max(cur.x, last.x);
+    const rightOverlap = Math.min(cur.x + cur.width, last.x + last.width);
+    const overlapW = rightOverlap - leftOverlap;
 
-    // Check for miss
-    if (overlapWidth <= 0 || overlapWidth < 10) {
+    if (overlapW <= 0) {
       gameOver();
       return;
     }
 
-    // Check for perfect drop
-    const isPerfect = Math.abs(currentBlock.x - lastBlock.x) < PERFECT_THRESHOLD;
+    const isPerfect = Math.abs(cur.x - last.x) < PERFECT_THRESH;
 
-    let newWidth = overlapWidth;
+    let newW = overlapW;
     let newX = leftOverlap;
 
     if (isPerfect) {
-      // Keep the same width as last block
-      newWidth = lastBlock.width;
-      newX = lastBlock.x;
-      perfectPopupRef.current = { show: true, time: Date.now() };
+      newW = last.width;
+      newX = last.x;
+      perfectRef.current = { show: true, time: Date.now() };
     }
 
-    // Place the block
-    const newBlock: Block = {
-      x: newX,
-      y: lastBlock.y - BLOCK_HEIGHT,
-      width: newWidth,
-      height: BLOCK_HEIGHT,
-      color: COLORS[(blocksRef.current.length) % COLORS.length],
-    };
-
-    blocksRef.current.push(newBlock);
-    scoreRef.current++;
-
-    // Pan camera up
-    cameraOffsetRef.current += BLOCK_HEIGHT;
-
-    // Check if block is too narrow
-    if (newWidth < 10) {
+    if (newW < 8) {
       gameOver();
       return;
     }
 
+    // Stack on top of last block
+    blocksRef.current.push({
+      x: newX,
+      y: last.y - BH,
+      width: newW,
+      height: BH,
+      color: COLORS[blocksRef.current.length % COLORS.length],
+    });
+    scoreRef.current++;
+
     // Increase difficulty
     if (scoreRef.current % 5 === 0) {
-      swingSpeedRef.current += 0.5;
+      swingSpeedRef.current = Math.min(8, swingSpeedRef.current + 0.4);
     }
 
-    // Create next block
-    currentBlockRef.current = {
+    // Next swinging block
+    curBlockRef.current = {
       x: 0,
-      y: 100,
-      width: newWidth,
-      height: BLOCK_HEIGHT,
+      y: getSwingY(),
+      width: newW,
+      height: BH,
       color: COLORS[(blocksRef.current.length) % COLORS.length],
     };
 
-    setForceUpdate((n) => n + 1);
+    rerender();
   };
 
   const gameOver = () => {
     stateRef.current = "gameover";
+    curBlockRef.current = null;
     if (scoreRef.current > bestRef.current) {
       bestRef.current = scoreRef.current;
       localStorage.setItem("pb-tower", scoreRef.current.toString());
     }
-    setForceUpdate((n) => n + 1);
+    rerender();
   };
 
   const gameLoop = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Swing the current block
-    if (stateRef.current === "playing" && currentBlockRef.current) {
-      currentBlockRef.current.x += swingDirectionRef.current * swingSpeedRef.current;
+    // Swing current block
+    if (stateRef.current === "playing" && curBlockRef.current) {
+      curBlockRef.current.x += swingDirRef.current * swingSpeedRef.current;
 
-      const maxX = CANVAS_WIDTH - currentBlockRef.current.width;
-      if (currentBlockRef.current.x <= 0) {
-        currentBlockRef.current.x = 0;
-        swingDirectionRef.current = 1;
-      } else if (currentBlockRef.current.x >= maxX) {
-        currentBlockRef.current.x = maxX;
-        swingDirectionRef.current = -1;
+      // Update swing y to track camera
+      curBlockRef.current.y = getSwingY();
+
+      const maxX = CW - curBlockRef.current.width;
+      if (curBlockRef.current.x <= 0) {
+        curBlockRef.current.x = 0;
+        swingDirRef.current = 1;
+      } else if (curBlockRef.current.x >= maxX) {
+        curBlockRef.current.x = maxX;
+        swingDirRef.current = -1;
       }
     }
 
-    // Draw
-    ctx.fillStyle = "#1a1a2e";
-    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    // --- Draw ---
+    const cam = getCameraY();
 
-    // Draw blocks with camera offset
-    blocksRef.current.forEach((block) => {
-      ctx.fillStyle = block.color;
-      ctx.fillRect(
-        block.x,
-        block.y + cameraOffsetRef.current,
-        block.width,
-        block.height
-      );
-      ctx.strokeStyle = "#000";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(
-        block.x,
-        block.y + cameraOffsetRef.current,
-        block.width,
-        block.height
-      );
-    });
+    // Sky gradient
+    const grad = ctx.createLinearGradient(0, 0, 0, CH);
+    grad.addColorStop(0, "#0f172a");
+    grad.addColorStop(0.5, "#1e293b");
+    grad.addColorStop(1, "#334155");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, CW, CH);
 
-    // Draw current swinging block
-    if (currentBlockRef.current && stateRef.current === "playing") {
-      ctx.fillStyle = currentBlockRef.current.color;
-      ctx.fillRect(
-        currentBlockRef.current.x,
-        currentBlockRef.current.y,
-        currentBlockRef.current.width,
-        currentBlockRef.current.height
-      );
-      ctx.strokeStyle = "#000";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(
-        currentBlockRef.current.x,
-        currentBlockRef.current.y,
-        currentBlockRef.current.width,
-        currentBlockRef.current.height
-      );
+    // Ground line
+    const groundY = CH - 20 - cam;
+    if (groundY < CH) {
+      ctx.fillStyle = "#475569";
+      ctx.fillRect(0, groundY + BH, CW, CH);
     }
 
-    // Draw perfect popup
-    if (perfectPopupRef.current.show) {
-      const elapsed = Date.now() - perfectPopupRef.current.time;
-      if (elapsed < 1000) {
-        const alpha = 1 - elapsed / 1000;
+    // Draw all stacked blocks
+    for (const block of blocksRef.current) {
+      const sy = block.y - cam;
+      if (sy > CH + BH || sy < -BH) continue; // cull off-screen
+
+      // Block body
+      ctx.fillStyle = block.color;
+      ctx.beginPath();
+      ctx.roundRect(block.x, sy, block.width, block.height, 3);
+      ctx.fill();
+
+      // Top highlight
+      ctx.fillStyle = "rgba(255,255,255,0.15)";
+      ctx.fillRect(block.x + 2, sy + 2, block.width - 4, 4);
+
+      // Border
+      ctx.strokeStyle = "rgba(0,0,0,0.3)";
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(block.x, sy, block.width, block.height);
+    }
+
+    // Draw swinging block
+    if (curBlockRef.current && stateRef.current === "playing") {
+      const cb = curBlockRef.current;
+
+      // Drop guide line (faint)
+      ctx.strokeStyle = "rgba(255,255,255,0.08)";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(cb.x + cb.width / 2, cb.y + BH);
+      const lastBlock = blocksRef.current[blocksRef.current.length - 1];
+      ctx.lineTo(cb.x + cb.width / 2, lastBlock.y - cam);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // The block itself
+      ctx.fillStyle = cb.color;
+      ctx.beginPath();
+      ctx.roundRect(cb.x, cb.y, cb.width, BH, 3);
+      ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,0.2)";
+      ctx.fillRect(cb.x + 2, cb.y + 2, cb.width - 4, 4);
+      ctx.strokeStyle = "rgba(0,0,0,0.3)";
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(cb.x, cb.y, cb.width, BH);
+    }
+
+    // Perfect popup
+    if (perfectRef.current.show) {
+      const elapsed = Date.now() - perfectRef.current.time;
+      if (elapsed < 800) {
+        const alpha = 1 - elapsed / 800;
+        const rise = elapsed * 0.03;
         ctx.globalAlpha = alpha;
-        ctx.font = "bold 36px sans-serif";
+        ctx.font = "bold 32px sans-serif";
         ctx.fillStyle = "#FFD700";
         ctx.textAlign = "center";
-        ctx.fillText("Perfect!", CANVAS_WIDTH / 2, 200);
+        ctx.fillText("Perfect!", CW / 2, 180 - rise);
         ctx.globalAlpha = 1;
       } else {
-        perfectPopupRef.current.show = false;
+        perfectRef.current.show = false;
       }
     }
 
-    // Draw score
-    ctx.font = "24px sans-serif";
+    // Score HUD
+    ctx.font = "bold 20px sans-serif";
     ctx.fillStyle = "#fff";
     ctx.textAlign = "left";
-    ctx.fillText(`Score: ${scoreRef.current}`, 10, 30);
+    ctx.fillText(`Score: ${scoreRef.current}`, 12, 30);
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "14px sans-serif";
+    ctx.fillText(`Best: ${bestRef.current}`, CW - 12, 30);
 
     if (stateRef.current === "playing") {
-      animationIdRef.current = requestAnimationFrame(gameLoop);
+      animIdRef.current = requestAnimationFrame(gameLoop);
     }
   };
 
   useEffect(() => {
-    return () => {
-      if (animationIdRef.current) {
-        cancelAnimationFrame(animationIdRef.current);
-      }
-    };
+    return () => { if (animIdRef.current) cancelAnimationFrame(animIdRef.current); };
   }, []);
 
-  const handleCanvasClick = () => {
-    if (stateRef.current === "playing") {
-      dropBlock();
-    }
+  const handleClick = () => {
+    if (stateRef.current === "playing") dropBlock();
   };
+
+  // Keyboard: space to drop
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code === "Space" && stateRef.current === "playing") {
+        e.preventDefault();
+        dropBlock();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const handleShare = async () => {
-    const text = `I stacked ${scoreRef.current} blocks in Tower Builder! Can you beat my score?`;
+    const text = `I stacked ${scoreRef.current} blocks in Tower Builder! Can you beat me?`;
     const url = "https://playmini.fun/tower-builder";
-
     if (navigator.share) {
-      try {
-        await navigator.share({ text, url });
-      } catch (err) {
-        // User cancelled or error
-      }
+      try { await navigator.share({ text, url }); } catch {}
     } else {
-      // Fallback to clipboard
-      try {
-        await navigator.clipboard.writeText(`${text} ${url}`);
-        alert("Score copied to clipboard!");
-      } catch (err) {
-        // Silent fail
-      }
+      try { await navigator.clipboard.writeText(`${text} ${url}`); alert("Copied!"); } catch {}
     }
-  };
-
-  const handleRestart = () => {
-    startGame();
   };
 
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-4">
       <div className="relative">
         <canvas
           ref={canvasRef}
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
-          className="border-2 border-gray-700 rounded-lg cursor-pointer max-w-full h-auto"
-          onClick={handleCanvasClick}
+          width={CW}
+          height={CH}
+          className="rounded-2xl cursor-pointer max-w-full h-auto border border-slate-700"
+          onClick={handleClick}
+          style={{ touchAction: "manipulation" }}
         />
 
         {stateRef.current === "start" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 rounded-lg">
-            <h2 className="text-4xl font-bold text-white mb-4">Tower Builder</h2>
-            <p className="text-gray-300 mb-6 text-center px-4">
-              Tap to drop blocks and build the tallest tower!
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
+            <div className="text-5xl mb-3">🏗️</div>
+            <h2 className="text-3xl font-black text-pink-400 mb-2">Tower Builder</h2>
+            <p className="text-gray-400 mb-6 text-sm text-center px-6">
+              Tap to drop blocks. Align them to build higher!
             </p>
             <button
               onClick={startGame}
-              className="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="px-10 py-3 bg-pink-600 hover:bg-pink-500 text-white font-bold rounded-2xl transition-all hover:scale-105 active:scale-95"
             >
-              Start Game
+              Play
             </button>
           </div>
         )}
 
         {stateRef.current === "gameover" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 rounded-lg">
-            <h2 className="text-3xl font-bold text-white mb-4">Game Over!</h2>
-            <p className="text-2xl text-gray-300 mb-2">Score: {scoreRef.current}</p>
-            <p className="text-xl text-gray-400 mb-6">Best: {bestRef.current}</p>
-            <div className="flex gap-4">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
+            <h2 className="text-3xl font-black text-red-400 mb-4">Game Over</h2>
+            <div className="bg-slate-900/80 rounded-xl px-6 py-3 mb-6 text-center">
+              <p className="text-white text-xl font-bold">Score: {scoreRef.current}</p>
+              <p className="text-gray-400 text-sm mt-1">Best: {bestRef.current}</p>
+              {scoreRef.current >= bestRef.current && scoreRef.current > 0 && (
+                <p className="text-yellow-400 text-sm font-bold mt-1">New Best!</p>
+              )}
+            </div>
+            <div className="flex gap-3">
               <button
-                onClick={handleRestart}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                onClick={startGame}
+                className="px-6 py-3 bg-pink-600 hover:bg-pink-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
               >
                 Play Again
               </button>
               <button
                 onClick={handleShare}
-                className="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
               >
                 Share
               </button>
+              <DownloadButton canvasRef={canvasRef} filename="tower-score" label="Save" />
             </div>
           </div>
         )}
       </div>
 
       {stateRef.current === "playing" && (
-        <p className="text-gray-300 text-center">
-          Tap the canvas to drop the block!
-        </p>
+        <p className="text-gray-500 text-xs text-center">Tap or press Space to drop the block</p>
       )}
     </div>
   );

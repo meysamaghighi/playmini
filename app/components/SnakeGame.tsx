@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import DownloadButton from "./DownloadButton";
 
 type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
 type Position = { x: number; y: number };
@@ -432,6 +433,7 @@ export default function SnakeGame() {
               >
                 Share
               </button>
+              <DownloadButton canvasRef={canvasRef} filename="snake-score" label="Save" />
             </div>
           </div>
         )}

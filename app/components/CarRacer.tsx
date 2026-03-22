@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import DownloadButton from "./DownloadButton";
 
 type ObstacleCar = { x: number; y: number; lane: number; color: string };
 type Coin = { x: number; y: number; collected: boolean; lane: number };
@@ -483,6 +484,7 @@ export default function CarRacer() {
               <button onClick={handleShare} className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95">
                 Share
               </button>
+              <DownloadButton canvasRef={canvasRef} filename="car-racer-score" label="Save" />
             </div>
           </div>
         )}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
+import DownloadButton from './DownloadButton';
 
 interface GameObject {
   x: number;
@@ -323,6 +324,7 @@ export default function FlappyBird() {
               >
                 Share
               </button>
+              <DownloadButton canvasRef={canvasRef} filename="flappy-score" label="Save" />
             </div>
           </div>
         )}
