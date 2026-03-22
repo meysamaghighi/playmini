@@ -64,60 +64,152 @@ export default function DinoRunner() {
     const height = isDucking ? DINO_DUCK_HEIGHT : DINO_HEIGHT;
     const dinoY = GROUND_Y - height + dino.y;
 
-    ctx.fillStyle = "#f7f7f7";
-
     if (isDucking) {
       // Ducking dino - lower profile
+      ctx.fillStyle = "#7ec850";
       ctx.fillRect(dino.x, dinoY, 40, 12); // body
-      ctx.fillRect(dino.x + 35, dinoY + 5, 8, 8); // head
-      ctx.fillRect(dino.x + 5, dinoY + 14, 8, 12); // front leg
-      ctx.fillRect(dino.x + 25, dinoY + 14, 8, 12); // back leg
+      ctx.fillStyle = "#6ab43e";
+      ctx.fillRect(dino.x, dinoY + 6, 40, 6); // body shadow
+      ctx.fillStyle = "#7ec850";
+      ctx.fillRect(dino.x + 35, dinoY + 2, 10, 10); // head
+      // Eye
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(dino.x + 40, dinoY + 3, 3, 3);
+      ctx.fillStyle = "#111";
+      ctx.fillRect(dino.x + 41, dinoY + 4, 2, 2);
+      // Legs
+      ctx.fillStyle = "#5a9e30";
+      ctx.fillRect(dino.x + 5, dinoY + 14, 8, 12);
+      ctx.fillRect(dino.x + 25, dinoY + 14, 8, 12);
     } else {
-      // Standing/jumping dino - T-Rex silhouette
-      ctx.fillRect(dino.x, dinoY + 20, DINO_WIDTH, 24); // body
-      ctx.fillRect(dino.x + 15, dinoY + 10, 12, 12); // head
-      ctx.fillRect(dino.x + 5, dinoY + 24, 4, 8); // small arm top
-      ctx.fillRect(dino.x + 5, dinoY + 32, 4, 8); // small arm bottom
+      // Standing/jumping dino - T-Rex with color
+      // Body
+      ctx.fillStyle = "#7ec850";
+      ctx.fillRect(dino.x, dinoY + 18, DINO_WIDTH + 2, 26);
+      // Body texture (scales)
+      ctx.fillStyle = "#6ab43e";
+      ctx.fillRect(dino.x + 2, dinoY + 22, 3, 3);
+      ctx.fillRect(dino.x + 8, dinoY + 20, 3, 3);
+      ctx.fillRect(dino.x + 14, dinoY + 24, 3, 3);
+      ctx.fillRect(dino.x + 6, dinoY + 30, 3, 3);
+      ctx.fillRect(dino.x + 12, dinoY + 32, 3, 3);
+      // Belly
+      ctx.fillStyle = "#a8e080";
+      ctx.fillRect(dino.x + 2, dinoY + 30, DINO_WIDTH - 4, 10);
+      // Head
+      ctx.fillStyle = "#7ec850";
+      ctx.fillRect(dino.x + 13, dinoY + 8, 14, 14);
+      // Eye
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(dino.x + 21, dinoY + 10, 4, 4);
+      ctx.fillStyle = "#111";
+      ctx.fillRect(dino.x + 23, dinoY + 11, 2, 2);
+      // Mouth
+      ctx.fillStyle = "#5a9e30";
+      ctx.fillRect(dino.x + 22, dinoY + 17, 6, 2);
+      // Small arm
+      ctx.fillStyle = "#6ab43e";
+      ctx.fillRect(dino.x + 4, dinoY + 24, 4, 6);
 
       // Legs animate when running on ground
+      ctx.fillStyle = "#5a9e30";
       const legOffset = dino.y === 0 ? (Math.floor(frameCount / 5) % 2) * 4 : 0;
-      ctx.fillRect(dino.x + 2, dinoY + 44 - 12, 6, 12 - legOffset); // left leg
-      ctx.fillRect(dino.x + 12, dinoY + 44 - 12, 6, 12 + legOffset); // right leg
+      ctx.fillRect(dino.x + 2, dinoY + 44 - 12, 7, 12 - legOffset);
+      ctx.fillRect(dino.x + 13, dinoY + 44 - 12, 7, 12 + legOffset);
+      // Feet
+      ctx.fillStyle = "#7ec850";
+      ctx.fillRect(dino.x + 1, dinoY + 44 - legOffset, 8, 3);
+      ctx.fillRect(dino.x + 12, dinoY + 44 + legOffset, 8, 3);
     }
   };
 
   const drawObstacle = (ctx: CanvasRenderingContext2D, obs: Obstacle) => {
-    ctx.fillStyle = "#f7f7f7";
     if (obs.type === "cactus") {
       const cactusY = GROUND_Y - obs.height;
-      ctx.fillRect(obs.x, cactusY, CACTUS_WIDTH, obs.height);
-      // Add some cactus arms
-      if (obs.height > 30) {
-        ctx.fillRect(obs.x - 6, cactusY + 8, 6, 12);
-        ctx.fillRect(obs.x + CACTUS_WIDTH, cactusY + 8, 6, 12);
+      // Main trunk
+      ctx.fillStyle = "#2d8c3c";
+      ctx.fillRect(obs.x + 4, cactusY, CACTUS_WIDTH - 8, obs.height);
+      // Darker center stripe
+      ctx.fillStyle = "#1e6e2c";
+      ctx.fillRect(obs.x + 8, cactusY, 4, obs.height);
+      // Spines/ridges
+      ctx.fillStyle = "#3aaf50";
+      for (let sy = cactusY + 4; sy < GROUND_Y - 4; sy += 8) {
+        ctx.fillRect(obs.x + 3, sy, 2, 2);
+        ctx.fillRect(obs.x + CACTUS_WIDTH - 5, sy + 4, 2, 2);
       }
+      // Arms
+      if (obs.height > 30) {
+        ctx.fillStyle = "#2d8c3c";
+        ctx.fillRect(obs.x - 4, cactusY + 8, 8, 6);
+        ctx.fillRect(obs.x - 4, cactusY + 8, 4, 14);
+        ctx.fillRect(obs.x + CACTUS_WIDTH - 4, cactusY + 12, 8, 6);
+        ctx.fillRect(obs.x + CACTUS_WIDTH, cactusY + 12, 4, 14);
+        // Arm highlights
+        ctx.fillStyle = "#3aaf50";
+        ctx.fillRect(obs.x - 3, cactusY + 9, 2, 2);
+        ctx.fillRect(obs.x + CACTUS_WIDTH + 1, cactusY + 13, 2, 2);
+      }
+      // Top cap
+      ctx.fillStyle = "#3aaf50";
+      ctx.beginPath();
+      ctx.arc(obs.x + CACTUS_WIDTH / 2, cactusY + 2, 6, Math.PI, 0);
+      ctx.fill();
     } else {
-      // Pterodactyl - flying at head height
-      const pteroY = obs.height; // height stores y-position for ptero
-      ctx.fillRect(obs.x, pteroY, PTERO_WIDTH, PTERO_HEIGHT);
-      // Wings (simple animation)
+      // Pterodactyl
+      const pteroY = obs.height;
       const wingFlap = Math.floor(gameStateRef.current.frameCount / 5) % 2;
-      const wingY = wingFlap === 0 ? pteroY - 5 : pteroY + PTERO_HEIGHT;
-      ctx.fillRect(obs.x + 5, wingY, 20, 5);
+      // Body
+      ctx.fillStyle = "#8b5e3c";
+      ctx.fillRect(obs.x + 8, pteroY + 4, 16, 12);
+      // Head
+      ctx.fillStyle = "#a0704f";
+      ctx.fillRect(obs.x + 22, pteroY + 4, 10, 8);
+      // Beak
+      ctx.fillStyle = "#d4a056";
+      ctx.fillRect(obs.x + 30, pteroY + 6, 6, 4);
+      // Eye
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(obs.x + 26, pteroY + 5, 3, 3);
+      ctx.fillStyle = "#111";
+      ctx.fillRect(obs.x + 27, pteroY + 6, 2, 2);
+      // Wings
+      ctx.fillStyle = "#a0704f";
+      if (wingFlap === 0) {
+        ctx.fillRect(obs.x + 4, pteroY - 4, 22, 6);
+        ctx.fillRect(obs.x, pteroY - 6, 8, 4);
+      } else {
+        ctx.fillRect(obs.x + 4, pteroY + 14, 22, 6);
+        ctx.fillRect(obs.x, pteroY + 18, 8, 4);
+      }
     }
   };
 
   const drawGround = (ctx: CanvasRenderingContext2D) => {
     const { groundOffset } = gameStateRef.current;
+    // Ground line
     ctx.strokeStyle = "#525252";
     ctx.lineWidth = 2;
-    ctx.setLineDash([10, 10]);
-    ctx.lineDashOffset = -groundOffset;
     ctx.beginPath();
     ctx.moveTo(0, GROUND_Y);
     ctx.lineTo(CANVAS_WIDTH, GROUND_Y);
     ctx.stroke();
-    ctx.setLineDash([]);
+    // Ground texture - pebbles and dirt
+    ctx.fillStyle = "#333";
+    const seed = 42;
+    for (let i = 0; i < 40; i++) {
+      const px = ((i * 37 + seed) % CANVAS_WIDTH + CANVAS_WIDTH - groundOffset) % CANVAS_WIDTH;
+      const py = GROUND_Y + 4 + ((i * 13 + seed) % 20);
+      const sz = 1 + ((i * 7) % 3);
+      ctx.fillRect(px, py, sz, sz);
+    }
+    // Sparse larger rocks
+    ctx.fillStyle = "#3a3a3a";
+    for (let i = 0; i < 8; i++) {
+      const px = ((i * 83 + 17) % CANVAS_WIDTH + CANVAS_WIDTH - groundOffset * 0.5) % CANVAS_WIDTH;
+      const py = GROUND_Y + 6 + ((i * 29) % 14);
+      ctx.fillRect(px, py, 4, 3);
+    }
   };
 
   const checkCollision = (): boolean => {

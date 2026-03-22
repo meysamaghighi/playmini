@@ -214,12 +214,40 @@ export default function TowerBuilder() {
       ctx.roundRect(block.x, sy, block.width, block.height, 3);
       ctx.fill();
 
+      // Brick texture pattern
+      ctx.strokeStyle = "rgba(0,0,0,0.12)";
+      ctx.lineWidth = 0.5;
+      const brickW = 20;
+      const brickH = BH / 2;
+      for (let row = 0; row < 2; row++) {
+        const by = sy + row * brickH;
+        if (row > 0) {
+          ctx.beginPath();
+          ctx.moveTo(block.x, by);
+          ctx.lineTo(block.x + block.width, by);
+          ctx.stroke();
+        }
+        const offset = row % 2 === 0 ? 0 : brickW / 2;
+        for (let bx = block.x + offset; bx < block.x + block.width; bx += brickW) {
+          if (bx > block.x && bx < block.x + block.width) {
+            ctx.beginPath();
+            ctx.moveTo(bx, by);
+            ctx.lineTo(bx, by + brickH);
+            ctx.stroke();
+          }
+        }
+      }
+
       // Top highlight
-      ctx.fillStyle = "rgba(255,255,255,0.15)";
-      ctx.fillRect(block.x + 2, sy + 2, block.width - 4, 4);
+      ctx.fillStyle = "rgba(255,255,255,0.18)";
+      ctx.fillRect(block.x + 2, sy + 1, block.width - 4, 3);
+
+      // Bottom shadow
+      ctx.fillStyle = "rgba(0,0,0,0.15)";
+      ctx.fillRect(block.x + 2, sy + BH - 3, block.width - 4, 2);
 
       // Border
-      ctx.strokeStyle = "rgba(0,0,0,0.3)";
+      ctx.strokeStyle = "rgba(0,0,0,0.35)";
       ctx.lineWidth = 1.5;
       ctx.strokeRect(block.x, sy, block.width, block.height);
     }

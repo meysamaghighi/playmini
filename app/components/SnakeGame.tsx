@@ -60,17 +60,11 @@ export default function SnakeGame() {
     const cell = canvas.width / GRID_SIZE;
     const t = timestamp || 0;
 
-    // Background
-    ctx.fillStyle = "#0f172a";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Subtle grid dots
-    ctx.fillStyle = "#1e293b";
+    // Background - checkerboard grass pattern
     for (let x = 0; x < GRID_SIZE; x++) {
       for (let y = 0; y < GRID_SIZE; y++) {
-        ctx.beginPath();
-        ctx.arc(x * cell + cell / 2, y * cell + cell / 2, 1, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.fillStyle = (x + y) % 2 === 0 ? "#0f172a" : "#111d30";
+        ctx.fillRect(x * cell, y * cell, cell, cell);
       }
     }
 
@@ -90,15 +84,37 @@ export default function SnakeGame() {
     ctx.arc(fx, fy, glowR, 0, Math.PI * 2);
     ctx.fill();
 
-    // Food circle
+    // Apple body
     ctx.fillStyle = "#ef4444";
     ctx.beginPath();
-    ctx.arc(fx, fy, cell / 2 - 3, 0, Math.PI * 2);
+    ctx.arc(fx, fy + 1, cell / 2 - 3, 0, Math.PI * 2);
     ctx.fill();
-    // Food highlight
-    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    // Apple darker side
+    ctx.fillStyle = "#c53030";
     ctx.beginPath();
-    ctx.arc(fx - 2, fy - 2, cell / 6, 0, Math.PI * 2);
+    ctx.arc(fx + 2, fy + 2, cell / 2 - 5, 0, Math.PI * 2);
+    ctx.fill();
+    // Apple main again (overlap for shape)
+    ctx.fillStyle = "#ef4444";
+    ctx.beginPath();
+    ctx.arc(fx - 1, fy, cell / 2 - 4, 0, Math.PI * 2);
+    ctx.fill();
+    // Highlight
+    ctx.fillStyle = "rgba(255,255,255,0.35)";
+    ctx.beginPath();
+    ctx.arc(fx - 3, fy - 3, cell / 6, 0, Math.PI * 2);
+    ctx.fill();
+    // Stem
+    ctx.strokeStyle = "#5a3e1b";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(fx, fy - cell / 2 + 4);
+    ctx.lineTo(fx + 1, fy - cell / 2 - 1);
+    ctx.stroke();
+    // Leaf
+    ctx.fillStyle = "#22c55e";
+    ctx.beginPath();
+    ctx.ellipse(fx + 3, fy - cell / 2 + 1, 3, 1.5, 0.5, 0, Math.PI * 2);
     ctx.fill();
 
     // Snake body - connected rounded segments
