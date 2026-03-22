@@ -20,6 +20,10 @@ export const metadata: Metadata = {
 const navLinks = [
   { href: "/2048", label: "2048" },
   { href: "/snake", label: "Snake" },
+  { href: "/minesweeper", label: "Minesweeper" },
+  { href: "/memory", label: "Memory" },
+  { href: "/whack-a-mole", label: "Whack-a-Mole" },
+  { href: "/tic-tac-toe", label: "Tic-Tac-Toe" },
 ];
 
 export default function RootLayout({

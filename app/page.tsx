@@ -2,17 +2,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "PlayMini - Free Browser Games | 2048, Snake & More",
+  title: "PlayMini - Free Browser Games | 2048, Snake, Minesweeper & More",
   description:
-    "Free online mini games you can play instantly in your browser. 2048, Snake, and more classic arcade & puzzle games. No download, no sign-up required.",
+    "Free online mini games you can play instantly. 2048, Snake, Minesweeper, Memory Match, Whack-a-Mole, Tic-Tac-Toe and more. No download, no sign-up.",
   keywords: [
     "free online games",
     "browser games",
     "2048",
     "snake game",
+    "minesweeper",
+    "memory match",
+    "whack a mole",
+    "tic tac toe",
     "mini games",
     "no download games",
-    "play online free",
     "classic games",
   ],
 };
@@ -43,14 +46,75 @@ const games = [
     color: "from-green-500 to-emerald-600",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <path
-          d="M8 24h8v-8h8v8h8v8h8"
-          stroke="#22c55e"
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+        <path d="M8 24h8v-8h8v8h8v8h8" stroke="#22c55e" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
         <circle cx="40" cy="32" r="3" fill="#ef4444" />
+      </svg>
+    ),
+  },
+  {
+    href: "/minesweeper",
+    title: "Minesweeper",
+    description: "Find all the mines without detonating any",
+    color: "from-blue-500 to-cyan-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <circle cx="24" cy="24" r="10" fill="#ef4444" />
+        <line x1="24" y1="8" x2="24" y2="14" stroke="#ef4444" strokeWidth="3" strokeLinecap="round" />
+        <line x1="24" y1="34" x2="24" y2="40" stroke="#ef4444" strokeWidth="3" strokeLinecap="round" />
+        <line x1="8" y1="24" x2="14" y2="24" stroke="#ef4444" strokeWidth="3" strokeLinecap="round" />
+        <line x1="34" y1="24" x2="40" y2="24" stroke="#ef4444" strokeWidth="3" strokeLinecap="round" />
+        <circle cx="24" cy="24" r="4" fill="white" />
+      </svg>
+    ),
+  },
+  {
+    href: "/memory",
+    title: "Memory Match",
+    description: "Flip cards and find matching pairs",
+    color: "from-purple-500 to-pink-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="6" y="6" width="14" height="18" rx="2" fill="#a855f7" />
+        <rect x="28" y="6" width="14" height="18" rx="2" fill="#ec4899" />
+        <rect x="6" y="28" width="14" height="14" rx="2" fill="#ec4899" />
+        <rect x="28" y="28" width="14" height="14" rx="2" fill="#a855f7" />
+        <text x="13" y="19" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">?</text>
+        <text x="35" y="19" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">?</text>
+      </svg>
+    ),
+  },
+  {
+    href: "/whack-a-mole",
+    title: "Whack-a-Mole",
+    description: "Whack moles as fast as you can!",
+    color: "from-yellow-500 to-amber-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <ellipse cx="24" cy="36" rx="16" ry="6" fill="#44403c" />
+        <circle cx="24" cy="24" r="10" fill="#a16207" />
+        <circle cx="20" cy="22" r="2" fill="white" />
+        <circle cx="28" cy="22" r="2" fill="white" />
+        <circle cx="20" cy="22" r="1" fill="#111" />
+        <circle cx="28" cy="22" r="1" fill="#111" />
+        <ellipse cx="24" cy="27" rx="2" ry="1.5" fill="#92400e" />
+      </svg>
+    ),
+  },
+  {
+    href: "/tic-tac-toe",
+    title: "Tic-Tac-Toe",
+    description: "Classic X and O - play vs AI or a friend",
+    color: "from-cyan-500 to-blue-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <line x1="16" y1="8" x2="16" y2="40" stroke="#374151" strokeWidth="2" />
+        <line x1="32" y1="8" x2="32" y2="40" stroke="#374151" strokeWidth="2" />
+        <line x1="8" y1="16" x2="40" y2="16" stroke="#374151" strokeWidth="2" />
+        <line x1="8" y1="32" x2="40" y2="32" stroke="#374151" strokeWidth="2" />
+        <line x1="10" y1="10" x2="14" y2="14" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1="14" y1="10" x2="10" y2="14" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" />
+        <circle cx="36" cy="12" r="3" stroke="#fb7185" strokeWidth="2" fill="none" />
+        <circle cx="12" cy="36" r="3" stroke="#fb7185" strokeWidth="2" fill="none" />
       </svg>
     ),
   },
@@ -58,7 +122,7 @@ const games = [
 
 export default function Home() {
   return (
-    <main className="max-w-2xl mx-auto px-4 pt-12 pb-12">
+    <main className="max-w-3xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-12">
         <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4">
           PlayMini
@@ -68,7 +132,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {games.map((game) => (
           <Link
             key={game.href}
