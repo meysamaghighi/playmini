@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SnakeGame from "../components/SnakeGame";
+import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Snake Game - Free Online | PlayMini",
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
     description:
       "Play the classic Snake game free online. Control the snake, eat food, grow longer, and beat your high score.",
     type: "website",
-    url: "https://playmini.com/snake",
+    url: "https://playmini.fun/snake",
   },
 };
 
@@ -49,7 +50,7 @@ export default function SnakePage() {
               <h3 className="font-semibold text-white mb-2">Mobile Controls:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Swipe in any direction to turn the snake</li>
-                <li>Tap and hold to pause (coming soon)</li>
+                <li>Swipe anywhere on the game area to control</li>
               </ul>
             </div>
             <div>
@@ -127,7 +128,7 @@ export default function SnakePage() {
               name: "Snake Game",
               description:
                 "Play the classic Snake game free online with smooth controls and high score tracking.",
-              url: "https://playmini.com/snake",
+              url: "https://playmini.fun/snake",
               applicationCategory: "Game",
               operatingSystem: "Any",
               offers: {
@@ -139,6 +140,8 @@ export default function SnakePage() {
             }),
           }}
         />
+
+        <MoreGames />
       </div>
     </main>
   );

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Game2048 from "../components/Game2048";
+import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "2048 Game - Free Online | PlayMini",
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     description:
       "Play the addictive 2048 puzzle game online for free. Combine numbered tiles to reach 2048!",
     type: "website",
-    url: "https://playmini.com/2048",
+    url: "https://playmini.fun/2048",
   },
 };
 
@@ -71,7 +72,7 @@ export default function Page2048() {
             "@context": "https://schema.org",
             "@type": "WebApplication",
             name: "2048 Game",
-            url: "https://playmini.com/2048",
+            url: "https://playmini.fun/2048",
             applicationCategory: "Game",
             genre: "Puzzle",
             description:
@@ -180,6 +181,8 @@ export default function Page2048() {
               </p>
             </div>
           </section>
+
+          <MoreGames />
         </div>
       </div>
     </>
