@@ -152,31 +152,67 @@ export default function FlappyBird() {
       ctx.translate(birdX, birdY);
       ctx.rotate(rotation);
 
+      // Wing (behind body) - flaps based on velocity
+      const wingFlap = Math.floor(frameCountRef.current / 4) % 3; // 0, 1, 2
+      const wingAngle = wingFlap === 0 ? -0.4 : wingFlap === 1 ? 0.1 : 0.3;
+      ctx.fillStyle = '#E5B800';
+      ctx.save();
+      ctx.translate(-4, 2);
+      ctx.rotate(wingAngle);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 8, 14, -0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#CC9900';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.restore();
+
       // Bird body (yellow circle)
       ctx.fillStyle = '#FFD700';
       ctx.beginPath();
       ctx.arc(0, 0, BIRD_SIZE / 2, 0, Math.PI * 2);
       ctx.fill();
 
+      // Belly highlight
+      ctx.fillStyle = '#FFE44D';
+      ctx.beginPath();
+      ctx.ellipse(-1, 3, 7, 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
       // Bird outline
       ctx.strokeStyle = '#FFA500';
       ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(0, 0, BIRD_SIZE / 2, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Eye
+      // Eye white
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(8, -5, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Eye pupil
       ctx.fillStyle = '#000';
       ctx.beginPath();
-      ctx.arc(8, -5, 3, 0, Math.PI * 2);
+      ctx.arc(9, -5, 2, 0, Math.PI * 2);
       ctx.fill();
 
       // Beak
       ctx.fillStyle = '#FF6347';
       ctx.beginPath();
-      ctx.moveTo(BIRD_SIZE / 2, 0);
-      ctx.lineTo(BIRD_SIZE / 2 + 10, -3);
-      ctx.lineTo(BIRD_SIZE / 2 + 10, 3);
+      ctx.moveTo(BIRD_SIZE / 2, -2);
+      ctx.lineTo(BIRD_SIZE / 2 + 10, 0);
+      ctx.lineTo(BIRD_SIZE / 2, 4);
       ctx.closePath();
       ctx.fill();
+      // Beak line
+      ctx.strokeStyle = '#CC4030';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(BIRD_SIZE / 2, 1);
+      ctx.lineTo(BIRD_SIZE / 2 + 8, 1);
+      ctx.stroke();
 
       ctx.restore();
 
