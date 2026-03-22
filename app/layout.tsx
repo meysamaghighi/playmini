@@ -64,7 +64,7 @@ export default function RootLayout({
               PlayMini
             </Link>
             <div className="hidden sm:flex items-center gap-4">
-              {navLinks.map((link) => (
+              {navLinks.slice(0, 6).map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -73,6 +73,12 @@ export default function RootLayout({
                   {link.label}
                 </Link>
               ))}
+              <Link
+                href="/"
+                className="text-sm text-blue-400 hover:text-blue-300 transition-colors font-medium"
+              >
+                All Games
+              </Link>
             </div>
             <MobileNav links={navLinks} />
           </div>
