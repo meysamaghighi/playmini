@@ -32,6 +32,8 @@ const navLinks = [
   { href: "/voxel", label: "Voxel Builder" },
   { href: "/car-racer", label: "Car Racer" },
   { href: "/tower-builder", label: "Tower Builder" },
+  { href: "/soccer", label: "Penalty Kicks" },
+  { href: "/table-tennis", label: "Table Tennis" },
 ];
 
 export default function RootLayout({

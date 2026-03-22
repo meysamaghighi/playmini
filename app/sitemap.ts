@@ -21,5 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/voxel`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/car-racer`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/tower-builder`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/soccer`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/table-tennis`, lastModified: now, priority: 0.9 },
   ];
 }

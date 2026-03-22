@@ -454,19 +454,18 @@ export default function FlappyBird() {
         />
 
         {gameState === 'start' && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 rounded-lg">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 rounded-lg" onClick={flap}>
             <h2 className="text-4xl font-bold text-white mb-2">Flappy Bird</h2>
-            <p className="text-lg text-white mb-1">Tap or Press Space to Flap</p>
-            <p className="text-sm text-gray-300 mb-5">Avoid the pipes!</p>
+            <p className="text-sm text-gray-300 mb-4">Avoid the pipes!</p>
 
             {/* Bird Selection */}
-            <div className="mb-5">
+            <div className="mb-4" onClick={(e) => e.stopPropagation()}>
               <p className="text-xs text-gray-400 uppercase tracking-wider text-center mb-2 font-bold">Choose Your Bird</p>
               <div className="flex flex-wrap gap-2 justify-center max-w-[340px]">
                 {(Object.keys(BIRDS) as BirdType[]).map((type) => (
                   <button
                     key={type}
-                    onClick={(e) => { e.stopPropagation(); selectBird(type); }}
+                    onClick={() => selectBird(type)}
                     className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
                       selectedBird === type
                         ? 'bg-white/25 ring-2 ring-white scale-105 text-white'
@@ -481,8 +480,16 @@ export default function FlappyBird() {
             </div>
 
             {bestScore > 0 && (
-              <p className="text-yellow-400 text-sm mb-2">Best: {bestScore}</p>
+              <p className="text-yellow-400 text-sm mb-3">Best: {bestScore}</p>
             )}
+
+            <button
+              onClick={startGame}
+              className="px-10 py-3 bg-green-600 hover:bg-green-500 text-white font-bold text-lg rounded-2xl transition-all hover:scale-105 active:scale-95"
+            >
+              Play
+            </button>
+            <p className="text-xs text-gray-400 mt-2">or tap anywhere / press Space</p>
           </div>
         )}
 

@@ -21,6 +21,10 @@ export const metadata: Metadata = {
     "voxel builder",
     "car racer",
     "tower builder",
+    "soccer game",
+    "penalty kicks",
+    "table tennis",
+    "pong game",
   ],
 };
 
@@ -253,6 +257,38 @@ const games = [
         <rect x="16" y="16" width="16" height="6" rx="1" fill="#c084fc" />
         <rect x="18" y="10" width="12" height="6" rx="1" fill="#a78bfa" opacity="0.6" />
         <line x1="24" y1="4" x2="24" y2="10" stroke="#a78bfa" strokeWidth="1" strokeDasharray="2 2" />
+      </svg>
+    ),
+  },
+  {
+    href: "/soccer",
+    title: "Penalty Kicks",
+    description: "Aim and shoot past the goalkeeper",
+    color: "from-green-500 to-lime-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <circle cx="24" cy="24" r="14" fill="white" stroke="#222" strokeWidth="1.5" />
+        <path d="M24 10L28 18H20L24 10Z" fill="#333" />
+        <path d="M24 38L20 30H28L24 38Z" fill="#333" />
+        <path d="M10 24L18 20V28L10 24Z" fill="#333" />
+        <path d="M38 24L30 28V20L38 24Z" fill="#333" />
+        <circle cx="24" cy="24" r="4" fill="#333" />
+        <rect x="20" y="40" width="8" height="4" rx="1" fill="#22c55e" />
+      </svg>
+    ),
+  },
+  {
+    href: "/table-tennis",
+    title: "Table Tennis",
+    description: "Classic paddle game vs AI",
+    color: "from-teal-500 to-cyan-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="8" width="40" height="32" rx="2" fill="#0d6b4e" stroke="#14b8a6" strokeWidth="1.5" />
+        <line x1="24" y1="8" x2="24" y2="40" stroke="#fff" strokeWidth="1.5" />
+        <rect x="8" y="16" width="4" height="16" rx="2" fill="#3b82f6" />
+        <rect x="36" y="16" width="4" height="16" rx="2" fill="#ef4444" />
+        <circle cx="20" cy="24" r="3" fill="#facc15" />
       </svg>
     ),
   },

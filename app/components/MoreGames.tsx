@@ -18,6 +18,8 @@ const games = [
   { href: "/voxel", label: "Voxel Builder", color: "from-green-500 to-teal-600" },
   { href: "/car-racer", label: "Car Racer", color: "from-red-500 to-orange-600" },
   { href: "/tower-builder", label: "Tower Builder", color: "from-pink-500 to-rose-600" },
+  { href: "/soccer", label: "Penalty Kicks", color: "from-green-500 to-lime-600" },
+  { href: "/table-tennis", label: "Table Tennis", color: "from-teal-500 to-cyan-600" },
 ];
 
 export default function MoreGames() {
