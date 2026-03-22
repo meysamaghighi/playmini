@@ -217,26 +217,50 @@ export default function TicTacToe() {
     }
   };
 
-  const getLinePosition = (line: WinLine) => {
-    if (!line) return {};
+  // Get SVG coordinates for win line endpoints.
+  // Cell centers in a 3x3 grid with gap-3 (12px):
+  //   col 0 center: calc((100% - 24px)/6)
+  //   col 1 center: 50%
+  //   col 2 center: calc(100% - (100% - 24px)/6)
+  // We use a 300-unit SVG viewBox so gap = 12/containerWidth * 300 is tricky.
+  // Instead, we compute from the fact that in a 3-col grid with 2 gaps:
+  //   cellSize = (total - 2*gap) / 3, center_i = i*(cellSize+gap) + cellSize/2
+  // For a 100-unit system with gap=4 (approx 12px/300px):
+  // Actually let's just use percentages in SVG with viewBox="0 0 100 100"
+  // gap-3 = 0.75rem ≈ 4% of a ~300px board. Use 4 as the gap in a 100-unit system.
+  const getLineSVGCoords = (line: WinLine): { x1: number; y1: number; x2: number; y2: number } | null => {
+    if (!line) return null;
 
-    const [a, b, c] = line;
+    // In a 100-unit coordinate system, with gap ≈ 4 units
+    // cell size = (100 - 2*4) / 3 = 30.67
+    // centers: 0 -> 15.33, 1 -> 50, 2 -> 84.67
+    const G = 4; // gap in viewBox units
+    const cellSize = (100 - 2 * G) / 3;
+    const centers = [cellSize / 2, cellSize / 2 + cellSize + G, cellSize / 2 + 2 * (cellSize + G)];
 
-    // Horizontal lines
-    if (a === 0 && b === 1 && c === 2) return { top: '16.66%', left: '0', width: '100%', height: '4px', transform: 'translateY(-50%)' };
-    if (a === 3 && b === 4 && c === 5) return { top: '50%', left: '0', width: '100%', height: '4px', transform: 'translateY(-50%)' };
-    if (a === 6 && b === 7 && c === 8) return { top: '83.33%', left: '0', width: '100%', height: '4px', transform: 'translateY(-50%)' };
+    const cellCenter = (idx: number) => ({
+      x: centers[idx % 3],
+      y: centers[Math.floor(idx / 3)],
+    });
 
-    // Vertical lines
-    if (a === 0 && b === 3 && c === 6) return { left: '16.66%', top: '0', width: '4px', height: '100%', transform: 'translateX(-50%)' };
-    if (a === 1 && b === 4 && c === 7) return { left: '50%', top: '0', width: '4px', height: '100%', transform: 'translateX(-50%)' };
-    if (a === 2 && b === 5 && c === 8) return { left: '83.33%', top: '0', width: '4px', height: '100%', transform: 'translateX(-50%)' };
+    const [a, , c] = line;
+    const start = cellCenter(a);
+    const end = cellCenter(c);
 
-    // Diagonal lines
-    if (a === 0 && b === 4 && c === 8) return { top: '50%', left: '50%', width: '141%', height: '4px', transform: 'translate(-50%, -50%) rotate(45deg)' };
-    if (a === 2 && b === 4 && c === 6) return { top: '50%', left: '50%', width: '141%', height: '4px', transform: 'translate(-50%, -50%) rotate(-45deg)' };
+    // Extend slightly past centers for a nicer look
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    const len = Math.sqrt(dx * dx + dy * dy);
+    const extend = 5; // extend line past cell centers
+    const nx = (dx / len) * extend;
+    const ny = (dy / len) * extend;
 
-    return {};
+    return {
+      x1: start.x - nx,
+      y1: start.y - ny,
+      x2: end.x + nx,
+      y2: end.y + ny,
+    };
   };
 
   return (
@@ -355,13 +379,30 @@ export default function TicTacToe() {
             ))}
           </div>
 
-          {/* Win Line */}
-          {winLine && (
-            <div
-              className="absolute bg-green-400 animate-draw-line"
-              style={getLinePosition(winLine)}
-            />
-          )}
+          {/* Win Line SVG overlay */}
+          {winLine && (() => {
+            const coords = getLineSVGCoords(winLine);
+            if (!coords) return null;
+            return (
+              <svg
+                className="absolute inset-0 w-full h-full pointer-events-none"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+              >
+                <line
+                  x1={coords.x1}
+                  y1={coords.y1}
+                  x2={coords.x2}
+                  y2={coords.y2}
+                  stroke="#4ade80"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                  className="animate-win-line"
+                />
+              </svg>
+            );
+          })()}
         </div>
       </div>
 
@@ -428,12 +469,12 @@ export default function TicTacToe() {
           }
         }
 
-        @keyframes draw-line {
+        @keyframes win-line {
           from {
-            transform: scaleX(0);
+            stroke-dashoffset: 200;
           }
           to {
-            transform: scaleX(1);
+            stroke-dashoffset: 0;
           }
         }
 
@@ -454,9 +495,10 @@ export default function TicTacToe() {
           animation: draw-o 0.3s ease-out;
         }
 
-        .animate-draw-line {
-          animation: draw-line 0.5s ease-out;
-          transform-origin: left center;
+        .animate-win-line {
+          stroke-dasharray: 200;
+          stroke-dashoffset: 200;
+          animation: win-line 0.5s ease-out forwards;
         }
 
         .animate-bounce-in {
