@@ -87,6 +87,7 @@ export default function BlockDrop() {
   const [level, setLevel] = useState(1);
   const [bestScore, setBestScore] = useState(0);
   const [scoreFlash, setScoreFlash] = useState(false);
+  const [levelUp, setLevelUp] = useState<number | null>(null);
 
   const boardRef = useRef<(string | null)[][]>(
     Array(GRID_HEIGHT)
@@ -316,6 +317,9 @@ export default function BlockDrop() {
         levelRef.current = newLevel;
         setLevel(newLevel);
         speedRef.current = Math.max(MIN_SPEED, INITIAL_SPEED - (newLevel - 1) * SPEED_INCREASE);
+        // Show level-up announcement
+        setLevelUp(newLevel);
+        setTimeout(() => setLevelUp(null), 2000);
       }
     }
 
@@ -598,6 +602,20 @@ export default function BlockDrop() {
             </div>
           )}
 
+          {/* Level Up Announcement */}
+          {levelUp !== null && displayState === "PLAYING" && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+              <div className="text-center animate-levelup">
+                <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-green-400 to-cyan-400 drop-shadow-lg">
+                  LEVEL {levelUp}
+                </div>
+                <div className="text-xl font-bold text-white mt-2 drop-shadow-md">
+                  Speed Up!
+                </div>
+              </div>
+            </div>
+          )}
+
           {displayState === "PAUSED" && (
             <div className="absolute inset-0 flex items-center justify-center bg-slate-950/90 rounded-xl backdrop-blur-sm">
               <div className="text-center">
@@ -676,6 +694,19 @@ export default function BlockDrop() {
       <div className="text-center text-xs text-gray-600">
         {displayState === "PLAYING" && <p>P or Escape to pause</p>}
       </div>
+
+      <style jsx>{`
+        @keyframes levelup-anim {
+          0% { transform: scale(0.3); opacity: 0; }
+          15% { transform: scale(1.2); opacity: 1; }
+          30% { transform: scale(1.0); opacity: 1; }
+          80% { transform: scale(1.0); opacity: 1; }
+          100% { transform: scale(1.5); opacity: 0; }
+        }
+        .animate-levelup {
+          animation: levelup-anim 2s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 }
