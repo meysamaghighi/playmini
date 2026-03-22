@@ -24,6 +24,10 @@ const navLinks = [
   { href: "/memory", label: "Memory" },
   { href: "/whack-a-mole", label: "Whack-a-Mole" },
   { href: "/tic-tac-toe", label: "Tic-Tac-Toe" },
+  { href: "/flappy", label: "Flappy" },
+  { href: "/block-drop", label: "Block Drop" },
+  { href: "/wordle", label: "Word Guess" },
+  { href: "/dino-runner", label: "Dino Runner" },
 ];
 
 export default function RootLayout({

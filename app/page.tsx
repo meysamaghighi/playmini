@@ -118,6 +118,73 @@ const games = [
       </svg>
     ),
   },
+  {
+    href: "/flappy",
+    title: "Flappy Bird",
+    description: "Tap to flap through the pipes",
+    color: "from-sky-400 to-blue-500",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <circle cx="24" cy="24" r="12" fill="#facc15" />
+        <circle cx="29" cy="20" r="3" fill="white" />
+        <circle cx="30" cy="20" r="1.5" fill="#111" />
+        <path d="M32 24h8l-4 4z" fill="#f97316" />
+        <path d="M12 22h10v4H12z" fill="#a3e635" />
+      </svg>
+    ),
+  },
+  {
+    href: "/block-drop",
+    title: "Block Drop",
+    description: "Classic falling blocks puzzle",
+    color: "from-violet-500 to-purple-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="8" y="28" width="10" height="10" rx="1" fill="#06b6d4" />
+        <rect x="18" y="28" width="10" height="10" rx="1" fill="#06b6d4" />
+        <rect x="18" y="18" width="10" height="10" rx="1" fill="#06b6d4" />
+        <rect x="28" y="18" width="10" height="10" rx="1" fill="#06b6d4" />
+        <rect x="10" y="8" width="8" height="8" rx="1" fill="#a855f7" opacity="0.4" />
+        <rect x="18" y="8" width="8" height="8" rx="1" fill="#a855f7" opacity="0.4" />
+        <rect x="26" y="8" width="8" height="8" rx="1" fill="#a855f7" opacity="0.4" />
+      </svg>
+    ),
+  },
+  {
+    href: "/wordle",
+    title: "Word Guess",
+    description: "Guess the 5-letter word in 6 tries",
+    color: "from-emerald-500 to-teal-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="14" width="8" height="8" rx="1" fill="#22c55e" />
+        <rect x="14" y="14" width="8" height="8" rx="1" fill="#eab308" />
+        <rect x="24" y="14" width="8" height="8" rx="1" fill="#4b5563" />
+        <rect x="34" y="14" width="8" height="8" rx="1" fill="#22c55e" />
+        <rect x="4" y="26" width="8" height="8" rx="1" fill="#4b5563" />
+        <rect x="14" y="26" width="8" height="8" rx="1" fill="#22c55e" />
+        <rect x="24" y="26" width="8" height="8" rx="1" fill="#4b5563" />
+        <rect x="34" y="26" width="8" height="8" rx="1" fill="#eab308" />
+      </svg>
+    ),
+  },
+  {
+    href: "/dino-runner",
+    title: "Dino Runner",
+    description: "Jump and duck in this endless runner",
+    color: "from-lime-500 to-green-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="20" y="10" width="14" height="12" rx="2" fill="#d1d5db" />
+        <rect x="20" y="22" width="8" height="10" fill="#d1d5db" />
+        <rect x="16" y="26" width="4" height="6" fill="#d1d5db" />
+        <rect x="22" y="32" width="4" height="6" fill="#d1d5db" />
+        <rect x="28" y="32" width="4" height="6" fill="#d1d5db" />
+        <circle cx="30" cy="14" r="2" fill="#111" />
+        <line x1="8" y1="38" x2="42" y2="38" stroke="#6b7280" strokeWidth="2" />
+      </svg>
+    ),
+  },
 ];
 
 export default function Home() {

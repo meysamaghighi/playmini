@@ -6,10 +6,14 @@ import { usePathname } from "next/navigation";
 const games = [
   { href: "/2048", label: "2048", color: "from-amber-500 to-orange-600" },
   { href: "/snake", label: "Snake", color: "from-green-500 to-emerald-600" },
-  { href: "/memory", label: "Memory Match", color: "from-purple-500 to-pink-600" },
   { href: "/minesweeper", label: "Minesweeper", color: "from-blue-500 to-cyan-600" },
+  { href: "/memory", label: "Memory Match", color: "from-purple-500 to-pink-600" },
   { href: "/whack-a-mole", label: "Whack-a-Mole", color: "from-yellow-500 to-amber-600" },
   { href: "/tic-tac-toe", label: "Tic-Tac-Toe", color: "from-cyan-500 to-blue-600" },
+  { href: "/flappy", label: "Flappy Bird", color: "from-sky-400 to-blue-500" },
+  { href: "/block-drop", label: "Block Drop", color: "from-violet-500 to-purple-600" },
+  { href: "/wordle", label: "Word Guess", color: "from-emerald-500 to-teal-600" },
+  { href: "/dino-runner", label: "Dino Runner", color: "from-lime-500 to-green-600" },
 ];
 
 export default function MoreGames() {

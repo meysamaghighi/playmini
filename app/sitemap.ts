@@ -13,5 +13,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/memory`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/whack-a-mole`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/tic-tac-toe`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/flappy`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/block-drop`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/wordle`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/dino-runner`, lastModified: now, priority: 0.9 },
   ];
 }
