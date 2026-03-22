@@ -44,15 +44,15 @@ export default function TowerBuilder() {
     if (s) bestRef.current = parseInt(s, 10);
   }, []);
 
-  // Camera: scroll so the top of the tower is at a target screen position
+  // Camera: scroll so the top of the tower stays at a target screen position
   const getCameraY = () => {
     if (blocksRef.current.length === 0) return 0;
     const topBlock = blocksRef.current[blocksRef.current.length - 1];
-    // We want the top block to appear at screen y ≈ 350 (lower half, showing tower growing up)
-    // But if tower is short, don't scroll
-    const targetScreenY = 350;
+    // We want the top block to appear at screen y ≈ 400 (lower half)
+    // topBlock.y decreases as tower grows; camera offset shifts everything down
+    const targetScreenY = 400;
     const offset = topBlock.y - targetScreenY;
-    return Math.max(0, offset); // only scroll up, never down
+    return Math.min(0, offset); // negative offset = shift view down to follow tower up
   };
 
   const getSwingY = () => {
