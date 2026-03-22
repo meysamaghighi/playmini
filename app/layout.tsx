@@ -38,6 +38,9 @@ const navLinks = [
   { href: "/connect4", label: "Connect 4" },
   { href: "/hangman", label: "Hangman" },
   { href: "/crossword", label: "Crossword" },
+  { href: "/checkers", label: "Checkers" },
+  { href: "/breakout", label: "Breakout" },
+  { href: "/typing-race", label: "Typing Race" },
 ];
 
 export default function RootLayout({

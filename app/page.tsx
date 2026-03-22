@@ -406,6 +406,64 @@ const games: Array<{
       </svg>
     ),
   },
+  {
+    href: "/checkers",
+    title: "Checkers",
+    description: "Classic board game with kings and multi-jumps",
+    color: "from-red-600 to-gray-600",
+    category: "Strategy",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="4" width="10" height="10" fill="#92400e" />
+        <rect x="14" y="4" width="10" height="10" fill="#fef3c7" />
+        <rect x="24" y="4" width="10" height="10" fill="#92400e" />
+        <rect x="34" y="4" width="10" height="10" fill="#fef3c7" />
+        <rect x="4" y="14" width="10" height="10" fill="#fef3c7" />
+        <rect x="14" y="14" width="10" height="10" fill="#92400e" />
+        <rect x="24" y="14" width="10" height="10" fill="#fef3c7" />
+        <rect x="34" y="14" width="10" height="10" fill="#92400e" />
+        <circle cx="19" cy="9" r="4" fill="#ef4444" />
+        <circle cx="39" cy="19" r="4" fill="#1f2937" />
+      </svg>
+    ),
+  },
+  {
+    href: "/breakout",
+    title: "Breakout",
+    description: "Smash bricks with a bouncing ball",
+    color: "from-red-500 to-purple-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="4" width="12" height="5" rx="1" fill="#ef4444" />
+        <rect x="18" y="4" width="12" height="5" rx="1" fill="#f59e0b" />
+        <rect x="32" y="4" width="12" height="5" rx="1" fill="#22c55e" />
+        <rect x="4" y="11" width="12" height="5" rx="1" fill="#3b82f6" />
+        <rect x="18" y="11" width="12" height="5" rx="1" fill="#a855f7" />
+        <rect x="32" y="11" width="12" height="5" rx="1" fill="#ec4899" />
+        <circle cx="24" cy="30" r="3" fill="white" />
+        <rect x="14" y="40" width="20" height="4" rx="2" fill="#94a3b8" />
+      </svg>
+    ),
+  },
+  {
+    href: "/typing-race",
+    title: "Typing Race",
+    description: "Type paragraphs as fast and accurately as you can",
+    color: "from-blue-500 to-purple-600",
+    category: "Word",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="14" width="40" height="24" rx="3" stroke="white" strokeWidth="2" opacity="0.5" />
+        <rect x="8" y="18" width="6" height="5" rx="1" fill="white" opacity="0.8" />
+        <rect x="16" y="18" width="6" height="5" rx="1" fill="#22c55e" />
+        <rect x="24" y="18" width="6" height="5" rx="1" fill="white" opacity="0.4" />
+        <rect x="32" y="18" width="6" height="5" rx="1" fill="white" opacity="0.4" />
+        <rect x="12" y="27" width="24" height="5" rx="1" fill="white" opacity="0.3" />
+        <text x="24" y="10" textAnchor="middle" fill="#22c55e" fontSize="8" fontWeight="bold">WPM</text>
+      </svg>
+    ),
+  },
 ];
 
 export default function Home() {

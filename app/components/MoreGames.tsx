@@ -24,6 +24,9 @@ const games = [
   { href: "/connect4", label: "Connect 4", color: "from-red-500 to-yellow-500" },
   { href: "/hangman", label: "Hangman", color: "from-slate-500 to-gray-600" },
   { href: "/crossword", label: "Crossword", color: "from-amber-500 to-yellow-600" },
+  { href: "/checkers", label: "Checkers", color: "from-red-600 to-gray-600" },
+  { href: "/breakout", label: "Breakout", color: "from-red-500 to-purple-600" },
+  { href: "/typing-race", label: "Typing Race", color: "from-blue-500 to-purple-600" },
 ];
 
 export default function MoreGames() {

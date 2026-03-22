@@ -27,5 +27,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/connect4`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/hangman`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/crossword`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/checkers`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/breakout`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/typing-race`, lastModified: now, priority: 0.9 },
   ];
 }
