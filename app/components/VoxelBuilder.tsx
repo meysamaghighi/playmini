@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 type BlockType = 'grass' | 'stone' | 'wood' | 'water' | 'sand' | 'brick';
 
@@ -29,334 +29,277 @@ const BLOCK_NAMES: Record<BlockType, string> = {
   brick: 'Brick',
 };
 
-const GRID_SIZE = 16;
+const GRID_SIZE = 10;
 const MAX_HEIGHT = 8;
-const BLOCK_WIDTH = 32; // Isometric block width
-const BLOCK_HEIGHT = 16; // Isometric block height
-const BLOCK_DEPTH = 16; // Vertical height of block
+const BLOCK_W = 40;
+const BLOCK_H = 20;
+const BLOCK_D = 20;
 
 export default function VoxelBuilder() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const blocksRef = useRef<Block[]>([]);
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [selectedBlock, setSelectedBlock] = useState<BlockType>('grass');
-  const [zoom, setZoom] = useState(1);
+  const [eraseMode, setEraseMode] = useState(false);
+  const [blockCount, setBlockCount] = useState(0);
 
-  // Load from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem('voxel-world');
     if (saved) {
       try {
-        setBlocks(JSON.parse(saved));
-      } catch (e) {
-        console.error('Failed to load voxel world', e);
-      }
+        const parsed = JSON.parse(saved);
+        blocksRef.current = parsed;
+        setBlocks(parsed);
+        setBlockCount(parsed.length);
+      } catch {}
     }
   }, []);
 
-  // Save to localStorage whenever blocks change
-  useEffect(() => {
-    if (blocks.length > 0) {
-      localStorage.setItem('voxel-world', JSON.stringify(blocks));
-    }
-  }, [blocks]);
+  const gridToScreen = useCallback((gx: number, gy: number, gz: number, cw: number, ch: number) => {
+    const cx = cw / 2;
+    const cy = ch * 0.45;
+    const sx = cx + (gx - gy) * (BLOCK_W / 2);
+    const sy = cy + (gx + gy) * (BLOCK_H / 2) - gz * BLOCK_D;
+    return { x: sx, y: sy };
+  }, []);
 
-  // Convert grid coordinates to isometric screen position
-  const gridToIso = (x: number, y: number, z: number, canvasWidth: number, canvasHeight: number) => {
-    const isoX = (x - y) * (BLOCK_WIDTH / 2) * zoom;
-    const isoY = (x + y) * (BLOCK_HEIGHT / 2) * zoom - z * BLOCK_DEPTH * zoom;
+  const screenToGrid = useCallback((sx: number, sy: number, cw: number, ch: number) => {
+    const cx = cw / 2;
+    const cy = ch * 0.45;
+    const rx = sx - cx;
+    const ry = sy - cy;
+    const gx = Math.floor((rx / (BLOCK_W / 2) + ry / (BLOCK_H / 2)) / 2);
+    const gy = Math.floor((ry / (BLOCK_H / 2) - rx / (BLOCK_W / 2)) / 2);
+    return { x: gx, y: gy };
+  }, []);
 
-    // Center on canvas
-    const centerX = canvasWidth / 2;
-    const centerY = canvasHeight / 2 + 50;
+  const drawBlock = useCallback((ctx: CanvasRenderingContext2D, sx: number, sy: number, colors: { top: string; left: string; right: string }) => {
+    const w2 = BLOCK_W / 2;
+    const h2 = BLOCK_H / 2;
 
-    return {
-      x: centerX + isoX,
-      y: centerY + isoY,
-    };
-  };
-
-  // Convert screen position to grid coordinates (for placement)
-  const screenToGrid = (screenX: number, screenY: number, canvasWidth: number, canvasHeight: number) => {
-    const centerX = canvasWidth / 2;
-    const centerY = canvasHeight / 2 + 50;
-
-    const relX = (screenX - centerX) / zoom;
-    const relY = (screenY - centerY) / zoom;
-
-    // Inverse isometric transformation (z=0 for ground level)
-    const x = Math.floor((relX / (BLOCK_WIDTH / 2) + relY / (BLOCK_HEIGHT / 2)) / 2);
-    const y = Math.floor((relY / (BLOCK_HEIGHT / 2) - relX / (BLOCK_WIDTH / 2)) / 2);
-
-    return { x, y };
-  };
-
-  // Draw a single isometric block
-  const drawBlock = (ctx: CanvasRenderingContext2D, block: Block, canvasWidth: number, canvasHeight: number) => {
-    const pos = gridToIso(block.x, block.y, block.z, canvasWidth, canvasHeight);
-    const colors = BLOCK_COLORS[block.type];
-    const w = BLOCK_WIDTH * zoom;
-    const h = BLOCK_HEIGHT * zoom;
-    const d = BLOCK_DEPTH * zoom;
-
-    // Draw top face
+    // Top face
     ctx.fillStyle = colors.top;
     ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-    ctx.lineTo(pos.x + w / 2, pos.y + h / 2);
-    ctx.lineTo(pos.x, pos.y + h);
-    ctx.lineTo(pos.x - w / 2, pos.y + h / 2);
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(sx + w2, sy + h2);
+    ctx.lineTo(sx, sy + BLOCK_H);
+    ctx.lineTo(sx - w2, sy + h2);
     ctx.closePath();
     ctx.fill();
-    ctx.strokeStyle = '#00000040';
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#00000030';
+    ctx.lineWidth = 0.5;
     ctx.stroke();
 
-    // Draw left face
+    // Left face
     ctx.fillStyle = colors.left;
     ctx.beginPath();
-    ctx.moveTo(pos.x - w / 2, pos.y + h / 2);
-    ctx.lineTo(pos.x, pos.y + h);
-    ctx.lineTo(pos.x, pos.y + h + d);
-    ctx.lineTo(pos.x - w / 2, pos.y + h / 2 + d);
+    ctx.moveTo(sx - w2, sy + h2);
+    ctx.lineTo(sx, sy + BLOCK_H);
+    ctx.lineTo(sx, sy + BLOCK_H + BLOCK_D);
+    ctx.lineTo(sx - w2, sy + h2 + BLOCK_D);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
-    // Draw right face
+    // Right face
     ctx.fillStyle = colors.right;
     ctx.beginPath();
-    ctx.moveTo(pos.x + w / 2, pos.y + h / 2);
-    ctx.lineTo(pos.x, pos.y + h);
-    ctx.lineTo(pos.x, pos.y + h + d);
-    ctx.lineTo(pos.x + w / 2, pos.y + h / 2 + d);
+    ctx.moveTo(sx + w2, sy + h2);
+    ctx.lineTo(sx, sy + BLOCK_H);
+    ctx.lineTo(sx, sy + BLOCK_H + BLOCK_D);
+    ctx.lineTo(sx + w2, sy + h2 + BLOCK_D);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
-  };
+  }, []);
 
-  // Render all blocks
-  const render = () => {
+  const render = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const dpr = window.devicePixelRatio || 1;
+    const cw = canvas.offsetWidth;
+    const ch = canvas.offsetHeight;
 
-    // Sort blocks for painter's algorithm (back to front, bottom to top)
-    const sorted = [...blocks].sort((a, b) => {
-      if (a.z !== b.z) return a.z - b.z;
-      if (a.y !== b.y) return a.y - b.y;
-      return a.x - b.x;
+    if (canvas.width !== cw * dpr || canvas.height !== ch * dpr) {
+      canvas.width = cw * dpr;
+      canvas.height = ch * dpr;
+      ctx.scale(dpr, dpr);
+    }
+
+    ctx.clearRect(0, 0, cw, ch);
+
+    // Draw grid (ground plane)
+    ctx.strokeStyle = '#ffffff15';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= GRID_SIZE; i++) {
+      const a = gridToScreen(i, 0, 0, cw, ch);
+      const b = gridToScreen(i, GRID_SIZE, 0, cw, ch);
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y + BLOCK_H);
+      ctx.lineTo(b.x, b.y + BLOCK_H);
+      ctx.stroke();
+
+      const c = gridToScreen(0, i, 0, cw, ch);
+      const d = gridToScreen(GRID_SIZE, i, 0, cw, ch);
+      ctx.beginPath();
+      ctx.moveTo(c.x, c.y + BLOCK_H);
+      ctx.lineTo(d.x, d.y + BLOCK_H);
+      ctx.stroke();
+    }
+
+    // Sort blocks: painter's algorithm (back to front)
+    const sorted = [...blocksRef.current].sort((a, b) => {
+      const depthA = a.x + a.y;
+      const depthB = b.x + b.y;
+      if (depthA !== depthB) return depthA - depthB;
+      return a.z - b.z;
     });
 
-    // Draw all blocks
-    sorted.forEach(block => drawBlock(ctx, block, canvas.width, canvas.height));
-  };
+    for (const block of sorted) {
+      const pos = gridToScreen(block.x, block.y, block.z, cw, ch);
+      drawBlock(ctx, pos.x, pos.y, BLOCK_COLORS[block.type]);
+    }
+  }, [gridToScreen, drawBlock]);
 
-  // Re-render whenever blocks or zoom changes
   useEffect(() => {
     render();
-  }, [blocks, zoom]);
+    const onResize = () => render();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [render, blocks]);
 
-  // Handle canvas resize
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const updateSize = () => {
-      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-      }
-      render();
-    };
-
-    updateSize();
-    window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
-  }, [blocks, zoom]);
-
-  // Get height at grid position
   const getHeightAt = (x: number, y: number): number => {
-    const blocksAtPos = blocks.filter(b => b.x === x && b.y === y);
-    return blocksAtPos.length > 0 ? Math.max(...blocksAtPos.map(b => b.z)) + 1 : 0;
+    let maxZ = -1;
+    for (const b of blocksRef.current) {
+      if (b.x === x && b.y === y && b.z > maxZ) maxZ = b.z;
+    }
+    return maxZ + 1;
   };
 
-  // Handle click to place block
-  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const rect = canvas.getBoundingClientRect();
-    const screenX = e.clientX - rect.left;
-    const screenY = e.clientY - rect.top;
+    const sx = e.clientX - rect.left;
+    const sy = e.clientY - rect.top;
+    const { x, y } = screenToGrid(sx, sy, canvas.offsetWidth, canvas.offsetHeight);
 
-    const { x, y } = screenToGrid(screenX, screenY, canvas.offsetWidth, canvas.offsetHeight);
-
-    // Check bounds
     if (x < 0 || x >= GRID_SIZE || y < 0 || y >= GRID_SIZE) return;
 
-    const z = getHeightAt(x, y);
+    if (eraseMode) {
+      const z = getHeightAt(x, y) - 1;
+      if (z < 0) return;
+      blocksRef.current = blocksRef.current.filter(
+        (b) => !(b.x === x && b.y === y && b.z === z)
+      );
+    } else {
+      const z = getHeightAt(x, y);
+      if (z >= MAX_HEIGHT) return;
+      blocksRef.current = [...blocksRef.current, { x, y, z, type: selectedBlock }];
+    }
 
-    // Check max height
-    if (z >= MAX_HEIGHT) return;
-
-    // Add block
-    setBlocks(prev => [...prev, { x, y, z, type: selectedBlock }]);
+    setBlocks([...blocksRef.current]);
+    setBlockCount(blocksRef.current.length);
+    localStorage.setItem('voxel-world', JSON.stringify(blocksRef.current));
+    render();
   };
 
-  // Handle right-click to remove block
-  const handleCanvasContextMenu = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleContextMenu = (e: React.MouseEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const rect = canvas.getBoundingClientRect();
-    const screenX = e.clientX - rect.left;
-    const screenY = e.clientY - rect.top;
-
-    const { x, y } = screenToGrid(screenX, screenY, canvas.offsetWidth, canvas.offsetHeight);
-
-    // Remove top block at this position
-    const z = getHeightAt(x, y) - 1;
-    if (z < 0) return;
-
-    setBlocks(prev => {
-      const idx = prev.findIndex(b => b.x === x && b.y === y && b.z === z);
-      if (idx === -1) return prev;
-      return [...prev.slice(0, idx), ...prev.slice(idx + 1)];
-    });
-  };
-
-  // Touch handling for mobile
-  const [touchStart, setTouchStart] = useState<number>(0);
-
-  const handleTouchStart = () => {
-    setTouchStart(Date.now());
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
-    const touchDuration = Date.now() - touchStart;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const touch = e.changedTouches[0];
-    const rect = canvas.getBoundingClientRect();
-    const screenX = touch.clientX - rect.left;
-    const screenY = touch.clientY - rect.top;
-
-    const { x, y } = screenToGrid(screenX, screenY, canvas.offsetWidth, canvas.offsetHeight);
-
+    const { x, y } = screenToGrid(e.clientX - rect.left, e.clientY - rect.top, canvas.offsetWidth, canvas.offsetHeight);
     if (x < 0 || x >= GRID_SIZE || y < 0 || y >= GRID_SIZE) return;
 
-    // Long press (>500ms) = remove, tap = place
-    if (touchDuration > 500) {
-      // Remove block
-      const z = getHeightAt(x, y) - 1;
-      if (z >= 0) {
-        setBlocks(prev => {
-          const idx = prev.findIndex(b => b.x === x && b.y === y && b.z === z);
-          if (idx === -1) return prev;
-          return [...prev.slice(0, idx), ...prev.slice(idx + 1)];
-        });
-      }
-    } else {
-      // Place block
-      const z = getHeightAt(x, y);
-      if (z < MAX_HEIGHT) {
-        setBlocks(prev => [...prev, { x, y, z, type: selectedBlock }]);
-      }
-    }
+    const z = getHeightAt(x, y) - 1;
+    if (z < 0) return;
+    blocksRef.current = blocksRef.current.filter(
+      (b) => !(b.x === x && b.y === y && b.z === z)
+    );
+    setBlocks([...blocksRef.current]);
+    setBlockCount(blocksRef.current.length);
+    localStorage.setItem('voxel-world', JSON.stringify(blocksRef.current));
+    render();
   };
 
   const clearAll = () => {
     if (confirm('Clear all blocks?')) {
+      blocksRef.current = [];
       setBlocks([]);
+      setBlockCount(0);
       localStorage.removeItem('voxel-world');
+      render();
     }
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      {/* Canvas */}
+    <div className="w-full max-w-3xl mx-auto">
       <div className="mb-4 bg-slate-800 rounded-lg overflow-hidden">
         <canvas
           ref={canvasRef}
-          onClick={handleCanvasClick}
-          onContextMenu={handleCanvasContextMenu}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          onClick={handleClick}
+          onContextMenu={handleContextMenu}
           className="w-full cursor-crosshair"
-          style={{ height: '500px', touchAction: 'none' }}
+          style={{ height: '450px', touchAction: 'none' }}
         />
       </div>
 
-      {/* Controls */}
       <div className="bg-slate-800 rounded-lg p-4 mb-4">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex gap-2">
             <button
-              onClick={() => setZoom(prev => Math.max(0.5, prev - 0.1))}
-              className="px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded transition-colors"
+              onClick={() => setEraseMode(false)}
+              className={`px-4 py-2 rounded font-bold text-sm transition-colors ${
+                !eraseMode ? 'bg-blue-600 text-white' : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
+              }`}
             >
-              Zoom Out
+              Build
             </button>
             <button
-              onClick={() => setZoom(prev => Math.min(2, prev + 0.1))}
-              className="px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded transition-colors"
+              onClick={() => setEraseMode(true)}
+              className={`px-4 py-2 rounded font-bold text-sm transition-colors ${
+                eraseMode ? 'bg-red-600 text-white' : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
+              }`}
             >
-              Zoom In
+              Erase
             </button>
-            <span className="px-3 py-1 bg-slate-900 rounded text-sm">
-              {Math.round(zoom * 100)}%
-            </span>
           </div>
-          <button
-            onClick={clearAll}
-            className="px-4 py-1 bg-red-600 hover:bg-red-500 rounded transition-colors"
-          >
-            Clear All
-          </button>
+          <div className="flex gap-2 items-center">
+            <span className="text-sm text-slate-400">{blockCount} blocks</span>
+            <button
+              onClick={clearAll}
+              className="px-4 py-2 bg-red-700 hover:bg-red-600 rounded text-sm font-bold transition-colors"
+            >
+              Clear All
+            </button>
+          </div>
         </div>
 
-        <p className="text-sm text-slate-400 mb-3">
-          <strong>Desktop:</strong> Left click to place, right click to remove. <strong>Mobile:</strong> Tap to place, long press to remove.
+        <p className="text-xs text-slate-500 mb-3">
+          Click to place/erase. Right-click always removes the top block.
         </p>
 
-        {/* Block palette */}
         <div className="flex flex-wrap gap-2">
-          {(Object.keys(BLOCK_COLORS) as BlockType[]).map(blockType => (
+          {(Object.keys(BLOCK_COLORS) as BlockType[]).map((bt) => (
             <button
-              key={blockType}
-              onClick={() => setSelectedBlock(blockType)}
-              className={`px-4 py-2 rounded transition-all ${
-                selectedBlock === blockType
-                  ? 'ring-2 ring-white scale-105'
-                  : 'hover:scale-105'
+              key={bt}
+              onClick={() => { setSelectedBlock(bt); setEraseMode(false); }}
+              className={`px-4 py-2 rounded transition-all text-sm font-bold ${
+                selectedBlock === bt && !eraseMode ? 'ring-2 ring-white scale-105' : 'hover:scale-105'
               }`}
               style={{
-                backgroundColor: BLOCK_COLORS[blockType].top,
-                color: blockType === 'sand' ? '#000' : '#fff',
+                backgroundColor: BLOCK_COLORS[bt].top,
+                color: bt === 'sand' ? '#000' : '#fff',
               }}
             >
-              {BLOCK_NAMES[blockType]}
+              {BLOCK_NAMES[bt]}
             </button>
           ))}
         </div>
-      </div>
-
-      <div className="bg-slate-800 rounded-lg p-4 text-sm text-slate-300">
-        <p className="mb-2">
-          <strong className="text-white">Blocks:</strong> {blocks.length} / {GRID_SIZE * GRID_SIZE * MAX_HEIGHT}
-        </p>
-        <p>
-          <strong className="text-white">Grid:</strong> {GRID_SIZE}×{GRID_SIZE}, Max height: {MAX_HEIGHT}
-        </p>
       </div>
     </div>
   );

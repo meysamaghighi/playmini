@@ -72,20 +72,21 @@ export default function CarRacer() {
     ctx.fillStyle = "#374151";
     ctx.fillRect(GRASS_WIDTH, 0, ROAD_WIDTH, CANVAS_HEIGHT);
 
-    // Lane markings (dashed white lines)
+    // Lane markings (dashed white lines) - move downward to simulate driving forward
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 3;
     ctx.setLineDash([20, 20]);
-    const dashOffset = roadOffsetRef.current % 40;
+    ctx.lineDashOffset = -(roadOffsetRef.current % 40);
 
     for (let i = 1; i < LANE_COUNT; i++) {
       const x = GRASS_WIDTH + i * LANE_WIDTH;
       ctx.beginPath();
-      ctx.moveTo(x, 0 - dashOffset);
-      ctx.lineTo(x, CANVAS_HEIGHT - dashOffset);
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, CANVAS_HEIGHT);
       ctx.stroke();
     }
     ctx.setLineDash([]);
+    ctx.lineDashOffset = 0;
 
     // Coins
     coinsRef.current.forEach((coin) => {
@@ -138,7 +139,29 @@ export default function CarRacer() {
   }, []);
 
   const spawnObstacle = () => {
-    const lane = Math.floor(Math.random() * LANE_COUNT);
+    // Find lanes that already have a nearby obstacle (within danger zone)
+    const dangerZone = CAR_HEIGHT * 2.5;
+    const blockedLanes = new Set<number>();
+    for (const obs of obstaclesRef.current) {
+      if (obs.y < dangerZone) {
+        blockedLanes.add(obs.lane);
+      }
+    }
+
+    // Always keep at least one lane open
+    const availableLanes = [0, 1, 2].filter((l) => !blockedLanes.has(l));
+    if (availableLanes.length <= 1) return; // Don't spawn if only 1 lane is open
+
+    // Pick a lane from the ones that are available (so we don't double-block)
+    const lane = Math.random() < 0.5
+      ? Math.floor(Math.random() * LANE_COUNT) // sometimes any lane
+      : availableLanes[Math.floor(Math.random() * availableLanes.length)]; // prefer open lanes less
+
+    // Re-check: would this block all lanes?
+    const wouldBlock = new Set(blockedLanes);
+    wouldBlock.add(lane);
+    if (wouldBlock.size >= LANE_COUNT) return;
+
     const color = OBSTACLE_COLORS[Math.floor(Math.random() * OBSTACLE_COLORS.length)];
     obstaclesRef.current.push({
       x: getLaneX(lane),
