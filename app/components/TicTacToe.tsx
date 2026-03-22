@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 type Cell = 'X' | 'O' | null;
 type Board = Cell[];
@@ -23,6 +23,8 @@ export default function TicTacToe() {
   const [winLine, setWinLine] = useState<WinLine>(null);
   const [scores, setScores] = useState({ xWins: 0, oWins: 0, draws: 0 });
   const [isThinking, setIsThinking] = useState(false);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [lineCoords, setLineCoords] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(null);
 
   // Load stats from localStorage
   useEffect(() => {
@@ -195,6 +197,7 @@ export default function TicTacToe() {
     setIsXNext(true);
     setWinner(null);
     setWinLine(null);
+    setLineCoords(null);
   };
 
   const resetScores = () => {
@@ -217,51 +220,38 @@ export default function TicTacToe() {
     }
   };
 
-  // Get SVG coordinates for win line endpoints.
-  // Cell centers in a 3x3 grid with gap-3 (12px):
-  //   col 0 center: calc((100% - 24px)/6)
-  //   col 1 center: 50%
-  //   col 2 center: calc(100% - (100% - 24px)/6)
-  // We use a 300-unit SVG viewBox so gap = 12/containerWidth * 300 is tricky.
-  // Instead, we compute from the fact that in a 3-col grid with 2 gaps:
-  //   cellSize = (total - 2*gap) / 3, center_i = i*(cellSize+gap) + cellSize/2
-  // For a 100-unit system with gap=4 (approx 12px/300px):
-  // Actually let's just use percentages in SVG with viewBox="0 0 100 100"
-  // gap-3 = 0.75rem ≈ 4% of a ~300px board. Use 4 as the gap in a 100-unit system.
-  const getLineSVGCoords = (line: WinLine): { x1: number; y1: number; x2: number; y2: number } | null => {
-    if (!line) return null;
+  // Compute win line coordinates from actual DOM positions
+  useEffect(() => {
+    if (!winLine || !gridRef.current) {
+      setLineCoords(null);
+      return;
+    }
 
-    // In a 100-unit coordinate system, with gap ≈ 4 units
-    // cell size = (100 - 2*4) / 3 = 30.67
-    // centers: 0 -> 15.33, 1 -> 50, 2 -> 84.67
-    const G = 4; // gap in viewBox units
-    const cellSize = (100 - 2 * G) / 3;
-    const centers = [cellSize / 2, cellSize / 2 + cellSize + G, cellSize / 2 + 2 * (cellSize + G)];
+    const grid = gridRef.current;
+    const gridRect = grid.getBoundingClientRect();
+    const cells = grid.querySelectorAll('button');
 
-    const cellCenter = (idx: number) => ({
-      x: centers[idx % 3],
-      y: centers[Math.floor(idx / 3)],
-    });
+    const [a, , c] = winLine;
+    const cellA = cells[a].getBoundingClientRect();
+    const cellC = cells[c].getBoundingClientRect();
 
-    const [a, , c] = line;
-    const start = cellCenter(a);
-    const end = cellCenter(c);
+    const x1 = (cellA.left + cellA.width / 2 - gridRect.left) / gridRect.width * 100;
+    const y1 = (cellA.top + cellA.height / 2 - gridRect.top) / gridRect.height * 100;
+    const x2 = (cellC.left + cellC.width / 2 - gridRect.left) / gridRect.width * 100;
+    const y2 = (cellC.top + cellC.height / 2 - gridRect.top) / gridRect.height * 100;
 
-    // Extend slightly past centers for a nicer look
-    const dx = end.x - start.x;
-    const dy = end.y - start.y;
+    const dx = x2 - x1;
+    const dy = y2 - y1;
     const len = Math.sqrt(dx * dx + dy * dy);
-    const extend = 5; // extend line past cell centers
-    const nx = (dx / len) * extend;
-    const ny = (dy / len) * extend;
+    const ext = 5;
+    const nx = (dx / len) * ext;
+    const ny = (dy / len) * ext;
 
-    return {
-      x1: start.x - nx,
-      y1: start.y - ny,
-      x2: end.x + nx,
-      y2: end.y + ny,
-    };
-  };
+    setLineCoords({
+      x1: x1 - nx, y1: y1 - ny,
+      x2: x2 + nx, y2: y2 + ny,
+    });
+  }, [winLine]);
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -357,7 +347,7 @@ export default function TicTacToe() {
       {/* Board */}
       <div className="bg-slate-900 p-6 rounded-xl mb-6">
         <div className="relative aspect-square max-w-md mx-auto">
-          <div className="grid grid-cols-3 gap-3 h-full">
+          <div ref={gridRef} className="grid grid-cols-3 gap-3 h-full">
             {board.map((cell, index) => (
               <button
                 key={index}
@@ -380,29 +370,25 @@ export default function TicTacToe() {
           </div>
 
           {/* Win Line SVG overlay */}
-          {winLine && (() => {
-            const coords = getLineSVGCoords(winLine);
-            if (!coords) return null;
-            return (
-              <svg
-                className="absolute inset-0 w-full h-full pointer-events-none"
-                viewBox="0 0 100 100"
-                preserveAspectRatio="none"
-              >
-                <line
-                  x1={coords.x1}
-                  y1={coords.y1}
-                  x2={coords.x2}
-                  y2={coords.y2}
-                  stroke="#4ade80"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  vectorEffect="non-scaling-stroke"
-                  className="animate-win-line"
-                />
-              </svg>
-            );
-          })()}
+          {lineCoords && (
+            <svg
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
+              <line
+                x1={lineCoords.x1}
+                y1={lineCoords.y1}
+                x2={lineCoords.x2}
+                y2={lineCoords.y2}
+                stroke="#4ade80"
+                strokeWidth="3"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+                className="animate-win-line"
+              />
+            </svg>
+          )}
         </div>
       </div>
 

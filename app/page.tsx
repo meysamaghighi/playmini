@@ -310,6 +310,62 @@ const games = [
       </svg>
     ),
   },
+  {
+    href: "/connect4",
+    title: "Connect 4",
+    description: "Drop discs to connect four in a row",
+    color: "from-red-500 to-yellow-500",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="10" width="40" height="32" rx="3" fill="#3b82f6" />
+        <circle cx="14" cy="20" r="4" fill="white" />
+        <circle cx="24" cy="20" r="4" fill="white" />
+        <circle cx="34" cy="20" r="4" fill="#ef4444" />
+        <circle cx="14" cy="30" r="4" fill="#facc15" />
+        <circle cx="24" cy="30" r="4" fill="#ef4444" />
+        <circle cx="34" cy="30" r="4" fill="#facc15" />
+      </svg>
+    ),
+  },
+  {
+    href: "/hangman",
+    title: "Hangman",
+    description: "Guess the word before the stick figure is complete",
+    color: "from-slate-500 to-gray-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <line x1="8" y1="42" x2="28" y2="42" stroke="#94a3b8" strokeWidth="2" />
+        <line x1="18" y1="42" x2="18" y2="8" stroke="#94a3b8" strokeWidth="2" />
+        <line x1="18" y1="8" x2="34" y2="8" stroke="#94a3b8" strokeWidth="2" />
+        <line x1="34" y1="8" x2="34" y2="14" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="34" cy="18" r="4" stroke="white" strokeWidth="2" />
+        <line x1="34" y1="22" x2="34" y2="32" stroke="white" strokeWidth="2" />
+        <line x1="34" y1="25" x2="28" y2="28" stroke="white" strokeWidth="2" />
+        <line x1="34" y1="25" x2="40" y2="28" stroke="white" strokeWidth="2" />
+      </svg>
+    ),
+  },
+  {
+    href: "/crossword",
+    title: "Crossword",
+    description: "Fill in the crossword puzzle with clues",
+    color: "from-amber-500 to-yellow-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="6" y="6" width="10" height="10" fill="white" stroke="#333" strokeWidth="1" />
+        <rect x="16" y="6" width="10" height="10" fill="white" stroke="#333" strokeWidth="1" />
+        <rect x="26" y="6" width="10" height="10" fill="#333" />
+        <rect x="6" y="16" width="10" height="10" fill="white" stroke="#333" strokeWidth="1" />
+        <rect x="16" y="16" width="10" height="10" fill="white" stroke="#333" strokeWidth="1" />
+        <rect x="26" y="16" width="10" height="10" fill="white" stroke="#333" strokeWidth="1" />
+        <rect x="6" y="26" width="10" height="10" fill="#333" />
+        <rect x="16" y="26" width="10" height="10" fill="white" stroke="#333" strokeWidth="1" />
+        <rect x="26" y="26" width="10" height="10" fill="white" stroke="#333" strokeWidth="1" />
+        <text x="11" y="14" textAnchor="middle" fill="#333" fontSize="8" fontWeight="bold">A</text>
+        <text x="21" y="14" textAnchor="middle" fill="#333" fontSize="8" fontWeight="bold">B</text>
+      </svg>
+    ),
+  },
 ];
 
 export default function Home() {

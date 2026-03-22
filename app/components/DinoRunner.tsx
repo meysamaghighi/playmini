@@ -36,6 +36,7 @@ export default function DinoRunner() {
   const [displayScore, setDisplayScore] = useState(0);
   const [displayBest, setDisplayBest] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [started, setStarted] = useState(false);
 
   // Constants
   const CANVAS_WIDTH = 600;
@@ -409,6 +410,7 @@ export default function DinoRunner() {
     state.speed = 5;
     setDisplayScore(0);
     setGameOver(false);
+    setStarted(true);
     requestAnimationFrame(gameLoop);
   };
 
@@ -450,52 +452,67 @@ export default function DinoRunner() {
     }
   };
 
-  // Touch handling
+  // Touch handling via native events for proper preventDefault on tablets
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const touch = e.touches[0];
-    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    const state = gameStateRef.current;
-    if (!state.isRunning && !state.gameOver) {
-      startGame();
-    }
-  };
+    const onTouchStart = (e: TouchEvent) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      touchStartRef.current = { x: touch.clientX, y: touch.clientY };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!touchStartRef.current) return;
+      const state = gameStateRef.current;
+      if (!state.isRunning && !state.gameOver) {
+        startGame();
+      }
+    };
 
-    const touch = e.touches[0];
-    const deltaY = touch.clientY - touchStartRef.current.y;
+    const onTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      if (!touchStartRef.current) return;
 
-    const state = gameStateRef.current;
-    if (!state.isRunning) return;
+      const touch = e.touches[0];
+      const deltaY = touch.clientY - touchStartRef.current.y;
 
-    // Swipe down = duck
-    if (deltaY > 30) {
-      duck(true);
-    }
-  };
+      const state = gameStateRef.current;
+      if (!state.isRunning) return;
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStartRef.current) return;
+      if (deltaY > 30) {
+        duck(true);
+      }
+    };
 
-    const state = gameStateRef.current;
-    if (!state.isRunning) return;
+    const onTouchEnd = (e: TouchEvent) => {
+      e.preventDefault();
+      if (!touchStartRef.current) return;
 
-    const touch = e.changedTouches[0];
-    const deltaY = touch.clientY - touchStartRef.current.y;
+      const state = gameStateRef.current;
+      if (!state.isRunning) return;
 
-    // Tap or swipe up = jump
-    if (deltaY < 30) {
-      jump();
-    }
+      const touch = e.changedTouches[0];
+      const deltaY = touch.clientY - touchStartRef.current.y;
 
-    // Release duck
-    duck(false);
-    touchStartRef.current = null;
-  };
+      if (deltaY < 30) {
+        jump();
+      }
+
+      duck(false);
+      touchStartRef.current = null;
+    };
+
+    canvas.addEventListener("touchstart", onTouchStart, { passive: false });
+    canvas.addEventListener("touchmove", onTouchMove, { passive: false });
+    canvas.addEventListener("touchend", onTouchEnd, { passive: false });
+
+    return () => {
+      canvas.removeEventListener("touchstart", onTouchStart);
+      canvas.removeEventListener("touchmove", onTouchMove);
+      canvas.removeEventListener("touchend", onTouchEnd);
+    };
+  }, []);
 
   const shareScore = async () => {
     const text = `I scored ${displayScore} in Dino Runner! Can you beat my score? Play now: https://playmini.fun/dino-runner`;
@@ -546,16 +563,17 @@ export default function DinoRunner() {
           height={CANVAS_HEIGHT}
           className="border-2 border-gray-700 rounded-lg max-w-full h-auto cursor-pointer"
           onClick={handleCanvasClick}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
           style={{ touchAction: "none" }}
         />
 
         {/* Start Overlay */}
-        {!gameStateRef.current.isRunning && !gameOver && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 rounded-lg">
-            <div className="text-center text-white">
+        {!started && !gameOver && (
+          <div
+            className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 rounded-lg cursor-pointer"
+            onClick={startGame}
+            onTouchEnd={(e) => { e.preventDefault(); startGame(); }}
+          >
+            <div className="text-center text-white pointer-events-none">
               <p className="text-xl font-bold mb-2">Press Space or Tap to Start</p>
               <p className="text-sm text-gray-300">↑/Space: Jump | ↓: Duck</p>
             </div>
