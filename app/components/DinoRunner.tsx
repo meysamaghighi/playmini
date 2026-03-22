@@ -38,9 +38,12 @@ export default function DinoRunner() {
   const [gameOver, setGameOver] = useState(false);
   const [started, setStarted] = useState(false);
 
-  // Constants
+  // Constants - game logic runs at 600x200, canvas renders at 900x300
+  const SCALE = 1.5;
   const CANVAS_WIDTH = 600;
   const CANVAS_HEIGHT = 200;
+  const RENDER_WIDTH = CANVAS_WIDTH * SCALE;
+  const RENDER_HEIGHT = CANVAS_HEIGHT * SCALE;
   const GROUND_Y = 160;
   const GRAVITY = 0.6;
   const JUMP_FORCE = -12;
@@ -309,9 +312,11 @@ export default function DinoRunner() {
     const state = gameStateRef.current;
     if (!state.isRunning || state.gameOver) return;
 
-    // Clear canvas
+    // Clear canvas at full render resolution, then scale for drawing
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.fillStyle = "#1b1b1b";
-    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    ctx.fillRect(0, 0, RENDER_WIDTH, RENDER_HEIGHT);
+    ctx.scale(SCALE, SCALE);
 
     // Update frame count
     state.frameCount++;
@@ -559,11 +564,11 @@ export default function DinoRunner() {
       <div className="relative">
         <canvas
           ref={canvasRef}
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
-          className="border-2 border-gray-700 rounded-lg max-w-full h-auto cursor-pointer"
+          width={RENDER_WIDTH}
+          height={RENDER_HEIGHT}
+          className="border-2 border-gray-700 rounded-lg w-full cursor-pointer"
           onClick={handleCanvasClick}
-          style={{ touchAction: "none" }}
+          style={{ touchAction: "none", maxWidth: "900px" }}
         />
 
         {/* Start Overlay */}

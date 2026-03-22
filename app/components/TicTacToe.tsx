@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 type Cell = 'X' | 'O' | null;
 type Board = Cell[];
@@ -23,8 +23,6 @@ export default function TicTacToe() {
   const [winLine, setWinLine] = useState<WinLine>(null);
   const [scores, setScores] = useState({ xWins: 0, oWins: 0, draws: 0 });
   const [isThinking, setIsThinking] = useState(false);
-  const gridRef = useRef<HTMLDivElement>(null);
-  const [lineCoords, setLineCoords] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(null);
 
   // Load stats from localStorage
   useEffect(() => {
@@ -197,7 +195,6 @@ export default function TicTacToe() {
     setIsXNext(true);
     setWinner(null);
     setWinLine(null);
-    setLineCoords(null);
   };
 
   const resetScores = () => {
@@ -220,38 +217,7 @@ export default function TicTacToe() {
     }
   };
 
-  // Compute win line coordinates from actual DOM positions
-  useEffect(() => {
-    if (!winLine || !gridRef.current) {
-      setLineCoords(null);
-      return;
-    }
-
-    const grid = gridRef.current;
-    const gridRect = grid.getBoundingClientRect();
-    const cells = grid.querySelectorAll('button');
-
-    const [a, , c] = winLine;
-    const cellA = cells[a].getBoundingClientRect();
-    const cellC = cells[c].getBoundingClientRect();
-
-    const x1 = (cellA.left + cellA.width / 2 - gridRect.left) / gridRect.width * 100;
-    const y1 = (cellA.top + cellA.height / 2 - gridRect.top) / gridRect.height * 100;
-    const x2 = (cellC.left + cellC.width / 2 - gridRect.left) / gridRect.width * 100;
-    const y2 = (cellC.top + cellC.height / 2 - gridRect.top) / gridRect.height * 100;
-
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    const len = Math.sqrt(dx * dx + dy * dy);
-    const ext = 5;
-    const nx = (dx / len) * ext;
-    const ny = (dy / len) * ext;
-
-    setLineCoords({
-      x1: x1 - nx, y1: y1 - ny,
-      x2: x2 + nx, y2: y2 + ny,
-    });
-  }, [winLine]);
+  const winSet = new Set(winLine ?? []);
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -347,48 +313,34 @@ export default function TicTacToe() {
       {/* Board */}
       <div className="bg-slate-900 p-6 rounded-xl mb-6">
         <div className="relative aspect-square max-w-md mx-auto">
-          <div ref={gridRef} className="grid grid-cols-3 gap-3 h-full">
-            {board.map((cell, index) => (
-              <button
-                key={index}
-                onClick={() => handleClick(index)}
-                disabled={!!cell || !!winner || (gameMode === 'ai' && !isXNext)}
-                className={`bg-slate-800 rounded-lg flex items-center justify-center text-5xl font-bold transition-all ${
-                  !cell && !winner && !(gameMode === 'ai' && !isXNext)
-                    ? 'hover:bg-slate-700 cursor-pointer'
-                    : 'cursor-default'
-                } ${cell === 'X' ? 'text-cyan-400' : cell === 'O' ? 'text-rose-400' : ''}`}
-                style={{ minHeight: '80px' }}
-              >
-                {cell && (
-                  <span className={cell === 'X' ? 'animate-draw-x' : 'animate-draw-o'}>
-                    {cell}
-                  </span>
-                )}
-              </button>
-            ))}
+          <div className="grid grid-cols-3 gap-3 h-full">
+            {board.map((cell, index) => {
+              const isWin = winSet.has(index);
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleClick(index)}
+                  disabled={!!cell || !!winner || (gameMode === 'ai' && !isXNext)}
+                  className={`rounded-lg flex items-center justify-center text-5xl font-bold transition-all ${
+                    isWin
+                      ? 'bg-green-600/40 ring-2 ring-green-400'
+                      : 'bg-slate-800'
+                  } ${
+                    !cell && !winner && !(gameMode === 'ai' && !isXNext)
+                      ? 'hover:bg-slate-700 cursor-pointer'
+                      : 'cursor-default'
+                  } ${cell === 'X' ? 'text-cyan-400' : cell === 'O' ? 'text-rose-400' : ''}`}
+                  style={{ minHeight: '80px' }}
+                >
+                  {cell && (
+                    <span className={cell === 'X' ? 'animate-draw-x' : 'animate-draw-o'}>
+                      {cell}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
-
-          {/* Win Line SVG overlay */}
-          {lineCoords && (
-            <svg
-              className="absolute inset-0 w-full h-full pointer-events-none"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-            >
-              <line
-                x1={lineCoords.x1}
-                y1={lineCoords.y1}
-                x2={lineCoords.x2}
-                y2={lineCoords.y2}
-                stroke="#4ade80"
-                strokeWidth="3"
-                strokeLinecap="round"
-                vectorEffect="non-scaling-stroke"
-                className="animate-win-line"
-              />
-            </svg>
-          )}
         </div>
       </div>
 
@@ -455,15 +407,6 @@ export default function TicTacToe() {
           }
         }
 
-        @keyframes win-line {
-          from {
-            stroke-dashoffset: 200;
-          }
-          to {
-            stroke-dashoffset: 0;
-          }
-        }
-
         @keyframes bounce-in {
           0%, 100% {
             transform: scale(1);
@@ -479,12 +422,6 @@ export default function TicTacToe() {
 
         .animate-draw-o {
           animation: draw-o 0.3s ease-out;
-        }
-
-        .animate-win-line {
-          stroke-dasharray: 200;
-          stroke-dashoffset: 200;
-          animation: win-line 0.5s ease-out forwards;
         }
 
         .animate-bounce-in {

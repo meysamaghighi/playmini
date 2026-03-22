@@ -30,12 +30,33 @@ export const metadata: Metadata = {
   ],
 };
 
-const games = [
+type GameCategory = "Puzzle" | "Arcade" | "Word" | "Strategy" | "Creative" | "Sports";
+
+const categoryOrder: GameCategory[] = ["Arcade", "Puzzle", "Word", "Strategy", "Sports", "Creative"];
+
+const categoryColors: Record<GameCategory, string> = {
+  Arcade: "text-red-400",
+  Puzzle: "text-blue-400",
+  Word: "text-emerald-400",
+  Strategy: "text-amber-400",
+  Sports: "text-green-400",
+  Creative: "text-purple-400",
+};
+
+const games: Array<{
+  href: string;
+  title: string;
+  description: string;
+  color: string;
+  category: GameCategory;
+  icon: React.ReactNode;
+}> = [
   {
     href: "/2048",
     title: "2048",
     description: "Slide and merge tiles to reach 2048",
     color: "from-amber-500 to-orange-600",
+    category: "Puzzle",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <rect x="4" y="4" width="18" height="18" rx="3" fill="#f59e0b" />
@@ -54,6 +75,7 @@ const games = [
     title: "Snake",
     description: "Eat food, grow longer, don't hit the walls",
     color: "from-green-500 to-emerald-600",
+    category: "Arcade",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <path d="M8 24h8v-8h8v8h8v8h8" stroke="#22c55e" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
@@ -66,6 +88,7 @@ const games = [
     title: "Minesweeper",
     description: "Find all the mines without detonating any",
     color: "from-blue-500 to-cyan-600",
+    category: "Puzzle",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <circle cx="24" cy="24" r="10" fill="#ef4444" />
@@ -82,6 +105,7 @@ const games = [
     title: "Memory Match",
     description: "Flip cards and find matching pairs",
     color: "from-purple-500 to-pink-600",
+    category: "Puzzle",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <rect x="6" y="6" width="14" height="18" rx="2" fill="#a855f7" />
@@ -98,6 +122,7 @@ const games = [
     title: "Whack-a-Mole",
     description: "Whack moles as fast as you can!",
     color: "from-yellow-500 to-amber-600",
+    category: "Arcade",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <ellipse cx="24" cy="36" rx="16" ry="6" fill="#44403c" />
@@ -115,6 +140,7 @@ const games = [
     title: "Tic-Tac-Toe",
     description: "Classic X and O - play vs AI or a friend",
     color: "from-cyan-500 to-blue-600",
+    category: "Strategy",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <line x1="16" y1="8" x2="16" y2="40" stroke="#374151" strokeWidth="2" />
@@ -133,6 +159,7 @@ const games = [
     title: "Flappy Bird",
     description: "Tap to flap through the pipes",
     color: "from-sky-400 to-blue-500",
+    category: "Arcade",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <circle cx="24" cy="24" r="12" fill="#facc15" />
@@ -148,6 +175,7 @@ const games = [
     title: "Block Drop",
     description: "Classic falling blocks puzzle",
     color: "from-violet-500 to-purple-600",
+    category: "Puzzle",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <rect x="8" y="28" width="10" height="10" rx="1" fill="#06b6d4" />
@@ -165,6 +193,7 @@ const games = [
     title: "Word Guess",
     description: "Guess the 5-letter word in 6 tries",
     color: "from-emerald-500 to-teal-600",
+    category: "Word",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <rect x="4" y="14" width="8" height="8" rx="1" fill="#22c55e" />
@@ -183,6 +212,7 @@ const games = [
     title: "Dino Runner",
     description: "Jump and duck in this endless runner",
     color: "from-lime-500 to-green-600",
+    category: "Arcade",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <rect x="20" y="10" width="14" height="12" rx="2" fill="#d1d5db" />
@@ -200,6 +230,7 @@ const games = [
     title: "Sudoku",
     description: "Classic 9x9 logic number puzzle",
     color: "from-indigo-500 to-blue-600",
+    category: "Puzzle",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <rect x="4" y="4" width="12" height="12" rx="1" stroke="#818cf8" strokeWidth="1.5" fill="none" />
@@ -219,6 +250,7 @@ const games = [
     title: "Voxel Builder",
     description: "Build with blocks in 3D isometric view",
     color: "from-green-500 to-teal-600",
+    category: "Creative",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <path d="M24 8L40 18V34L24 44L8 34V18L24 8Z" fill="#2dd4bf" opacity="0.3" />
@@ -233,6 +265,7 @@ const games = [
     title: "Car Racer",
     description: "Dodge traffic on the endless highway",
     color: "from-red-500 to-orange-600",
+    category: "Arcade",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <rect x="18" y="12" width="12" height="24" rx="3" fill="#ef4444" />
@@ -251,6 +284,7 @@ const games = [
     title: "Tower Builder",
     description: "Stack swinging blocks to build high",
     color: "from-pink-500 to-rose-600",
+    category: "Arcade",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <rect x="10" y="34" width="28" height="6" rx="1" fill="#fb7185" />
@@ -267,6 +301,7 @@ const games = [
     title: "Penalty Kicks",
     description: "Aim and shoot past the goalkeeper",
     color: "from-green-500 to-lime-600",
+    category: "Sports",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <circle cx="24" cy="24" r="14" fill="white" stroke="#222" strokeWidth="1.5" />
@@ -284,6 +319,7 @@ const games = [
     title: "Table Tennis",
     description: "Classic paddle game vs AI",
     color: "from-teal-500 to-cyan-600",
+    category: "Sports",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <rect x="4" y="8" width="40" height="32" rx="2" fill="#0d6b4e" stroke="#14b8a6" strokeWidth="1.5" />
@@ -299,6 +335,7 @@ const games = [
     title: "Music Trivia",
     description: "Song quiz and timeline challenge",
     color: "from-purple-500 to-pink-600",
+    category: "Word",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <circle cx="24" cy="24" r="18" fill="#7c3aed" opacity="0.3" />
@@ -315,6 +352,7 @@ const games = [
     title: "Connect 4",
     description: "Drop discs to connect four in a row",
     color: "from-red-500 to-yellow-500",
+    category: "Strategy",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <rect x="4" y="10" width="40" height="32" rx="3" fill="#3b82f6" />
@@ -332,6 +370,7 @@ const games = [
     title: "Hangman",
     description: "Guess the word before the stick figure is complete",
     color: "from-slate-500 to-gray-600",
+    category: "Word",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <line x1="8" y1="42" x2="28" y2="42" stroke="#94a3b8" strokeWidth="2" />
@@ -350,6 +389,7 @@ const games = [
     title: "Crossword",
     description: "Fill in the crossword puzzle with clues",
     color: "from-amber-500 to-yellow-600",
+    category: "Word",
     icon: (
       <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
         <rect x="6" y="6" width="10" height="10" fill="white" stroke="#333" strokeWidth="1" />
@@ -369,36 +409,53 @@ const games = [
 ];
 
 export default function Home() {
+  const grouped = categoryOrder.map((cat) => ({
+    category: cat,
+    games: games.filter((g) => g.category === cat),
+  })).filter((g) => g.games.length > 0);
+
   return (
-    <main className="max-w-3xl mx-auto px-4 pt-12 pb-12">
+    <main className="max-w-4xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-12">
         <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4">
           PlayMini
         </h1>
         <p className="text-gray-400 text-lg">
-          Free browser games. No download, no sign-up. Just play.
+          {games.length} free browser games. No download, no sign-up. Just play.
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {games.map((game) => (
-          <Link
-            key={game.href}
-            href={game.href}
-            className="group bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-gray-700 transition-all hover:scale-[1.02]"
-          >
-            <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${game.color} flex items-center justify-center mb-4`}>
-              {game.icon}
-            </div>
-            <h2 className="text-xl font-bold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-purple-400 transition-all">
-              {game.title}
-            </h2>
-            <p className="text-gray-400 text-sm mt-1">{game.description}</p>
-          </Link>
-        ))}
-      </div>
+      {grouped.map(({ category, games: catGames }) => (
+        <section key={category} className="mb-10">
+          <h2 className={`text-xl font-bold ${categoryColors[category]} mb-4 flex items-center gap-2`}>
+            {category}
+            <span className="text-sm font-normal text-gray-500">({catGames.length})</span>
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {catGames.map((game) => (
+              <Link
+                key={game.href}
+                href={game.href}
+                className="group bg-gray-900 rounded-2xl p-5 border border-gray-800 hover:border-gray-700 transition-all hover:scale-[1.02]"
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${game.color} flex items-center justify-center flex-shrink-0`}>
+                    {game.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-purple-400 transition-all">
+                      {game.title}
+                    </h3>
+                    <p className="text-gray-400 text-sm">{game.description}</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      ))}
 
-      <div className="mt-12 text-center text-sm text-gray-500">
+      <div className="mt-8 text-center text-sm text-gray-500">
         <p>More games coming soon!</p>
       </div>
 

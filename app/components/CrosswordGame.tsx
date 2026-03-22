@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 type Cell = {
   letter: string; // The correct letter (uppercase) or "" if black cell
@@ -736,6 +736,7 @@ export default function CrosswordGame() {
   const [personalBest, setPersonalBest] = useState<number | null>(null);
 
   const puzzle = PUZZLES[currentPuzzleIndex];
+  const hiddenInputRef = useRef<HTMLInputElement>(null);
 
   // Load personal best
   useEffect(() => {
@@ -805,11 +806,13 @@ export default function CrosswordGame() {
     if (grid[row][col].isBlack || won) return;
 
     if (selectedCell && selectedCell[0] === row && selectedCell[1] === col) {
-      // Toggle direction
       setDirection((d) => (d === "across" ? "down" : "across"));
     } else {
       setSelectedCell([row, col]);
     }
+
+    // Focus hidden input to open mobile keyboard
+    setTimeout(() => hiddenInputRef.current?.focus(), 50);
   };
 
   const handleKeyDown = useCallback(
@@ -907,6 +910,37 @@ export default function CrosswordGame() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
+
+  // Handle mobile keyboard input via hidden input
+  const handleMobileInput = (e: React.FormEvent<HTMLInputElement>) => {
+    const value = (e.target as HTMLInputElement).value.toUpperCase();
+    (e.target as HTMLInputElement).value = "";
+
+    if (!selectedCell || won) return;
+    const [row, col] = selectedCell;
+
+    const lastChar = value.slice(-1);
+    if (lastChar >= "A" && lastChar <= "Z") {
+      const newGrid = grid.map((r) => r.map((c) => ({ ...c })));
+      newGrid[row][col].userLetter = lastChar;
+      setGrid(newGrid);
+
+      const clue = getCurrentClue();
+      if (clue) {
+        if (direction === "across") {
+          const nextCol = col + 1;
+          if (nextCol < clue.col + clue.length && !grid[row][nextCol]?.isBlack) {
+            setSelectedCell([row, nextCol]);
+          }
+        } else {
+          const nextRow = row + 1;
+          if (nextRow < clue.row + clue.length && !grid[nextRow]?.[col]?.isBlack) {
+            setSelectedCell([nextRow, col]);
+          }
+        }
+      }
+    }
+  };
 
   const handleCheck = () => {
     setShowErrors(true);
@@ -1015,6 +1049,24 @@ export default function CrosswordGame() {
           </button>
         </div>
       )}
+
+      {/* Hidden input for mobile keyboard */}
+      <input
+        ref={hiddenInputRef}
+        type="text"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="characters"
+        spellCheck={false}
+        className="sr-only"
+        onInput={handleMobileInput}
+        onKeyDown={(e) => {
+          if (e.key === "Backspace") {
+            e.preventDefault();
+            handleKeyDown(e.nativeEvent);
+          }
+        }}
+      />
 
       <div className="flex flex-col lg:flex-row gap-6 w-full max-w-6xl">
         {/* Grid */}
