@@ -37,6 +37,10 @@ export default function RootLayout({
           }}
         />
         <meta
+          name="google-site-verification"
+          content="ORYrIGzzyK2TBQTM6OgzsFisZceq4rBIRl4HZXMzQ48"
+        />
+        <meta
           name="google-adsense-account"
           content="ca-pub-2621005924235240"
         />
