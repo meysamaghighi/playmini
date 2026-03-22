@@ -25,6 +25,8 @@ export const metadata: Metadata = {
     "penalty kicks",
     "table tennis",
     "pong game",
+    "music trivia",
+    "song quiz",
   ],
 };
 
@@ -289,6 +291,22 @@ const games = [
         <rect x="8" y="16" width="4" height="16" rx="2" fill="#3b82f6" />
         <rect x="36" y="16" width="4" height="16" rx="2" fill="#ef4444" />
         <circle cx="20" cy="24" r="3" fill="#facc15" />
+      </svg>
+    ),
+  },
+  {
+    href: "/music-trivia",
+    title: "Music Trivia",
+    description: "Song quiz and timeline challenge",
+    color: "from-purple-500 to-pink-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <circle cx="24" cy="24" r="18" fill="#7c3aed" opacity="0.3" />
+        <circle cx="24" cy="24" r="12" fill="#a855f7" />
+        <circle cx="24" cy="24" r="4" fill="white" />
+        <circle cx="24" cy="24" r="1.5" fill="#7c3aed" />
+        <rect x="22" y="6" width="4" height="8" rx="2" fill="#ec4899" />
+        <text x="24" y="40" textAnchor="middle" fill="#e879f9" fontSize="7" fontWeight="bold">TRIVIA</text>
       </svg>
     ),
   },

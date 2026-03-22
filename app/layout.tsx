@@ -34,6 +34,7 @@ const navLinks = [
   { href: "/tower-builder", label: "Tower Builder" },
   { href: "/soccer", label: "Penalty Kicks" },
   { href: "/table-tennis", label: "Table Tennis" },
+  { href: "/music-trivia", label: "Music Trivia" },
 ];
 
 export default function RootLayout({

@@ -20,6 +20,7 @@ const games = [
   { href: "/tower-builder", label: "Tower Builder", color: "from-pink-500 to-rose-600" },
   { href: "/soccer", label: "Penalty Kicks", color: "from-green-500 to-lime-600" },
   { href: "/table-tennis", label: "Table Tennis", color: "from-teal-500 to-cyan-600" },
+  { href: "/music-trivia", label: "Music Trivia", color: "from-purple-500 to-pink-600" },
 ];
 
 export default function MoreGames() {
