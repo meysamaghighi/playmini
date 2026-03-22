@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { VALID_GUESSES } from "./wordlist";
 
 const WORD_LIST = [
   "CRANE", "SLATE", "HOUSE", "PLANE", "STORM", "LIGHT", "FRAME", "GLOBE", "CHAIR", "MONEY",
@@ -108,7 +109,7 @@ export default function WordleGame() {
 
   const submitGuess = () => {
     if (currentGuess.length !== 5) return;
-    if (!WORD_LIST.includes(currentGuess)) {
+    if (!VALID_GUESSES.has(currentGuess) && !WORD_LIST.includes(currentGuess)) {
       setShake(true);
       setTimeout(() => setShake(false), 500);
       return;
