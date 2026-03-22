@@ -5,7 +5,7 @@ import DownloadButton from "./DownloadButton";
 
 type ObstacleCar = { x: number; y: number; lane: number; color: string };
 type Coin = { x: number; y: number; collected: boolean; lane: number };
-type Vehicle = "car" | "motorcycle" | "truck";
+type Vehicle = "car" | "motorcycle" | "truck" | "lambo" | "junker" | "bus";
 
 const CW = 400;
 const CH = 600;
@@ -16,10 +16,13 @@ const LANE_W = ROAD_W / LANES;
 const PLAYER_Y = CH - 100;
 const OBS_COLORS = ["#ef4444", "#3b82f6", "#eab308", "#8b5cf6", "#ec4899", "#14b8a6"];
 
-const VEHICLE_STATS: Record<Vehicle, { w: number; h: number; label: string; emoji: string }> = {
-  car: { w: 36, h: 60, label: "Car", emoji: "🚗" },
-  motorcycle: { w: 22, h: 48, label: "Motorcycle", emoji: "🏍️" },
-  truck: { w: 44, h: 72, label: "Truck", emoji: "🚛" },
+const VEHICLE_STATS: Record<Vehicle, { w: number; h: number; label: string; emoji: string; baseSpeed: number }> = {
+  lambo:      { w: 34, h: 58, label: "Lambo",      emoji: "🏎️", baseSpeed: 4.5 },
+  car:        { w: 36, h: 60, label: "Car",         emoji: "🚗", baseSpeed: 3 },
+  motorcycle: { w: 22, h: 48, label: "Motorcycle",  emoji: "🏍️", baseSpeed: 3.5 },
+  junker:     { w: 38, h: 62, label: "Junker",      emoji: "🚙", baseSpeed: 2 },
+  truck:      { w: 44, h: 72, label: "Truck",       emoji: "🚛", baseSpeed: 2.5 },
+  bus:        { w: 46, h: 84, label: "Bus",          emoji: "🚌", baseSpeed: 2 },
 };
 
 const BASE_SPEED = 3;
@@ -112,6 +115,123 @@ export default function CarRacer() {
         ctx.fillRect(bx + 3, by + h - 8, 12, 6);
         ctx.fillRect(bx + w - 15, by + h - 8, 12, 6);
       }
+    } else if (v === "lambo") {
+      // Sleek wedge body
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(bx + 4, by + h);
+      ctx.lineTo(bx, by + h * 0.6);
+      ctx.lineTo(bx + 4, by + 4);
+      ctx.quadraticCurveTo(x, by, bx + w - 4, by + 4);
+      ctx.lineTo(bx + w, by + h * 0.6);
+      ctx.lineTo(bx + w - 4, by + h);
+      ctx.closePath();
+      ctx.fill();
+      // Racing stripe
+      ctx.fillStyle = "rgba(0,0,0,0.25)";
+      ctx.fillRect(x - 3, by + 2, 6, h - 4);
+      // Windshield (low, aggressive)
+      ctx.fillStyle = "rgba(60,120,200,0.8)";
+      ctx.fillRect(bx + 5, by + (isPlayer ? h - 24 : 6), w - 10, 16);
+      // Side intakes
+      ctx.fillStyle = "rgba(0,0,0,0.4)";
+      ctx.fillRect(bx + 1, by + h * 0.45, 5, 10);
+      ctx.fillRect(bx + w - 6, by + h * 0.45, 5, 10);
+      if (isPlayer) {
+        // Sharp LED headlights
+        ctx.fillStyle = "#fef08a";
+        ctx.fillRect(bx + 3, by + 5, 8, 4);
+        ctx.fillRect(bx + w - 11, by + 5, 8, 4);
+      } else {
+        ctx.fillStyle = "#991b1b";
+        ctx.fillRect(bx + 3, by + h - 6, 10, 4);
+        ctx.fillRect(bx + w - 13, by + h - 6, 10, 4);
+      }
+    } else if (v === "junker") {
+      // Dented, rusty old car
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.roundRect(bx, by, w, h, 4);
+      ctx.fill();
+      // Rust patches
+      ctx.fillStyle = "#92400e";
+      ctx.beginPath(); ctx.arc(bx + 8, by + 15, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(bx + w - 6, by + h - 18, 6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#78350f";
+      ctx.beginPath(); ctx.arc(bx + w - 10, by + 25, 4, 0, Math.PI * 2); ctx.fill();
+      // Dent marks (dark scratches)
+      ctx.strokeStyle = "rgba(0,0,0,0.5)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(bx + 5, by + h * 0.3); ctx.lineTo(bx + 15, by + h * 0.35); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(bx + w - 5, by + h * 0.6); ctx.lineTo(bx + w - 15, by + h * 0.55); ctx.stroke();
+      // Cracked windshield
+      ctx.fillStyle = "rgba(100,140,160,0.5)";
+      ctx.fillRect(bx + 5, by + (isPlayer ? h - 28 : 8), w - 10, 18);
+      ctx.strokeStyle = "rgba(255,255,255,0.3)";
+      ctx.lineWidth = 1;
+      const wy = by + (isPlayer ? h - 28 : 8);
+      ctx.beginPath(); ctx.moveTo(bx + 8, wy + 3); ctx.lineTo(bx + w / 2, wy + 10); ctx.lineTo(bx + w - 10, wy + 5); ctx.stroke();
+      // Mismatched headlights (one dim, one broken)
+      if (isPlayer) {
+        ctx.fillStyle = "#fef08a80";
+        ctx.fillRect(bx + 4, by + 4, 8, 6);
+        ctx.fillStyle = "#44403c";
+        ctx.fillRect(bx + w - 12, by + 4, 8, 6);
+      } else {
+        ctx.fillStyle = "#991b1b80";
+        ctx.fillRect(bx + 4, by + h - 8, 8, 5);
+        ctx.fillStyle = "#44403c";
+        ctx.fillRect(bx + w - 12, by + h - 8, 8, 5);
+      }
+      // Exhaust smoke (player only)
+      if (isPlayer) {
+        ctx.fillStyle = "rgba(120,120,120,0.3)";
+        ctx.beginPath(); ctx.arc(bx + w - 4, by + h + 6, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(bx + w - 8, by + h + 12, 5, 0, Math.PI * 2); ctx.fill();
+      }
+    } else if (v === "bus") {
+      // Long rectangular bus body
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.roundRect(bx, by, w, h, 4);
+      ctx.fill();
+      // Window row (3 windows each side)
+      ctx.fillStyle = "rgba(150,200,240,0.7)";
+      const winH = 10, winW = 10, winGap = 4;
+      for (let i = 0; i < 3; i++) {
+        const wy = by + 14 + i * (winH + winGap);
+        ctx.fillRect(bx + 3, wy, winW, winH);
+        ctx.fillRect(bx + w - winW - 3, wy, winW, winH);
+      }
+      // Door (side stripe)
+      ctx.fillStyle = "rgba(0,0,0,0.2)";
+      ctx.fillRect(bx + w / 2 - 4, by + 10, 8, h - 20);
+      // Destination sign (front)
+      if (isPlayer) {
+        ctx.fillStyle = "#fbbf24";
+        ctx.fillRect(bx + 6, by + 3, w - 12, 8);
+        ctx.fillStyle = "#111";
+        ctx.font = "bold 6px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("EXPRESS", x, by + 7);
+      }
+      // Headlights / taillights
+      if (isPlayer) {
+        ctx.fillStyle = "#fef08a";
+        ctx.fillRect(bx + 3, by + 2, 10, 6);
+        ctx.fillRect(bx + w - 13, by + 2, 10, 6);
+      } else {
+        ctx.fillStyle = "#991b1b";
+        ctx.fillRect(bx + 3, by + h - 8, 12, 6);
+        ctx.fillRect(bx + w - 15, by + h - 8, 12, 6);
+      }
+      // Wheels (visible on the side)
+      ctx.fillStyle = "#111";
+      ctx.beginPath(); ctx.arc(bx + 8, by + h - 4, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(bx + w - 8, by + h - 4, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(bx + 8, by + 12, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(bx + w - 8, by + 12, 5, 0, Math.PI * 2); ctx.fill();
     } else {
       // Car (default)
       ctx.fillStyle = color;
@@ -182,8 +302,11 @@ export default function CarRacer() {
 
     // Player
     const v = vehicleRef.current;
-    const playerColor = v === "motorcycle" ? "#f59e0b" : v === "truck" ? "#10b981" : "#10b981";
-    drawVehicle(ctx, laneX(playerLaneRef.current), PLAYER_Y, v, playerColor, true);
+    const playerColors: Record<Vehicle, string> = {
+      car: "#10b981", motorcycle: "#f59e0b", truck: "#10b981",
+      lambo: "#ef4444", junker: "#8b7355", bus: "#f59e0b",
+    };
+    drawVehicle(ctx, laneX(playerLaneRef.current), PLAYER_Y, v, playerColors[v], true);
 
     // Speed bar (bottom-right)
     if (stateRef.current === "PLAYING") {
@@ -266,8 +389,9 @@ export default function CarRacer() {
   const gameLoop = useCallback(() => {
     if (stateRef.current !== "PLAYING") { loopRef.current = null; return; }
 
-    // Base speed increases over distance
-    baseSpeedRef.current = Math.min(MAX_SPEED * 0.7, BASE_SPEED + distRef.current * SPEED_INC);
+    // Base speed increases over distance (starting from vehicle's own base speed)
+    const vBase = VEHICLE_STATS[vehicleRef.current].baseSpeed;
+    baseSpeedRef.current = Math.min(MAX_SPEED * 0.7, vBase + distRef.current * SPEED_INC);
 
     // Apply player boost/brake
     if (keysRef.current.up) boostRef.current = Math.min(4, boostRef.current + BOOST_AMOUNT);
@@ -323,15 +447,16 @@ export default function CarRacer() {
     vehicleRef.current = vehicle;
     playerLaneRef.current = 1;
     roadOffRef.current = 0;
-    speedRef.current = BASE_SPEED;
-    baseSpeedRef.current = BASE_SPEED;
+    const vSpeed = VEHICLE_STATS[vehicle].baseSpeed;
+    speedRef.current = vSpeed;
+    baseSpeedRef.current = vSpeed;
     boostRef.current = 0;
     obsRef.current = [];
     coinsRef.current = [];
     scoreRef.current = 0;
     distRef.current = 0;
     setScore(0);
-    setDisplaySpeed(Math.round(BASE_SPEED * 20));
+    setDisplaySpeed(Math.round(vSpeed * 20));
     keysRef.current = { left: false, right: false, up: false, down: false };
     stateRef.current = "PLAYING";
     setDisplayState("PLAYING");
@@ -406,7 +531,7 @@ export default function CarRacer() {
   useEffect(() => { draw(); }, [draw]);
 
   const handleShare = async () => {
-    const text = `I scored ${scoreRef.current} in Car Racer on a ${vehicleRef.current}! https://playmini.fun/car-racer`;
+    const text = `I scored ${scoreRef.current} in Car Racer driving a ${VEHICLE_STATS[vehicleRef.current].label}! https://playmini.fun/car-racer`;
     if (navigator.share) { try { await navigator.share({ text }); } catch {} }
     else { try { await navigator.clipboard.writeText(text); alert("Copied!"); } catch {} }
   };
@@ -440,21 +565,27 @@ export default function CarRacer() {
             <h2 className="text-3xl font-black text-blue-400 mb-4">Car Racer</h2>
 
             {/* Vehicle selector */}
-            <div className="flex gap-2 mb-4">
-              {(["car", "motorcycle", "truck"] as Vehicle[]).map((v) => (
-                <button
-                  key={v}
-                  onClick={() => setVehicle(v)}
-                  className={`px-4 py-2 rounded-xl font-bold text-sm transition-all ${
-                    vehicle === v
-                      ? "bg-blue-600 text-white ring-2 ring-blue-400 scale-105"
-                      : "bg-slate-800 text-gray-300 hover:bg-slate-700"
-                  }`}
-                >
-                  <span className="text-lg mr-1">{VEHICLE_STATS[v].emoji}</span>
-                  {VEHICLE_STATS[v].label}
-                </button>
-              ))}
+            <div className="flex flex-wrap gap-2 mb-4 justify-center max-w-[360px]">
+              {(["lambo", "car", "motorcycle", "junker", "truck", "bus"] as Vehicle[]).map((v) => {
+                const s = VEHICLE_STATS[v];
+                const speedLabel = s.baseSpeed >= 4 ? "Fast" : s.baseSpeed >= 3 ? "Med" : "Slow";
+                const speedColor = s.baseSpeed >= 4 ? "text-red-400" : s.baseSpeed >= 3 ? "text-yellow-400" : "text-green-400";
+                return (
+                  <button
+                    key={v}
+                    onClick={() => setVehicle(v)}
+                    className={`px-3 py-2 rounded-xl font-bold text-sm transition-all flex flex-col items-center min-w-[70px] ${
+                      vehicle === v
+                        ? "bg-blue-600 text-white ring-2 ring-blue-400 scale-105"
+                        : "bg-slate-800 text-gray-300 hover:bg-slate-700"
+                    }`}
+                  >
+                    <span className="text-lg">{s.emoji}</span>
+                    <span className="text-xs">{s.label}</span>
+                    <span className={`text-[10px] ${vehicle === v ? "text-blue-200" : speedColor}`}>{speedLabel}</span>
+                  </button>
+                );
+              })}
             </div>
 
             <p className="text-gray-400 mb-1 text-xs">Left/Right: steer | Up/Down: speed</p>
