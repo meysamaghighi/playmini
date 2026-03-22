@@ -17,6 +17,10 @@ export const metadata: Metadata = {
     "mini games",
     "no download games",
     "classic games",
+    "sudoku",
+    "voxel builder",
+    "car racer",
+    "tower builder",
   ],
 };
 
@@ -182,6 +186,73 @@ const games = [
         <rect x="28" y="32" width="4" height="6" fill="#d1d5db" />
         <circle cx="30" cy="14" r="2" fill="#111" />
         <line x1="8" y1="38" x2="42" y2="38" stroke="#6b7280" strokeWidth="2" />
+      </svg>
+    ),
+  },
+  {
+    href: "/sudoku",
+    title: "Sudoku",
+    description: "Classic 9x9 logic number puzzle",
+    color: "from-indigo-500 to-blue-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="4" width="12" height="12" rx="1" stroke="#818cf8" strokeWidth="1.5" fill="none" />
+        <rect x="18" y="4" width="12" height="12" rx="1" stroke="#818cf8" strokeWidth="1.5" fill="none" />
+        <rect x="32" y="4" width="12" height="12" rx="1" stroke="#818cf8" strokeWidth="1.5" fill="none" />
+        <rect x="4" y="18" width="12" height="12" rx="1" stroke="#818cf8" strokeWidth="1.5" fill="none" />
+        <rect x="18" y="18" width="12" height="12" rx="1" stroke="#818cf8" strokeWidth="1.5" fill="none" />
+        <rect x="32" y="18" width="12" height="12" rx="1" stroke="#818cf8" strokeWidth="1.5" fill="none" />
+        <text x="10" y="14" textAnchor="middle" fill="#818cf8" fontSize="10" fontWeight="bold">5</text>
+        <text x="24" y="14" textAnchor="middle" fill="#818cf8" fontSize="10" fontWeight="bold">3</text>
+        <text x="38" y="28" textAnchor="middle" fill="#818cf8" fontSize="10" fontWeight="bold">9</text>
+      </svg>
+    ),
+  },
+  {
+    href: "/voxel",
+    title: "Voxel Builder",
+    description: "Build with blocks in 3D isometric view",
+    color: "from-green-500 to-teal-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <path d="M24 8L40 18V34L24 44L8 34V18L24 8Z" fill="#2dd4bf" opacity="0.3" />
+        <path d="M24 8L40 18L24 28L8 18L24 8Z" fill="#14b8a6" />
+        <path d="M24 28V44L8 34V18L24 28Z" fill="#0d9488" />
+        <path d="M24 28V44L40 34V18L24 28Z" fill="#0f766e" />
+      </svg>
+    ),
+  },
+  {
+    href: "/car-racer",
+    title: "Car Racer",
+    description: "Dodge traffic on the endless highway",
+    color: "from-red-500 to-orange-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="18" y="12" width="12" height="24" rx="3" fill="#ef4444" />
+        <rect x="20" y="14" width="8" height="6" rx="1" fill="#93c5fd" />
+        <circle cx="20" cy="32" r="3" fill="#374151" />
+        <circle cx="28" cy="32" r="3" fill="#374151" />
+        <circle cx="20" cy="16" r="3" fill="#374151" />
+        <circle cx="28" cy="16" r="3" fill="#374151" />
+        <line x1="12" y1="40" x2="12" y2="8" stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
+        <line x1="36" y1="40" x2="36" y2="8" stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
+      </svg>
+    ),
+  },
+  {
+    href: "/tower-builder",
+    title: "Tower Builder",
+    description: "Stack swinging blocks to build high",
+    color: "from-pink-500 to-rose-600",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="10" y="34" width="28" height="6" rx="1" fill="#fb7185" />
+        <rect x="12" y="28" width="24" height="6" rx="1" fill="#f472b6" />
+        <rect x="14" y="22" width="20" height="6" rx="1" fill="#e879f9" />
+        <rect x="16" y="16" width="16" height="6" rx="1" fill="#c084fc" />
+        <rect x="18" y="10" width="12" height="6" rx="1" fill="#a78bfa" opacity="0.6" />
+        <line x1="24" y1="4" x2="24" y2="10" stroke="#a78bfa" strokeWidth="1" strokeDasharray="2 2" />
       </svg>
     ),
   },

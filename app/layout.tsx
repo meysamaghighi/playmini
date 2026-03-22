@@ -28,6 +28,10 @@ const navLinks = [
   { href: "/block-drop", label: "Block Drop" },
   { href: "/wordle", label: "Word Guess" },
   { href: "/dino-runner", label: "Dino Runner" },
+  { href: "/sudoku", label: "Sudoku" },
+  { href: "/voxel", label: "Voxel Builder" },
+  { href: "/car-racer", label: "Car Racer" },
+  { href: "/tower-builder", label: "Tower Builder" },
 ];
 
 export default function RootLayout({

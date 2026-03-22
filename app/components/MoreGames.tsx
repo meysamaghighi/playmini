@@ -14,6 +14,10 @@ const games = [
   { href: "/block-drop", label: "Block Drop", color: "from-violet-500 to-purple-600" },
   { href: "/wordle", label: "Word Guess", color: "from-emerald-500 to-teal-600" },
   { href: "/dino-runner", label: "Dino Runner", color: "from-lime-500 to-green-600" },
+  { href: "/sudoku", label: "Sudoku", color: "from-indigo-500 to-blue-600" },
+  { href: "/voxel", label: "Voxel Builder", color: "from-green-500 to-teal-600" },
+  { href: "/car-racer", label: "Car Racer", color: "from-red-500 to-orange-600" },
+  { href: "/tower-builder", label: "Tower Builder", color: "from-pink-500 to-rose-600" },
 ];
 
 export default function MoreGames() {
