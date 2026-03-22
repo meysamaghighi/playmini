@@ -396,8 +396,8 @@ export default function MinesweeperGame() {
                     onTouchStart={() => handleTouchStart(rowIndex, colIndex)}
                     onTouchEnd={handleTouchEnd}
                     className={`
-                      min-w-[28px] min-h-[28px] md:min-w-[32px] md:min-h-[32px]
-                      flex items-center justify-center font-bold text-sm md:text-base
+                      min-w-[24px] min-h-[24px] sm:min-w-[28px] sm:min-h-[28px] md:min-w-[32px] md:min-h-[32px]
+                      flex items-center justify-center font-bold text-xs sm:text-sm md:text-base
                       transition-colors select-none
                       ${
                         cell.isRevealed

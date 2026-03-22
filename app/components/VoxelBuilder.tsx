@@ -526,38 +526,38 @@ export default function VoxelBuilder() {
           onMouseLeave={() => { isDragRef.current = false; }}
           onWheel={handleWheel}
           className="w-full cursor-crosshair"
-          style={{ height: '500px', touchAction: 'none' }}
+          style={{ height: 'min(500px, 70vh)', touchAction: 'none' }}
         />
       </div>
 
       {/* Camera controls */}
-      <div className="bg-slate-800 rounded-lg p-3 mb-3 flex flex-wrap items-center gap-2">
-        <span className="text-xs text-slate-400 font-bold uppercase tracking-wider mr-1">Camera</span>
-        <button onClick={() => rotate(-1)} className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-sm transition-colors" title="Rotate left">
+      <div className="bg-slate-800 rounded-lg p-2 sm:p-3 mb-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
+        <span className="text-xs text-slate-400 font-bold uppercase tracking-wider mr-1 hidden sm:inline">Camera</span>
+        <button onClick={() => rotate(-1)} className="px-2 sm:px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-xs sm:text-sm transition-colors" title="Rotate left">
           &#8634; Left
         </button>
-        <button onClick={() => rotate(1)} className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-sm transition-colors" title="Rotate right">
+        <button onClick={() => rotate(1)} className="px-2 sm:px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-xs sm:text-sm transition-colors" title="Rotate right">
           &#8635; Right
         </button>
-        <button onClick={() => { zoomRef.current = Math.min(2.5, zoomRef.current + 0.2); render(); }} className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-sm transition-colors">
+        <button onClick={() => { zoomRef.current = Math.min(2.5, zoomRef.current + 0.2); render(); }} className="px-2 sm:px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-xs sm:text-sm transition-colors">
           + Zoom
         </button>
-        <button onClick={() => { zoomRef.current = Math.max(0.4, zoomRef.current - 0.2); render(); }} className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-sm transition-colors">
+        <button onClick={() => { zoomRef.current = Math.max(0.4, zoomRef.current - 0.2); render(); }} className="px-2 sm:px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-xs sm:text-sm transition-colors">
           - Zoom
         </button>
-        <button onClick={resetCamera} className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-sm transition-colors">
+        <button onClick={resetCamera} className="px-2 sm:px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded text-xs sm:text-sm transition-colors">
           Reset
         </button>
         <span className="text-xs text-slate-500 ml-auto hidden sm:inline">Shift+drag to pan | Scroll to zoom</span>
       </div>
 
       {/* Build controls */}
-      <div className="bg-slate-800 rounded-lg p-3 mb-3">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex gap-2">
+      <div className="bg-slate-800 rounded-lg p-2 sm:p-3 mb-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div className="flex gap-1.5 sm:gap-2">
             <button
               onClick={() => setEraseMode(false)}
-              className={`px-4 py-2 rounded font-bold text-sm transition-colors ${
+              className={`px-3 sm:px-4 py-2 rounded font-bold text-xs sm:text-sm transition-colors ${
                 !eraseMode ? 'bg-blue-600 text-white' : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
               }`}
             >
@@ -565,28 +565,28 @@ export default function VoxelBuilder() {
             </button>
             <button
               onClick={() => setEraseMode(true)}
-              className={`px-4 py-2 rounded font-bold text-sm transition-colors ${
+              className={`px-3 sm:px-4 py-2 rounded font-bold text-xs sm:text-sm transition-colors ${
                 eraseMode ? 'bg-red-600 text-white' : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
               }`}
             >
               Erase
             </button>
           </div>
-          <div className="flex gap-2 items-center">
-            <span className="text-sm text-slate-400">{blockCount} blocks</span>
+          <div className="flex gap-1.5 sm:gap-2 items-center">
+            <span className="text-xs sm:text-sm text-slate-400">{blockCount} blocks</span>
             <DownloadButton canvasRef={canvasRef} filename="voxel-creation" label="Save" />
-            <button onClick={clearAll} className="px-3 py-2 bg-red-700 hover:bg-red-600 rounded text-sm font-bold transition-colors">
-              Clear All
+            <button onClick={clearAll} className="px-2 sm:px-3 py-2 bg-red-700 hover:bg-red-600 rounded text-xs sm:text-sm font-bold transition-colors">
+              Clear
             </button>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
           {(Object.keys(TX) as BlockType[]).map((bt) => (
             <button
               key={bt}
               onClick={() => { setSelectedBlock(bt); setEraseMode(false); }}
-              className={`px-4 py-2 rounded transition-all text-sm font-bold ${
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded transition-all text-xs sm:text-sm font-bold ${
                 selectedBlock === bt && !eraseMode ? 'ring-2 ring-white scale-105' : 'hover:scale-105'
               }`}
               style={{ backgroundColor: PALETTE_COLOR[bt], color: bt === 'sand' ? '#000' : '#fff' }}

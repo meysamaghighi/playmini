@@ -14,7 +14,7 @@ export default function MobileNav({
     <div className="sm:hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="text-gray-400 hover:text-white p-1"
+        className="text-gray-400 hover:text-white p-2"
         aria-label="Menu"
       >
         <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
