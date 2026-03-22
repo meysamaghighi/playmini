@@ -228,14 +228,14 @@ export default function WordleGame() {
     const state = keyStates[key];
     if (state === "correct") return "bg-[#22c55e] text-white border-[#22c55e]";
     if (state === "present") return "bg-[#eab308] text-white border-[#eab308]";
-    if (state === "absent") return "bg-[#4b5563] text-white border-[#4b5563]";
+    if (state === "absent") return "bg-[#6b2c2c] text-gray-400 border-[#6b2c2c]";
     return "bg-slate-700 hover:bg-slate-600 border-gray-600";
   };
 
   const getTileClass = (state: TileState["state"]) => {
     if (state === "correct") return "bg-[#22c55e] border-[#22c55e] text-white";
     if (state === "present") return "bg-[#eab308] border-[#eab308] text-white";
-    if (state === "absent") return "bg-[#4b5563] border-[#4b5563] text-white";
+    if (state === "absent") return "bg-[#5c2020] border-[#5c2020] text-gray-300";
     if (state === "tbd") return "border-gray-500 text-white animate-pulse";
     return "border-gray-700 text-white";
   };
@@ -298,7 +298,7 @@ export default function WordleGame() {
               return (
                 <div
                   key={colIndex}
-                  className={`w-14 h-14 sm:w-16 sm:h-16 border-2 flex items-center justify-center text-2xl font-bold rounded ${getTileClass(
+                  className={`w-14 h-14 sm:w-16 sm:h-16 border-2 flex items-center justify-center text-2xl font-bold rounded leading-none ${getTileClass(
                     state
                   )} ${shouldFlip ? "animate-flip" : ""}`}
                   style={{
@@ -321,7 +321,7 @@ export default function WordleGame() {
               <button
                 key={key}
                 onClick={() => handleKeyPress(key)}
-                className={`px-2 py-3 sm:px-4 sm:py-4 rounded font-bold border-2 transition-colors ${
+                className={`px-2 py-3 sm:px-4 sm:py-4 rounded font-bold border-2 transition-colors leading-none flex items-center justify-center ${
                   key === "ENTER" || key === "←" ? "flex-grow max-w-[80px]" : "w-8 sm:w-10"
                 } ${getKeyClass(key)}`}
                 disabled={gameOver}
