@@ -1050,15 +1050,16 @@ export default function CrosswordGame() {
         </div>
       )}
 
-      {/* Hidden input for mobile keyboard */}
+      {/* Offscreen input for mobile keyboard - must not be clipped/hidden for iOS to open keyboard */}
       <input
         ref={hiddenInputRef}
         type="text"
+        inputMode="text"
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="characters"
         spellCheck={false}
-        className="sr-only"
+        style={{ position: "absolute", left: "-9999px", top: "0", fontSize: "16px", opacity: 0.01 }}
         onInput={handleMobileInput}
         onKeyDown={(e) => {
           if (e.key === "Backspace") {

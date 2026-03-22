@@ -38,8 +38,8 @@ export default function DinoRunner() {
   const [gameOver, setGameOver] = useState(false);
   const [started, setStarted] = useState(false);
 
-  // Constants - game logic runs at 600x200, canvas renders at 900x300
-  const SCALE = 1.5;
+  // Constants - game logic runs at 600x200, canvas renders at 1200x400
+  const SCALE = 2;
   const CANVAS_WIDTH = 600;
   const CANVAS_HEIGHT = 200;
   const RENDER_WIDTH = CANVAS_WIDTH * SCALE;
@@ -568,7 +568,7 @@ export default function DinoRunner() {
           height={RENDER_HEIGHT}
           className="border-2 border-gray-700 rounded-lg w-full cursor-pointer"
           onClick={handleCanvasClick}
-          style={{ touchAction: "none", maxWidth: "900px" }}
+          style={{ touchAction: "none", maxWidth: "1200px" }}
         />
 
         {/* Start Overlay */}
