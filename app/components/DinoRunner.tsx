@@ -18,7 +18,7 @@ export default function DinoRunner() {
     bestScore: 0,
     dino: {
       x: 50,
-      y: 0, // y=0 is ground level, negative is jumping
+      y: 0,
       velocityY: 0,
       isDucking: false,
       isJumping: false,
@@ -38,13 +38,13 @@ export default function DinoRunner() {
   const [gameOver, setGameOver] = useState(false);
   const [started, setStarted] = useState(false);
 
-  // Constants - game logic runs at 600x200, canvas renders at 1200x400
+  // Game logic runs at 400x250, rendered at 2x (800x500)
   const SCALE = 2;
-  const CANVAS_WIDTH = 600;
-  const CANVAS_HEIGHT = 200;
+  const CANVAS_WIDTH = 400;
+  const CANVAS_HEIGHT = 250;
   const RENDER_WIDTH = CANVAS_WIDTH * SCALE;
   const RENDER_HEIGHT = CANVAS_HEIGHT * SCALE;
-  const GROUND_Y = 160;
+  const GROUND_Y = 200;
   const GRAVITY = 0.6;
   const JUMP_FORCE = -12;
   const DINO_WIDTH = 20;
@@ -69,58 +69,44 @@ export default function DinoRunner() {
     const dinoY = GROUND_Y - height + dino.y;
 
     if (isDucking) {
-      // Ducking dino - lower profile
       ctx.fillStyle = "#7ec850";
-      ctx.fillRect(dino.x, dinoY, 40, 12); // body
+      ctx.fillRect(dino.x, dinoY, 40, 12);
       ctx.fillStyle = "#6ab43e";
-      ctx.fillRect(dino.x, dinoY + 6, 40, 6); // body shadow
+      ctx.fillRect(dino.x, dinoY + 6, 40, 6);
       ctx.fillStyle = "#7ec850";
-      ctx.fillRect(dino.x + 35, dinoY + 2, 10, 10); // head
-      // Eye
+      ctx.fillRect(dino.x + 35, dinoY + 2, 10, 10);
       ctx.fillStyle = "#fff";
       ctx.fillRect(dino.x + 40, dinoY + 3, 3, 3);
       ctx.fillStyle = "#111";
       ctx.fillRect(dino.x + 41, dinoY + 4, 2, 2);
-      // Legs
       ctx.fillStyle = "#5a9e30";
       ctx.fillRect(dino.x + 5, dinoY + 14, 8, 12);
       ctx.fillRect(dino.x + 25, dinoY + 14, 8, 12);
     } else {
-      // Standing/jumping dino - T-Rex with color
-      // Body
       ctx.fillStyle = "#7ec850";
       ctx.fillRect(dino.x, dinoY + 18, DINO_WIDTH + 2, 26);
-      // Body texture (scales)
       ctx.fillStyle = "#6ab43e";
       ctx.fillRect(dino.x + 2, dinoY + 22, 3, 3);
       ctx.fillRect(dino.x + 8, dinoY + 20, 3, 3);
       ctx.fillRect(dino.x + 14, dinoY + 24, 3, 3);
       ctx.fillRect(dino.x + 6, dinoY + 30, 3, 3);
       ctx.fillRect(dino.x + 12, dinoY + 32, 3, 3);
-      // Belly
       ctx.fillStyle = "#a8e080";
       ctx.fillRect(dino.x + 2, dinoY + 30, DINO_WIDTH - 4, 10);
-      // Head
       ctx.fillStyle = "#7ec850";
       ctx.fillRect(dino.x + 13, dinoY + 8, 14, 14);
-      // Eye
       ctx.fillStyle = "#fff";
       ctx.fillRect(dino.x + 21, dinoY + 10, 4, 4);
       ctx.fillStyle = "#111";
       ctx.fillRect(dino.x + 23, dinoY + 11, 2, 2);
-      // Mouth
       ctx.fillStyle = "#5a9e30";
       ctx.fillRect(dino.x + 22, dinoY + 17, 6, 2);
-      // Small arm
       ctx.fillStyle = "#6ab43e";
       ctx.fillRect(dino.x + 4, dinoY + 24, 4, 6);
-
-      // Legs animate when running on ground
       ctx.fillStyle = "#5a9e30";
       const legOffset = dino.y === 0 ? (Math.floor(frameCount / 5) % 2) * 4 : 0;
       ctx.fillRect(dino.x + 2, dinoY + 44 - 12, 7, 12 - legOffset);
       ctx.fillRect(dino.x + 13, dinoY + 44 - 12, 7, 12 + legOffset);
-      // Feet
       ctx.fillStyle = "#7ec850";
       ctx.fillRect(dino.x + 1, dinoY + 44 - legOffset, 8, 3);
       ctx.fillRect(dino.x + 12, dinoY + 44 + legOffset, 8, 3);
@@ -130,54 +116,42 @@ export default function DinoRunner() {
   const drawObstacle = (ctx: CanvasRenderingContext2D, obs: Obstacle) => {
     if (obs.type === "cactus") {
       const cactusY = GROUND_Y - obs.height;
-      // Main trunk
       ctx.fillStyle = "#2d8c3c";
       ctx.fillRect(obs.x + 4, cactusY, CACTUS_WIDTH - 8, obs.height);
-      // Darker center stripe
       ctx.fillStyle = "#1e6e2c";
       ctx.fillRect(obs.x + 8, cactusY, 4, obs.height);
-      // Spines/ridges
       ctx.fillStyle = "#3aaf50";
       for (let sy = cactusY + 4; sy < GROUND_Y - 4; sy += 8) {
         ctx.fillRect(obs.x + 3, sy, 2, 2);
         ctx.fillRect(obs.x + CACTUS_WIDTH - 5, sy + 4, 2, 2);
       }
-      // Arms
       if (obs.height > 30) {
         ctx.fillStyle = "#2d8c3c";
         ctx.fillRect(obs.x - 4, cactusY + 8, 8, 6);
         ctx.fillRect(obs.x - 4, cactusY + 8, 4, 14);
         ctx.fillRect(obs.x + CACTUS_WIDTH - 4, cactusY + 12, 8, 6);
         ctx.fillRect(obs.x + CACTUS_WIDTH, cactusY + 12, 4, 14);
-        // Arm highlights
         ctx.fillStyle = "#3aaf50";
         ctx.fillRect(obs.x - 3, cactusY + 9, 2, 2);
         ctx.fillRect(obs.x + CACTUS_WIDTH + 1, cactusY + 13, 2, 2);
       }
-      // Top cap
       ctx.fillStyle = "#3aaf50";
       ctx.beginPath();
       ctx.arc(obs.x + CACTUS_WIDTH / 2, cactusY + 2, 6, Math.PI, 0);
       ctx.fill();
     } else {
-      // Pterodactyl
       const pteroY = obs.height;
       const wingFlap = Math.floor(gameStateRef.current.frameCount / 5) % 2;
-      // Body
       ctx.fillStyle = "#8b5e3c";
       ctx.fillRect(obs.x + 8, pteroY + 4, 16, 12);
-      // Head
       ctx.fillStyle = "#a0704f";
       ctx.fillRect(obs.x + 22, pteroY + 4, 10, 8);
-      // Beak
       ctx.fillStyle = "#d4a056";
       ctx.fillRect(obs.x + 30, pteroY + 6, 6, 4);
-      // Eye
       ctx.fillStyle = "#fff";
       ctx.fillRect(obs.x + 26, pteroY + 5, 3, 3);
       ctx.fillStyle = "#111";
       ctx.fillRect(obs.x + 27, pteroY + 6, 2, 2);
-      // Wings
       ctx.fillStyle = "#a0704f";
       if (wingFlap === 0) {
         ctx.fillRect(obs.x + 4, pteroY - 4, 22, 6);
@@ -191,28 +165,39 @@ export default function DinoRunner() {
 
   const drawGround = (ctx: CanvasRenderingContext2D) => {
     const { groundOffset } = gameStateRef.current;
-    // Ground line
     ctx.strokeStyle = "#525252";
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(0, GROUND_Y);
     ctx.lineTo(CANVAS_WIDTH, GROUND_Y);
     ctx.stroke();
-    // Ground texture - pebbles and dirt
     ctx.fillStyle = "#333";
     const seed = 42;
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 30; i++) {
       const px = ((i * 37 + seed) % CANVAS_WIDTH + CANVAS_WIDTH - groundOffset) % CANVAS_WIDTH;
       const py = GROUND_Y + 4 + ((i * 13 + seed) % 20);
       const sz = 1 + ((i * 7) % 3);
       ctx.fillRect(px, py, sz, sz);
     }
-    // Sparse larger rocks
     ctx.fillStyle = "#3a3a3a";
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 6; i++) {
       const px = ((i * 83 + 17) % CANVAS_WIDTH + CANVAS_WIDTH - groundOffset * 0.5) % CANVAS_WIDTH;
       const py = GROUND_Y + 6 + ((i * 29) % 14);
       ctx.fillRect(px, py, 4, 3);
+    }
+  };
+
+  const drawClouds = (ctx: CanvasRenderingContext2D) => {
+    const { groundOffset } = gameStateRef.current;
+    ctx.fillStyle = "#2a2a2a";
+    for (let i = 0; i < 4; i++) {
+      const cx = ((i * 120 + 50) - groundOffset * 0.2 + CANVAS_WIDTH * 2) % CANVAS_WIDTH;
+      const cy = 30 + i * 15;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 12, 0, Math.PI * 2);
+      ctx.arc(cx + 14, cy - 4, 10, 0, Math.PI * 2);
+      ctx.arc(cx + 24, cy, 8, 0, Math.PI * 2);
+      ctx.fill();
     }
   };
 
@@ -220,7 +205,7 @@ export default function DinoRunner() {
     const { dino, obstacles } = gameStateRef.current;
     const dinoHeight = dino.isDucking ? DINO_DUCK_HEIGHT : DINO_HEIGHT;
     const dinoRect = {
-      x: dino.x + 2, // slight margin
+      x: dino.x + 2,
       y: GROUND_Y - dinoHeight + dino.y + 2,
       width: DINO_WIDTH - 4,
       height: dinoHeight - 4,
@@ -258,8 +243,6 @@ export default function DinoRunner() {
 
   const spawnObstacle = () => {
     const { obstacles, frameCount, lastObstacleSpawn } = gameStateRef.current;
-
-    // Spawn obstacle every 90-150 frames (variable gap)
     const minGap = 90;
     const maxGap = 150;
     const gap = minGap + Math.random() * (maxGap - minGap);
@@ -268,7 +251,6 @@ export default function DinoRunner() {
       const obstacleType = Math.random() < 0.7 ? "cactus" : "ptero";
 
       if (obstacleType === "cactus") {
-        // Cactus: variable height
         const heights = [30, 40, 50];
         obstacles.push({
           x: CANVAS_WIDTH,
@@ -276,11 +258,10 @@ export default function DinoRunner() {
           height: heights[Math.floor(Math.random() * heights.length)],
         });
       } else {
-        // Pterodactyl: flying at head height (needs ducking)
         obstacles.push({
           x: CANVAS_WIDTH,
           type: "ptero",
-          height: GROUND_Y - DINO_HEIGHT - 10, // Just above dino head
+          height: GROUND_Y - DINO_HEIGHT - 10,
         });
       }
 
@@ -312,30 +293,23 @@ export default function DinoRunner() {
     const state = gameStateRef.current;
     if (!state.isRunning || state.gameOver) return;
 
-    // Clear canvas at full render resolution, then scale for drawing
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.fillStyle = "#1b1b1b";
     ctx.fillRect(0, 0, RENDER_WIDTH, RENDER_HEIGHT);
     ctx.scale(SCALE, SCALE);
 
-    // Update frame count
     state.frameCount++;
-
-    // Update score (1 point per frame, ~60fps = ~60 points/sec)
     state.score = Math.floor(state.frameCount / 6);
     setDisplayScore(state.score);
 
-    // Check for milestone (every 100 points)
     if (state.score >= state.lastMilestone + 100) {
       state.lastMilestone = state.score;
       state.showMilestone = true;
       state.milestoneFrame = state.frameCount;
     }
 
-    // Increase speed gradually
     state.speed = 5 + state.score / 100;
 
-    // Update dino physics
     const { dino } = state;
     dino.velocityY += GRAVITY;
     dino.y += dino.velocityY;
@@ -345,26 +319,21 @@ export default function DinoRunner() {
       dino.isJumping = false;
     }
 
-    // Update ground
     state.groundOffset += state.speed;
     if (state.groundOffset > 20) state.groundOffset = 0;
 
-    // Spawn obstacles
     spawnObstacle();
 
-    // Update obstacles
     state.obstacles = state.obstacles.filter((obs) => {
       obs.x -= state.speed;
-      return obs.x > -50; // remove off-screen obstacles
+      return obs.x > -50;
     });
 
-    // Check collision
     if (checkCollision()) {
       state.gameOver = true;
       state.isRunning = false;
       setGameOver(true);
 
-      // Update best score
       if (state.score > state.bestScore) {
         state.bestScore = state.score;
         setDisplayBest(state.score);
@@ -373,18 +342,16 @@ export default function DinoRunner() {
       return;
     }
 
-    // Draw everything
+    drawClouds(ctx);
     drawGround(ctx);
     state.obstacles.forEach((obs) => drawObstacle(ctx, obs));
     drawDino(ctx);
 
-    // Draw score
     ctx.fillStyle = "#f7f7f7";
     ctx.font = "16px monospace";
     ctx.textAlign = "right";
     ctx.fillText(`Score: ${state.score}`, CANVAS_WIDTH - 10, 30);
 
-    // Draw milestone flash
     if (state.showMilestone && state.frameCount - state.milestoneFrame < 30) {
       ctx.font = "24px monospace";
       ctx.textAlign = "center";
@@ -457,7 +424,6 @@ export default function DinoRunner() {
     }
   };
 
-  // Touch handling via native events for proper preventDefault on tablets
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
@@ -529,7 +495,6 @@ export default function DinoRunner() {
         // User cancelled or error
       }
     } else {
-      // Fallback: copy to clipboard
       try {
         await navigator.clipboard.writeText(text);
         alert("Score copied to clipboard!");
@@ -561,14 +526,14 @@ export default function DinoRunner() {
       </div>
 
       {/* Canvas */}
-      <div className="relative">
+      <div className="relative w-full" style={{ maxWidth: "800px" }}>
         <canvas
           ref={canvasRef}
           width={RENDER_WIDTH}
           height={RENDER_HEIGHT}
           className="border-2 border-gray-700 rounded-lg w-full cursor-pointer"
           onClick={handleCanvasClick}
-          style={{ touchAction: "none", maxWidth: "1200px" }}
+          style={{ touchAction: "none" }}
         />
 
         {/* Start Overlay */}

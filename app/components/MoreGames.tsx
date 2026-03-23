@@ -27,6 +27,8 @@ const games = [
   { href: "/checkers", label: "Checkers", color: "from-red-600 to-gray-600" },
   { href: "/breakout", label: "Breakout", color: "from-red-500 to-purple-600" },
   { href: "/typing-race", label: "Typing Race", color: "from-blue-500 to-purple-600" },
+  { href: "/word-search", label: "Word Search", color: "from-green-500 to-emerald-600" },
+  { href: "/maze", label: "Maze Runner", color: "from-purple-500 to-violet-600" },
 ];
 
 export default function MoreGames() {

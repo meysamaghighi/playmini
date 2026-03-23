@@ -41,6 +41,8 @@ const navLinks = [
   { href: "/checkers", label: "Checkers" },
   { href: "/breakout", label: "Breakout" },
   { href: "/typing-race", label: "Typing Race" },
+  { href: "/word-search", label: "Word Search" },
+  { href: "/maze", label: "Maze" },
 ];
 
 export default function RootLayout({

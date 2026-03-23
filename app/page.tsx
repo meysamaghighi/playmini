@@ -464,6 +464,44 @@ const games: Array<{
       </svg>
     ),
   },
+  {
+    href: "/word-search",
+    title: "Word Search",
+    description: "Find hidden words in a letter grid",
+    color: "from-green-500 to-emerald-600",
+    category: "Puzzle",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="6" y="6" width="36" height="36" rx="2" fill="#1f2937" stroke="#22c55e" strokeWidth="2" />
+        <text x="14" y="20" fill="#6b7280" fontSize="10" fontWeight="bold">A</text>
+        <text x="22" y="20" fill="#22c55e" fontSize="10" fontWeight="bold">C</text>
+        <text x="30" y="20" fill="#6b7280" fontSize="10" fontWeight="bold">B</text>
+        <text x="14" y="28" fill="#6b7280" fontSize="10" fontWeight="bold">X</text>
+        <text x="22" y="28" fill="#22c55e" fontSize="10" fontWeight="bold">A</text>
+        <text x="30" y="28" fill="#6b7280" fontSize="10" fontWeight="bold">F</text>
+        <text x="14" y="36" fill="#6b7280" fontSize="10" fontWeight="bold">Q</text>
+        <text x="22" y="36" fill="#22c55e" fontSize="10" fontWeight="bold">T</text>
+        <text x="30" y="36" fill="#6b7280" fontSize="10" fontWeight="bold">M</text>
+        <line x1="22" y1="14" x2="22" y2="38" stroke="#22c55e" strokeWidth="2" opacity="0.5" />
+      </svg>
+    ),
+  },
+  {
+    href: "/maze",
+    title: "Maze Runner",
+    description: "Navigate through generated mazes to the goal",
+    color: "from-purple-500 to-violet-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="4" width="40" height="40" rx="2" fill="#1f2937" />
+        <path d="M8 8h32v8H32v8h8v8H32v8h8v-8" stroke="#a855f7" strokeWidth="3" fill="none" />
+        <path d="M8 16h8v8H8v8h8v8" stroke="#a855f7" strokeWidth="3" fill="none" />
+        <circle cx="12" cy="12" r="3" fill="#3b82f6" />
+        <circle cx="36" cy="36" r="3" fill="#22c55e" />
+      </svg>
+    ),
+  },
 ];
 
 export default function Home() {
