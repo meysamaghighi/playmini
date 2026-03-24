@@ -32,5 +32,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/typing-race`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/word-search`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/maze`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/space-invaders`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/bubble-shooter`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/simon`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/sliding-puzzle`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/solitaire`, lastModified: now, priority: 0.9 },
   ];
 }

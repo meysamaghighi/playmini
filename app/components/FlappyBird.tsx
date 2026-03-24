@@ -106,11 +106,11 @@ export default function FlappyBird() {
   const CANVAS_HEIGHT = 600;
   const BIRD_SIZE = 30;
   const PIPE_WIDTH = 60;
-  const GAP_SIZE = 150;
-  const GRAVITY = 0.5;
-  const FLAP_STRENGTH = -9;
-  const PIPE_SPEED = 2;
-  const PIPE_SPACING = 220;
+  const GAP_SIZE = 200;
+  const GRAVITY = 0.35;
+  const FLAP_STRENGTH = -7.5;
+  const PIPE_SPEED = 1.6;
+  const PIPE_SPACING = 280;
   const GROUND_HEIGHT = 80;
 
   useEffect(() => {
@@ -277,11 +277,11 @@ export default function FlappyBird() {
         return pipe.x > -PIPE_WIDTH;
       });
 
-      // Collision detection
-      const birdLeft = CANVAS_WIDTH / 2 - BIRD_SIZE / 2;
-      const birdRight = CANVAS_WIDTH / 2 + BIRD_SIZE / 2;
-      const birdTop = birdRef.current.y - BIRD_SIZE / 2;
-      const birdBottom = birdRef.current.y + BIRD_SIZE / 2;
+      // Collision detection (with forgiving hitbox)
+      const birdLeft = CANVAS_WIDTH / 2 - BIRD_SIZE / 2 + 4;
+      const birdRight = CANVAS_WIDTH / 2 + BIRD_SIZE / 2 - 4;
+      const birdTop = birdRef.current.y - BIRD_SIZE / 2 + 4;
+      const birdBottom = birdRef.current.y + BIRD_SIZE / 2 - 4;
 
       if (birdBottom >= CANVAS_HEIGHT - GROUND_HEIGHT || birdTop <= 0) {
         endGame();

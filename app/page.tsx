@@ -502,6 +502,99 @@ const games: Array<{
       </svg>
     ),
   },
+  {
+    href: "/space-invaders",
+    title: "Space Invaders",
+    description: "Defend Earth from alien invaders",
+    color: "from-red-500 to-pink-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="8" y="16" width="8" height="8" fill="#ef4444" />
+        <rect x="20" y="16" width="8" height="8" fill="#ef4444" />
+        <rect x="32" y="16" width="8" height="8" fill="#ef4444" />
+        <rect x="14" y="24" width="8" height="8" fill="#ef4444" />
+        <rect x="26" y="24" width="8" height="8" fill="#ef4444" />
+        <path d="M20 38h8l-2 4h-4z" fill="#22c55e" />
+        <rect x="18" y="36" width="12" height="4" fill="#22c55e" />
+        <rect x="22" y="42" width="2" height="2" fill="#facc15" />
+      </svg>
+    ),
+  },
+  {
+    href: "/bubble-shooter",
+    title: "Bubble Shooter",
+    description: "Match 3+ bubbles to pop them",
+    color: "from-purple-500 to-fuchsia-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <circle cx="14" cy="12" r="6" fill="#ef4444" opacity="0.8" />
+        <circle cx="24" cy="12" r="6" fill="#3b82f6" opacity="0.8" />
+        <circle cx="34" cy="12" r="6" fill="#22c55e" opacity="0.8" />
+        <circle cx="19" cy="20" r="6" fill="#a855f7" opacity="0.8" />
+        <circle cx="29" cy="20" r="6" fill="#f59e0b" opacity="0.8" />
+        <circle cx="24" cy="28" r="6" fill="#ec4899" opacity="0.8" />
+        <path d="M24 38L28 42L20 42Z" fill="#6b7280" />
+        <circle cx="24" cy="38" r="3" fill="#ef4444" />
+      </svg>
+    ),
+  },
+  {
+    href: "/simon",
+    title: "Simon Says",
+    description: "Repeat the color sequence pattern",
+    color: "from-blue-500 to-cyan-600",
+    category: "Puzzle",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <circle cx="24" cy="24" r="20" fill="#1f2937" />
+        <path d="M24 24L24 4A20 20 0 0 1 44 24Z" fill="#ef4444" />
+        <path d="M24 24L44 24A20 20 0 0 1 24 44Z" fill="#3b82f6" />
+        <path d="M24 24L24 44A20 20 0 0 1 4 24Z" fill="#22c55e" />
+        <path d="M24 24L4 24A20 20 0 0 1 24 4Z" fill="#facc15" />
+        <circle cx="24" cy="24" r="6" fill="#111" />
+      </svg>
+    ),
+  },
+  {
+    href: "/sliding-puzzle",
+    title: "Sliding Puzzle",
+    description: "Arrange tiles 1-15 in order",
+    color: "from-green-500 to-teal-600",
+    category: "Puzzle",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="4" width="40" height="40" rx="2" fill="#1f2937" stroke="#22c55e" strokeWidth="2" />
+        <rect x="8" y="8" width="8" height="8" rx="1" fill="#22c55e" />
+        <rect x="18" y="8" width="8" height="8" rx="1" fill="#22c55e" />
+        <rect x="28" y="8" width="8" height="8" rx="1" fill="#22c55e" />
+        <rect x="8" y="18" width="8" height="8" rx="1" fill="#22c55e" />
+        <rect x="18" y="18" width="8" height="8" rx="1" fill="#22c55e" />
+        <rect x="28" y="18" width="8" height="8" rx="1" fill="#22c55e" />
+        <text x="12" y="14" textAnchor="middle" fill="white" fontSize="7" fontWeight="bold">1</text>
+        <text x="22" y="14" textAnchor="middle" fill="white" fontSize="7" fontWeight="bold">2</text>
+        <text x="32" y="14" textAnchor="middle" fill="white" fontSize="7" fontWeight="bold">3</text>
+      </svg>
+    ),
+  },
+  {
+    href: "/solitaire",
+    title: "Solitaire",
+    description: "Classic Klondike card game",
+    color: "from-blue-600 to-indigo-700",
+    category: "Strategy",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="8" y="12" width="12" height="18" rx="2" fill="white" stroke="#3b82f6" strokeWidth="1.5" />
+        <rect x="18" y="16" width="12" height="18" rx="2" fill="white" stroke="#3b82f6" strokeWidth="1.5" />
+        <rect x="28" y="20" width="12" height="18" rx="2" fill="white" stroke="#3b82f6" strokeWidth="1.5" />
+        <text x="14" y="24" textAnchor="middle" fill="#ef4444" fontSize="10" fontWeight="bold">A</text>
+        <text x="24" y="28" textAnchor="middle" fill="#111" fontSize="10" fontWeight="bold">K</text>
+        <text x="34" y="32" textAnchor="middle" fill="#ef4444" fontSize="10" fontWeight="bold">Q</text>
+      </svg>
+    ),
+  },
 ];
 
 export default function Home() {
