@@ -353,7 +353,7 @@ export default function CarRacer() {
     if (jumpingRef.current) {
       // Parabolic arc: goes up then down
       const t = jumpProgressRef.current;
-      const jumpHeight = 80; // max height
+      const jumpHeight = 100; // max height (increased for more dramatic jump)
       const arc = Math.sin(t * Math.PI); // 0 to 1 to 0
       playerY = PLAYER_Y - jumpHeight * arc;
       shadowOffset = jumpHeight * arc;
@@ -400,16 +400,22 @@ export default function CarRacer() {
     const would = new Set(blocked); would.add(lane);
     if (would.size >= LANES) return;
 
+    const carY = -35;
     obsRef.current.push({
-      x: laneX(lane), y: -35, lane,
+      x: laneX(lane), y: carY, lane,
       color: OBS_COLORS[Math.floor(Math.random() * OBS_COLORS.length)],
     });
 
-    // 25% chance to spawn a ramp before this obstacle
+    // 25% chance to spawn a ramp directly before this obstacle
+    // Ramp must be in same lane and positioned so player hits ramp first, then jumps over car
     if (Math.random() < 0.25) {
+      // Ramp positioned 150px ahead of car (closer to player)
+      // At typical speed (~3-5), this gives ~30-50 frames, and jump duration is 40 frames (1/0.025)
+      // Player will hit ramp, jump arc peaks around halfway, car passes underneath
+      const rampY = carY + 150;
       rampsRef.current.push({
         x: laneX(lane),
-        y: -120, // ahead of the car
+        y: rampY,
         lane,
       });
     }
@@ -513,7 +519,7 @@ export default function CarRacer() {
 
     // Update jump progress
     if (jumpingRef.current) {
-      jumpProgressRef.current += 0.025; // ~1 second jump duration
+      jumpProgressRef.current += 0.03; // ~0.8 second jump duration for tighter timing
       if (jumpProgressRef.current >= 1) {
         jumpingRef.current = false;
         jumpProgressRef.current = 0;

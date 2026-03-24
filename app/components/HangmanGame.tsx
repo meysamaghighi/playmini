@@ -76,7 +76,7 @@ const HARD_WORDS: { [category: string]: string[] } = {
 type Difficulty = "easy" | "medium" | "hard";
 
 const DIFFICULTY_SETTINGS = {
-  easy: { maxWrong: 8, wordBank: EASY_WORDS },
+  easy: { maxWrong: 10, wordBank: EASY_WORDS },
   medium: { maxWrong: 6, wordBank: MEDIUM_WORD_BANK },
   hard: { maxWrong: 5, wordBank: HARD_WORDS }
 };
@@ -247,6 +247,26 @@ export default function HangmanGame() {
             {/* Right Leg */}
             {wrongGuesses >= 6 && (
               <line x1="130" y1="150" x2="150" y2="190" stroke="white" strokeWidth="4" />
+            )}
+
+            {/* Left Hand */}
+            {wrongGuesses >= 7 && (
+              <circle cx="95" cy="135" r="5" stroke="white" strokeWidth="3" fill="none" />
+            )}
+
+            {/* Right Hand */}
+            {wrongGuesses >= 8 && (
+              <circle cx="165" cy="135" r="5" stroke="white" strokeWidth="3" fill="none" />
+            )}
+
+            {/* Left Foot */}
+            {wrongGuesses >= 9 && (
+              <line x1="110" y1="190" x2="100" y2="200" stroke="white" strokeWidth="3" />
+            )}
+
+            {/* Right Foot */}
+            {wrongGuesses >= 10 && (
+              <line x1="150" y1="190" x2="160" y2="200" stroke="white" strokeWidth="3" />
             )}
           </svg>
         </div>
