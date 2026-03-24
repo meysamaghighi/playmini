@@ -487,6 +487,26 @@ const games: Array<{
     ),
   },
   {
+    href: "/word-builder",
+    title: "Word Builder",
+    description: "How many words can you make from one word?",
+    color: "from-emerald-500 to-cyan-600",
+    category: "Word",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="16" width="10" height="10" rx="2" fill="#10b981" />
+        <rect x="16" y="16" width="10" height="10" rx="2" fill="#14b8a6" />
+        <rect x="28" y="16" width="10" height="10" rx="2" fill="#06b6d4" />
+        <rect x="40" y="16" width="4" height="10" rx="1" fill="#0891b2" />
+        <text x="9" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">W</text>
+        <text x="21" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">O</text>
+        <text x="33" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">R</text>
+        <text x="42" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">D</text>
+        <path d="M10 30 Q24 34 38 30" stroke="#22c55e" strokeWidth="2" fill="none" opacity="0.6" />
+      </svg>
+    ),
+  },
+  {
     href: "/maze",
     title: "Maze Runner",
     description: "Navigate through generated mazes to the goal",

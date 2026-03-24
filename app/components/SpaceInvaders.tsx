@@ -47,6 +47,9 @@ export default function SpaceInvaders() {
   const lastShotTimeRef = useRef(0);
   const lastAlienShotRef = useRef(0);
   const gameStateRef = useRef<"start" | "playing" | "gameover">("start");
+  const touchLeftRef = useRef(false);
+  const touchRightRef = useRef(false);
+  const touchFireRef = useRef(false);
 
   const initAliens = useCallback(() => {
     const aliens: Alien[] = [];
@@ -123,17 +126,17 @@ export default function SpaceInvaders() {
       return;
     }
 
-    // Move player
-    if (keysRef.current["ArrowLeft"] || keysRef.current["a"]) {
+    // Move player (keyboard or touch)
+    if (keysRef.current["ArrowLeft"] || keysRef.current["a"] || touchLeftRef.current) {
       playerXRef.current = Math.max(0, playerXRef.current - PLAYER_SPEED);
     }
-    if (keysRef.current["ArrowRight"] || keysRef.current["d"]) {
+    if (keysRef.current["ArrowRight"] || keysRef.current["d"] || touchRightRef.current) {
       playerXRef.current = Math.min(CANVAS_WIDTH - PLAYER_WIDTH, playerXRef.current + PLAYER_SPEED);
     }
 
-    // Shoot
+    // Shoot (keyboard or touch)
     const now = Date.now();
-    if (keysRef.current[" "] && now - lastShotTimeRef.current > 300) {
+    if ((keysRef.current[" "] || touchFireRef.current) && now - lastShotTimeRef.current > 300) {
       bulletsRef.current.push({
         x: playerXRef.current + PLAYER_WIDTH / 2 - 2,
         y: CANVAS_HEIGHT - 70,
@@ -318,6 +321,20 @@ export default function SpaceInvaders() {
     }
   };
 
+  const handleTouchStart = (direction: "left" | "right" | "fire") => (e: React.TouchEvent) => {
+    e.preventDefault();
+    if (direction === "left") touchLeftRef.current = true;
+    else if (direction === "right") touchRightRef.current = true;
+    else if (direction === "fire") touchFireRef.current = true;
+  };
+
+  const handleTouchEnd = (direction: "left" | "right" | "fire") => (e: React.TouchEvent) => {
+    e.preventDefault();
+    if (direction === "left") touchLeftRef.current = false;
+    else if (direction === "right") touchRightRef.current = false;
+    else if (direction === "fire") touchFireRef.current = false;
+  };
+
   return (
     <div ref={containerRef} className="flex flex-col items-center gap-4">
       <div className="flex gap-8 text-center">
@@ -337,6 +354,7 @@ export default function SpaceInvaders() {
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
           className="rounded-2xl max-w-full h-auto border border-gray-800"
+          style={{ touchAction: "none" }}
         />
 
         {gameState === "start" && (
@@ -381,8 +399,37 @@ export default function SpaceInvaders() {
         )}
       </div>
 
+      {/* Touch Controls */}
+      <div className="flex gap-3 w-full max-w-md justify-between items-center px-4">
+        <button
+          onTouchStart={handleTouchStart("left")}
+          onTouchEnd={handleTouchEnd("left")}
+          className="flex-1 h-16 bg-gray-800/50 hover:bg-gray-700/50 active:bg-gray-600/50 text-white font-bold rounded-xl transition-colors select-none flex items-center justify-center text-2xl border border-gray-700"
+          style={{ touchAction: "none" }}
+        >
+          ←
+        </button>
+        <button
+          onTouchStart={handleTouchStart("fire")}
+          onTouchEnd={handleTouchEnd("fire")}
+          className="flex-1 h-16 bg-red-600/50 hover:bg-red-500/50 active:bg-red-400/50 text-white font-bold rounded-xl transition-colors select-none flex items-center justify-center border border-red-500"
+          style={{ touchAction: "none" }}
+        >
+          FIRE
+        </button>
+        <button
+          onTouchStart={handleTouchStart("right")}
+          onTouchEnd={handleTouchEnd("right")}
+          className="flex-1 h-16 bg-gray-800/50 hover:bg-gray-700/50 active:bg-gray-600/50 text-white font-bold rounded-xl transition-colors select-none flex items-center justify-center text-2xl border border-gray-700"
+          style={{ touchAction: "none" }}
+        >
+          →
+        </button>
+      </div>
+
       <div className="text-center text-xs text-gray-600">
         <p>Arrow keys or A/D to move • Space to shoot</p>
+        <p className="mt-1">Or use touch controls on mobile</p>
       </div>
     </div>
   );

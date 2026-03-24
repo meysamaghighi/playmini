@@ -48,6 +48,7 @@ const navLinks = [
   { href: "/simon", label: "Simon Says" },
   { href: "/sliding-puzzle", label: "Sliding Puzzle" },
   { href: "/solitaire", label: "Solitaire" },
+  { href: "/word-builder", label: "Word Builder" },
 ];
 
 export default function RootLayout({

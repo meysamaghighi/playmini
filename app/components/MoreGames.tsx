@@ -34,6 +34,7 @@ const games = [
   { href: "/simon", label: "Simon Says", color: "from-blue-500 to-cyan-600" },
   { href: "/sliding-puzzle", label: "Sliding Puzzle", color: "from-green-500 to-teal-600" },
   { href: "/solitaire", label: "Solitaire", color: "from-blue-600 to-indigo-700" },
+  { href: "/word-builder", label: "Word Builder", color: "from-emerald-500 to-cyan-600" },
 ];
 
 export default function MoreGames() {
