@@ -46,6 +46,7 @@ export default function SpaceInvaders() {
   const livesRef = useRef(3);
   const lastShotTimeRef = useRef(0);
   const lastAlienShotRef = useRef(0);
+  const gameStateRef = useRef<"start" | "playing" | "gameover">("start");
 
   const initAliens = useCallback(() => {
     const aliens: Alien[] = [];
@@ -117,7 +118,7 @@ export default function SpaceInvaders() {
   }, []);
 
   const gameLoop = useCallback(() => {
-    if (gameState !== "playing") {
+    if (gameStateRef.current !== "playing") {
       gameLoopRef.current = null;
       return;
     }
@@ -221,6 +222,7 @@ export default function SpaceInvaders() {
         setLives(livesRef.current);
         alienBulletsRef.current = [];
         if (livesRef.current <= 0) {
+          gameStateRef.current = "gameover";
           setGameState("gameover");
           gameLoopRef.current = null;
           draw();
@@ -233,6 +235,7 @@ export default function SpaceInvaders() {
     // Check win
     const anyAlive = aliensRef.current.some((a) => a.alive);
     if (!anyAlive) {
+      gameStateRef.current = "gameover";
       setGameState("gameover");
       gameLoopRef.current = null;
       draw();
@@ -242,6 +245,7 @@ export default function SpaceInvaders() {
     // Check loss (aliens reached bottom)
     for (const alien of aliensRef.current) {
       if (alien.alive && alien.y + ALIEN_HEIGHT >= CANVAS_HEIGHT - 80) {
+        gameStateRef.current = "gameover";
         setGameState("gameover");
         gameLoopRef.current = null;
         draw();
@@ -251,7 +255,7 @@ export default function SpaceInvaders() {
 
     draw();
     gameLoopRef.current = requestAnimationFrame(gameLoop);
-  }, [gameState, draw]);
+  }, [draw]);
 
   const startGame = useCallback(() => {
     playerXRef.current = CANVAS_WIDTH / 2 - PLAYER_WIDTH / 2;
@@ -267,8 +271,11 @@ export default function SpaceInvaders() {
     lastAlienShotRef.current = 0;
     setScore(0);
     setLives(3);
+    gameStateRef.current = "playing";
     setGameState("playing");
-    gameLoopRef.current = requestAnimationFrame(gameLoop);
+    if (gameLoopRef.current === null) {
+      gameLoopRef.current = requestAnimationFrame(gameLoop);
+    }
   }, [initAliens, gameLoop]);
 
   useEffect(() => {

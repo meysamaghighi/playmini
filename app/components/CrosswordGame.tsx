@@ -23,8 +23,92 @@ type Puzzle = {
   clues: Clue[];
 };
 
-// Pre-built puzzles
-const PUZZLES: Puzzle[] = [
+type Difficulty = "easy" | "medium" | "hard";
+
+// Easy puzzles (5x5 or 7x7, simple words)
+const EASY_PUZZLES: Puzzle[] = [
+  {
+    grid: [
+      [
+        { letter: "C", userLetter: "", number: 1, isBlack: false },
+        { letter: "A", userLetter: "", isBlack: false },
+        { letter: "T", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "D", userLetter: "", number: 2, isBlack: false },
+        { letter: "O", userLetter: "", isBlack: false },
+        { letter: "G", userLetter: "", isBlack: false },
+      ],
+      [
+        { letter: "U", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "R", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "A", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+      ],
+      [
+        { letter: "P", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "E", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "Y", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+      ],
+      [
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "S", userLetter: "", number: 3, isBlack: false },
+        { letter: "U", userLetter: "", isBlack: false },
+        { letter: "N", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+      ],
+      [
+        { letter: "B", userLetter: "", number: 4, isBlack: false },
+        { letter: "E", userLetter: "", isBlack: false },
+        { letter: "D", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "R", userLetter: "", number: 5, isBlack: false },
+        { letter: "U", userLetter: "", isBlack: false },
+        { letter: "N", userLetter: "", isBlack: false },
+      ],
+      [
+        { letter: "O", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "E", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+      ],
+      [
+        { letter: "X", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "D", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+      ],
+    ],
+    clues: [
+      { number: 1, text: "Pet that meows", row: 0, col: 0, direction: "across", length: 3 },
+      { number: 1, text: "Holds coffee", row: 0, col: 0, direction: "down", length: 4 },
+      { number: 2, text: "Pet that barks", row: 0, col: 4, direction: "across", length: 3 },
+      { number: 2, text: "24 hours", row: 0, col: 4, direction: "down", length: 3 },
+      { number: 3, text: "Yellow star in sky", row: 3, col: 1, direction: "across", length: 3 },
+      { number: 4, text: "Sleep here", row: 4, col: 0, direction: "across", length: 3 },
+      { number: 4, text: "Container", row: 4, col: 0, direction: "down", length: 3 },
+      { number: 5, text: "Move fast", row: 4, col: 4, direction: "across", length: 3 },
+      { number: 5, text: "Color of blood", row: 4, col: 4, direction: "down", length: 3 },
+    ],
+  },
+];
+
+// Medium puzzles (10x10, current difficulty)
+const MEDIUM_PUZZLES: Puzzle[] = [
   // Puzzle 1 - Simple themed puzzle
   {
     grid: [
@@ -721,21 +805,164 @@ const PUZZLES: Puzzle[] = [
   },
 ];
 
+// Hard puzzles (larger grids, longer words, trickier clues)
+const HARD_PUZZLES: Puzzle[] = [
+  {
+    grid: [
+      [
+        { letter: "A", userLetter: "", number: 1, isBlack: false },
+        { letter: "L", userLetter: "", isBlack: false },
+        { letter: "G", userLetter: "", isBlack: false },
+        { letter: "O", userLetter: "", isBlack: false },
+        { letter: "R", userLetter: "", isBlack: false },
+        { letter: "I", userLetter: "", isBlack: false },
+        { letter: "T", userLetter: "", isBlack: false },
+        { letter: "H", userLetter: "", isBlack: false },
+        { letter: "M", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+      ],
+      [
+        { letter: "R", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "C", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "Y", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+      ],
+      [
+        { letter: "C", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "P", userLetter: "", number: 2, isBlack: false },
+        { letter: "H", userLetter: "", isBlack: false },
+        { letter: "E", userLetter: "", isBlack: false },
+        { letter: "N", userLetter: "", isBlack: false },
+        { letter: "O", userLetter: "", isBlack: false },
+        { letter: "M", userLetter: "", isBlack: false },
+        { letter: "E", userLetter: "", isBlack: false },
+        { letter: "N", userLetter: "", isBlack: false },
+      ],
+      [
+        { letter: "H", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "Y", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "T", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "L", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+      ],
+      [
+        { letter: "I", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "P", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "H", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "A", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+      ],
+      [
+        { letter: "T", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "C", userLetter: "", number: 3, isBlack: false },
+        { letter: "O", userLetter: "", isBlack: false },
+        { letter: "M", userLetter: "", isBlack: false },
+        { letter: "P", userLetter: "", isBlack: false },
+        { letter: "L", userLetter: "", isBlack: false },
+        { letter: "E", userLetter: "", isBlack: false },
+        { letter: "X", userLetter: "", isBlack: false },
+        { letter: "I", userLetter: "", isBlack: false },
+      ],
+      [
+        { letter: "E", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "O", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "N", userLetter: "", isBlack: false },
+      ],
+      [
+        { letter: "C", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "L", userLetter: "", number: 4, isBlack: false },
+        { letter: "A", userLetter: "", isBlack: false },
+        { letter: "B", userLetter: "", isBlack: false },
+        { letter: "Y", userLetter: "", isBlack: false },
+        { letter: "R", userLetter: "", isBlack: false },
+        { letter: "I", userLetter: "", isBlack: false },
+        { letter: "N", userLetter: "", isBlack: false },
+        { letter: "T", userLetter: "", isBlack: false },
+      ],
+      [
+        { letter: "T", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "F", userLetter: "", isBlack: false },
+        { letter: "H", userLetter: "", isBlack: false },
+      ],
+      [
+        { letter: "U", userLetter: "", isBlack: false },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+        { letter: "", userLetter: "", isBlack: true },
+      ],
+    ],
+    clues: [
+      { number: 1, text: "Step-by-step procedure", row: 0, col: 0, direction: "across", length: 9 },
+      { number: 1, text: "Design style", row: 0, col: 0, direction: "down", length: 11 },
+      { number: 2, text: "Observable event", row: 2, col: 2, direction: "across", length: 10 },
+      { number: 2, text: "Guess to be tested", row: 2, col: 4, direction: "down", length: 4 },
+      { number: 3, text: "Difficult number", row: 5, col: 2, direction: "across", length: 8 },
+      { number: 4, text: "Intricate maze", row: 7, col: 2, direction: "across", length: 9 },
+      { number: 4, text: "Reference list", row: 7, col: 8, direction: "down", length: 2 },
+    ],
+  },
+];
+
+const DIFFICULTY_SETTINGS = {
+  easy: { puzzles: EASY_PUZZLES, gridSize: 7 },
+  medium: { puzzles: MEDIUM_PUZZLES, gridSize: 10 },
+  hard: { puzzles: HARD_PUZZLES, gridSize: 10 }
+};
+
 export default function CrosswordGame() {
-  const [currentPuzzleIndex] = useState(() => Math.floor(Math.random() * PUZZLES.length));
-  const [grid, setGrid] = useState<Cell[][]>(() => {
-    const puzzle = PUZZLES[currentPuzzleIndex];
-    return puzzle.grid.map((row) => row.map((cell) => ({ ...cell, userLetter: "" })));
-  });
+  const [difficulty, setDifficulty] = useState<Difficulty | null>(null);
+  const [currentPuzzleIndex, setCurrentPuzzleIndex] = useState(0);
+  const [grid, setGrid] = useState<Cell[][]>([]);
   const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
   const [direction, setDirection] = useState<"across" | "down">("across");
   const [timer, setTimer] = useState(0);
-  const [isRunning, setIsRunning] = useState(true);
+  const [isRunning, setIsRunning] = useState(false);
   const [won, setWon] = useState(false);
   const [showErrors, setShowErrors] = useState(false);
   const [personalBest, setPersonalBest] = useState<number | null>(null);
+  const [gameStarted, setGameStarted] = useState(false);
 
-  const puzzle = PUZZLES[currentPuzzleIndex];
+  const puzzle = difficulty ? DIFFICULTY_SETTINGS[difficulty].puzzles[currentPuzzleIndex] : null;
+  const gridSize = difficulty ? DIFFICULTY_SETTINGS[difficulty].gridSize : 10;
   const hiddenInputRef = useRef<HTMLInputElement>(null);
 
   // Load personal best
@@ -757,13 +984,28 @@ export default function CrosswordGame() {
     return () => clearInterval(interval);
   }, [isRunning, won]);
 
+  // Initialize difficulty
+  const selectDifficulty = (diff: Difficulty) => {
+    setDifficulty(diff);
+    const puzzles = DIFFICULTY_SETTINGS[diff].puzzles;
+    const randomIndex = Math.floor(Math.random() * puzzles.length);
+    setCurrentPuzzleIndex(randomIndex);
+    const selectedPuzzle = puzzles[randomIndex];
+    setGrid(selectedPuzzle.grid.map((row) => row.map((cell) => ({ ...cell, userLetter: "" }))));
+    setGameStarted(true);
+    setIsRunning(true);
+    setWon(false);
+    setTimer(0);
+  };
+
   // Check for completion
   useEffect(() => {
-    if (won) return;
+    if (won || !puzzle || grid.length === 0) return;
 
     let allCorrect = true;
-    for (let r = 0; r < 10; r++) {
-      for (let c = 0; c < 10; c++) {
+    for (let r = 0; r < gridSize; r++) {
+      for (let c = 0; c < gridSize; c++) {
+        if (!grid[r] || !grid[r][c]) continue;
         if (grid[r][c].isBlack) continue;
         if (grid[r][c].userLetter !== grid[r][c].letter) {
           allCorrect = false;
@@ -783,10 +1025,10 @@ export default function CrosswordGame() {
         setPersonalBest(timer);
       }
     }
-  }, [grid, won, timer]);
+  }, [grid, won, timer, puzzle, gridSize]);
 
   const getCurrentClue = useCallback(() => {
-    if (!selectedCell) return null;
+    if (!selectedCell || !puzzle) return null;
     const [row, col] = selectedCell;
 
     // Find the clue for the current word
@@ -800,10 +1042,10 @@ export default function CrosswordGame() {
     });
 
     return clue;
-  }, [selectedCell, direction, puzzle.clues]);
+  }, [selectedCell, direction, puzzle]);
 
   const handleCellClick = (row: number, col: number) => {
-    if (grid[row][col].isBlack || won) return;
+    if (!grid[row] || !grid[row][col] || grid[row][col].isBlack || won) return;
 
     if (selectedCell && selectedCell[0] === row && selectedCell[1] === col) {
       setDirection((d) => (d === "across" ? "down" : "across"));
@@ -880,23 +1122,23 @@ export default function CrosswordGame() {
         switch (key) {
           case "ARROWUP":
             newRow = Math.max(0, row - 1);
-            while (newRow >= 0 && grid[newRow][col].isBlack) newRow--;
+            while (newRow >= 0 && grid[newRow]?.[col]?.isBlack) newRow--;
             break;
           case "ARROWDOWN":
-            newRow = Math.min(9, row + 1);
-            while (newRow <= 9 && grid[newRow][col].isBlack) newRow++;
+            newRow = Math.min(gridSize - 1, row + 1);
+            while (newRow <= gridSize - 1 && grid[newRow]?.[col]?.isBlack) newRow++;
             break;
           case "ARROWLEFT":
             newCol = Math.max(0, col - 1);
-            while (newCol >= 0 && grid[row][newCol].isBlack) newCol--;
+            while (newCol >= 0 && grid[row]?.[newCol]?.isBlack) newCol--;
             break;
           case "ARROWRIGHT":
-            newCol = Math.min(9, col + 1);
-            while (newCol <= 9 && grid[row][newCol].isBlack) newCol++;
+            newCol = Math.min(gridSize - 1, col + 1);
+            while (newCol <= gridSize - 1 && grid[row]?.[newCol]?.isBlack) newCol++;
             break;
         }
 
-        if (newRow >= 0 && newRow <= 9 && newCol >= 0 && newCol <= 9 && !grid[newRow][newCol].isBlack) {
+        if (newRow >= 0 && newRow <= gridSize - 1 && newCol >= 0 && newCol <= gridSize - 1 && grid[newRow]?.[newCol] && !grid[newRow][newCol].isBlack) {
           setSelectedCell([newRow, newCol]);
           if (key === "ARROWUP" || key === "ARROWDOWN") setDirection("down");
           else setDirection("across");
@@ -907,9 +1149,10 @@ export default function CrosswordGame() {
   );
 
   useEffect(() => {
+    if (!gameStarted) return;
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown]);
+  }, [handleKeyDown, gameStarted]);
 
   // Handle mobile keyboard input via hidden input
   const handleMobileInput = (e: React.FormEvent<HTMLInputElement>) => {
@@ -974,8 +1217,8 @@ export default function CrosswordGame() {
   };
 
   const currentClue = getCurrentClue();
-  const acrossClues = puzzle.clues.filter((c) => c.direction === "across");
-  const downClues = puzzle.clues.filter((c) => c.direction === "down");
+  const acrossClues = puzzle ? puzzle.clues.filter((c) => c.direction === "across") : [];
+  const downClues = puzzle ? puzzle.clues.filter((c) => c.direction === "down") : [];
 
   const getHighlightedCells = (): Set<string> => {
     const cells = new Set<string>();
@@ -996,11 +1239,60 @@ export default function CrosswordGame() {
 
   const highlightedCells = getHighlightedCells();
 
+  // Difficulty selection screen
+  if (!gameStarted) {
+    return (
+      <div className="flex flex-col items-center gap-6 p-8">
+        <div className="text-center">
+          <div className="text-6xl mb-4">📝</div>
+          <h2 className="text-3xl font-bold text-white mb-4">Crossword Puzzle</h2>
+          <p className="text-slate-400 mb-8">Choose your difficulty level</p>
+        </div>
+
+        <div className="space-y-4 max-w-md w-full">
+          <button
+            onClick={() => selectDifficulty("easy")}
+            className="w-full px-6 py-5 bg-gray-900 hover:bg-gray-800 border-2 border-green-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
+          >
+            <div className="font-bold text-xl text-green-400 mb-2">Easy</div>
+            <div className="text-sm text-gray-300 mb-1">7x7 grid • Simple 3-5 letter words</div>
+            <div className="text-xs text-gray-500">Perfect for beginners</div>
+          </button>
+
+          <button
+            onClick={() => selectDifficulty("medium")}
+            className="w-full px-6 py-5 bg-gray-900 hover:bg-gray-800 border-2 border-orange-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
+          >
+            <div className="font-bold text-xl text-orange-400 mb-2">Medium</div>
+            <div className="text-sm text-gray-300 mb-1">10x10 grid • 5-10 letter words</div>
+            <div className="text-xs text-gray-500">Standard crossword difficulty</div>
+          </button>
+
+          <button
+            onClick={() => selectDifficulty("hard")}
+            className="w-full px-6 py-5 bg-gray-900 hover:bg-gray-800 border-2 border-red-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
+          >
+            <div className="font-bold text-xl text-red-400 mb-2">Hard</div>
+            <div className="text-sm text-gray-300 mb-1">10x10 grid • 8+ letter words</div>
+            <div className="text-xs text-gray-500">Challenging vocabulary & clues</div>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center gap-6 p-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-4xl">
-        <div className="text-2xl font-mono font-bold text-white">{formatTime(timer)}</div>
+        <div className="flex items-center gap-3">
+          <div className="text-2xl font-mono font-bold text-white">{formatTime(timer)}</div>
+          {difficulty && (
+            <span className="px-2 py-1 rounded text-xs font-bold uppercase bg-gray-800 text-gray-300">
+              {difficulty}
+            </span>
+          )}
+        </div>
 
         {personalBest !== null && !won && (
           <div className="text-slate-400 text-sm">Personal Best: {formatTime(personalBest)}</div>
@@ -1073,7 +1365,13 @@ export default function CrosswordGame() {
         {/* Grid */}
         <div className="flex-shrink-0">
           <div className="bg-slate-800 p-2 sm:p-4 rounded-lg inline-block">
-            <div className="grid grid-cols-10 gap-0" style={{ width: "min(90vw, 500px)" }}>
+            <div
+              className="grid gap-0"
+              style={{
+                gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
+                width: difficulty === "easy" ? "min(90vw, 350px)" : "min(90vw, 500px)"
+              }}
+            >
               {grid.map((row, r) =>
                 row.map((cell, c) => {
                   const isSelected = selectedCell?.[0] === r && selectedCell?.[1] === c;

@@ -5,6 +5,7 @@ import DownloadButton from "./DownloadButton";
 
 type ObstacleCar = { x: number; y: number; lane: number; color: string };
 type Coin = { x: number; y: number; collected: boolean; lane: number };
+type Ramp = { x: number; y: number; lane: number };
 type Vehicle = "car" | "motorcycle" | "truck" | "lambo" | "junker" | "bus";
 
 const CW = 400;
@@ -49,6 +50,9 @@ export default function CarRacer() {
   const boostRef = useRef(0); // player speed adjustment
   const obsRef = useRef<ObstacleCar[]>([]);
   const coinsRef = useRef<Coin[]>([]);
+  const rampsRef = useRef<Ramp[]>([]);
+  const jumpingRef = useRef(false);
+  const jumpProgressRef = useRef(0); // 0 to 1
   const scoreRef = useRef(0);
   const distRef = useRef(0);
   const bestRef = useRef(0);
@@ -280,6 +284,44 @@ export default function CarRacer() {
     ctx.setLineDash([]);
     ctx.lineDashOffset = 0;
 
+    // Ramps
+    rampsRef.current.forEach((r) => {
+      // Draw wedge shape (triangle)
+      ctx.fillStyle = "#f59e0b"; // orange
+      ctx.beginPath();
+      ctx.moveTo(r.x - 30, r.y + 15); // bottom left
+      ctx.lineTo(r.x + 30, r.y + 15); // bottom right
+      ctx.lineTo(r.x, r.y - 15); // top center
+      ctx.closePath();
+      ctx.fill();
+      // Darker outline
+      ctx.strokeStyle = "#ea580c";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      // Stripes for visibility
+      ctx.strokeStyle = "#fbbf24";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(r.x - 15, r.y + 5);
+      ctx.lineTo(r.x, r.y - 10);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(r.x + 15, r.y + 5);
+      ctx.lineTo(r.x, r.y - 10);
+      ctx.stroke();
+      // Hint text
+      ctx.fillStyle = "#fbbf24";
+      ctx.font = "bold 16px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const pulse = Math.sin(Date.now() / 200) * 0.3 + 1; // pulsing effect
+      ctx.save();
+      ctx.translate(r.x, r.y - 35);
+      ctx.scale(pulse, pulse);
+      ctx.fillText("↑ JUMP!", 0, 0);
+      ctx.restore();
+    });
+
     // Coins
     coinsRef.current.forEach((c) => {
       if (c.collected) return;
@@ -300,13 +342,31 @@ export default function CarRacer() {
       drawVehicle(ctx, obs.x, obs.y, "car", obs.color, false);
     });
 
-    // Player
+    // Player (with jump elevation)
     const v = vehicleRef.current;
     const playerColors: Record<Vehicle, string> = {
       car: "#10b981", motorcycle: "#f59e0b", truck: "#10b981",
       lambo: "#ef4444", junker: "#8b7355", bus: "#f59e0b",
     };
-    drawVehicle(ctx, laneX(playerLaneRef.current), PLAYER_Y, v, playerColors[v], true);
+    let playerY = PLAYER_Y;
+    let shadowOffset = 0;
+    if (jumpingRef.current) {
+      // Parabolic arc: goes up then down
+      const t = jumpProgressRef.current;
+      const jumpHeight = 80; // max height
+      const arc = Math.sin(t * Math.PI); // 0 to 1 to 0
+      playerY = PLAYER_Y - jumpHeight * arc;
+      shadowOffset = jumpHeight * arc;
+    }
+    // Draw shadow if jumping
+    if (jumpingRef.current && shadowOffset > 10) {
+      ctx.fillStyle = "rgba(0,0,0,0.3)";
+      ctx.beginPath();
+      const shadowSize = 40 + shadowOffset * 0.3;
+      ctx.ellipse(laneX(playerLaneRef.current), PLAYER_Y + 10, shadowSize, 15, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    drawVehicle(ctx, laneX(playerLaneRef.current), playerY, v, playerColors[v], true);
 
     // Speed bar (bottom-right)
     if (stateRef.current === "PLAYING") {
@@ -344,6 +404,15 @@ export default function CarRacer() {
       x: laneX(lane), y: -35, lane,
       color: OBS_COLORS[Math.floor(Math.random() * OBS_COLORS.length)],
     });
+
+    // 25% chance to spawn a ramp before this obstacle
+    if (Math.random() < 0.25) {
+      rampsRef.current.push({
+        x: laneX(lane),
+        y: -120, // ahead of the car
+        lane,
+      });
+    }
   };
 
   const spawnCoin = () => {
@@ -361,10 +430,26 @@ export default function CarRacer() {
     const v = vehicleRef.current;
     const { w: pw, h: ph } = VEHICLE_STATS[v];
 
-    for (const o of obsRef.current) {
-      const dx = Math.abs(px - o.x);
-      const dy = Math.abs(PLAYER_Y - o.y);
-      if (dx < (pw / 2 + 18) * 0.8 && dy < (ph / 2 + 30) * 0.8) return true;
+    // Check ramp collision (trigger jump)
+    for (let i = rampsRef.current.length - 1; i >= 0; i--) {
+      const r = rampsRef.current[i];
+      const dx = Math.abs(px - r.x);
+      const dy = Math.abs(PLAYER_Y - r.y);
+      if (dx < 35 && dy < 30 && !jumpingRef.current) {
+        // Hit ramp, start jump
+        jumpingRef.current = true;
+        jumpProgressRef.current = 0;
+        rampsRef.current.splice(i, 1); // remove ramp
+      }
+    }
+
+    // Skip obstacle collision if jumping
+    if (!jumpingRef.current) {
+      for (const o of obsRef.current) {
+        const dx = Math.abs(px - o.x);
+        const dy = Math.abs(PLAYER_Y - o.y);
+        if (dx < (pw / 2 + 18) * 0.8 && dy < (ph / 2 + 30) * 0.8) return true;
+      }
     }
 
     for (const c of coinsRef.current) {
@@ -426,10 +511,21 @@ export default function CarRacer() {
     if (Math.random() < 0.012) spawnObstacle();
     if (Math.random() < 0.008) spawnCoin();
 
+    // Update jump progress
+    if (jumpingRef.current) {
+      jumpProgressRef.current += 0.025; // ~1 second jump duration
+      if (jumpProgressRef.current >= 1) {
+        jumpingRef.current = false;
+        jumpProgressRef.current = 0;
+      }
+    }
+
     obsRef.current.forEach(o => { o.y += speedRef.current; });
     coinsRef.current.forEach(c => { c.y += speedRef.current; });
+    rampsRef.current.forEach(r => { r.y += speedRef.current; });
     obsRef.current = obsRef.current.filter(o => o.y < CH + 50);
     coinsRef.current = coinsRef.current.filter(c => c.y < CH + 50);
+    rampsRef.current = rampsRef.current.filter(r => r.y < CH + 50);
 
     if (checkCollision()) {
       stateRef.current = "GAME_OVER";
@@ -453,6 +549,9 @@ export default function CarRacer() {
     boostRef.current = 0;
     obsRef.current = [];
     coinsRef.current = [];
+    rampsRef.current = [];
+    jumpingRef.current = false;
+    jumpProgressRef.current = 0;
     scoreRef.current = 0;
     distRef.current = 0;
     setScore(0);

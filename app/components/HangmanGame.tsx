@@ -2,8 +2,17 @@
 
 import { useEffect, useState, useCallback } from "react";
 
-// 200+ word bank categorized
-const WORD_BANK: { [category: string]: string[] } = {
+// Easy words for kids learning English (3-4 letters)
+const EASY_WORDS: { [category: string]: string[] } = {
+  Animals: ["cat", "dog", "cow", "pig", "hen", "bat", "fox", "bee"],
+  Objects: ["sun", "hat", "cup", "bed", "bus", "pen", "box", "map", "mat", "pot", "net", "van"],
+  Actions: ["run", "sit", "hop", "fun", "top", "hot"],
+  Body: ["leg", "arm", "lip", "eye", "ear"],
+  Things: ["toy", "boy", "key", "ice", "pie", "jam", "red", "big"]
+};
+
+// Medium words (current difficulty)
+const MEDIUM_WORD_BANK: { [category: string]: string[] } = {
   Animals: [
     "elephant", "giraffe", "penguin", "dolphin", "cheetah", "kangaroo", "leopard",
     "octopus", "crocodile", "butterfly", "squirrel", "hedgehog", "flamingo", "panda",
@@ -56,16 +65,32 @@ const WORD_BANK: { [category: string]: string[] } = {
   ]
 };
 
-const MAX_WRONG = 6;
+// Hard words (8+ letters, challenging)
+const HARD_WORDS: { [category: string]: string[] } = {
+  Science: ["algorithm", "hypothesis", "phenomenon", "catastrophe", "bibliography"],
+  Places: ["boulevard", "labyrinth", "architecture", "peninsula", "archipelago"],
+  Abstract: ["mysterious", "elaborate", "magnificent", "exquisite", "spectacular"],
+  Advanced: ["xylophone", "pneumonia", "rhombus", "renaissance", "philosopher"]
+};
+
+type Difficulty = "easy" | "medium" | "hard";
+
+const DIFFICULTY_SETTINGS = {
+  easy: { maxWrong: 8, wordBank: EASY_WORDS },
+  medium: { maxWrong: 6, wordBank: MEDIUM_WORD_BANK },
+  hard: { maxWrong: 5, wordBank: HARD_WORDS }
+};
 
 export default function HangmanGame() {
+  const [difficulty, setDifficulty] = useState<Difficulty | null>(null);
   const [word, setWord] = useState("");
   const [category, setCategory] = useState("");
   const [guessedLetters, setGuessedLetters] = useState<Set<string>>(new Set());
   const [wrongGuesses, setWrongGuesses] = useState(0);
-  const [gameState, setGameState] = useState<"START" | "PLAYING" | "WON" | "LOST">("START");
+  const [gameState, setGameState] = useState<"SELECT" | "PLAYING" | "WON" | "LOST">("SELECT");
   const [currentStreak, setCurrentStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
+  const [maxWrong, setMaxWrong] = useState(6);
 
   // Load best streak from localStorage
   useEffect(() => {
@@ -75,22 +100,35 @@ export default function HangmanGame() {
     }
   }, []);
 
-  const pickRandomWord = useCallback(() => {
-    const categories = Object.keys(WORD_BANK);
+  const pickRandomWord = useCallback((diff: Difficulty) => {
+    const settings = DIFFICULTY_SETTINGS[diff];
+    const categories = Object.keys(settings.wordBank);
     const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-    const words = WORD_BANK[randomCategory];
+    const words = settings.wordBank[randomCategory];
     const randomWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
     return { word: randomWord, category: randomCategory };
   }, []);
 
-  const startGame = useCallback(() => {
-    const { word: newWord, category: newCategory } = pickRandomWord();
+  const selectDifficulty = useCallback((diff: Difficulty) => {
+    setDifficulty(diff);
+    setMaxWrong(DIFFICULTY_SETTINGS[diff].maxWrong);
+    const { word: newWord, category: newCategory } = pickRandomWord(diff);
     setWord(newWord);
     setCategory(newCategory);
     setGuessedLetters(new Set());
     setWrongGuesses(0);
     setGameState("PLAYING");
   }, [pickRandomWord]);
+
+  const startGame = useCallback(() => {
+    if (!difficulty) return;
+    const { word: newWord, category: newCategory } = pickRandomWord(difficulty);
+    setWord(newWord);
+    setCategory(newCategory);
+    setGuessedLetters(new Set());
+    setWrongGuesses(0);
+    setGameState("PLAYING");
+  }, [pickRandomWord, difficulty]);
 
   const handleGuess = useCallback((letter: string) => {
     if (gameState !== "PLAYING" || guessedLetters.has(letter)) return;
@@ -103,7 +141,7 @@ export default function HangmanGame() {
       const newWrong = wrongGuesses + 1;
       setWrongGuesses(newWrong);
 
-      if (newWrong >= MAX_WRONG) {
+      if (newWrong >= maxWrong) {
         setGameState("LOST");
         setCurrentStreak(0);
       }
@@ -213,8 +251,17 @@ export default function HangmanGame() {
           </svg>
         </div>
 
+        {/* Difficulty Badge */}
+        {gameState !== "SELECT" && difficulty && (
+          <div className="text-center mb-2">
+            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-gray-800 text-gray-300">
+              {difficulty}
+            </span>
+          </div>
+        )}
+
         {/* Category Hint */}
-        {gameState !== "START" && (
+        {gameState !== "SELECT" && (
           <div className="text-center mb-4">
             <span className="text-sm text-gray-400">Category: </span>
             <span className="text-sm font-bold text-orange-400">{category}</span>
@@ -222,7 +269,7 @@ export default function HangmanGame() {
         )}
 
         {/* Word Display */}
-        {gameState !== "START" && (
+        {gameState !== "SELECT" && (
           <div className="text-center mb-6">
             <div className="text-3xl md:text-4xl font-mono font-bold tracking-wider text-white">
               {displayWord}
@@ -233,22 +280,45 @@ export default function HangmanGame() {
         {/* Wrong Guesses Counter */}
         {gameState === "PLAYING" && (
           <div className="text-center mb-4 text-gray-400 text-sm">
-            Wrong guesses: {wrongGuesses} / {MAX_WRONG}
+            Wrong guesses: {wrongGuesses} / {maxWrong}
           </div>
         )}
 
-        {/* Start Screen */}
-        {gameState === "START" && (
+        {/* Difficulty Selection Screen */}
+        {gameState === "SELECT" && (
           <div className="text-center py-8">
             <div className="text-6xl mb-4">🎯</div>
             <h2 className="text-2xl font-bold text-orange-400 mb-4">Hangman</h2>
-            <p className="text-gray-400 mb-6">Guess the word before it's too late!</p>
-            <button
-              onClick={startGame}
-              className="px-8 py-3 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
-            >
-              Start Game
-            </button>
+            <p className="text-gray-400 mb-8">Choose your difficulty</p>
+
+            <div className="space-y-4 max-w-md mx-auto">
+              <button
+                onClick={() => selectDifficulty("easy")}
+                className="w-full px-6 py-4 bg-gray-900 hover:bg-gray-800 border-2 border-green-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
+              >
+                <div className="font-bold text-lg text-green-400 mb-1">Easy</div>
+                <div className="text-sm text-gray-400">3-4 letter words • 8 wrong guesses allowed</div>
+                <div className="text-xs text-gray-500 mt-1">Perfect for kids learning English</div>
+              </button>
+
+              <button
+                onClick={() => selectDifficulty("medium")}
+                className="w-full px-6 py-4 bg-gray-900 hover:bg-gray-800 border-2 border-orange-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
+              >
+                <div className="font-bold text-lg text-orange-400 mb-1">Medium</div>
+                <div className="text-sm text-gray-400">5-10 letter words • 6 wrong guesses allowed</div>
+                <div className="text-xs text-gray-500 mt-1">Standard difficulty</div>
+              </button>
+
+              <button
+                onClick={() => selectDifficulty("hard")}
+                className="w-full px-6 py-4 bg-gray-900 hover:bg-gray-800 border-2 border-red-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
+              >
+                <div className="font-bold text-lg text-red-400 mb-1">Hard</div>
+                <div className="text-sm text-gray-400">8+ letter words • 5 wrong guesses allowed</div>
+                <div className="text-xs text-gray-500 mt-1">Challenging vocabulary</div>
+              </button>
+            </div>
           </div>
         )}
 

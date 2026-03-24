@@ -120,7 +120,7 @@ export default function VoxelBuilder() {
     const w = BW * z, h = BH * z, d = BD * z;
     return {
       x: cw / 2 + panXRef.current + (rx - ry) * (w / 2),
-      y: ch * 0.42 + panYRef.current + (rx + ry) * (h / 2) - gz * d,
+      y: ch * 0.52 + panYRef.current + (rx + ry) * (h / 2) - gz * d,
     };
   };
 
@@ -128,7 +128,7 @@ export default function VoxelBuilder() {
     const z = zoomRef.current;
     const w = BW * z, h = BH * z;
     const relX = (sx - cw / 2 - panXRef.current) / (w / 2);
-    const relY = (sy - ch * 0.42 - panYRef.current) / (h / 2);
+    const relY = (sy - ch * 0.52 - panYRef.current) / (h / 2);
     const rx = Math.floor((relX + relY) / 2);
     const ry = Math.floor((relY - relX) / 2);
     return rotateInv(rx, ry);
@@ -283,23 +283,12 @@ export default function VoxelBuilder() {
     drawSky(ctx, cw, ch);
     drawSun(ctx, cw, ch);
 
-    // Ground grid
-    const z = zoomRef.current;
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= GRID; i++) {
-      const a = g2s(i, 0, 0, cw, ch);
-      const b = g2s(i, GRID, 0, cw, ch);
-      ctx.beginPath();
-      ctx.moveTo(a.x, a.y + BH * z);
-      ctx.lineTo(b.x, b.y + BH * z);
-      ctx.stroke();
-      const c = g2s(0, i, 0, cw, ch);
-      const d = g2s(GRID, i, 0, cw, ch);
-      ctx.beginPath();
-      ctx.moveTo(c.x, c.y + BH * z);
-      ctx.lineTo(d.x, d.y + BH * z);
-      ctx.stroke();
+    // Grass floor (draw grass blocks at z=0 for entire grid)
+    for (let gx = 0; gx < GRID; gx++) {
+      for (let gy = 0; gy < GRID; gy++) {
+        const grassBlock: Block = { x: gx, y: gy, z: 0, type: 'grass' };
+        drawBlock(ctx, grassBlock, cw, ch);
+      }
     }
 
     // Sort & draw blocks (painter's algorithm)
@@ -322,7 +311,7 @@ export default function VoxelBuilder() {
 
   // ---- Helpers ----
   const getHeightAt = (x: number, y: number) => {
-    let max = -1;
+    let max = 0; // Start at 0 (grass floor level)
     for (const b of blocksRef.current) if (b.x === x && b.y === y && b.z > max) max = b.z;
     return max + 1;
   };
@@ -360,6 +349,11 @@ export default function VoxelBuilder() {
 
   const handleClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (e.shiftKey) return; // was a pan
+
+    // Prevent click event from firing after touch (iPad double-tap fix)
+    const now = Date.now();
+    if (now - lastTouchPlaceTime.current < 500) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
@@ -368,7 +362,7 @@ export default function VoxelBuilder() {
 
     if (eraseMode || e.button === 2) {
       const z = getHeightAt(x, y) - 1;
-      if (z < 0) return;
+      if (z < 1) return; // Don't erase below grass level
       blocksRef.current = blocksRef.current.filter(b => !(b.x === x && b.y === y && b.z === z));
     } else {
       const z = getHeightAt(x, y);
@@ -387,7 +381,7 @@ export default function VoxelBuilder() {
     const { x, y } = s2g(e.clientX - rect.left, e.clientY - rect.top, canvas.offsetWidth, canvas.offsetHeight);
     if (x < 0 || x >= GRID || y < 0 || y >= GRID) return;
     const z = getHeightAt(x, y) - 1;
-    if (z < 0) return;
+    if (z < 1) return; // Don't erase below grass level
     blocksRef.current = blocksRef.current.filter(b => !(b.x === x && b.y === y && b.z === z));
     save();
     render();
@@ -402,6 +396,7 @@ export default function VoxelBuilder() {
 
   // ---- Touch events ----
   const touchStartRef = useRef<{ x: number; y: number; t: number } | null>(null);
+  const lastTouchPlaceTime = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -455,6 +450,14 @@ export default function VoxelBuilder() {
         const dt = Date.now() - touchStartRef.current.t;
         // Only place/erase on short taps without movement
         if (Math.abs(dx) < 15 && Math.abs(dy) < 15 && dt < 400) {
+          // Prevent double-placement (iPad fires both touch and click)
+          const now = Date.now();
+          if (now - lastTouchPlaceTime.current < 500) {
+            touchStartRef.current = null;
+            return;
+          }
+          lastTouchPlaceTime.current = now;
+
           const rect = canvas.getBoundingClientRect();
           const sx = touch.clientX - rect.left;
           const sy = touch.clientY - rect.top;
@@ -462,7 +465,7 @@ export default function VoxelBuilder() {
           if (x >= 0 && x < GRID && y >= 0 && y < GRID) {
             if (eraseMode) {
               const z = getHeightAt(x, y) - 1;
-              if (z >= 0) {
+              if (z >= 1) { // Don't erase below grass level
                 blocksRef.current = blocksRef.current.filter(b => !(b.x === x && b.y === y && b.z === z));
                 save(); render();
               }
@@ -514,7 +517,7 @@ export default function VoxelBuilder() {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto px-2 sm:px-4">
       <div className="mb-3 rounded-lg overflow-hidden border border-slate-700">
         <canvas
           ref={canvasRef}
@@ -526,7 +529,7 @@ export default function VoxelBuilder() {
           onMouseLeave={() => { isDragRef.current = false; }}
           onWheel={handleWheel}
           className="w-full cursor-crosshair"
-          style={{ height: 'min(500px, 70vh)', touchAction: 'none' }}
+          style={{ height: 'min(650px, 75vh)', touchAction: 'none' }}
         />
       </div>
 

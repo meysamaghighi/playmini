@@ -32,6 +32,7 @@ export default function BubbleShooter() {
   const levelRef = useRef(1);
   const mouseXRef = useRef(CANVAS_WIDTH / 2);
   const mouseYRef = useRef(CANVAS_HEIGHT / 2);
+  const gameStateRef = useRef<"start" | "playing" | "gameover">("start");
 
   const initBubbles = useCallback(() => {
     const bubbles: Bubble[] = [];
@@ -191,7 +192,7 @@ export default function BubbleShooter() {
   }, []);
 
   const gameLoop = useCallback(() => {
-    if (gameState !== "playing") {
+    if (gameStateRef.current !== "playing") {
       gameLoopRef.current = null;
       return;
     }
@@ -275,6 +276,7 @@ export default function BubbleShooter() {
         // Check loss
         for (const bubble of bubblesRef.current) {
           if (bubble.y + BUBBLE_RADIUS >= CANVAS_HEIGHT - 100) {
+            gameStateRef.current = "gameover";
             setGameState("gameover");
             gameLoopRef.current = null;
             draw();
@@ -293,10 +295,10 @@ export default function BubbleShooter() {
 
     draw();
     gameLoopRef.current = requestAnimationFrame(gameLoop);
-  }, [gameState, draw, findMatches, removeFloating, getNextColor, initBubbles]);
+  }, [draw, findMatches, removeFloating, getNextColor, initBubbles]);
 
   const shoot = useCallback(() => {
-    if (projectileRef.current || gameState !== "playing") return;
+    if (projectileRef.current || gameStateRef.current !== "playing") return;
     const s = shooterRef.current;
     const speed = 10;
     projectileRef.current = {
@@ -306,7 +308,7 @@ export default function BubbleShooter() {
       vy: Math.sin(s.angle) * speed,
       color: currentBubbleRef.current.color,
     };
-  }, [gameState]);
+  }, []);
 
   const startGame = useCallback(() => {
     bubblesRef.current = initBubbles();
@@ -318,8 +320,11 @@ export default function BubbleShooter() {
     levelRef.current = 1;
     setScore(0);
     setLevel(1);
+    gameStateRef.current = "playing";
     setGameState("playing");
-    gameLoopRef.current = requestAnimationFrame(gameLoop);
+    if (gameLoopRef.current === null) {
+      gameLoopRef.current = requestAnimationFrame(gameLoop);
+    }
   }, [initBubbles, getNextColor, gameLoop]);
 
   useEffect(() => {
