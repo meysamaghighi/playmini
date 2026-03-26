@@ -49,7 +49,7 @@ export default function SpaceInvaders() {
   const gameStateRef = useRef<"start" | "playing" | "gameover">("start");
   const touchLeftRef = useRef(false);
   const touchRightRef = useRef(false);
-  const touchFireRef = useRef(false);
+  const autoShootIntervalRef = useRef<number | null>(null);
 
   const initAliens = useCallback(() => {
     const aliens: Alien[] = [];
@@ -123,6 +123,11 @@ export default function SpaceInvaders() {
   const gameLoop = useCallback(() => {
     if (gameStateRef.current !== "playing") {
       gameLoopRef.current = null;
+      // Stop auto-shooting when game ends
+      if (autoShootIntervalRef.current !== null) {
+        clearInterval(autoShootIntervalRef.current);
+        autoShootIntervalRef.current = null;
+      }
       return;
     }
 
@@ -134,15 +139,7 @@ export default function SpaceInvaders() {
       playerXRef.current = Math.min(CANVAS_WIDTH - PLAYER_WIDTH, playerXRef.current + PLAYER_SPEED);
     }
 
-    // Shoot (keyboard or touch)
     const now = Date.now();
-    if ((keysRef.current[" "] || touchFireRef.current) && now - lastShotTimeRef.current > 300) {
-      bulletsRef.current.push({
-        x: playerXRef.current + PLAYER_WIDTH / 2 - 2,
-        y: CANVAS_HEIGHT - 70,
-      });
-      lastShotTimeRef.current = now;
-    }
 
     // Move bullets
     bulletsRef.current = bulletsRef.current.filter((bullet) => {
@@ -276,6 +273,20 @@ export default function SpaceInvaders() {
     setLives(3);
     gameStateRef.current = "playing";
     setGameState("playing");
+
+    // Start auto-shooting
+    if (autoShootIntervalRef.current !== null) {
+      clearInterval(autoShootIntervalRef.current);
+    }
+    autoShootIntervalRef.current = window.setInterval(() => {
+      if (gameStateRef.current === "playing") {
+        bulletsRef.current.push({
+          x: playerXRef.current + PLAYER_WIDTH / 2 - 2,
+          y: CANVAS_HEIGHT - 70,
+        });
+      }
+    }, 350);
+
     if (gameLoopRef.current === null) {
       gameLoopRef.current = requestAnimationFrame(gameLoop);
     }
@@ -284,7 +295,7 @@ export default function SpaceInvaders() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
-      if (["arrowleft", "arrowright", " ", "a", "d"].includes(key)) {
+      if (["arrowleft", "arrowright", "a", "d"].includes(key)) {
         e.preventDefault();
         keysRef.current[key] = true;
       }
@@ -300,6 +311,10 @@ export default function SpaceInvaders() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
+      // Cleanup auto-shoot interval on unmount
+      if (autoShootIntervalRef.current !== null) {
+        clearInterval(autoShootIntervalRef.current);
+      }
     };
   }, []);
 
@@ -321,18 +336,16 @@ export default function SpaceInvaders() {
     }
   };
 
-  const handleTouchStart = (direction: "left" | "right" | "fire") => (e: React.TouchEvent) => {
+  const handleTouchStart = (direction: "left" | "right") => (e: React.TouchEvent) => {
     e.preventDefault();
     if (direction === "left") touchLeftRef.current = true;
     else if (direction === "right") touchRightRef.current = true;
-    else if (direction === "fire") touchFireRef.current = true;
   };
 
-  const handleTouchEnd = (direction: "left" | "right" | "fire") => (e: React.TouchEvent) => {
+  const handleTouchEnd = (direction: "left" | "right") => (e: React.TouchEvent) => {
     e.preventDefault();
     if (direction === "left") touchLeftRef.current = false;
     else if (direction === "right") touchRightRef.current = false;
-    else if (direction === "fire") touchFireRef.current = false;
   };
 
   return (
@@ -361,7 +374,7 @@ export default function SpaceInvaders() {
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
             <div className="text-6xl mb-3">👾</div>
             <h2 className="text-3xl font-black text-red-400 mb-2">Space Invaders</h2>
-            <p className="text-gray-400 mb-6 text-sm">Arrow keys to move, Space to shoot</p>
+            <p className="text-gray-400 mb-6 text-sm">Arrow keys to move, auto-shooting enabled</p>
             <button
               onClick={startGame}
               className="px-10 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-2xl transition-all hover:scale-105 active:scale-95"
@@ -400,7 +413,7 @@ export default function SpaceInvaders() {
       </div>
 
       {/* Touch Controls */}
-      <div className="flex gap-3 w-full max-w-md justify-between items-center px-4">
+      <div className="flex gap-3 w-full max-w-md justify-center items-center px-4">
         <button
           onTouchStart={handleTouchStart("left")}
           onTouchEnd={handleTouchEnd("left")}
@@ -408,14 +421,6 @@ export default function SpaceInvaders() {
           style={{ touchAction: "none" }}
         >
           ←
-        </button>
-        <button
-          onTouchStart={handleTouchStart("fire")}
-          onTouchEnd={handleTouchEnd("fire")}
-          className="flex-1 h-16 bg-red-600/50 hover:bg-red-500/50 active:bg-red-400/50 text-white font-bold rounded-xl transition-colors select-none flex items-center justify-center border border-red-500"
-          style={{ touchAction: "none" }}
-        >
-          FIRE
         </button>
         <button
           onTouchStart={handleTouchStart("right")}
@@ -428,8 +433,8 @@ export default function SpaceInvaders() {
       </div>
 
       <div className="text-center text-xs text-gray-600">
-        <p>Arrow keys or A/D to move • Space to shoot</p>
-        <p className="mt-1">Or use touch controls on mobile</p>
+        <p>Arrow keys or A/D to move • Auto-shooting enabled</p>
+        <p className="mt-1">Use touch controls on mobile</p>
       </div>
     </div>
   );

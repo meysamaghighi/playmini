@@ -204,14 +204,14 @@ export default function WordBuilder() {
 
     if (!word) return;
 
-    if (foundWords.includes(word)) {
+    if (foundWords.map(w => w.toLowerCase()).includes(word)) {
       setFeedback("wrong");
       setTimeout(() => setFeedback(null), 600);
       setCurrentInput("");
       return;
     }
 
-    if (possibleWords.includes(word)) {
+    if (possibleWords.map(w => w.toLowerCase()).includes(word)) {
       setFoundWords([...foundWords, word]);
       setFeedback("correct");
       setTimeout(() => setFeedback(null), 600);
@@ -235,7 +235,7 @@ export default function WordBuilder() {
     }
   };
 
-  const missedWords = possibleWords.filter((w) => !foundWords.includes(w));
+  const missedWords = possibleWords.filter((w) => !foundWords.map(f => f.toLowerCase()).includes(w.toLowerCase()));
   const currentScore = calculateScore(foundWords);
   const isNewBest = gameOver && currentScore > personalBest;
 

@@ -10,6 +10,7 @@ interface Pipe {
 }
 
 type BirdType = 'classic' | 'blueJay' | 'cardinal' | 'parrot' | 'penguin' | 'phoenix';
+type Difficulty = 'easy' | 'medium' | 'hard';
 
 interface BirdTheme {
   label: string;
@@ -21,6 +22,46 @@ interface BirdTheme {
   beak: string;
   beakLine: string;
 }
+
+interface DifficultySettings {
+  label: string;
+  description: string;
+  gravity: number;
+  flapStrength: number;
+  pipeSpeed: number;
+  gapSize: number;
+  pipeSpacing: number;
+}
+
+const DIFFICULTY_SETTINGS: Record<Difficulty, DifficultySettings> = {
+  easy: {
+    label: 'Easy',
+    description: 'Perfect for young kids',
+    gravity: 0.25,
+    flapStrength: -5.5,
+    pipeSpeed: 1.2,
+    gapSize: 250,
+    pipeSpacing: 320,
+  },
+  medium: {
+    label: 'Medium',
+    description: 'Balanced challenge',
+    gravity: 0.35,
+    flapStrength: -7.5,
+    pipeSpeed: 1.6,
+    gapSize: 200,
+    pipeSpacing: 280,
+  },
+  hard: {
+    label: 'Hard',
+    description: 'For experts',
+    gravity: 0.5,
+    flapStrength: -9,
+    pipeSpeed: 2.2,
+    gapSize: 150,
+    pipeSpacing: 220,
+  },
+};
 
 const BIRDS: Record<BirdType, BirdTheme> = {
   classic: {
@@ -91,6 +132,8 @@ export default function FlappyBird() {
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [selectedBird, setSelectedBird] = useState<BirdType>('classic');
+  const [difficulty, setDifficulty] = useState<Difficulty>('medium');
+  const [showDifficultySelect, setShowDifficultySelect] = useState(true);
 
   // Game state refs
   const birdRef = useRef({ y: 250, velocity: 0 });
@@ -100,18 +143,22 @@ export default function FlappyBird() {
   const gameStateRef = useRef<'start' | 'playing' | 'gameover'>('start');
   const animationIdRef = useRef<number | null>(null);
   const birdTypeRef = useRef<BirdType>('classic');
+  const difficultyRef = useRef<Difficulty>('medium');
 
   // Constants
   const CANVAS_WIDTH = 400;
   const CANVAS_HEIGHT = 600;
   const BIRD_SIZE = 30;
   const PIPE_WIDTH = 60;
-  const GAP_SIZE = 200;
-  const GRAVITY = 0.35;
-  const FLAP_STRENGTH = -7.5;
-  const PIPE_SPEED = 1.6;
-  const PIPE_SPACING = 280;
   const GROUND_HEIGHT = 80;
+
+  // Dynamic difficulty settings
+  const settings = DIFFICULTY_SETTINGS[difficultyRef.current];
+  const GAP_SIZE = settings.gapSize;
+  const GRAVITY = settings.gravity;
+  const FLAP_STRENGTH = settings.flapStrength;
+  const PIPE_SPEED = settings.pipeSpeed;
+  const PIPE_SPACING = settings.pipeSpacing;
 
   useEffect(() => {
     const saved = localStorage.getItem('pb-flappy');
@@ -120,6 +167,11 @@ export default function FlappyBird() {
     if (savedBird && savedBird in BIRDS) {
       setSelectedBird(savedBird as BirdType);
       birdTypeRef.current = savedBird as BirdType;
+    }
+    const savedDifficulty = localStorage.getItem('flappy-difficulty');
+    if (savedDifficulty && savedDifficulty in DIFFICULTY_SETTINGS) {
+      setDifficulty(savedDifficulty as Difficulty);
+      difficultyRef.current = savedDifficulty as Difficulty;
     }
   }, []);
 
@@ -331,6 +383,17 @@ export default function FlappyBird() {
       ctx.lineWidth = 4;
       ctx.strokeText(scoreRef.current.toString(), CANVAS_WIDTH / 2, 80);
       ctx.fillText(scoreRef.current.toString(), CANVAS_WIDTH / 2, 80);
+
+      // Difficulty indicator
+      if (gameStateRef.current === 'playing') {
+        ctx.fillStyle = '#FFF';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'left';
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 3;
+        ctx.strokeText(DIFFICULTY_SETTINGS[difficultyRef.current].label, 10, 30);
+        ctx.fillText(DIFFICULTY_SETTINGS[difficultyRef.current].label, 10, 30);
+      }
     };
 
     const endGame = () => {
@@ -356,7 +419,7 @@ export default function FlappyBird() {
         cancelAnimationFrame(animationIdRef.current);
       }
     };
-  }, [gameState, bestScore, selectedBird]);
+  }, [gameState, bestScore, selectedBird, difficulty]);
 
   const flap = () => {
     if (gameStateRef.current === 'start') {
@@ -380,6 +443,13 @@ export default function FlappyBird() {
     setSelectedBird(type);
     birdTypeRef.current = type;
     localStorage.setItem('flappy-bird-type', type);
+  };
+
+  const selectDifficulty = (diff: Difficulty) => {
+    setDifficulty(diff);
+    difficultyRef.current = diff;
+    localStorage.setItem('flappy-difficulty', diff);
+    setShowDifficultySelect(false);
   };
 
   const handleShare = async () => {
@@ -453,10 +523,44 @@ export default function FlappyBird() {
           onTouchStart={(e) => { e.preventDefault(); flap(); }}
         />
 
-        {gameState === 'start' && (
+        {gameState === 'start' && showDifficultySelect && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 rounded-lg" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-4xl font-bold text-white mb-2">Flappy Bird</h2>
+            <p className="text-sm text-gray-300 mb-6">Choose your difficulty</p>
+
+            {/* Difficulty Selection */}
+            <div className="flex flex-col gap-3 mb-4">
+              {(Object.keys(DIFFICULTY_SETTINGS) as Difficulty[]).map((diff) => {
+                const diffSettings = DIFFICULTY_SETTINGS[diff];
+                return (
+                  <button
+                    key={diff}
+                    onClick={() => selectDifficulty(diff)}
+                    className={`px-6 py-4 rounded-xl text-left transition-all min-w-[280px] ${
+                      difficulty === diff
+                        ? 'bg-white/25 ring-2 ring-white scale-105'
+                        : 'bg-white/10 hover:bg-white/20'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-white font-bold text-lg">{diffSettings.label}</span>
+                      {diff === 'easy' && <span className="text-green-400 text-2xl">😊</span>}
+                      {diff === 'medium' && <span className="text-yellow-400 text-2xl">😐</span>}
+                      {diff === 'hard' && <span className="text-red-400 text-2xl">😤</span>}
+                    </div>
+                    <p className="text-gray-300 text-xs">{diffSettings.description}</p>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {gameState === 'start' && !showDifficultySelect && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 rounded-lg" onClick={flap}>
             <h2 className="text-4xl font-bold text-white mb-2">Flappy Bird</h2>
-            <p className="text-sm text-gray-300 mb-4">Avoid the pipes!</p>
+            <p className="text-sm text-gray-300 mb-1">Avoid the pipes!</p>
+            <p className="text-xs text-yellow-400 mb-4">Difficulty: {DIFFICULTY_SETTINGS[difficulty].label}</p>
 
             {/* Bird Selection */}
             <div className="mb-4" onClick={(e) => e.stopPropagation()}>
@@ -483,12 +587,20 @@ export default function FlappyBird() {
               <p className="text-yellow-400 text-sm mb-3">Best: {bestScore}</p>
             )}
 
-            <button
-              onClick={startGame}
-              className="px-10 py-3 bg-green-600 hover:bg-green-500 text-white font-bold text-lg rounded-2xl transition-all hover:scale-105 active:scale-95"
-            >
-              Play
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowDifficultySelect(true); }}
+                className="px-6 py-3 bg-gray-600 hover:bg-gray-500 text-white font-bold text-sm rounded-2xl transition-all hover:scale-105 active:scale-95"
+              >
+                Change Difficulty
+              </button>
+              <button
+                onClick={startGame}
+                className="px-10 py-3 bg-green-600 hover:bg-green-500 text-white font-bold text-lg rounded-2xl transition-all hover:scale-105 active:scale-95"
+              >
+                Play
+              </button>
+            </div>
             <p className="text-xs text-gray-400 mt-2">or tap anywhere / press Space</p>
           </div>
         )}
@@ -497,10 +609,11 @@ export default function FlappyBird() {
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 rounded-lg">
             <h2 className="text-4xl font-bold text-white mb-6">Game Over!</h2>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-6">
+              <p className="text-sm text-gray-300 mb-3">Difficulty: <span className="font-bold text-yellow-400">{DIFFICULTY_SETTINGS[difficulty].label}</span></p>
               <p className="text-2xl text-white mb-2">Score: <span className="font-bold text-yellow-400">{score}</span></p>
               <p className="text-xl text-white">Best: <span className="font-bold text-yellow-400">{bestScore}</span></p>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-3 mb-3">
               <button
                 onClick={startGame}
                 className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors"
@@ -515,6 +628,12 @@ export default function FlappyBird() {
               </button>
               <DownloadButton canvasRef={canvasRef} filename="flappy-score" label="Save" />
             </div>
+            <button
+              onClick={() => { setGameState('start'); setShowDifficultySelect(true); }}
+              className="px-6 py-2 bg-gray-600 hover:bg-gray-500 text-white font-bold text-sm rounded-lg transition-colors"
+            >
+              Change Difficulty
+            </button>
           </div>
         )}
       </div>
