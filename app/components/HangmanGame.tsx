@@ -76,7 +76,7 @@ const HARD_WORDS: { [category: string]: string[] } = {
 type Difficulty = "easy" | "medium" | "hard";
 
 const DIFFICULTY_SETTINGS = {
-  easy: { maxWrong: 10, wordBank: EASY_WORDS },
+  easy: { maxWrong: 12, wordBank: EASY_WORDS },
   medium: { maxWrong: 6, wordBank: MEDIUM_WORD_BANK },
   hard: { maxWrong: 5, wordBank: HARD_WORDS }
 };
@@ -268,6 +268,16 @@ export default function HangmanGame() {
             {wrongGuesses >= 10 && (
               <line x1="150" y1="190" x2="160" y2="200" stroke="white" strokeWidth="3" />
             )}
+
+            {/* Left Eye */}
+            {wrongGuesses >= 11 && (
+              <circle cx="123" cy="68" r="2" fill="white" />
+            )}
+
+            {/* Right Eye */}
+            {wrongGuesses >= 12 && (
+              <circle cx="137" cy="68" r="2" fill="white" />
+            )}
           </svg>
         </div>
 
@@ -317,7 +327,7 @@ export default function HangmanGame() {
                 className="w-full px-6 py-4 bg-gray-900 hover:bg-gray-800 border-2 border-green-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
               >
                 <div className="font-bold text-lg text-green-400 mb-1">Easy</div>
-                <div className="text-sm text-gray-400">3-4 letter words • 8 wrong guesses allowed</div>
+                <div className="text-sm text-gray-400">3-4 letter words • 12 wrong guesses allowed</div>
                 <div className="text-xs text-gray-500 mt-1">Perfect for kids learning English</div>
               </button>
 

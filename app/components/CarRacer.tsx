@@ -311,14 +311,14 @@ export default function CarRacer() {
       ctx.stroke();
       // Hint text
       ctx.fillStyle = "#fbbf24";
-      ctx.font = "bold 16px sans-serif";
+      ctx.font = "bold 14px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       const pulse = Math.sin(Date.now() / 200) * 0.3 + 1; // pulsing effect
       ctx.save();
       ctx.translate(r.x, r.y - 35);
       ctx.scale(pulse, pulse);
-      ctx.fillText("↑ JUMP!", 0, 0);
+      ctx.fillText("Hit ramp to jump!", 0, 0);
       ctx.restore();
     });
 
@@ -409,10 +409,10 @@ export default function CarRacer() {
     // 25% chance to spawn a ramp directly before this obstacle
     // Ramp must be in same lane and positioned so player hits ramp first, then jumps over car
     if (Math.random() < 0.25) {
-      // Ramp positioned 150px ahead of car (closer to player)
-      // At typical speed (~3-5), this gives ~30-50 frames, and jump duration is 40 frames (1/0.025)
+      // Ramp positioned 150px ahead of car (more negative Y = closer to spawn point)
+      // At typical speed (~3-5), this gives ~30-50 frames, and jump duration is ~33 frames (1/0.03)
       // Player will hit ramp, jump arc peaks around halfway, car passes underneath
-      const rampY = carY + 150;
+      const rampY = carY - 150;
       rampsRef.current.push({
         x: laneX(lane),
         y: rampY,
