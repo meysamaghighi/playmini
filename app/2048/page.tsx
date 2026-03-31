@@ -3,24 +3,23 @@ import Game2048 from "../components/Game2048";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "2048 Game - Free Online | PlayMini",
+  title: "Play 2048 Online Free - 2048 Game Browser | PlayMini",
   description:
-    "Play the addictive 2048 puzzle game online for free. Combine numbered tiles to reach 2048. Features touch controls, score tracking, and responsive design. Can you beat your high score?",
+    "Play 2048 online free! Combine numbered tiles to reach 2048 in this addictive puzzle game. No download needed. Touch controls for mobile, arrow keys for desktop.",
   keywords: [
-    "2048 game",
+    "play 2048 online free",
+    "2048 game browser",
     "2048 online",
-    "free 2048",
-    "puzzle game",
-    "2048 puzzle",
-    "number puzzle",
-    "brain game",
-    "merge game",
+    "free 2048 game",
+    "2048 puzzle game",
     "2048 unblocked",
+    "number puzzle online",
+    "merge game 2048",
   ],
   openGraph: {
-    title: "2048 Game - Free Online | PlayMini",
+    title: "Play 2048 Online Free - 2048 Game Browser | PlayMini",
     description:
-      "Play the addictive 2048 puzzle game online for free. Combine numbered tiles to reach 2048!",
+      "Play 2048 online free! Combine numbered tiles to reach 2048 in this addictive puzzle game.",
     type: "website",
     url: "https://playmini.fun/2048",
   },

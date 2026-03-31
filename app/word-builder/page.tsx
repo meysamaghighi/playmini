@@ -3,15 +3,23 @@ import WordBuilder from "../components/WordBuilder";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Word Builder - Create Words from Letters | PlayMini",
+  title: "Word Builder Game Online - Make Words From Letters | PlayMini",
   description:
-    "Free online word building game. Create as many words as you can from the letters of one word. Test your vocabulary in this 2-minute word puzzle challenge!",
-  keywords:
-    "word builder, word game, vocabulary game, word puzzle, anagram game, letter game, brain game, word challenge",
+    "Play word builder game online! Make words from letters in 2 minutes. Test your vocabulary with this free word puzzle. No download. Desktop and mobile friendly.",
+  keywords: [
+    "word builder game online",
+    "make words from letters game",
+    "word builder online",
+    "word puzzle game",
+    "vocabulary game online",
+    "anagram game",
+    "letter game online",
+    "word challenge",
+  ],
   openGraph: {
-    title: "Word Builder - Create Words from Letters | PlayMini",
+    title: "Word Builder Game Online - Make Words From Letters | PlayMini",
     description:
-      "Create as many words as you can from one word! Free word building game with timer-based scoring.",
+      "Play word builder game online! Make words from letters in 2 minutes. Test your vocabulary with this free word puzzle.",
     type: "website",
     url: "https://playmini.fun/word-builder",
   },

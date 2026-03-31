@@ -338,6 +338,16 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export default function WordBuilder() {
+  type Difficulty = "superEasy" | "easy" | "medium" | "hard" | "impossible";
+
+  const difficultyConfig = {
+    superEasy: { name: "Super Easy", time: 300, color: "from-green-500 to-green-600" },
+    easy: { name: "Easy", time: 180, color: "from-teal-500 to-teal-600" },
+    medium: { name: "Medium", time: 120, color: "from-cyan-500 to-cyan-600" },
+    hard: { name: "Hard", time: 60, color: "from-orange-500 to-orange-600" },
+    impossible: { name: "Impossible", time: 30, color: "from-red-500 to-red-600" },
+  };
+
   const [sourceWord, setSourceWord] = useState("");
   const [scrambledLetters, setScrambledLetters] = useState<string[]>([]);
   const [possibleWords, setPossibleWords] = useState<string[]>([]);
@@ -348,11 +358,16 @@ export default function WordBuilder() {
   const [gameOver, setGameOver] = useState(false);
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
   const [personalBest, setPersonalBest] = useState<number>(0);
+  const [difficulty, setDifficulty] = useState<Difficulty>("medium");
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("pb-word-builder");
     if (saved) setPersonalBest(parseInt(saved, 10));
+    const savedDifficulty = localStorage.getItem("wb-difficulty");
+    if (savedDifficulty && savedDifficulty in difficultyConfig) {
+      setDifficulty(savedDifficulty as Difficulty);
+    }
   }, []);
 
   const calculateScore = useCallback((words: string[]) => {
@@ -372,12 +387,12 @@ export default function WordBuilder() {
     setPossibleWords(possible);
     setFoundWords([]);
     setCurrentInput("");
-    setTimeLeft(120);
+    setTimeLeft(difficultyConfig[difficulty].time);
     setIsPlaying(true);
     setGameOver(false);
     setFeedback(null);
     inputRef.current?.focus();
-  }, []);
+  }, [difficulty]);
 
   useEffect(() => {
     if (!isPlaying || gameOver) return;
@@ -436,6 +451,11 @@ export default function WordBuilder() {
     }
   };
 
+  const handleDifficultySelect = (diff: Difficulty) => {
+    setDifficulty(diff);
+    localStorage.setItem("wb-difficulty", diff);
+  };
+
   const missedWords = possibleWords.filter((w) => !foundWords.map(f => f.toLowerCase()).includes(w.toLowerCase()));
   const currentScore = calculateScore(foundWords);
   const isNewBest = gameOver && currentScore > personalBest;
@@ -445,12 +465,34 @@ export default function WordBuilder() {
       <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800">
         {!isPlaying && !gameOver && (
           <div className="text-center">
+            <h2 className="text-2xl font-bold text-white mb-2">Word Builder</h2>
             <p className="text-gray-300 mb-6">
-              Create words from the letters of one word. Find as many as you can in 2 minutes!
+              Create words from the letters of one word. Find as many as you can!
             </p>
+
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-300 mb-4">Select Difficulty</h3>
+              <div className="flex flex-col gap-3 max-w-md mx-auto">
+                {(Object.keys(difficultyConfig) as Difficulty[]).map((diff) => (
+                  <button
+                    key={diff}
+                    onClick={() => handleDifficultySelect(diff)}
+                    className={`px-6 py-4 bg-gradient-to-r ${difficultyConfig[diff].color} text-white font-bold rounded-xl hover:opacity-90 transition-all ${
+                      difficulty === diff ? "ring-4 ring-white/30 scale-105" : ""
+                    }`}
+                  >
+                    <div className="text-xl">{difficultyConfig[diff].name}</div>
+                    <div className="text-sm opacity-90">
+                      {Math.floor(difficultyConfig[diff].time / 60)}:{String(difficultyConfig[diff].time % 60).padStart(2, "0")}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <button
               onClick={startGame}
-              className="px-8 py-3 bg-gradient-to-r from-emerald-500 to-cyan-600 text-white font-bold rounded-xl hover:opacity-90 transition-opacity"
+              className={`px-8 py-3 bg-gradient-to-r ${difficultyConfig[difficulty].color} text-white font-bold rounded-xl hover:opacity-90 transition-opacity`}
             >
               Start Game
             </button>
@@ -540,6 +582,9 @@ export default function WordBuilder() {
               <p className="text-xl text-yellow-400 mb-4">🎉 New Personal Best!</p>
             )}
             <div className="mb-6">
+              <p className={`text-lg font-semibold mb-2 bg-gradient-to-r ${difficultyConfig[difficulty].color} bg-clip-text text-transparent`}>
+                {difficultyConfig[difficulty].name}
+              </p>
               <p className="text-2xl text-cyan-400 font-bold mb-1">Score: {currentScore}</p>
               <p className="text-gray-400">
                 Found {foundWords.length} of {possibleWords.length} words
@@ -583,7 +628,7 @@ export default function WordBuilder() {
               </div>
             )}
 
-            <div className="flex gap-3 justify-center">
+            <div className="flex gap-3 justify-center flex-wrap">
               <button
                 onClick={handleShare}
                 className="px-6 py-3 bg-gray-800 text-white font-bold rounded-xl hover:bg-gray-700 transition-colors"
@@ -591,8 +636,17 @@ export default function WordBuilder() {
                 Share
               </button>
               <button
+                onClick={() => {
+                  setGameOver(false);
+                  setIsPlaying(false);
+                }}
+                className="px-6 py-3 bg-gray-700 text-white font-bold rounded-xl hover:bg-gray-600 transition-colors"
+              >
+                Change Difficulty
+              </button>
+              <button
                 onClick={startGame}
-                className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-cyan-600 text-white font-bold rounded-xl hover:opacity-90 transition-opacity"
+                className={`px-6 py-3 bg-gradient-to-r ${difficultyConfig[difficulty].color} text-white font-bold rounded-xl hover:opacity-90 transition-opacity`}
               >
                 Play Again
               </button>

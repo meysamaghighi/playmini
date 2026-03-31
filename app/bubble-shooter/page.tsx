@@ -3,15 +3,23 @@ import BubbleShooter from "../components/BubbleShooter";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Bubble Shooter - Match 3 Puzzle Game | PlayMini",
+  title: "Bubble Shooter Game Free Online - Bubble Pop Game | PlayMini",
   description:
-    "Free online Bubble Shooter game. Aim and shoot colored bubbles to match 3 or more. Clear the board to advance levels. Addictive puzzle action!",
-  keywords:
-    "bubble shooter, bubble game, match 3, puzzle game, free online game, bubble pop, matching game",
+    "Play bubble shooter game free online! Aim and shoot to match 3+ bubbles. Bubble pop game with multiple levels. No download, desktop and mobile friendly.",
+  keywords: [
+    "bubble shooter game free online",
+    "bubble pop game",
+    "bubble shooter online",
+    "free bubble shooter",
+    "bubble game online",
+    "match 3 bubbles",
+    "puzzle game online",
+    "bubble shooter unblocked",
+  ],
   openGraph: {
-    title: "Bubble Shooter - Match 3 Puzzle Game | PlayMini",
+    title: "Bubble Shooter Game Free Online - Bubble Pop Game | PlayMini",
     description:
-      "Play free Bubble Shooter online. Match 3+ bubbles to pop them and clear the board!",
+      "Play bubble shooter game free online! Aim and shoot to match 3+ bubbles. Bubble pop game with multiple levels.",
     type: "website",
     url: "https://playmini.fun/bubble-shooter",
   },

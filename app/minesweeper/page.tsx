@@ -3,15 +3,22 @@ import MinesweeperGame from "../components/MinesweeperGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Minesweeper - Free Online | PlayMini",
+  title: "Play Minesweeper Online Free - Minesweeper Browser Game",
   description:
-    "Play classic Minesweeper online for free! Three difficulty levels: Easy, Medium, and Hard. Clear the board without hitting mines. Track your best times and compete with yourself!",
-  keywords:
-    "minesweeper, free minesweeper, online minesweeper, minesweeper game, classic minesweeper, browser game, puzzle game, logic game",
+    "Play minesweeper online free! Classic logic puzzle with 3 difficulty levels. Clear the board without hitting mines. No download. Desktop and mobile friendly.",
+  keywords: [
+    "play minesweeper online free",
+    "minesweeper browser game",
+    "minesweeper online",
+    "free minesweeper",
+    "classic minesweeper",
+    "minesweeper game online",
+    "minesweeper unblocked",
+  ],
   openGraph: {
-    title: "Minesweeper - Free Online | PlayMini",
+    title: "Play Minesweeper Online Free - Minesweeper Browser Game",
     description:
-      "Play classic Minesweeper online! Three difficulty levels with personal best tracking. Can you clear the board without hitting a mine?",
+      "Play minesweeper online free! Classic logic puzzle with 3 difficulty levels. Clear the board without hitting mines.",
     url: "https://playmini.fun/minesweeper",
     siteName: "PlayMini",
     type: "website",
@@ -26,9 +33,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Minesweeper - Free Online | PlayMini",
+    title: "Play Minesweeper Online Free - Minesweeper Browser Game",
     description:
-      "Play classic Minesweeper online! Three difficulty levels with personal best tracking.",
+      "Play minesweeper online free! Classic logic puzzle with 3 difficulty levels.",
   },
 };
 

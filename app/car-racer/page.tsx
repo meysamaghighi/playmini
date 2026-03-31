@@ -3,15 +3,23 @@ import CarRacer from "../components/CarRacer";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Car Racer - Free Driving Game Online | PlayMini",
+  title: "Car Racing Game Online Free - Browser Car Game | PlayMini",
   description:
-    "Play Car Racer free online - a thrilling top-down driving game. Dodge traffic, collect coins, and race for the highest score. Desktop and mobile friendly with arrow keys or touch controls.",
-  keywords:
-    "car racing game, driving game, car racer online, free racing game, top-down racing, arcade racing, endless runner car game, browser racing game",
+    "Play car racing game online free! Dodge traffic, collect coins, and race for high scores. Top-down browser car game with smooth controls. No download needed.",
+  keywords: [
+    "car racing game online free",
+    "browser car game",
+    "car racer online",
+    "free racing game",
+    "online car game",
+    "top-down racing",
+    "arcade racing game",
+    "endless runner car",
+  ],
   openGraph: {
-    title: "Car Racer - Free Driving Game Online | PlayMini",
+    title: "Car Racing Game Online Free - Browser Car Game | PlayMini",
     description:
-      "Play Car Racer free online - dodge traffic, collect coins, and race for the highest score.",
+      "Play car racing game online free! Dodge traffic, collect coins, and race for high scores in this browser car game.",
     type: "website",
     url: "https://playmini.fun/car-racer",
   },

@@ -3,15 +3,22 @@ import SnakeGame from "../components/SnakeGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Snake Game - Free Online | PlayMini",
+  title: "Play Snake Game Online Free - Snake Game Browser | PlayMini",
   description:
-    "Play the classic Snake game free online. Control the snake, eat food, grow longer, and beat your high score. Works on desktop and mobile with arrow keys or swipe controls.",
-  keywords:
-    "snake game, classic snake, online snake, free snake game, snake online, retro games, arcade games",
+    "Play snake game online free! Classic snake game in your browser. Eat food, grow longer, beat your high score. No download. Desktop and mobile friendly.",
+  keywords: [
+    "play snake game online free",
+    "snake game browser",
+    "snake game online",
+    "free snake game",
+    "classic snake online",
+    "snake game unblocked",
+    "retro snake game",
+  ],
   openGraph: {
-    title: "Snake Game - Free Online | PlayMini",
+    title: "Play Snake Game Online Free - Snake Game Browser | PlayMini",
     description:
-      "Play the classic Snake game free online. Control the snake, eat food, grow longer, and beat your high score.",
+      "Play snake game online free! Classic snake game in your browser. Eat food, grow longer, beat your high score.",
     type: "website",
     url: "https://playmini.fun/snake",
   },

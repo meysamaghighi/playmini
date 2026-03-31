@@ -3,15 +3,23 @@ import SpaceInvaders from "../components/SpaceInvaders";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Space Invaders - Classic Arcade Shooter | PlayMini",
+  title: "Play Space Invaders Online Free - Browser Game | PlayMini",
   description:
-    "Free online Space Invaders game. Defend Earth from alien invaders! Move with arrow keys, shoot with space. Classic arcade action in your browser.",
-  keywords:
-    "space invaders, arcade game, shooter game, aliens, retro game, classic arcade, free online game",
+    "Play Space Invaders online free! Classic arcade shooter in your browser. Defend Earth from alien invaders. No download needed. Desktop and mobile friendly.",
+  keywords: [
+    "play space invaders online free",
+    "space invaders browser game",
+    "space invaders online",
+    "free space invaders",
+    "space invaders game",
+    "arcade shooter",
+    "retro game online",
+    "classic arcade game",
+  ],
   openGraph: {
-    title: "Space Invaders - Classic Arcade Shooter | PlayMini",
+    title: "Play Space Invaders Online Free - Browser Game | PlayMini",
     description:
-      "Play free Space Invaders online. Defend Earth from waves of alien invaders!",
+      "Play Space Invaders online free! Classic arcade shooter in your browser. Defend Earth from alien invaders.",
     type: "website",
     url: "https://playmini.fun/space-invaders",
   },

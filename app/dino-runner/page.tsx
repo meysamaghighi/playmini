@@ -3,15 +3,23 @@ import DinoRunner from "../components/DinoRunner";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Dino Runner - Free Endless Runner Game | PlayMini",
+  title: "Dino Run Game Online - Chrome Dinosaur Game | PlayMini",
   description:
-    "Play the addictive Dino Runner endless runner game free online. Jump over cacti, duck under pterodactyls, and beat your high score. Chrome dinosaur game style with increasing difficulty!",
-  keywords:
-    "dino runner, endless runner, chrome dinosaur game, dino game, free runner game, dinosaur game, t-rex runner, online runner, arcade game, jumping game",
+    "Play dino run game online! Chrome dinosaur game style endless runner. Jump over cacti, duck under pterodactyls. Free, no download. Desktop and mobile.",
+  keywords: [
+    "dino run game online",
+    "chrome dinosaur game online",
+    "dino game online",
+    "t-rex runner",
+    "chrome dino game",
+    "dinosaur game online free",
+    "endless runner game",
+    "dino runner",
+  ],
   openGraph: {
-    title: "Dino Runner - Free Endless Runner Game | PlayMini",
+    title: "Dino Run Game Online - Chrome Dinosaur Game | PlayMini",
     description:
-      "Play the addictive Dino Runner endless runner game free online. Jump over cacti, duck under pterodactyls, and beat your high score!",
+      "Play dino run game online! Chrome dinosaur game style endless runner. Jump over cacti, duck under pterodactyls.",
     type: "website",
     url: "https://playmini.fun/dino-runner",
   },
