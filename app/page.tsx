@@ -52,6 +52,180 @@ const games: Array<{
   icon: React.ReactNode;
 }> = [
   {
+    href: "/space-invaders",
+    title: "Space Invaders",
+    description: "Defend Earth from alien invaders",
+    color: "from-red-500 to-pink-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="8" y="16" width="8" height="8" fill="#ef4444" />
+        <rect x="20" y="16" width="8" height="8" fill="#ef4444" />
+        <rect x="32" y="16" width="8" height="8" fill="#ef4444" />
+        <rect x="14" y="24" width="8" height="8" fill="#ef4444" />
+        <rect x="26" y="24" width="8" height="8" fill="#ef4444" />
+        <path d="M20 38h8l-2 4h-4z" fill="#22c55e" />
+        <rect x="18" y="36" width="12" height="4" fill="#22c55e" />
+        <rect x="22" y="42" width="2" height="2" fill="#facc15" />
+      </svg>
+    ),
+  },
+  {
+    href: "/car-racer",
+    title: "Car Racer",
+    description: "Dodge traffic on the endless highway",
+    color: "from-red-500 to-orange-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="18" y="12" width="12" height="24" rx="3" fill="#ef4444" />
+        <rect x="20" y="14" width="8" height="6" rx="1" fill="#93c5fd" />
+        <circle cx="20" cy="32" r="3" fill="#374151" />
+        <circle cx="28" cy="32" r="3" fill="#374151" />
+        <circle cx="20" cy="16" r="3" fill="#374151" />
+        <circle cx="28" cy="16" r="3" fill="#374151" />
+        <line x1="12" y1="40" x2="12" y2="8" stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
+        <line x1="36" y1="40" x2="36" y2="8" stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
+      </svg>
+    ),
+  },
+  {
+    href: "/dino-runner",
+    title: "Dino Runner",
+    description: "Jump and duck in this endless runner",
+    color: "from-lime-500 to-green-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="20" y="10" width="14" height="12" rx="2" fill="#d1d5db" />
+        <rect x="20" y="22" width="8" height="10" fill="#d1d5db" />
+        <rect x="16" y="26" width="4" height="6" fill="#d1d5db" />
+        <rect x="22" y="32" width="4" height="6" fill="#d1d5db" />
+        <rect x="28" y="32" width="4" height="6" fill="#d1d5db" />
+        <circle cx="30" cy="14" r="2" fill="#111" />
+        <line x1="8" y1="38" x2="42" y2="38" stroke="#6b7280" strokeWidth="2" />
+      </svg>
+    ),
+  },
+  {
+    href: "/flappy",
+    title: "Flappy Bird",
+    description: "Tap to flap through the pipes",
+    color: "from-sky-400 to-blue-500",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <circle cx="24" cy="24" r="12" fill="#facc15" />
+        <circle cx="29" cy="20" r="3" fill="white" />
+        <circle cx="30" cy="20" r="1.5" fill="#111" />
+        <path d="M32 24h8l-4 4z" fill="#f97316" />
+        <path d="M12 22h10v4H12z" fill="#a3e635" />
+      </svg>
+    ),
+  },
+  {
+    href: "/breakout",
+    title: "Breakout",
+    description: "Smash bricks with a bouncing ball",
+    color: "from-red-500 to-purple-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="4" width="12" height="5" rx="1" fill="#ef4444" />
+        <rect x="18" y="4" width="12" height="5" rx="1" fill="#f59e0b" />
+        <rect x="32" y="4" width="12" height="5" rx="1" fill="#22c55e" />
+        <rect x="4" y="11" width="12" height="5" rx="1" fill="#3b82f6" />
+        <rect x="18" y="11" width="12" height="5" rx="1" fill="#a855f7" />
+        <rect x="32" y="11" width="12" height="5" rx="1" fill="#ec4899" />
+        <circle cx="24" cy="30" r="3" fill="white" />
+        <rect x="14" y="40" width="20" height="4" rx="2" fill="#94a3b8" />
+      </svg>
+    ),
+  },
+  {
+    href: "/bubble-shooter",
+    title: "Bubble Shooter",
+    description: "Match 3+ bubbles to pop them",
+    color: "from-purple-500 to-fuchsia-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <circle cx="14" cy="12" r="6" fill="#ef4444" opacity="0.8" />
+        <circle cx="24" cy="12" r="6" fill="#3b82f6" opacity="0.8" />
+        <circle cx="34" cy="12" r="6" fill="#22c55e" opacity="0.8" />
+        <circle cx="19" cy="20" r="6" fill="#a855f7" opacity="0.8" />
+        <circle cx="29" cy="20" r="6" fill="#f59e0b" opacity="0.8" />
+        <circle cx="24" cy="28" r="6" fill="#ec4899" opacity="0.8" />
+        <path d="M24 38L28 42L20 42Z" fill="#6b7280" />
+        <circle cx="24" cy="38" r="3" fill="#ef4444" />
+      </svg>
+    ),
+  },
+  {
+    href: "/snake",
+    title: "Snake",
+    description: "Eat food, grow longer, don't hit the walls",
+    color: "from-green-500 to-emerald-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <path d="M8 24h8v-8h8v8h8v8h8" stroke="#22c55e" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="40" cy="32" r="3" fill="#ef4444" />
+      </svg>
+    ),
+  },
+  {
+    href: "/whack-a-mole",
+    title: "Whack-a-Mole",
+    description: "Whack moles as fast as you can!",
+    color: "from-yellow-500 to-amber-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <ellipse cx="24" cy="36" rx="16" ry="6" fill="#44403c" />
+        <circle cx="24" cy="24" r="10" fill="#a16207" />
+        <circle cx="20" cy="22" r="2" fill="white" />
+        <circle cx="28" cy="22" r="2" fill="white" />
+        <circle cx="20" cy="22" r="1" fill="#111" />
+        <circle cx="28" cy="22" r="1" fill="#111" />
+        <ellipse cx="24" cy="27" rx="2" ry="1.5" fill="#92400e" />
+      </svg>
+    ),
+  },
+  {
+    href: "/tower-builder",
+    title: "Tower Builder",
+    description: "Stack swinging blocks to build high",
+    color: "from-pink-500 to-rose-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="10" y="34" width="28" height="6" rx="1" fill="#fb7185" />
+        <rect x="12" y="28" width="24" height="6" rx="1" fill="#f472b6" />
+        <rect x="14" y="22" width="20" height="6" rx="1" fill="#e879f9" />
+        <rect x="16" y="16" width="16" height="6" rx="1" fill="#c084fc" />
+        <rect x="18" y="10" width="12" height="6" rx="1" fill="#a78bfa" opacity="0.6" />
+        <line x1="24" y1="4" x2="24" y2="10" stroke="#a78bfa" strokeWidth="1" strokeDasharray="2 2" />
+      </svg>
+    ),
+  },
+  {
+    href: "/maze",
+    title: "Maze Runner",
+    description: "Navigate through generated mazes to the goal",
+    color: "from-purple-500 to-violet-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="4" width="40" height="40" rx="2" fill="#1f2937" />
+        <path d="M8 8h32v8H32v8h8v8H32v8h8v-8" stroke="#a855f7" strokeWidth="3" fill="none" />
+        <path d="M8 16h8v8H8v8h8v8" stroke="#a855f7" strokeWidth="3" fill="none" />
+        <circle cx="12" cy="12" r="3" fill="#3b82f6" />
+        <circle cx="36" cy="36" r="3" fill="#22c55e" />
+      </svg>
+    ),
+  },
+  {
     href: "/2048",
     title: "2048",
     description: "Slide and merge tiles to reach 2048",
@@ -67,19 +241,6 @@ const games: Array<{
         <text x="35" y="17" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">4</text>
         <text x="13" y="39" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">8</text>
         <text x="35" y="39" textAnchor="middle" fill="white" fontSize="9" fontWeight="bold">16</text>
-      </svg>
-    ),
-  },
-  {
-    href: "/snake",
-    title: "Snake",
-    description: "Eat food, grow longer, don't hit the walls",
-    color: "from-green-500 to-emerald-600",
-    category: "Arcade",
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <path d="M8 24h8v-8h8v8h8v8h8" stroke="#22c55e" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="40" cy="32" r="3" fill="#ef4444" />
       </svg>
     ),
   },
@@ -114,24 +275,6 @@ const games: Array<{
         <rect x="28" y="28" width="14" height="14" rx="2" fill="#a855f7" />
         <text x="13" y="19" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">?</text>
         <text x="35" y="19" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">?</text>
-      </svg>
-    ),
-  },
-  {
-    href: "/whack-a-mole",
-    title: "Whack-a-Mole",
-    description: "Whack moles as fast as you can!",
-    color: "from-yellow-500 to-amber-600",
-    category: "Arcade",
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <ellipse cx="24" cy="36" rx="16" ry="6" fill="#44403c" />
-        <circle cx="24" cy="24" r="10" fill="#a16207" />
-        <circle cx="20" cy="22" r="2" fill="white" />
-        <circle cx="28" cy="22" r="2" fill="white" />
-        <circle cx="20" cy="22" r="1" fill="#111" />
-        <circle cx="28" cy="22" r="1" fill="#111" />
-        <ellipse cx="24" cy="27" rx="2" ry="1.5" fill="#92400e" />
       </svg>
     ),
   },
@@ -189,6 +332,45 @@ const games: Array<{
     ),
   },
   {
+    href: "/hangman",
+    title: "Hangman",
+    description: "Guess the word before the stick figure is complete",
+    color: "from-slate-500 to-gray-600",
+    category: "Word",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <line x1="8" y1="42" x2="28" y2="42" stroke="#94a3b8" strokeWidth="2" />
+        <line x1="18" y1="42" x2="18" y2="8" stroke="#94a3b8" strokeWidth="2" />
+        <line x1="18" y1="8" x2="34" y2="8" stroke="#94a3b8" strokeWidth="2" />
+        <line x1="34" y1="8" x2="34" y2="14" stroke="#94a3b8" strokeWidth="2" />
+        <circle cx="34" cy="18" r="4" stroke="white" strokeWidth="2" />
+        <line x1="34" y1="22" x2="34" y2="32" stroke="white" strokeWidth="2" />
+        <line x1="34" y1="25" x2="28" y2="28" stroke="white" strokeWidth="2" />
+        <line x1="34" y1="25" x2="40" y2="28" stroke="white" strokeWidth="2" />
+      </svg>
+    ),
+  },
+  {
+    href: "/word-builder",
+    title: "Word Builder",
+    description: "How many words can you make from one word?",
+    color: "from-emerald-500 to-cyan-600",
+    category: "Word",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="16" width="10" height="10" rx="2" fill="#10b981" />
+        <rect x="16" y="16" width="10" height="10" rx="2" fill="#14b8a6" />
+        <rect x="28" y="16" width="10" height="10" rx="2" fill="#06b6d4" />
+        <rect x="40" y="16" width="4" height="10" rx="1" fill="#0891b2" />
+        <text x="9" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">W</text>
+        <text x="21" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">O</text>
+        <text x="33" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">R</text>
+        <text x="42" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">D</text>
+        <path d="M10 30 Q24 34 38 30" stroke="#22c55e" strokeWidth="2" fill="none" opacity="0.6" />
+      </svg>
+    ),
+  },
+  {
     href: "/wordle",
     title: "Word Guess",
     description: "Guess the 5-letter word in 6 tries",
@@ -204,24 +386,6 @@ const games: Array<{
         <rect x="14" y="26" width="8" height="8" rx="1" fill="#22c55e" />
         <rect x="24" y="26" width="8" height="8" rx="1" fill="#4b5563" />
         <rect x="34" y="26" width="8" height="8" rx="1" fill="#eab308" />
-      </svg>
-    ),
-  },
-  {
-    href: "/dino-runner",
-    title: "Dino Runner",
-    description: "Jump and duck in this endless runner",
-    color: "from-lime-500 to-green-600",
-    category: "Arcade",
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <rect x="20" y="10" width="14" height="12" rx="2" fill="#d1d5db" />
-        <rect x="20" y="22" width="8" height="10" fill="#d1d5db" />
-        <rect x="16" y="26" width="4" height="6" fill="#d1d5db" />
-        <rect x="22" y="32" width="4" height="6" fill="#d1d5db" />
-        <rect x="28" y="32" width="4" height="6" fill="#d1d5db" />
-        <circle cx="30" cy="14" r="2" fill="#111" />
-        <line x1="8" y1="38" x2="42" y2="38" stroke="#6b7280" strokeWidth="2" />
       </svg>
     ),
   },
@@ -257,42 +421,6 @@ const games: Array<{
         <path d="M24 8L40 18L24 28L8 18L24 8Z" fill="#14b8a6" />
         <path d="M24 28V44L8 34V18L24 28Z" fill="#0d9488" />
         <path d="M24 28V44L40 34V18L24 28Z" fill="#0f766e" />
-      </svg>
-    ),
-  },
-  {
-    href: "/car-racer",
-    title: "Car Racer",
-    description: "Dodge traffic on the endless highway",
-    color: "from-red-500 to-orange-600",
-    category: "Arcade",
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <rect x="18" y="12" width="12" height="24" rx="3" fill="#ef4444" />
-        <rect x="20" y="14" width="8" height="6" rx="1" fill="#93c5fd" />
-        <circle cx="20" cy="32" r="3" fill="#374151" />
-        <circle cx="28" cy="32" r="3" fill="#374151" />
-        <circle cx="20" cy="16" r="3" fill="#374151" />
-        <circle cx="28" cy="16" r="3" fill="#374151" />
-        <line x1="12" y1="40" x2="12" y2="8" stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
-        <line x1="36" y1="40" x2="36" y2="8" stroke="#6b7280" strokeWidth="1" strokeDasharray="4 3" />
-      </svg>
-    ),
-  },
-  {
-    href: "/tower-builder",
-    title: "Tower Builder",
-    description: "Stack swinging blocks to build high",
-    color: "from-pink-500 to-rose-600",
-    category: "Arcade",
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <rect x="10" y="34" width="28" height="6" rx="1" fill="#fb7185" />
-        <rect x="12" y="28" width="24" height="6" rx="1" fill="#f472b6" />
-        <rect x="14" y="22" width="20" height="6" rx="1" fill="#e879f9" />
-        <rect x="16" y="16" width="16" height="6" rx="1" fill="#c084fc" />
-        <rect x="18" y="10" width="12" height="6" rx="1" fill="#a78bfa" opacity="0.6" />
-        <line x1="24" y1="4" x2="24" y2="10" stroke="#a78bfa" strokeWidth="1" strokeDasharray="2 2" />
       </svg>
     ),
   },
@@ -366,25 +494,6 @@ const games: Array<{
     ),
   },
   {
-    href: "/hangman",
-    title: "Hangman",
-    description: "Guess the word before the stick figure is complete",
-    color: "from-slate-500 to-gray-600",
-    category: "Word",
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <line x1="8" y1="42" x2="28" y2="42" stroke="#94a3b8" strokeWidth="2" />
-        <line x1="18" y1="42" x2="18" y2="8" stroke="#94a3b8" strokeWidth="2" />
-        <line x1="18" y1="8" x2="34" y2="8" stroke="#94a3b8" strokeWidth="2" />
-        <line x1="34" y1="8" x2="34" y2="14" stroke="#94a3b8" strokeWidth="2" />
-        <circle cx="34" cy="18" r="4" stroke="white" strokeWidth="2" />
-        <line x1="34" y1="22" x2="34" y2="32" stroke="white" strokeWidth="2" />
-        <line x1="34" y1="25" x2="28" y2="28" stroke="white" strokeWidth="2" />
-        <line x1="34" y1="25" x2="40" y2="28" stroke="white" strokeWidth="2" />
-      </svg>
-    ),
-  },
-  {
     href: "/crossword",
     title: "Crossword",
     description: "Fill in the crossword puzzle with clues",
@@ -428,25 +537,6 @@ const games: Array<{
     ),
   },
   {
-    href: "/breakout",
-    title: "Breakout",
-    description: "Smash bricks with a bouncing ball",
-    color: "from-red-500 to-purple-600",
-    category: "Arcade",
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <rect x="4" y="4" width="12" height="5" rx="1" fill="#ef4444" />
-        <rect x="18" y="4" width="12" height="5" rx="1" fill="#f59e0b" />
-        <rect x="32" y="4" width="12" height="5" rx="1" fill="#22c55e" />
-        <rect x="4" y="11" width="12" height="5" rx="1" fill="#3b82f6" />
-        <rect x="18" y="11" width="12" height="5" rx="1" fill="#a855f7" />
-        <rect x="32" y="11" width="12" height="5" rx="1" fill="#ec4899" />
-        <circle cx="24" cy="30" r="3" fill="white" />
-        <rect x="14" y="40" width="20" height="4" rx="2" fill="#94a3b8" />
-      </svg>
-    ),
-  },
-  {
     href: "/typing-race",
     title: "Typing Race",
     description: "Type paragraphs as fast and accurately as you can",
@@ -483,80 +573,6 @@ const games: Array<{
         <text x="22" y="36" fill="#22c55e" fontSize="10" fontWeight="bold">T</text>
         <text x="30" y="36" fill="#6b7280" fontSize="10" fontWeight="bold">M</text>
         <line x1="22" y1="14" x2="22" y2="38" stroke="#22c55e" strokeWidth="2" opacity="0.5" />
-      </svg>
-    ),
-  },
-  {
-    href: "/word-builder",
-    title: "Word Builder",
-    description: "How many words can you make from one word?",
-    color: "from-emerald-500 to-cyan-600",
-    category: "Word",
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <rect x="4" y="16" width="10" height="10" rx="2" fill="#10b981" />
-        <rect x="16" y="16" width="10" height="10" rx="2" fill="#14b8a6" />
-        <rect x="28" y="16" width="10" height="10" rx="2" fill="#06b6d4" />
-        <rect x="40" y="16" width="4" height="10" rx="1" fill="#0891b2" />
-        <text x="9" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">W</text>
-        <text x="21" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">O</text>
-        <text x="33" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">R</text>
-        <text x="42" y="24" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">D</text>
-        <path d="M10 30 Q24 34 38 30" stroke="#22c55e" strokeWidth="2" fill="none" opacity="0.6" />
-      </svg>
-    ),
-  },
-  {
-    href: "/maze",
-    title: "Maze Runner",
-    description: "Navigate through generated mazes to the goal",
-    color: "from-purple-500 to-violet-600",
-    category: "Arcade",
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <rect x="4" y="4" width="40" height="40" rx="2" fill="#1f2937" />
-        <path d="M8 8h32v8H32v8h8v8H32v8h8v-8" stroke="#a855f7" strokeWidth="3" fill="none" />
-        <path d="M8 16h8v8H8v8h8v8" stroke="#a855f7" strokeWidth="3" fill="none" />
-        <circle cx="12" cy="12" r="3" fill="#3b82f6" />
-        <circle cx="36" cy="36" r="3" fill="#22c55e" />
-      </svg>
-    ),
-  },
-  {
-    href: "/space-invaders",
-    title: "Space Invaders",
-    description: "Defend Earth from alien invaders",
-    color: "from-red-500 to-pink-600",
-    category: "Arcade",
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <rect x="8" y="16" width="8" height="8" fill="#ef4444" />
-        <rect x="20" y="16" width="8" height="8" fill="#ef4444" />
-        <rect x="32" y="16" width="8" height="8" fill="#ef4444" />
-        <rect x="14" y="24" width="8" height="8" fill="#ef4444" />
-        <rect x="26" y="24" width="8" height="8" fill="#ef4444" />
-        <path d="M20 38h8l-2 4h-4z" fill="#22c55e" />
-        <rect x="18" y="36" width="12" height="4" fill="#22c55e" />
-        <rect x="22" y="42" width="2" height="2" fill="#facc15" />
-      </svg>
-    ),
-  },
-  {
-    href: "/bubble-shooter",
-    title: "Bubble Shooter",
-    description: "Match 3+ bubbles to pop them",
-    color: "from-purple-500 to-fuchsia-600",
-    category: "Arcade",
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <circle cx="14" cy="12" r="6" fill="#ef4444" opacity="0.8" />
-        <circle cx="24" cy="12" r="6" fill="#3b82f6" opacity="0.8" />
-        <circle cx="34" cy="12" r="6" fill="#22c55e" opacity="0.8" />
-        <circle cx="19" cy="20" r="6" fill="#a855f7" opacity="0.8" />
-        <circle cx="29" cy="20" r="6" fill="#f59e0b" opacity="0.8" />
-        <circle cx="24" cy="28" r="6" fill="#ec4899" opacity="0.8" />
-        <path d="M24 38L28 42L20 42Z" fill="#6b7280" />
-        <circle cx="24" cy="38" r="3" fill="#ef4444" />
       </svg>
     ),
   },
@@ -624,38 +640,47 @@ export default function Home() {
   })).filter((g) => g.games.length > 0);
 
   return (
-    <main className="max-w-4xl mx-auto px-4 pt-12 pb-12">
-      <div className="text-center mb-12">
-        <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-4">
+    <main className="max-w-4xl mx-auto px-4 pt-6 pb-12">
+      <div className="text-center mb-6">
+        <h1 className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-2">
           PlayMini
         </h1>
-        <p className="text-gray-400 text-lg">
+        <p className="text-gray-400 text-base sm:text-lg">
           {games.length} free browser games. No download, no sign-up. Just play.
         </p>
       </div>
 
+      <div className="flex flex-wrap justify-center gap-3 mb-6 text-xs text-gray-500">
+        <span>Also try:</span>
+        <a href="https://benchmybrain.com" className="text-cyan-400 hover:text-cyan-300 transition-colors">BenchMyBrain - Brain Tests</a>
+        <span className="text-gray-700">|</span>
+        <a href="https://doodlelab.fun" className="text-pink-400 hover:text-pink-300 transition-colors">DoodleLab - Drawing Games</a>
+        <span className="text-gray-700">|</span>
+        <a href="https://cashcalcs.com" className="text-green-400 hover:text-green-300 transition-colors">CashCalcs - Financial Tools</a>
+      </div>
+
       {grouped.map(({ category, games: catGames }) => (
-        <section key={category} className="mb-10">
-          <h2 className={`text-xl font-bold ${categoryColors[category]} mb-4 flex items-center gap-2`}>
+        <section key={category} className="mb-8">
+          <h2 className={`text-lg font-bold ${categoryColors[category]} mb-3 flex items-center gap-2`}>
             {category}
             <span className="text-sm font-normal text-gray-500">({catGames.length})</span>
           </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {catGames.map((game) => (
               <Link
                 key={game.href}
                 href={game.href}
-                className="group bg-gray-900 rounded-2xl p-5 border border-gray-800 hover:border-gray-700 transition-all hover:scale-[1.02]"
+                className="group bg-gray-900 rounded-xl p-3 border border-gray-800 hover:border-gray-700 transition-all"
               >
-                <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${game.color} flex items-center justify-center flex-shrink-0`}>
+                <div className="flex flex-col items-center gap-2">
+                  <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${game.color} flex items-center justify-center flex-shrink-0`}>
                     {game.icon}
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-purple-400 transition-all">
+                  <div className="text-center w-full">
+                    <h3 className="text-sm sm:text-base font-bold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-purple-400 transition-all">
                       {game.title}
                     </h3>
-                    <p className="text-gray-400 text-sm">{game.description}</p>
+                    <p className="text-gray-400 text-xs hidden sm:block">{game.description}</p>
                   </div>
                 </div>
               </Link>
