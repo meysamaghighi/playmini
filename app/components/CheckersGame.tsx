@@ -335,11 +335,11 @@ export default function CheckersGame() {
     }
 
     if (playerMoves.length === 0) {
-      return player === "RED" ? "LOST" : "WON";
+      return "LOST";
     }
 
     if (opponentMoves.length === 0) {
-      return player === "RED" ? "WON" : "LOST";
+      return "WON";
     }
 
     // Draw after 100 moves without capture
