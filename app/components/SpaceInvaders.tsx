@@ -375,7 +375,7 @@ export default function SpaceInvaders() {
     });
   }, []);
 
-  const gameLoop = useCallback(() => {
+  const gameLoop: () => void = useCallback(() => {
     if (gameStateRef.current !== "playing") {
       gameLoopRef.current = null;
       return;
