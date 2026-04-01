@@ -628,7 +628,8 @@ export default function SpaceInvaders() {
 
     draw();
     gameLoopRef.current = requestAnimationFrame(gameLoop);
-  }, [draw, initAliens, spawnPowerUp, activatePowerUp, gameLoop]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [draw, initAliens, spawnPowerUp, activatePowerUp]);
 
   const startGame = useCallback(() => {
     playerXRef.current = CANVAS_WIDTH / 2 - PLAYER_WIDTH / 2;
