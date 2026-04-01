@@ -3,9 +3,9 @@ import SpaceInvaders from "../components/SpaceInvaders";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Play Space Invaders Online Free - Browser Game | PlayMini",
+  title: "Play Space Invaders Online Free - 10 Levels & Power-Ups | PlayMini",
   description:
-    "Play Space Invaders online free! Classic arcade shooter in your browser. Defend Earth from alien invaders. No download needed. Desktop and mobile friendly.",
+    "Play Space Invaders online free! 10 levels + endless mode, 3 enemy types, power-ups (shield, rapid fire, spread shot). Classic arcade shooter in your browser. No download needed.",
   keywords: [
     "play space invaders online free",
     "space invaders browser game",
@@ -13,13 +13,13 @@ export const metadata: Metadata = {
     "free space invaders",
     "space invaders game",
     "arcade shooter",
+    "space invaders levels",
     "retro game online",
-    "classic arcade game",
   ],
   openGraph: {
-    title: "Play Space Invaders Online Free - Browser Game | PlayMini",
+    title: "Play Space Invaders Online Free - 10 Levels & Power-Ups | PlayMini",
     description:
-      "Play Space Invaders online free! Classic arcade shooter in your browser. Defend Earth from alien invaders.",
+      "Play Space Invaders online free! 10 levels, 3 enemy types, power-ups. Classic arcade shooter in your browser.",
     type: "website",
     url: "https://playmini.fun/space-invaders",
   },
@@ -30,7 +30,7 @@ export default function SpaceInvadersPage() {
     <main className="max-w-4xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-black text-white mb-3">Space Invaders</h1>
-        <p className="text-gray-400">Defend Earth from alien invaders</p>
+        <p className="text-gray-400">10 levels, 3 enemy types, power-ups -- defend Earth!</p>
       </div>
 
       <SpaceInvaders />
@@ -43,16 +43,17 @@ export default function SpaceInvadersPage() {
             <h3 className="font-semibold text-white mb-2">Controls:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Arrow Keys or A/D - Move left and right</li>
-              <li>Space - Shoot</li>
+              <li>Auto-shooting enabled (no need to press fire)</li>
+              <li>Touch buttons on mobile</li>
             </ul>
           </div>
           <div>
             <h3 className="font-semibold text-white mb-2">Goal:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
-              <li>Destroy all alien invaders before they reach the bottom</li>
-              <li>Avoid alien bullets</li>
-              <li>You have 3 lives</li>
-              <li>Aliens speed up as you destroy more of them</li>
+              <li>Clear all aliens to advance to the next level (10 levels + endless)</li>
+              <li>Avoid alien bullets -- you have 3 lives (+1 bonus every 5 levels)</li>
+              <li>Collect power-ups: Shield, Rapid Fire, Spread Shot</li>
+              <li>3 enemy types: Normal (red), Tough (blue, 2 hits), Elite (gold, 3 hits)</li>
             </ul>
           </div>
         </div>
@@ -66,10 +67,10 @@ export default function SpaceInvadersPage() {
             Space Invaders is a classic arcade game that defined the shooter genre. Originally released in 1978, it became one of the most influential video games of all time.
           </p>
           <p>
-            In this version, face waves of alien invaders marching down the screen. Move your ship left and right to dodge their bullets while shooting back. The aliens march faster as you eliminate more of them, increasing the challenge.
+            This version features 10 progressively harder levels plus an endless mode. Face three enemy types: normal (red), tough (blue, takes 2 hits), and elite (gold, takes 3 hits). Collect power-ups dropped by defeated aliens: Shield absorbs a hit, Rapid Fire doubles your shooting speed, and Spread Shot fires three bullets at once.
           </p>
           <p>
-            Can you defend Earth and achieve a high score?
+            Can you reach level 10 and survive the endless waves beyond?
           </p>
         </div>
       </section>
@@ -87,7 +88,7 @@ export default function SpaceInvadersPage() {
                 name: "How do I play Space Invaders?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Use the arrow keys or A/D to move your ship left and right. Press the space bar to shoot at the aliens. Destroy all aliens before they reach the bottom while avoiding their bullets.",
+                  text: "Use the arrow keys or A/D to move your ship left and right. Your ship auto-shoots. Destroy all aliens to advance to the next level. Collect power-ups (shield, rapid fire, spread shot) to gain an advantage.",
                 },
               },
               {
@@ -95,15 +96,15 @@ export default function SpaceInvadersPage() {
                 name: "What happens when I lose all my lives?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "The game ends when you lose all 3 lives. You can start a new game to try again and beat your high score.",
+                  text: "The game ends when you lose all lives. You start with 3 lives and earn a bonus life every 5 levels (max 5). Your high score is saved automatically.",
                 },
               },
               {
                 "@type": "Question",
-                name: "Do the aliens get faster?",
+                name: "How many levels are there?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Yes! The aliens progressively speed up as you destroy more of them, making the game increasingly challenging.",
+                  text: "There are 10 handcrafted levels with increasing difficulty, plus an endless mode that scales infinitely. Each level has more aliens, faster movement, and tougher enemy types (blue takes 2 hits, gold takes 3 hits).",
                 },
               },
             ],
