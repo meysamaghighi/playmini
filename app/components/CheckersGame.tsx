@@ -152,7 +152,8 @@ export default function CheckersGame() {
             landRow,
             landCol,
             piece,
-            [{ row: captureRow, col: captureCol }]
+            [{ row: captureRow, col: captureCol }],
+            { row, col }
           );
           moves.push(...multiJumps);
         }
@@ -167,7 +168,8 @@ export default function CheckersGame() {
     row: number,
     col: number,
     piece: Piece,
-    capturedSoFar: Position[]
+    capturedSoFar: Position[],
+    originalFrom: Position
   ): Move[] {
     const moves: Move[] = [];
     const allDirections = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
@@ -199,7 +201,7 @@ export default function CheckersGame() {
         ) {
           foundJump = true;
           const newCaptured = [...capturedSoFar, { row: captureRow, col: captureCol }];
-          const furtherJumps = findMultiJumps(board, landRow, landCol, piece, newCaptured);
+          const furtherJumps = findMultiJumps(board, landRow, landCol, piece, newCaptured, originalFrom);
           moves.push(...furtherJumps);
         }
       }
@@ -207,21 +209,8 @@ export default function CheckersGame() {
 
     // If no further jumps, this is an end position
     if (!foundJump) {
-      const originalPos = capturedSoFar.length > 0
-        ? { row: row - (row - capturedSoFar[0].row) * 2, col: col - (col - capturedSoFar[0].col) * 2 }
-        : { row, col };
-
-      // Find original position by working backwards from first capture
-      let fromRow = row;
-      let fromCol = col;
-      for (let i = capturedSoFar.length - 1; i >= 0; i--) {
-        const cap = capturedSoFar[i];
-        fromRow = fromRow - (fromRow > cap.row ? 2 : -2);
-        fromCol = fromCol - (fromCol > cap.col ? 2 : -2);
-      }
-
       moves.push({
-        from: { row: fromRow, col: fromCol },
+        from: originalFrom,
         to: { row, col },
         captures: capturedSoFar
       });
@@ -370,7 +359,6 @@ export default function CheckersGame() {
 
     // If clicking on own piece, select it
     if (piece && piece.player === "RED") {
-      setSelectedPiece({ row, col });
       const moves = getValidMovesForPiece(board, row, col);
       const allMoves = getValidMoves(board, "RED");
       const hasCaptureMove = allMoves.some(m => m.captures.length > 0);
@@ -380,6 +368,12 @@ export default function CheckersGame() {
         ? moves.filter(m => m.captures.length > 0)
         : moves;
 
+      // Don't select pieces with no valid moves when captures are mandatory
+      if (hasCaptureMove && filteredMoves.length === 0) {
+        return; // This piece can't capture, don't select it
+      }
+
+      setSelectedPiece({ row, col });
       setValidMoves(filteredMoves);
       return;
     }
@@ -571,7 +565,24 @@ export default function CheckersGame() {
         }
       }
     }
-  }, [board, selectedPiece, validMoves]);
+
+    // Highlight pieces that must capture
+    if (gameState === "PLAYING" && currentPlayer === "RED" && !isAiThinking) {
+      const allMoves = getValidMoves(board, "RED");
+      const hasCaptureMove = allMoves.some(m => m.captures.length > 0);
+      if (hasCaptureMove) {
+        const capturePieces = new Set(allMoves.filter(m => m.captures.length > 0).map(m => `${m.from.row},${m.from.col}`));
+        for (const key of capturePieces) {
+          const [r, c] = key.split(',').map(Number);
+          const x = PADDING + c * CELL_SIZE;
+          const y = PADDING + r * CELL_SIZE;
+          ctx.strokeStyle = "#fbbf24";
+          ctx.lineWidth = 3;
+          ctx.strokeRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4);
+        }
+      }
+    }
+  }, [board, selectedPiece, validMoves, gameState, currentPlayer, isAiThinking]);
 
   useEffect(() => {
     draw();
@@ -716,7 +727,13 @@ export default function CheckersGame() {
               {currentPlayer === "RED"
                 ? selectedPiece
                   ? "Click a highlighted square to move"
-                  : "Your turn - Select a red piece"
+                  : (() => {
+                      const allMoves = getValidMoves(board, "RED");
+                      const hasCaptureMove = allMoves.some(m => m.captures.length > 0);
+                      return hasCaptureMove
+                        ? "You must capture! (pieces with yellow border)"
+                        : "Your turn - Select a red piece";
+                    })()
                 : "AI's turn"}
             </p>
           )}
