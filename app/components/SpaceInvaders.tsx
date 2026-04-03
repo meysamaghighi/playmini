@@ -70,7 +70,7 @@ function getLevelConfig(level: number): LevelConfig {
 export default function SpaceInvaders() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [gameState, setGameState] = useState<"start" | "playing" | "gameover" | "levelcomplete">("start");
+  const [gameState, setGameState] = useState<"start" | "playing" | "gameover">("start");
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [level, setLevel] = useState(1);
@@ -92,14 +92,14 @@ export default function SpaceInvaders() {
   const highScoreRef = useRef(0);
   const lastShotTimeRef = useRef(0);
   const lastAlienShotRef = useRef(0);
-  const gameStateRef = useRef<"start" | "playing" | "gameover" | "levelcomplete">("start");
+  const gameStateRef = useRef<"start" | "playing" | "gameover">("start");
   const touchLeftRef = useRef(false);
   const touchRightRef = useRef(false);
   const autoShootIntervalRef = useRef<number | null>(null);
   const activePowerUpRef = useRef<PowerUpType | null>(null);
   const powerUpTimerRef = useRef<number | null>(null);
   const alienShootIntervalRef = useRef(1000);
-  const levelCompleteTimeoutRef = useRef<number | null>(null);
+  const levelUpFlashRef = useRef(0);
 
   const initAliens = useCallback((lvl: number) => {
     const config = getLevelConfig(lvl);
@@ -373,6 +373,22 @@ export default function SpaceInvaders() {
       ctx.textBaseline = "middle";
       ctx.fillText(letter, powerUp.x, powerUp.y);
     });
+
+    // Level-up flash notification
+    if (levelUpFlashRef.current > 0) {
+      levelUpFlashRef.current--;
+      const alpha = Math.min(1, levelUpFlashRef.current / 40); // fade out in last ~0.7s
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.font = "bold 32px monospace";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#22c55e";
+      ctx.fillText(`LEVEL ${levelRef.current}`, 300, 300);
+      ctx.font = "16px monospace";
+      ctx.fillStyle = "#86efac";
+      ctx.fillText("Get ready!", 300, 330);
+      ctx.restore();
+    }
   }, []);
 
   const gameLoop: () => void = useCallback(() => {
@@ -536,75 +552,35 @@ export default function SpaceInvaders() {
     // Check level complete
     const anyAlive = aliensRef.current.some((a) => a.alive);
     if (!anyAlive) {
-      gameStateRef.current = "levelcomplete";
-      setGameState("levelcomplete");
-      gameLoopRef.current = null;
+      levelRef.current++;
+      setLevel(levelRef.current);
 
-      // Auto-advance after 2 seconds
-      levelCompleteTimeoutRef.current = window.setTimeout(() => {
-        levelRef.current++;
-        setLevel(levelRef.current);
+      // Bonus life every 5 levels (cap at 5)
+      if (levelRef.current % 5 === 0 && livesRef.current < 5) {
+        livesRef.current++;
+        setLives(livesRef.current);
+      }
 
-        // Bonus life every 5 levels (cap at 5)
-        if (levelRef.current % 5 === 0 && livesRef.current < 5) {
-          livesRef.current++;
-          setLives(livesRef.current);
-        }
+      // Setup next level
+      const config = getLevelConfig(levelRef.current);
+      aliensRef.current = initAliens(levelRef.current);
+      bulletsRef.current = [];
+      alienBulletsRef.current = [];
+      powerUpsRef.current = [];
+      alienDirectionRef.current = 1;
+      alienSpeedRef.current = config.startSpeed;
+      alienMoveCountRef.current = 0;
+      alienShootIntervalRef.current = config.alienShootInterval;
+      lastAlienShotRef.current = 0;
 
-        // Setup next level
-        const config = getLevelConfig(levelRef.current);
-        aliensRef.current = initAliens(levelRef.current);
-        bulletsRef.current = [];
-        alienBulletsRef.current = [];
-        powerUpsRef.current = [];
-        alienDirectionRef.current = 1;
-        alienSpeedRef.current = config.startSpeed;
-        alienMoveCountRef.current = 0;
-        alienShootIntervalRef.current = config.alienShootInterval;
-        lastAlienShotRef.current = 0;
+      // Clear active power-ups
+      activePowerUpRef.current = null;
+      if (powerUpTimerRef.current !== null) {
+        clearTimeout(powerUpTimerRef.current);
+        powerUpTimerRef.current = null;
+      }
 
-        // Clear active power-ups
-        activePowerUpRef.current = null;
-        if (powerUpTimerRef.current !== null) {
-          clearTimeout(powerUpTimerRef.current);
-          powerUpTimerRef.current = null;
-        }
-
-        // Restart auto-shooting with normal interval
-        if (autoShootIntervalRef.current !== null) {
-          clearInterval(autoShootIntervalRef.current);
-        }
-        autoShootIntervalRef.current = window.setInterval(() => {
-          if (gameStateRef.current === "playing") {
-            const angle = activePowerUpRef.current === "spread" ? 0 : undefined;
-            bulletsRef.current.push({
-              x: playerXRef.current + PLAYER_WIDTH / 2 - 2,
-              y: CANVAS_HEIGHT - 70,
-              angle,
-            });
-
-            if (activePowerUpRef.current === "spread") {
-              bulletsRef.current.push({
-                x: playerXRef.current + PLAYER_WIDTH / 2 - 2,
-                y: CANVAS_HEIGHT - 70,
-                angle: -15,
-              });
-              bulletsRef.current.push({
-                x: playerXRef.current + PLAYER_WIDTH / 2 - 2,
-                y: CANVAS_HEIGHT - 70,
-                angle: 15,
-              });
-            }
-          }
-        }, 350);
-
-        gameStateRef.current = "playing";
-        setGameState("playing");
-        gameLoopRef.current = requestAnimationFrame(gameLoop);
-      }, 2000);
-
-      draw();
-      return;
+      levelUpFlashRef.current = 120; // ~2 seconds at 60fps
     }
 
     // Check loss (aliens reached bottom)
@@ -650,6 +626,7 @@ export default function SpaceInvaders() {
     lastShotTimeRef.current = 0;
     lastAlienShotRef.current = 0;
     activePowerUpRef.current = null;
+    levelUpFlashRef.current = 0;
 
     setScore(0);
     setLives(3);
@@ -663,10 +640,6 @@ export default function SpaceInvaders() {
     if (powerUpTimerRef.current !== null) {
       clearTimeout(powerUpTimerRef.current);
       powerUpTimerRef.current = null;
-    }
-    if (levelCompleteTimeoutRef.current !== null) {
-      clearTimeout(levelCompleteTimeoutRef.current);
-      levelCompleteTimeoutRef.current = null;
     }
 
     // Start auto-shooting
@@ -733,9 +706,6 @@ export default function SpaceInvaders() {
       }
       if (powerUpTimerRef.current !== null) {
         clearTimeout(powerUpTimerRef.current);
-      }
-      if (levelCompleteTimeoutRef.current !== null) {
-        clearTimeout(levelCompleteTimeoutRef.current);
       }
     };
   }, []);
@@ -815,16 +785,6 @@ export default function SpaceInvaders() {
             >
               Play
             </button>
-          </div>
-        )}
-
-        {gameState === "levelcomplete" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
-            <h2 className="text-3xl font-black text-green-400 mb-4">LEVEL {level} COMPLETE!</h2>
-            <div className="bg-slate-900/80 rounded-xl px-6 py-3 mb-6">
-              <p className="text-white text-lg font-bold">Score: {score}</p>
-              <p className="text-gray-400 text-sm">Get ready for Level {level + 1}...</p>
-            </div>
           </div>
         )}
 

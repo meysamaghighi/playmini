@@ -60,7 +60,7 @@ const OBSTACLE_TYPES = {
 export default function CarRacer() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [displayState, setDisplayState] = useState<"START" | "PLAYING" | "GAME_OVER" | "LEVEL_COMPLETE">("START");
+  const [displayState, setDisplayState] = useState<"START" | "PLAYING" | "GAME_OVER">("START");
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [scoreFlash, setScoreFlash] = useState(false);
@@ -87,7 +87,7 @@ export default function CarRacer() {
   const distRef = useRef(0);
   const levelDistRef = useRef(0); // distance in current level
   const bestRef = useRef(0);
-  const stateRef = useRef<"START" | "PLAYING" | "GAME_OVER" | "LEVEL_COMPLETE">("START");
+  const stateRef = useRef<"START" | "PLAYING" | "GAME_OVER">("START");
   const loopRef = useRef<number | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const keysRef = useRef({ left: false, right: false, up: false, down: false });
@@ -95,6 +95,7 @@ export default function CarRacer() {
   const livesRef = useRef(3);
   const activePowerUpRef = useRef<{ type: PowerUpType; timeLeft: number } | null>(null);
   const oilSlowRef = useRef(0); // frames of oil slow remaining
+  const levelUpFlashRef = useRef(0); // countdown frames for level-up flash text
 
   useEffect(() => {
     const saved = localStorage.getItem("pb-car-racer");
@@ -535,7 +536,7 @@ export default function CarRacer() {
     drawVehicle(ctx, laneX(playerLaneRef.current), playerY, v, playerColors[v], true);
 
     // HUD (top-left)
-    if (stateRef.current === "PLAYING" || stateRef.current === "LEVEL_COMPLETE") {
+    if (stateRef.current === "PLAYING") {
       // Level indicator
       ctx.fillStyle = "rgba(0,0,0,0.6)";
       ctx.fillRect(10, 10, 120, 30);
@@ -589,6 +590,23 @@ export default function CarRacer() {
       ctx.textAlign = "center";
       ctx.fillText(Math.round(spd * 20) + "", bx + barW / 2, by - 6);
       ctx.fillText("km/h", bx + barW / 2, by + barH + 14);
+    }
+
+    // Level-up flash notification
+    if (levelUpFlashRef.current > 0) {
+      levelUpFlashRef.current--;
+      const alpha = Math.min(1, levelUpFlashRef.current / 30); // fade out in last 0.5s
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.font = "bold 36px monospace";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#22c55e"; // green-500
+      ctx.fillText(`LEVEL ${levelRef.current}`, CW / 2, CH / 2 - 10);
+      ctx.font = "18px monospace";
+      ctx.fillStyle = "#a3e635"; // lime-400
+      const config = levelRef.current <= 10 ? LEVEL_CONFIGS[levelRef.current - 1] : null;
+      if (config) ctx.fillText(config.name, CW / 2, CH / 2 + 20);
+      ctx.restore();
     }
   }, []);
 
@@ -815,31 +833,21 @@ export default function CarRacer() {
 
     // Check level completion
     if (config && levelDistRef.current >= config.targetDist) {
-      stateRef.current = "LEVEL_COMPLETE";
-      setDisplayState("LEVEL_COMPLETE");
-      loopRef.current = null;
-      draw();
-      // Auto-advance after 2 seconds
-      setTimeout(() => {
-        levelRef.current++;
-        setCurrentLevel(levelRef.current);
-        // Bonus life every 5 levels (cap at 5)
-        if (levelRef.current % 5 === 1 && livesRef.current < 5) {
-          livesRef.current++;
-          setLives(livesRef.current);
-        }
-        levelDistRef.current = 0;
-        obsRef.current = [];
-        coinsRef.current = [];
-        rampsRef.current = [];
-        oilSlicksRef.current = [];
-        roadworksRef.current = [];
-        powerUpsRef.current = [];
-        stateRef.current = "PLAYING";
-        setDisplayState("PLAYING");
-        loopRef.current = requestAnimationFrame(gameLoop);
-      }, 2000);
-      return;
+      levelRef.current++;
+      setCurrentLevel(levelRef.current);
+      // Bonus life every 5 levels (cap at 5)
+      if (levelRef.current % 5 === 1 && livesRef.current < 5) {
+        livesRef.current++;
+        setLives(livesRef.current);
+      }
+      levelDistRef.current = 0;
+      obsRef.current = [];
+      coinsRef.current = [];
+      rampsRef.current = [];
+      oilSlicksRef.current = [];
+      roadworksRef.current = [];
+      powerUpsRef.current = [];
+      levelUpFlashRef.current = 90; // ~1.5 seconds at 60fps
     }
 
     // Lane changes
@@ -928,6 +936,7 @@ export default function CarRacer() {
     livesRef.current = 3;
     activePowerUpRef.current = null;
     oilSlowRef.current = 0;
+    levelUpFlashRef.current = 0;
     setScore(0);
     setCurrentLevel(1);
     setLives(3);
@@ -1078,16 +1087,6 @@ export default function CarRacer() {
             >
               Play
             </button>
-          </div>
-        )}
-
-        {displayState === "LEVEL_COMPLETE" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
-            <div className="text-6xl mb-4">🏆</div>
-            <h2 className="text-4xl font-black text-green-400 mb-2">Level {currentLevel} Complete!</h2>
-            <p className="text-gray-300 text-lg mb-4">{LEVEL_CONFIGS[currentLevel - 1]?.name}</p>
-            <p className="text-white text-xl">Score: {score}</p>
-            <p className="text-gray-400 text-sm mt-2">Get ready for the next level...</p>
           </div>
         )}
 
