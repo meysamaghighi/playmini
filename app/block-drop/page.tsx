@@ -3,18 +3,18 @@ import BlockDrop from "../components/BlockDrop";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Block Drop - Free Falling Block Puzzle Game Online | PlayMini",
+  title: "Play Block Drop Online Free - Tetris-style Game | PlayMini",
   description:
-    "Play Block Drop free online. Stack falling blocks, clear lines, and beat your high score. Classic block-stacking puzzle game with 7 colorful pieces. Works on desktop and mobile.",
+    "Play Block Drop online free! Stack falling blocks, clear lines, beat your high score. Classic puzzle game with 7 pieces. Browser-based, works on mobile and desktop.",
   keywords:
     "block drop, falling blocks, block puzzle, tetris clone, puzzle game, online games, free games, stack blocks, line clear game",
   alternates: {
     canonical: "/block-drop",
   },
   openGraph: {
-    title: "Block Drop - Free Falling Block Puzzle Game Online | PlayMini",
+    title: "Play Block Drop Online Free - Tetris-style Game | PlayMini",
     description:
-      "Play Block Drop free online. Stack falling blocks, clear lines, and beat your high score. Classic puzzle gameplay.",
+      "Play Block Drop online free! Stack falling blocks, clear lines, beat your high score. Classic puzzle game with 7 pieces. Browser-based, works on mobile and desktop.",
     type: "website",
     url: "https://playmini.fun/block-drop",
   },

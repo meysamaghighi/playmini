@@ -3,18 +3,18 @@ import BreakoutGame from "../components/BreakoutGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Breakout - Classic Brick Breaker Game Online | PlayMini",
+  title: "Play Breakout Online Free - Brick Breaker Game | PlayMini",
   description:
-    "Play Breakout free online - the classic brick breaker game. Destroy colorful bricks, collect points, and advance through levels. Desktop and mobile friendly with keyboard or touch controls.",
+    "Play Breakout online free! Classic brick breaker arcade game. Smash colorful bricks, advance through levels, beat high scores. Browser game with touch controls.",
   keywords:
     "breakout game, brick breaker, arkanoid, classic arcade game, breakout online, free breakout game, brick breaker online, paddle game, browser arcade game",
   alternates: {
     canonical: "/breakout",
   },
   openGraph: {
-    title: "Breakout - Classic Brick Breaker Game Online | PlayMini",
+    title: "Play Breakout Online Free - Brick Breaker Game | PlayMini",
     description:
-      "Play Breakout free online - destroy colorful bricks, advance through levels, and beat your high score!",
+      "Play Breakout online free! Classic brick breaker arcade game. Smash colorful bricks, advance through levels, beat high scores. Browser game with touch controls.",
     type: "website",
     url: "https://playmini.fun/breakout",
   },

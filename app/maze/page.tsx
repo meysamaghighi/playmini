@@ -3,18 +3,18 @@ import MazeRunner from "../components/MazeRunner";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Maze Runner - Navigate Through Generated Mazes | PlayMini",
+  title: "Play Maze Runner Online Free - Puzzle Game | PlayMini",
   description:
-    "Free online maze game with procedurally generated mazes. Navigate from start to finish using arrow keys or swipe controls. Three difficulty levels with timer-based scoring!",
+    "Play Maze Runner online free! Navigate through procedurally generated mazes, 3 difficulty levels. Use arrows or swipe. Browser-based puzzle game, no download.",
   keywords:
     "maze game, maze runner, maze puzzle, online maze, free maze game, puzzle game, brain game, labyrinth",
   alternates: {
     canonical: "/maze",
   },
   openGraph: {
-    title: "Maze Runner - Navigate Through Generated Mazes | PlayMini",
+    title: "Play Maze Runner Online Free - Puzzle Game | PlayMini",
     description:
-      "Play free online maze game with procedurally generated mazes. Navigate to the goal as fast as you can!",
+      "Play Maze Runner online free! Navigate through procedurally generated mazes, 3 difficulty levels. Use arrows or swipe. Browser-based puzzle game, no download.",
     type: "website",
     url: "https://playmini.fun/maze",
   },

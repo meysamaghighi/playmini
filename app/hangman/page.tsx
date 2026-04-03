@@ -3,9 +3,9 @@ import HangmanGame from "../components/HangmanGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Hangman Game Online Free - Play Hangman Online | PlayMini",
+  title: "Play Hangman Online Free - Word Guess Game | PlayMini",
   description:
-    "Play hangman game online free! Guess the word one letter at a time. 200+ words across 10 categories. No download needed. Mobile and desktop friendly.",
+    "Play Hangman online free! Guess the word letter by letter, 200+ words across 10 categories. Classic word guessing game in browser. No download, mobile-friendly.",
   keywords: [
     "hangman game online free",
     "play hangman online",
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
     canonical: "/hangman",
   },
   openGraph: {
-    title: "Hangman Game Online Free - Play Hangman Online | PlayMini",
+    title: "Play Hangman Online Free - Word Guess Game | PlayMini",
     description:
-      "Play hangman game online free! Guess the word one letter at a time. 200+ words across 10 categories.",
+      "Play Hangman online free! Guess the word letter by letter, 200+ words across 10 categories. Classic word guessing game in browser. No download, mobile-friendly.",
     type: "website",
     url: "https://playmini.fun/hangman",
   },

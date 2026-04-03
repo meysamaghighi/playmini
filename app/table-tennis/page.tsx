@@ -3,18 +3,18 @@ import TableTennis from "../components/TableTennis";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Table Tennis - Free Online Pong Game | PlayMini",
+  title: "Play Table Tennis Online Free - Pong Game | PlayMini",
   description:
-    "Play free table tennis (Pong) online against AI. Move your paddle, return the ball, and be the first to 7 points. Works on desktop and mobile.",
+    "Play Table Tennis (Pong) online free! Classic paddle game vs AI. Return the ball, first to 7 wins. Browser-based, works on mobile and desktop. No download.",
   keywords:
     "table tennis game, pong game, free pong, online ping pong, paddle game, browser game, arcade game",
   alternates: {
     canonical: "/table-tennis",
   },
   openGraph: {
-    title: "Table Tennis - Free Online Pong Game | PlayMini",
+    title: "Play Table Tennis Online Free - Pong Game | PlayMini",
     description:
-      "Play free table tennis online against AI. Move your paddle, return the ball, and win the match.",
+      "Play Table Tennis (Pong) online free! Classic paddle game vs AI. Return the ball, first to 7 wins. Browser-based, works on mobile and desktop. No download.",
     type: "website",
     url: "https://playmini.fun/table-tennis",
   },

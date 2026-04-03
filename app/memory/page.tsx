@@ -3,18 +3,18 @@ import MemoryMatch from "../components/MemoryMatch";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Memory Match - Free Online Card Flip Game | PlayMini",
+  title: "Play Memory Match Online Free - Card Game | PlayMini",
   description:
-    "Play Memory Match online for free. Flip cards to find matching pairs, test your memory, and complete the puzzle in the fewest moves. Three difficulty levels: Easy, Medium, and Hard.",
+    "Play Memory Match online free! Flip cards to find matching pairs in this classic brain game. 3 difficulty levels, track your moves. Browser-based, no download needed.",
   keywords:
     "memory match, memory game, card flip game, matching game, concentration game, brain game, memory test, online memory game, free memory game",
   alternates: {
     canonical: "/memory",
   },
   openGraph: {
-    title: "Memory Match - Free Online Card Flip Game | PlayMini",
+    title: "Play Memory Match Online Free - Card Game | PlayMini",
     description:
-      "Test your memory! Flip cards to find matching pairs in this classic concentration game. Three difficulty levels available.",
+      "Play Memory Match online free! Flip cards to find matching pairs in this classic brain game. 3 difficulty levels, track your moves. Browser-based, no download needed.",
     type: "website",
     url: "https://playmini.fun/memory",
   },

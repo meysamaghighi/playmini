@@ -3,15 +3,15 @@ import TicTacToe from '../components/TicTacToe';
 import MoreGames from '../components/MoreGames';
 
 export const metadata: Metadata = {
-  title: 'Tic-Tac-Toe - Free Online | PlayMini',
-  description: 'Play classic Tic-Tac-Toe online for free! Challenge an unbeatable AI or play with a friend. Three difficulty levels, score tracking, and smooth gameplay.',
+  title: 'Play Tic-Tac-Toe Online Free - vs AI or Friend | PlayMini',
+  description: 'Play Tic-Tac-Toe online free! Classic XO game with AI opponent or 2-player mode. 3 difficulty levels, score tracking. Browser game, no download needed.',
   keywords: 'tic tac toe, tic-tac-toe online, noughts and crosses, xs and os, tic tac toe game, play tic tac toe, tic tac toe AI, free online game',
   alternates: {
     canonical: '/tic-tac-toe',
   },
   openGraph: {
-    title: 'Tic-Tac-Toe - Free Online | PlayMini',
-    description: 'Play classic Tic-Tac-Toe online! Challenge AI or play with friends. Three difficulty levels and score tracking.',
+    title: 'Play Tic-Tac-Toe Online Free - vs AI or Friend | PlayMini',
+    description: 'Play Tic-Tac-Toe online free! Classic XO game with AI opponent or 2-player mode. 3 difficulty levels, score tracking. Browser game, no download needed.',
     url: 'https://playmini.fun/tic-tac-toe',
     siteName: 'PlayMini',
     type: 'website',
@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tic-Tac-Toe - Free Online | PlayMini',
-    description: 'Play classic Tic-Tac-Toe online! Challenge AI or play with friends.',
+    title: 'Play Tic-Tac-Toe Online Free - vs AI or Friend | PlayMini',
+    description: 'Play Tic-Tac-Toe online free! Classic XO game with AI opponent or 2-player mode. 3 difficulty levels, score tracking. Browser game, no download needed.',
   }
 };
 

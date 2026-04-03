@@ -3,15 +3,15 @@ import WhackMole from '../components/WhackMole';
 import MoreGames from '../components/MoreGames';
 
 export const metadata: Metadata = {
-  title: 'Whack-a-Mole - Free Online | PlayMini',
-  description: 'Play Whack-a-Mole online for free! Tap the moles as they pop up, catch golden moles for bonus points, and beat your high score in this classic arcade game.',
+  title: 'Play Whack-a-Mole Online Free - Arcade Game | PlayMini',
+  description: 'Play Whack-a-Mole online free! Tap moles as fast as you can, catch golden moles for bonus points. Classic arcade game in browser, no download required.',
   keywords: 'whack a mole, whack-a-mole game, arcade game, reaction game, tap game, free online game, browser game, mobile game',
   alternates: {
     canonical: '/whack-a-mole',
   },
   openGraph: {
-    title: 'Whack-a-Mole - Free Online | PlayMini',
-    description: 'Play Whack-a-Mole online for free! Tap the moles as they pop up and beat your high score.',
+    title: 'Play Whack-a-Mole Online Free - Arcade Game | PlayMini',
+    description: 'Play Whack-a-Mole online free! Tap moles as fast as you can, catch golden moles for bonus points. Classic arcade game in browser, no download required.',
     url: 'https://playmini.fun/whack-a-mole',
     siteName: 'PlayMini',
     type: 'website',

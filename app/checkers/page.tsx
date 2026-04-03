@@ -3,18 +3,18 @@ import CheckersGame from "../components/CheckersGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Checkers - Free Online | PlayMini",
+  title: "Play Checkers Online Free - vs AI Board Game | PlayMini",
   description:
-    "Play Checkers free online against AI. Classic 8x8 board with kings, multi-jump chains, and mandatory captures. Strategic board game for desktop and mobile.",
+    "Play Checkers online free! Classic board game vs AI with kings, multi-jumps, mandatory captures. Strategic gameplay in browser. No download, mobile-friendly.",
   keywords:
     "checkers, checkers online, free checkers, checkers vs ai, draughts, board game, strategy game, kings",
   alternates: {
     canonical: "/checkers",
   },
   openGraph: {
-    title: "Checkers - Free Online | PlayMini",
+    title: "Play Checkers Online Free - vs AI Board Game | PlayMini",
     description:
-      "Play Checkers free online against AI. Classic board game with kings, multi-jump chains, and strategic gameplay.",
+      "Play Checkers online free! Classic board game vs AI with kings, multi-jumps, mandatory captures. Strategic gameplay in browser. No download, mobile-friendly.",
     type: "website",
     url: "https://playmini.fun/checkers",
   },

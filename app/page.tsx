@@ -167,7 +167,7 @@ const games: Array<{
   {
     href: "/snake",
     title: "Snake",
-    description: "Eat food, grow longer, don't hit the walls",
+    description: "Classic arcade - eat food and grow longer",
     color: "from-green-500 to-emerald-600",
     category: "Arcade",
     icon: (
@@ -231,7 +231,7 @@ const games: Array<{
   {
     href: "/2048",
     title: "2048",
-    description: "Slide and merge tiles to reach 2048",
+    description: "Classic number puzzle - merge tiles to 2048",
     color: "from-amber-500 to-orange-600",
     category: "Puzzle",
     icon: (
@@ -250,7 +250,7 @@ const games: Array<{
   {
     href: "/minesweeper",
     title: "Minesweeper",
-    description: "Find all the mines without detonating any",
+    description: "Classic logic puzzle - clear board without mines",
     color: "from-blue-500 to-cyan-600",
     category: "Puzzle",
     icon: (
@@ -337,7 +337,7 @@ const games: Array<{
   {
     href: "/hangman",
     title: "Hangman",
-    description: "Guess the word before the stick figure is complete",
+    description: "Classic word guessing with 200+ words",
     color: "from-slate-500 to-gray-600",
     category: "Word",
     icon: (
@@ -376,7 +376,7 @@ const games: Array<{
   {
     href: "/wordle",
     title: "Word Guess",
-    description: "Guess the 5-letter word in 6 tries",
+    description: "Wordle-style - guess 5-letter word in 6 tries",
     color: "from-emerald-500 to-teal-600",
     category: "Word",
     icon: (
@@ -395,7 +395,7 @@ const games: Array<{
   {
     href: "/sudoku",
     title: "Sudoku",
-    description: "Classic 9x9 logic number puzzle",
+    description: "9x9 number puzzle with 3 difficulty levels",
     color: "from-indigo-500 to-blue-600",
     category: "Puzzle",
     icon: (
@@ -620,7 +620,7 @@ const games: Array<{
   {
     href: "/solitaire",
     title: "Solitaire",
-    description: "Classic Klondike card game",
+    description: "Klondike card game - build foundations",
     color: "from-blue-600 to-indigo-700",
     category: "Strategy",
     icon: (

@@ -3,18 +3,18 @@ import WordSearchGame from "../components/WordSearchGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Word Search - Find Hidden Words | PlayMini",
+  title: "Play Word Search Online Free - Puzzle Game | PlayMini",
   description:
-    "Free online word search puzzle game. Find hidden words in a letter grid across three difficulty levels. Challenge your vocabulary and pattern recognition skills!",
+    "Play Word Search online free! Find hidden words in letter grids, 3 difficulty levels. Classic word puzzle game in browser. No download, works on mobile and desktop.",
   keywords:
     "word search, word find, word puzzle, free word search, online word search, vocabulary game, puzzle game",
   alternates: {
     canonical: "/word-search",
   },
   openGraph: {
-    title: "Word Search - Find Hidden Words | PlayMini",
+    title: "Play Word Search Online Free - Puzzle Game | PlayMini",
     description:
-      "Play free word search puzzles online. Find hidden words in the grid with multiple difficulty levels.",
+      "Play Word Search online free! Find hidden words in letter grids, 3 difficulty levels. Classic word puzzle game in browser. No download, works on mobile and desktop.",
     type: "website",
     url: "https://playmini.fun/word-search",
   },

@@ -3,9 +3,9 @@ import MinesweeperGame from "../components/MinesweeperGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Play Minesweeper Online Free - Minesweeper Browser Game",
+  title: "Play Minesweeper Online Free - Classic Game | PlayMini",
   description:
-    "Play minesweeper online free! Classic logic puzzle with 3 difficulty levels. Clear the board without hitting mines. No download. Desktop and mobile friendly.",
+    "Play Minesweeper online free in your browser! Classic logic puzzle game with 3 difficulty levels. Clear all mines to win. No download, mobile-friendly.",
   keywords: [
     "play minesweeper online free",
     "minesweeper browser game",
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
     canonical: "/minesweeper",
   },
   openGraph: {
-    title: "Play Minesweeper Online Free - Minesweeper Browser Game",
+    title: "Play Minesweeper Online Free - Classic Game | PlayMini",
     description:
-      "Play minesweeper online free! Classic logic puzzle with 3 difficulty levels. Clear the board without hitting mines.",
+      "Play Minesweeper online free in your browser! Classic logic puzzle game with 3 difficulty levels. Clear all mines to win. No download, mobile-friendly.",
     url: "https://playmini.fun/minesweeper",
     siteName: "PlayMini",
     type: "website",

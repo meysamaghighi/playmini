@@ -3,9 +3,9 @@ import TypingRace from "../components/TypingRace";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Typing Race - Test Your Typing Speed Online | PlayMini",
+  title: "Play Typing Race Online Free - WPM Speed Test | PlayMini",
   description:
-    "Race against the clock in Typing Race! Test your typing speed and accuracy with varied difficulty levels. Track your WPM, beat your personal best, and share your results. Free online typing speed test!",
+    "Play Typing Race online free! Test your typing speed and accuracy, track WPM and personal best. Multiple difficulty levels. Browser-based typing game, no download.",
   keywords: [
     "typing race",
     "typing speed test",
@@ -22,9 +22,9 @@ export const metadata: Metadata = {
     canonical: "/typing-race",
   },
   openGraph: {
-    title: "Typing Race - Test Your Typing Speed Online | PlayMini",
+    title: "Play Typing Race Online Free - WPM Speed Test | PlayMini",
     description:
-      "Race against the clock! Test your typing speed and accuracy with varied difficulty levels. Track your WPM and beat your personal best.",
+      "Play Typing Race online free! Test your typing speed and accuracy, track WPM and personal best. Multiple difficulty levels. Browser-based typing game, no download.",
     url: "https://playmini.fun/typing-race",
     siteName: "PlayMini",
     type: "website",

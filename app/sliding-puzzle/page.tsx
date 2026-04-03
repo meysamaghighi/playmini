@@ -3,18 +3,18 @@ import SlidingPuzzle from "../components/SlidingPuzzle";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Sliding Puzzle - Classic 15-Puzzle Game | PlayMini",
+  title: "Play Sliding Puzzle Online Free - 15 Puzzle Game | PlayMini",
   description:
-    "Free online 15-puzzle sliding game. Arrange numbered tiles from 1 to 15 by sliding them into the empty space. Classic brain teaser!",
+    "Play Sliding Puzzle online free! Arrange tiles 1-15 by sliding into empty space. Classic 15-puzzle brain teaser in browser. No download, mobile-friendly.",
   keywords:
     "sliding puzzle, 15 puzzle, tile puzzle, logic game, brain teaser, puzzle game, free online game",
   alternates: {
     canonical: "/sliding-puzzle",
   },
   openGraph: {
-    title: "Sliding Puzzle - Classic 15-Puzzle Game | PlayMini",
+    title: "Play Sliding Puzzle Online Free - 15 Puzzle Game | PlayMini",
     description:
-      "Play free sliding puzzle online. Arrange tiles 1-15 by sliding them into order!",
+      "Play Sliding Puzzle online free! Arrange tiles 1-15 by sliding into empty space. Classic 15-puzzle brain teaser in browser. No download, mobile-friendly.",
     type: "website",
     url: "https://playmini.fun/sliding-puzzle",
   },

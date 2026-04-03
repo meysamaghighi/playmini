@@ -3,15 +3,15 @@ import VoxelBuilder from '../components/VoxelBuilder';
 import MoreGames from '../components/MoreGames';
 
 export const metadata: Metadata = {
-  title: 'Voxel Builder - Free Minecraft-like Game | PlayMini',
-  description: 'Build your own voxel world! Stack colorful blocks in 3D, create structures, and unleash your creativity in this free Minecraft-like building game.',
+  title: 'Play Voxel Builder Online Free - 3D Building Game | PlayMini',
+  description: 'Play Voxel Builder online free! Build with 3D blocks, create structures in isometric view. Minecraft-like building game in browser, no download required.',
   keywords: 'voxel builder, minecraft game, block building, 3D builder, creative game, building game, free minecraft, voxel game, sandbox game',
   alternates: {
     canonical: '/voxel',
   },
   openGraph: {
-    title: 'Voxel Builder - Free Minecraft-like Building Game',
-    description: 'Build your own voxel world! Stack colorful blocks in 3D, create structures, and unleash your creativity.',
+    title: 'Play Voxel Builder Online Free - 3D Building Game | PlayMini',
+    description: 'Play Voxel Builder online free! Build with 3D blocks, create structures in isometric view. Minecraft-like building game in browser, no download required.',
     url: 'https://playmini.fun/voxel',
     siteName: 'PlayMini',
     images: [

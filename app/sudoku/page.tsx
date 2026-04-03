@@ -3,18 +3,18 @@ import SudokuGame from "../components/SudokuGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Sudoku - Free Online | PlayMini",
+  title: "Play Sudoku Online Free - 9x9 Puzzle Game | PlayMini",
   description:
-    "Play free Sudoku online with 3 difficulty levels. Classic 9x9 logic puzzle with pencil marks, undo, and timer. Track your personal best times.",
+    "Play Sudoku online free with 3 difficulty levels! Classic 9x9 number puzzle game with hints, undo, timer. Browser-based, no download required. Beat your best time!",
   keywords:
     "sudoku, sudoku online, free sudoku, sudoku game, logic puzzle, number puzzle, sudoku easy, sudoku medium, sudoku hard, brain game",
   alternates: {
     canonical: "/sudoku",
   },
   openGraph: {
-    title: "Sudoku - Free Online | PlayMini",
+    title: "Play Sudoku Online Free - 9x9 Puzzle Game | PlayMini",
     description:
-      "Play free Sudoku online with 3 difficulty levels. Classic 9x9 logic puzzle with pencil marks, undo, and timer.",
+      "Play Sudoku online free with 3 difficulty levels! Classic 9x9 number puzzle game with hints, undo, timer. Browser-based, no download required. Beat your best time!",
     url: "https://playmini.fun/sudoku",
     siteName: "PlayMini",
     type: "website",

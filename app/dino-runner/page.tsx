@@ -3,9 +3,9 @@ import DinoRunner from "../components/DinoRunner";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Dino Run Game Online - 10+ Levels & Power-Ups | PlayMini",
+  title: "Play Dino Run Game Online Free - Chrome Dino | PlayMini",
   description:
-    "Play dino run game online with 10+ handcrafted levels, power-ups, and multiple biomes! Jump, duck, collect power-ups. Free, no download. Desktop and mobile.",
+    "Play Dino Run game online free! 10+ levels, power-ups, multiple biomes. Jump and duck like Chrome's T-Rex runner. Browser game, works on mobile and desktop.",
   keywords: [
     "dino run game online",
     "chrome dinosaur game online",
@@ -22,9 +22,9 @@ export const metadata: Metadata = {
     canonical: "/dino-runner",
   },
   openGraph: {
-    title: "Dino Run Game Online - 10+ Levels & Power-Ups | PlayMini",
+    title: "Play Dino Run Game Online Free - Chrome Dino | PlayMini",
     description:
-      "Play dino run game online with 10+ handcrafted levels, power-ups, and multiple biomes! Jump, duck, collect power-ups.",
+      "Play Dino Run game online free! 10+ levels, power-ups, multiple biomes. Jump and duck like Chrome's T-Rex runner. Browser game, works on mobile and desktop.",
     type: "website",
     url: "https://playmini.fun/dino-runner",
   },

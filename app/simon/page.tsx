@@ -3,18 +3,18 @@ import SimonSays from "../components/SimonSays";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Simon Says - Memory Pattern Game | PlayMini",
+  title: "Play Simon Says Online Free - Memory Game | PlayMini",
   description:
-    "Free online Simon Says memory game. Watch the color sequence and repeat it. Test your memory skills with increasingly longer patterns!",
+    "Play Simon Says online free! Watch color sequences and repeat them. Test your memory with longer patterns. Classic brain game in browser, no download needed.",
   keywords:
     "simon says, simon game, memory game, pattern game, sequence game, brain game, free online game",
   alternates: {
     canonical: "/simon",
   },
   openGraph: {
-    title: "Simon Says - Memory Pattern Game | PlayMini",
+    title: "Play Simon Says Online Free - Memory Game | PlayMini",
     description:
-      "Play free Simon Says online. Watch the pattern and repeat it. How far can you go?",
+      "Play Simon Says online free! Watch color sequences and repeat them. Test your memory with longer patterns. Classic brain game in browser, no download needed.",
     type: "website",
     url: "https://playmini.fun/simon",
   },

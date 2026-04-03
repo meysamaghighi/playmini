@@ -3,9 +3,9 @@ import WordBuilder from "../components/WordBuilder";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Word Builder Game Online - Make Words From Letters | PlayMini",
+  title: "Play Word Builder Online Free - Make Words Game | PlayMini",
   description:
-    "Play word builder game online! Make words from letters in 2 minutes. Test your vocabulary with this free word puzzle. No download. Desktop and mobile friendly.",
+    "Play Word Builder online free! Make as many words as you can from letters in 2 minutes. Test your vocabulary in this browser word puzzle. No download needed.",
   keywords: [
     "word builder game online",
     "make words from letters game",
@@ -20,9 +20,9 @@ export const metadata: Metadata = {
     canonical: "/word-builder",
   },
   openGraph: {
-    title: "Word Builder Game Online - Make Words From Letters | PlayMini",
+    title: "Play Word Builder Online Free - Make Words Game | PlayMini",
     description:
-      "Play word builder game online! Make words from letters in 2 minutes. Test your vocabulary with this free word puzzle.",
+      "Play Word Builder online free! Make as many words as you can from letters in 2 minutes. Test your vocabulary in this browser word puzzle. No download needed.",
     type: "website",
     url: "https://playmini.fun/word-builder",
   },

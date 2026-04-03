@@ -3,18 +3,18 @@ import SoccerGame from "../components/SoccerGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Penalty Kicks - Free Online Soccer Game | PlayMini",
+  title: "Play Penalty Kicks Online Free - Soccer Game | PlayMini",
   description:
-    "Play free penalty kicks online. Aim your shot, beat the goalkeeper, and score as many goals as you can in 10 rounds. Works on desktop and mobile.",
+    "Play Penalty Kicks online free! Aim your shot, beat the goalkeeper, score goals. 10 rounds of soccer action. Browser game, works on mobile and desktop.",
   keywords:
     "penalty kicks, soccer game, football game, free soccer game, online soccer, penalty shootout, browser game",
   alternates: {
     canonical: "/soccer",
   },
   openGraph: {
-    title: "Penalty Kicks - Free Online Soccer Game | PlayMini",
+    title: "Play Penalty Kicks Online Free - Soccer Game | PlayMini",
     description:
-      "Play free penalty kicks online. Aim your shot, beat the goalkeeper, and score as many goals as you can.",
+      "Play Penalty Kicks online free! Aim your shot, beat the goalkeeper, score goals. 10 rounds of soccer action. Browser game, works on mobile and desktop.",
     type: "website",
     url: "https://playmini.fun/soccer",
   },

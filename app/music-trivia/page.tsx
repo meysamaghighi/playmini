@@ -3,18 +3,18 @@ import MusicTrivia from "../components/MusicTrivia";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Music Party Trivia - Free Song Quiz Game | PlayMini",
+  title: "Play Music Trivia Online Free - Song Quiz Game | PlayMini",
   description:
-    "Free music trivia game with 170+ songs. Test your knowledge about artists and songs, or challenge friends to place songs on a timeline. Perfect for parties!",
+    "Play Music Trivia online free! 170+ songs, test your music knowledge, timeline challenge. Browser-based song quiz perfect for parties. No download needed.",
   keywords:
     "music trivia, song quiz, music quiz game, party game, timeline game, music knowledge, free trivia",
   alternates: {
     canonical: "/music-trivia",
   },
   openGraph: {
-    title: "Music Party Trivia - Free Song Quiz Game | PlayMini",
+    title: "Play Music Trivia Online Free - Song Quiz Game | PlayMini",
     description:
-      "Free music trivia with 170+ songs spanning 7 decades. Trivia questions + timeline challenge. Perfect for parties!",
+      "Play Music Trivia online free! 170+ songs, test your music knowledge, timeline challenge. Browser-based song quiz perfect for parties. No download needed.",
     type: "website",
     url: "https://playmini.fun/music-trivia",
   },

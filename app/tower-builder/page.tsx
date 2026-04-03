@@ -3,18 +3,18 @@ import TowerBuilder from "../components/TowerBuilder";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Tower Builder - Free Stacking Game Online | PlayMini",
+  title: "Play Tower Builder Online Free - Stacking Game | PlayMini",
   description:
-    "Build the tallest tower by stacking blocks perfectly! Free online tower building game. Drop blocks, align them perfectly, and challenge your precision. No download required.",
+    "Play Tower Builder online free! Stack swinging blocks to build the tallest tower. Test your precision and timing. Browser-based arcade game, no download needed.",
   keywords:
     "tower builder, stacking game, block stacking, tower game, precision game, free online game, casual game, mobile game, browser game",
   alternates: {
     canonical: "/tower-builder",
   },
   openGraph: {
-    title: "Tower Builder - Free Stacking Game Online | PlayMini",
+    title: "Play Tower Builder Online Free - Stacking Game | PlayMini",
     description:
-      "Build the tallest tower by stacking blocks perfectly! Drop blocks, align them perfectly, and challenge your precision.",
+      "Play Tower Builder online free! Stack swinging blocks to build the tallest tower. Test your precision and timing. Browser-based arcade game, no download needed.",
     url: "https://playmini.fun/tower-builder",
     siteName: "PlayMini",
     type: "website",

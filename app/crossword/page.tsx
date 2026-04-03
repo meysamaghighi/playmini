@@ -3,18 +3,18 @@ import CrosswordGame from "../components/CrosswordGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Crossword Puzzle - Free Online | PlayMini",
+  title: "Play Crossword Puzzle Online Free - Word Game | PlayMini",
   description:
-    "Play free crossword puzzles online. Solve clues, fill in words, and test your vocabulary and general knowledge. New puzzles available every time you play!",
+    "Play Crossword Puzzle online free! Solve clues, fill in words, test your vocabulary. New puzzles generated every time. Browser-based word game, no download.",
   keywords:
     "crossword puzzle, free crossword, online crossword, word game, brain game, vocabulary game, crossword solver",
   alternates: {
     canonical: "/crossword",
   },
   openGraph: {
-    title: "Crossword Puzzle - Free Online | PlayMini",
+    title: "Play Crossword Puzzle Online Free - Word Game | PlayMini",
     description:
-      "Play free crossword puzzles online. Solve clues, fill in words, and test your vocabulary and general knowledge.",
+      "Play Crossword Puzzle online free! Solve clues, fill in words, test your vocabulary. New puzzles generated every time. Browser-based word game, no download.",
     type: "website",
     url: "https://playmini.fun/crossword",
   },

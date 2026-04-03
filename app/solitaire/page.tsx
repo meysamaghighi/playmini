@@ -3,18 +3,18 @@ import Solitaire from "../components/Solitaire";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Solitaire - Classic Klondike Card Game | PlayMini",
+  title: "Play Solitaire Online Free - Klondike Card Game | PlayMini",
   description:
-    "Free online Solitaire (Klondike) card game. Drag and drop cards to build foundations by suit. Classic patience game in your browser!",
+    "Play Solitaire online free! Classic Klondike card game, drag and drop to build foundations. Browser-based patience game, no download required. Mobile-friendly.",
   keywords:
     "solitaire, klondike, card game, patience, free solitaire, online card game, classic solitaire",
   alternates: {
     canonical: "/solitaire",
   },
   openGraph: {
-    title: "Solitaire - Classic Klondike Card Game | PlayMini",
+    title: "Play Solitaire Online Free - Klondike Card Game | PlayMini",
     description:
-      "Play free Solitaire online. Build foundations from Ace to King in this classic card game!",
+      "Play Solitaire online free! Classic Klondike card game, drag and drop to build foundations. Browser-based patience game, no download required. Mobile-friendly.",
     type: "website",
     url: "https://playmini.fun/solitaire",
   },
