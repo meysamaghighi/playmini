@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: 'Tic-Tac-Toe - Free Online | PlayMini',
   description: 'Play classic Tic-Tac-Toe online for free! Challenge an unbeatable AI or play with a friend. Three difficulty levels, score tracking, and smooth gameplay.',
   keywords: 'tic tac toe, tic-tac-toe online, noughts and crosses, xs and os, tic tac toe game, play tic tac toe, tic tac toe AI, free online game',
+  alternates: {
+    canonical: '/tic-tac-toe',
+  },
   openGraph: {
     title: 'Tic-Tac-Toe - Free Online | PlayMini',
     description: 'Play classic Tic-Tac-Toe online! Challenge AI or play with friends. Three difficulty levels and score tracking.',

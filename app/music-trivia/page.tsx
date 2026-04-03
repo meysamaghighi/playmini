@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Free music trivia game with 170+ songs. Test your knowledge about artists and songs, or challenge friends to place songs on a timeline. Perfect for parties!",
   keywords:
     "music trivia, song quiz, music quiz game, party game, timeline game, music knowledge, free trivia",
+  alternates: {
+    canonical: "/music-trivia",
+  },
   openGraph: {
     title: "Music Party Trivia - Free Song Quiz Game | PlayMini",
     description:

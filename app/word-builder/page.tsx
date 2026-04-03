@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     "letter game online",
     "word challenge",
   ],
+  alternates: {
+    canonical: "/word-builder",
+  },
   openGraph: {
     title: "Word Builder Game Online - Make Words From Letters | PlayMini",
     description:

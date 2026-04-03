@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "About PlayMini - Free Browser Games",
   description:
     "Learn about PlayMini, a collection of 31 free browser games. Custom-built games with no downloads, no accounts, and no tracking.",
+  alternates: {
+    canonical: "/about",
+  },
   openGraph: {
     title: "About PlayMini",
     description:

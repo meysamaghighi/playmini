@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     'flappy bird unblocked',
     'arcade game online',
   ],
+  alternates: {
+    canonical: '/flappy',
+  },
   openGraph: {
     title: 'Play Flappy Bird Online Free - Flappy Bird Browser Game',
     description: 'Play Flappy Bird online free! Tap to flap through pipes in this classic browser game. Beat your high score!',

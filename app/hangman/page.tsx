@@ -15,6 +15,9 @@ export const metadata: Metadata = {
     "hangman word game",
     "online hangman unblocked",
   ],
+  alternates: {
+    canonical: "/hangman",
+  },
   openGraph: {
     title: "Hangman Game Online Free - Play Hangman Online | PlayMini",
     description:

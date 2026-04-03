@@ -18,6 +18,9 @@ export const metadata: Metadata = {
     "typing challenge",
     "typing trainer",
   ],
+  alternates: {
+    canonical: "/typing-race",
+  },
   openGraph: {
     title: "Typing Race - Test Your Typing Speed Online | PlayMini",
     description:

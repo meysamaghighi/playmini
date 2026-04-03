@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: 'Whack-a-Mole - Free Online | PlayMini',
   description: 'Play Whack-a-Mole online for free! Tap the moles as they pop up, catch golden moles for bonus points, and beat your high score in this classic arcade game.',
   keywords: 'whack a mole, whack-a-mole game, arcade game, reaction game, tap game, free online game, browser game, mobile game',
+  alternates: {
+    canonical: '/whack-a-mole',
+  },
   openGraph: {
     title: 'Whack-a-Mole - Free Online | PlayMini',
     description: 'Play Whack-a-Mole online for free! Tap the moles as they pop up and beat your high score.',

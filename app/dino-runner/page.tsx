@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     "endless runner game",
     "dino runner",
   ],
+  alternates: {
+    canonical: "/dino-runner",
+  },
   openGraph: {
     title: "Dino Run Game Online - Chrome Dinosaur Game | PlayMini",
     description:

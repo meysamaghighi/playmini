@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Free online Solitaire (Klondike) card game. Drag and drop cards to build foundations by suit. Classic patience game in your browser!",
   keywords:
     "solitaire, klondike, card game, patience, free solitaire, online card game, classic solitaire",
+  alternates: {
+    canonical: "/solitaire",
+  },
   openGraph: {
     title: "Solitaire - Classic Klondike Card Game | PlayMini",
     description:

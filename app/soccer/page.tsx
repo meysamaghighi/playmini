@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Play free penalty kicks online. Aim your shot, beat the goalkeeper, and score as many goals as you can in 10 rounds. Works on desktop and mobile.",
   keywords:
     "penalty kicks, soccer game, football game, free soccer game, online soccer, penalty shootout, browser game",
+  alternates: {
+    canonical: "/soccer",
+  },
   openGraph: {
     title: "Penalty Kicks - Free Online Soccer Game | PlayMini",
     description:

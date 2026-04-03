@@ -18,6 +18,9 @@ export const metadata: Metadata = {
     "vocabulary game",
     "brain teaser",
   ],
+  alternates: {
+    canonical: "/wordle",
+  },
   openGraph: {
     title: "Word Guess - Free Wordle Game Online | PlayMini",
     description:

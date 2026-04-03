@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     "puzzle game online",
     "bubble shooter unblocked",
   ],
+  alternates: {
+    canonical: "/bubble-shooter",
+  },
   openGraph: {
     title: "Bubble Shooter Game Free Online - Bubble Pop Game | PlayMini",
     description:

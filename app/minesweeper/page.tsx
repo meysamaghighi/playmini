@@ -15,6 +15,9 @@ export const metadata: Metadata = {
     "minesweeper game online",
     "minesweeper unblocked",
   ],
+  alternates: {
+    canonical: "/minesweeper",
+  },
   openGraph: {
     title: "Play Minesweeper Online Free - Minesweeper Browser Game",
     description:

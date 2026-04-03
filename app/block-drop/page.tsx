@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Play Block Drop free online. Stack falling blocks, clear lines, and beat your high score. Classic block-stacking puzzle game with 7 colorful pieces. Works on desktop and mobile.",
   keywords:
     "block drop, falling blocks, block puzzle, tetris clone, puzzle game, online games, free games, stack blocks, line clear game",
+  alternates: {
+    canonical: "/block-drop",
+  },
   openGraph: {
     title: "Block Drop - Free Falling Block Puzzle Game Online | PlayMini",
     description:

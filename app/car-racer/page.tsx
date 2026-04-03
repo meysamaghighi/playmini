@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     "arcade racing game",
     "endless runner car",
   ],
+  alternates: {
+    canonical: "/car-racer",
+  },
   openGraph: {
     title: "Car Racing Game Online Free - Browser Car Game | PlayMini",
     description:

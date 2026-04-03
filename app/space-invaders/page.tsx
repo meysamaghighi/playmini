@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     "space invaders levels",
     "retro game online",
   ],
+  alternates: {
+    canonical: "/space-invaders",
+  },
   openGraph: {
     title: "Play Space Invaders Online Free - 10 Levels & Power-Ups | PlayMini",
     description:

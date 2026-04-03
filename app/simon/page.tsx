@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Free online Simon Says memory game. Watch the color sequence and repeat it. Test your memory skills with increasingly longer patterns!",
   keywords:
     "simon says, simon game, memory game, pattern game, sequence game, brain game, free online game",
+  alternates: {
+    canonical: "/simon",
+  },
   openGraph: {
     title: "Simon Says - Memory Pattern Game | PlayMini",
     description:

@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Play Breakout free online - the classic brick breaker game. Destroy colorful bricks, collect points, and advance through levels. Desktop and mobile friendly with keyboard or touch controls.",
   keywords:
     "breakout game, brick breaker, arkanoid, classic arcade game, breakout online, free breakout game, brick breaker online, paddle game, browser arcade game",
+  alternates: {
+    canonical: "/breakout",
+  },
   openGraph: {
     title: "Breakout - Classic Brick Breaker Game Online | PlayMini",
     description:

@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Play free crossword puzzles online. Solve clues, fill in words, and test your vocabulary and general knowledge. New puzzles available every time you play!",
   keywords:
     "crossword puzzle, free crossword, online crossword, word game, brain game, vocabulary game, crossword solver",
+  alternates: {
+    canonical: "/crossword",
+  },
   openGraph: {
     title: "Crossword Puzzle - Free Online | PlayMini",
     description:

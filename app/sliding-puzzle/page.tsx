@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Free online 15-puzzle sliding game. Arrange numbered tiles from 1 to 15 by sliding them into the empty space. Classic brain teaser!",
   keywords:
     "sliding puzzle, 15 puzzle, tile puzzle, logic game, brain teaser, puzzle game, free online game",
+  alternates: {
+    canonical: "/sliding-puzzle",
+  },
   openGraph: {
     title: "Sliding Puzzle - Classic 15-Puzzle Game | PlayMini",
     description:

@@ -15,6 +15,9 @@ export const metadata: Metadata = {
     "snake game unblocked",
     "retro snake game",
   ],
+  alternates: {
+    canonical: "/snake",
+  },
   openGraph: {
     title: "Play Snake Game Online Free - Snake Game Browser | PlayMini",
     description:

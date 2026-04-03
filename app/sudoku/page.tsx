@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Play free Sudoku online with 3 difficulty levels. Classic 9x9 logic puzzle with pencil marks, undo, and timer. Track your personal best times.",
   keywords:
     "sudoku, sudoku online, free sudoku, sudoku game, logic puzzle, number puzzle, sudoku easy, sudoku medium, sudoku hard, brain game",
+  alternates: {
+    canonical: "/sudoku",
+  },
   openGraph: {
     title: "Sudoku - Free Online | PlayMini",
     description:

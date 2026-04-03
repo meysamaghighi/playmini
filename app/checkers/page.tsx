@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Play Checkers free online against AI. Classic 8x8 board with kings, multi-jump chains, and mandatory captures. Strategic board game for desktop and mobile.",
   keywords:
     "checkers, checkers online, free checkers, checkers vs ai, draughts, board game, strategy game, kings",
+  alternates: {
+    canonical: "/checkers",
+  },
   openGraph: {
     title: "Checkers - Free Online | PlayMini",
     description:

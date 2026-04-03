@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Play free table tennis (Pong) online against AI. Move your paddle, return the ball, and be the first to 7 points. Works on desktop and mobile.",
   keywords:
     "table tennis game, pong game, free pong, online ping pong, paddle game, browser game, arcade game",
+  alternates: {
+    canonical: "/table-tennis",
+  },
   openGraph: {
     title: "Table Tennis - Free Online Pong Game | PlayMini",
     description:

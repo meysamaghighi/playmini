@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     "number puzzle online",
     "merge game 2048",
   ],
+  alternates: {
+    canonical: "/2048",
+  },
   openGraph: {
     title: "Play 2048 Online Free - 2048 Game Browser | PlayMini",
     description:

@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Free online maze game with procedurally generated mazes. Navigate from start to finish using arrow keys or swipe controls. Three difficulty levels with timer-based scoring!",
   keywords:
     "maze game, maze runner, maze puzzle, online maze, free maze game, puzzle game, brain game, labyrinth",
+  alternates: {
+    canonical: "/maze",
+  },
   openGraph: {
     title: "Maze Runner - Navigate Through Generated Mazes | PlayMini",
     description:

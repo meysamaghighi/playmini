@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     "music trivia",
     "song quiz",
   ],
+  alternates: {
+    canonical: "/",
+  },
 };
 
 type GameCategory = "Puzzle" | "Arcade" | "Word" | "Strategy" | "Creative" | "Sports";

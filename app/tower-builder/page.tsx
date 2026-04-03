@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Build the tallest tower by stacking blocks perfectly! Free online tower building game. Drop blocks, align them perfectly, and challenge your precision. No download required.",
   keywords:
     "tower builder, stacking game, block stacking, tower game, precision game, free online game, casual game, mobile game, browser game",
+  alternates: {
+    canonical: "/tower-builder",
+  },
   openGraph: {
     title: "Tower Builder - Free Stacking Game Online | PlayMini",
     description:

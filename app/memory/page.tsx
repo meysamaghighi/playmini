@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Play Memory Match online for free. Flip cards to find matching pairs, test your memory, and complete the puzzle in the fewest moves. Three difficulty levels: Easy, Medium, and Hard.",
   keywords:
     "memory match, memory game, card flip game, matching game, concentration game, brain game, memory test, online memory game, free memory game",
+  alternates: {
+    canonical: "/memory",
+  },
   openGraph: {
     title: "Memory Match - Free Online Card Flip Game | PlayMini",
     description:

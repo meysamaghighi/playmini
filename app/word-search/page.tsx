@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "Free online word search puzzle game. Find hidden words in a letter grid across three difficulty levels. Challenge your vocabulary and pattern recognition skills!",
   keywords:
     "word search, word find, word puzzle, free word search, online word search, vocabulary game, puzzle game",
+  alternates: {
+    canonical: "/word-search",
+  },
   openGraph: {
     title: "Word Search - Find Hidden Words | PlayMini",
     description:
