@@ -398,10 +398,10 @@ export default function SpaceInvaders() {
     }
 
     // Move player (keyboard or touch)
-    if (keysRef.current["ArrowLeft"] || keysRef.current["a"] || touchLeftRef.current) {
+    if (keysRef.current["arrowleft"] || keysRef.current["a"] || touchLeftRef.current) {
       playerXRef.current = Math.max(0, playerXRef.current - PLAYER_SPEED);
     }
-    if (keysRef.current["ArrowRight"] || keysRef.current["d"] || touchRightRef.current) {
+    if (keysRef.current["arrowright"] || keysRef.current["d"] || touchRightRef.current) {
       playerXRef.current = Math.min(CANVAS_WIDTH - PLAYER_WIDTH, playerXRef.current + PLAYER_SPEED);
     }
 
@@ -728,13 +728,13 @@ export default function SpaceInvaders() {
     }
   };
 
-  const handleTouchStart = (direction: "left" | "right") => (e: React.TouchEvent) => {
+  const handleTouchStart = (direction: "left" | "right") => (e: React.PointerEvent) => {
     e.preventDefault();
     if (direction === "left") touchLeftRef.current = true;
     else if (direction === "right") touchRightRef.current = true;
   };
 
-  const handleTouchEnd = (direction: "left" | "right") => (e: React.TouchEvent) => {
+  const handleTouchEnd = (direction: "left" | "right") => (e: React.PointerEvent) => {
     e.preventDefault();
     if (direction === "left") touchLeftRef.current = false;
     else if (direction === "right") touchRightRef.current = false;
@@ -821,16 +821,16 @@ export default function SpaceInvaders() {
       {/* Touch Controls */}
       <div className="flex gap-3 w-full max-w-md justify-center items-center px-4">
         <button
-          onTouchStart={handleTouchStart("left")}
-          onTouchEnd={handleTouchEnd("left")}
+          onPointerDown={handleTouchStart("left")}
+          onPointerUp={handleTouchEnd("left")}
           className="flex-1 h-16 bg-gray-800/50 hover:bg-gray-700/50 active:bg-gray-600/50 text-white font-bold rounded-xl transition-colors select-none flex items-center justify-center text-2xl border border-gray-700"
           style={{ touchAction: "none" }}
         >
           ←
         </button>
         <button
-          onTouchStart={handleTouchStart("right")}
-          onTouchEnd={handleTouchEnd("right")}
+          onPointerDown={handleTouchStart("right")}
+          onPointerUp={handleTouchEnd("right")}
           className="flex-1 h-16 bg-gray-800/50 hover:bg-gray-700/50 active:bg-gray-600/50 text-white font-bold rounded-xl transition-colors select-none flex items-center justify-center text-2xl border border-gray-700"
           style={{ touchAction: "none" }}
         >
