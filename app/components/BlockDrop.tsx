@@ -88,6 +88,7 @@ export default function BlockDrop() {
   const [bestScore, setBestScore] = useState(0);
   const [scoreFlash, setScoreFlash] = useState(false);
   const [levelUp, setLevelUp] = useState<number | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const boardRef = useRef<(string | null)[][]>(
     Array(GRID_HEIGHT)
@@ -455,6 +456,57 @@ export default function BlockDrop() {
     }
   }, [gameLoop]);
 
+  // Touch gestures
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!touchStartRef.current || e.changedTouches.length === 0) return;
+
+    e.preventDefault();
+
+    const touchEnd = {
+      x: e.changedTouches[0].clientX,
+      y: e.changedTouches[0].clientY,
+    };
+
+    const dx = touchEnd.x - touchStartRef.current.x;
+    const dy = touchEnd.y - touchStartRef.current.y;
+
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
+
+    // Swipe threshold
+    const threshold = 30;
+
+    if (absDx < threshold && absDy < threshold) {
+      // Tap - hard drop
+      hardDrop();
+    } else if (absDx > absDy) {
+      // Horizontal swipe
+      if (dx < -threshold) {
+        movePiece(-1);
+      } else if (dx > threshold) {
+        movePiece(1);
+      }
+    } else {
+      // Vertical swipe
+      if (dy > threshold) {
+        softDrop();
+      } else if (dy < -threshold) {
+        rotatePieceFn();
+      }
+    }
+
+    touchStartRef.current = null;
+  }, [movePiece, rotatePieceFn, softDrop, hardDrop]);
+
   // Keyboard
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -578,12 +630,14 @@ export default function BlockDrop() {
       {/* Game Area */}
       <div className="flex flex-col md:flex-row gap-4 items-start">
         {/* Main Canvas */}
-        <div className="relative">
+        <div className="relative" style={{ maxWidth: "min(300px, 90vw)" }}>
           <canvas
             ref={canvasRef}
             width={300}
             height={600}
-            className="rounded-xl max-w-full h-auto border-2 border-gray-800"
+            className="rounded-xl w-full h-auto border-2 border-gray-800"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           />
 
           {displayState === "START" && (
@@ -591,7 +645,7 @@ export default function BlockDrop() {
               <div className="text-6xl mb-3">🎮</div>
               <h2 className="text-3xl font-black text-purple-400 mb-2">Block Drop</h2>
               <p className="text-gray-400 mb-6 text-sm text-center px-4">
-                Arrow keys to move/rotate, Space to drop
+                Swipe to move, swipe up to rotate, tap to drop
               </p>
               <button
                 onClick={startGame}
@@ -663,36 +717,13 @@ export default function BlockDrop() {
         </div>
       </div>
 
-      {/* Mobile Controls */}
-      <div className="flex gap-2 md:hidden">
-        <button
-          onClick={() => movePiece(-1)}
-          className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white font-bold rounded-xl"
-        >
-          ←
-        </button>
-        <button
-          onClick={rotatePieceFn}
-          className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white font-bold rounded-xl"
-        >
-          ↻
-        </button>
-        <button
-          onClick={() => movePiece(1)}
-          className="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white font-bold rounded-xl"
-        >
-          →
-        </button>
-        <button
-          onClick={hardDrop}
-          className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl"
-        >
-          Drop
-        </button>
-      </div>
-
       <div className="text-center text-xs text-gray-600">
-        {displayState === "PLAYING" && <p>P or Escape to pause</p>}
+        {displayState === "PLAYING" && (
+          <>
+            <p className="hidden md:block">Arrow keys to move, Space to drop, P to pause</p>
+            <p className="md:hidden">Swipe to move, swipe up to rotate, tap to drop</p>
+          </>
+        )}
       </div>
 
       <style jsx>{`

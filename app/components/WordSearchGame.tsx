@@ -307,6 +307,7 @@ export default function WordSearchGame() {
             className="grid gap-1"
             style={{
               gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,
+              touchAction: "none",
             }}
           >
             {grid.map((row, rowIndex) =>
@@ -315,8 +316,12 @@ export default function WordSearchGame() {
                   key={`${rowIndex}-${colIndex}`}
                   onMouseDown={() => handleCellDown(rowIndex, colIndex)}
                   onMouseEnter={() => handleCellEnter(rowIndex, colIndex)}
-                  onTouchStart={() => handleCellDown(rowIndex, colIndex)}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    handleCellDown(rowIndex, colIndex);
+                  }}
                   onTouchMove={(e) => {
+                    e.preventDefault();
                     const touch = e.touches[0];
                     const element = document.elementFromPoint(touch.clientX, touch.clientY);
                     if (element?.getAttribute("data-cell")) {
@@ -326,6 +331,7 @@ export default function WordSearchGame() {
                   }}
                   onTouchEnd={handleCellUp}
                   data-cell={`${rowIndex}-${colIndex}`}
+                  style={{ touchAction: "none" }}
                   className={`
                     w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center
                     font-bold text-sm sm:text-base cursor-pointer select-none

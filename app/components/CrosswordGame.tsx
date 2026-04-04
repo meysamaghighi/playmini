@@ -1054,7 +1054,7 @@ export default function CrosswordGame() {
     }
 
     // Focus hidden input to open mobile keyboard
-    setTimeout(() => hiddenInputRef.current?.focus(), 50);
+    hiddenInputRef.current?.focus();
   };
 
   const handleKeyDown = useCallback(
@@ -1342,7 +1342,7 @@ export default function CrosswordGame() {
         </div>
       )}
 
-      {/* Offscreen input for mobile keyboard - must not be clipped/hidden for iOS to open keyboard */}
+      {/* Offscreen input for mobile keyboard - must be in viewport for iOS keyboard */}
       <input
         ref={hiddenInputRef}
         type="text"
@@ -1351,7 +1351,9 @@ export default function CrosswordGame() {
         autoCorrect="off"
         autoCapitalize="characters"
         spellCheck={false}
-        style={{ position: "absolute", left: "-9999px", top: "0", fontSize: "16px", opacity: 0.01 }}
+        readOnly={false}
+        enterKeyHint="next"
+        style={{ position: "fixed", bottom: "0", left: "0", width: "1px", height: "1px", fontSize: "16px", opacity: 0.01, zIndex: -1 }}
         onInput={handleMobileInput}
         onKeyDown={(e) => {
           if (e.key === "Backspace") {
