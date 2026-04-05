@@ -3,18 +3,18 @@ import BreakoutGame from "../components/BreakoutGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Play Breakout Online Free - Brick Breaker Game | PlayMini",
+  title: "Play Breakout Online Free - 10 Levels, Power-Ups & Brick Types | PlayMini",
   description:
-    "Play Breakout online free! Classic brick breaker arcade game. Smash colorful bricks, advance through levels, beat high scores. Browser game with touch controls.",
+    "Play Breakout online free! 10 levels + endless mode, 4 power-ups (multi-ball, laser, wide paddle, slow), 5 brick types, combo system. Classic brick breaker with modern features. Browser game with touch controls.",
   keywords:
-    "breakout game, brick breaker, arkanoid, classic arcade game, breakout online, free breakout game, brick breaker online, paddle game, browser arcade game",
+    "breakout game, brick breaker, arkanoid, classic arcade game, breakout online, free breakout game, brick breaker online, paddle game, browser arcade game, breakout power ups, breakout levels",
   alternates: {
     canonical: "/breakout",
   },
   openGraph: {
-    title: "Play Breakout Online Free - Brick Breaker Game | PlayMini",
+    title: "Play Breakout Online Free - 10 Levels, Power-Ups & Brick Types | PlayMini",
     description:
-      "Play Breakout online free! Classic brick breaker arcade game. Smash colorful bricks, advance through levels, beat high scores. Browser game with touch controls.",
+      "Play Breakout online free! 10 levels, 4 power-ups, 5 brick types, combo system. Classic brick breaker arcade game with modern features.",
     type: "website",
     url: "https://playmini.fun/breakout",
   },
@@ -30,7 +30,7 @@ export default function BreakoutPage() {
             Breakout
           </h1>
           <p className="text-gray-300 text-lg">
-            Break all the bricks with your ball and paddle to advance through levels!
+            10 levels, 4 power-ups, 5 brick types -- the ultimate brick breaker experience!
           </p>
         </div>
 
@@ -44,27 +44,51 @@ export default function BreakoutPage() {
             <div>
               <h3 className="font-semibold text-white mb-2">Desktop Controls:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>Use Left/Right Arrow Keys to move the paddle</li>
-                <li>Alternative: A and D keys</li>
-                <li>Press Space to launch the ball</li>
+                <li>Use Left/Right Arrow Keys or A/D to move the paddle</li>
+                <li>Press Space to launch the ball or shoot lasers (with laser power-up)</li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold text-white mb-2">Mobile Controls:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Drag your finger to move the paddle</li>
-                <li>Tap anywhere to launch the ball</li>
+                <li>Tap anywhere to launch the ball or shoot lasers</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Rules:</h3>
+              <h3 className="font-semibold text-white mb-2">Brick Types:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>Break all bricks to advance to the next level</li>
-                <li>Different colored bricks award different points (red = 70, purple = 20)</li>
-                <li>You start with 3 lives - don't let the ball fall off the bottom!</li>
-                <li>The ball speeds up as you destroy more bricks</li>
-                <li>Each new level increases the difficulty with faster ball speed</li>
-                <li>Hit the ball with different parts of the paddle to control its angle</li>
+                <li><strong>Normal</strong> - Standard colorful bricks (1 hit, 20-70 points by row)</li>
+                <li><strong>Tough</strong> (blue) - Takes 2 hits to destroy (60 points)</li>
+                <li><strong>Steel</strong> (gray) - Takes 3 hits to destroy (80 points)</li>
+                <li><strong>Explosive</strong> (red with !) - Destroys neighboring bricks (100 points)</li>
+                <li><strong>Gold</strong> (yellow with star) - Bonus points brick (200 points)</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-white mb-2">Power-Ups:</h3>
+              <ul className="list-disc list-inside space-y-1 ml-2">
+                <li><strong>Multi-Ball</strong> (M, purple) - Splits each ball into 3</li>
+                <li><strong>Wide Paddle</strong> (W, blue) - Temporarily widens your paddle</li>
+                <li><strong>Laser</strong> (L, red) - Shoot lasers from paddle sides (Space to fire)</li>
+                <li><strong>Slow Ball</strong> (S, cyan) - Temporarily slows down all balls</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-white mb-2">Combo System:</h3>
+              <ul className="list-disc list-inside space-y-1 ml-2">
+                <li>Hit bricks consecutively without touching the paddle to build combo multiplier</li>
+                <li>Up to 10x multiplier on brick points</li>
+                <li>Combo resets when ball hits the paddle</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-white mb-2">Levels:</h3>
+              <ul className="list-disc list-inside space-y-1 ml-2">
+                <li>10 handcrafted levels with unique patterns and increasing difficulty</li>
+                <li>Ball speed increases with each level</li>
+                <li>After level 10, enter endless mode with continued scaling</li>
+                <li>You start with 3 lives - don't let all balls fall off the bottom!</li>
               </ul>
             </div>
           </div>
@@ -80,16 +104,16 @@ export default function BreakoutPage() {
               bricks - has made it one of the most enduring video game genres.
             </p>
             <p>
-              This modern browser-based version features colorful rainbow bricks arranged in six
-              rows, each offering different point values. The red bricks at the top are worth the
-              most points (70), while the purple bricks at the bottom award fewer points (20).
-              Strategic play involves aiming for the high-value bricks while managing the
-              increasing ball speed.
+              This modern version takes the classic formula to the next level with 10 progressively
+              challenging levels, 5 different brick types (normal, tough, steel, explosive, and gold),
+              and 4 power-ups (multi-ball, wide paddle, laser cannons, and slow ball). The combo system
+              rewards skillful consecutive hits with up to 10x score multipliers.
             </p>
             <p>
-              As you progress through levels, the challenge intensifies with faster ball speeds.
-              Master the art of paddle control to angle your shots and clear levels efficiently.
-              Perfect for quick gaming sessions or extended play to reach the highest levels!
+              Master the art of paddle control to angle your shots, collect power-ups strategically,
+              and build massive combos. Watch out for explosive bricks that destroy their neighbors
+              and aim for the valuable gold bricks. Can you complete all 10 levels and dominate the
+              endless mode?
             </p>
           </div>
         </section>
@@ -107,31 +131,39 @@ export default function BreakoutPage() {
                   name: "How do I control the paddle in Breakout?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "On desktop, use the left and right arrow keys (or A and D keys) to move the paddle horizontally. Press Space to launch the ball. On mobile, drag your finger across the screen to move the paddle and tap to launch the ball.",
+                    text: "On desktop, use the left and right arrow keys (or A and D keys) to move the paddle horizontally. Press Space to launch the ball or shoot lasers (with laser power-up). On mobile, drag your finger across the screen to move the paddle and tap to launch the ball or shoot lasers.",
                   },
                 },
                 {
                   "@type": "Question",
-                  name: "How does scoring work in Breakout?",
+                  name: "What are the different brick types?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Different colored bricks award different points. Red bricks (top row) give 70 points, orange 60, yellow 50, green 40, blue 30, and purple (bottom row) 20 points. Break all bricks to advance to the next level with increased difficulty.",
+                    text: "There are 5 brick types: Normal (colorful, 1 hit, 20-70 points), Tough/blue (2 hits, 60 points), Steel/gray (3 hits, 80 points), Explosive/red (1 hit, destroys neighbors, 100 points), and Gold/yellow star (1 hit, 200 bonus points).",
                   },
                 },
                 {
                   "@type": "Question",
-                  name: "What happens when I lose all my lives?",
+                  name: "How does the combo system work?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "You start with 3 lives. Each time the ball falls off the bottom of the screen, you lose a life. When all lives are lost, the game ends and your final score is recorded. If you beat your previous best score, it will be saved as your new personal best.",
+                    text: "Hit bricks consecutively without the ball touching the paddle to build your combo multiplier, up to 10x. Each brick's points are multiplied by your current combo. The combo resets when the ball hits your paddle.",
                   },
                 },
                 {
                   "@type": "Question",
-                  name: "How do levels work in Breakout?",
+                  name: "What power-ups are available?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "When you clear all bricks on the screen, you advance to the next level. Each new level features a fresh set of bricks and increased ball speed, making the game progressively more challenging. Your lives carry over between levels.",
+                    text: "There are 4 power-ups: Multi-Ball (M, purple) splits each ball into 3, Wide Paddle (W, blue) widens your paddle, Laser (L, red) adds laser cannons to shoot bricks, and Slow Ball (S, cyan) temporarily slows down all balls. Power-ups drop randomly from destroyed bricks.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "How many levels are there?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "There are 10 handcrafted levels with unique brick patterns and progressively faster ball speeds. After completing level 10, you enter endless mode where the difficulty continues to scale infinitely.",
                   },
                 },
               ],
@@ -148,7 +180,7 @@ export default function BreakoutPage() {
               "@type": "WebApplication",
               name: "Breakout",
               description:
-                "Play Breakout free online - the classic brick breaker arcade game with colorful bricks, multiple levels, and high score tracking.",
+                "Play Breakout free online - the classic brick breaker arcade game with 10 levels, power-ups, 5 brick types, combo system, and high score tracking.",
               url: "https://playmini.fun/breakout",
               applicationCategory: "Game",
               operatingSystem: "Any",
