@@ -189,10 +189,14 @@ export default function GameShufflePage() {
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
         {!currentGame ? (
           // Landing state
-          <div className="text-center">
+          <div className="text-center max-w-lg mx-auto">
+            <h2 className="text-4xl font-black mb-3">Tinder for Games</h2>
+            <p className="text-gray-400 mb-8">
+              Shuffle through 31 free games. Vote thumbs up or down. Discover your favorites.
+            </p>
             <button
               onClick={handleShuffle}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold text-xl px-12 py-6 rounded-xl shadow-lg transition-all transform hover:scale-105 flex items-center gap-3"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold text-xl px-12 py-6 rounded-xl shadow-lg transition-all transform hover:scale-105 flex items-center gap-3 mx-auto"
             >
               <svg
                 className="w-8 h-8"
@@ -209,6 +213,9 @@ export default function GameShufflePage() {
               </svg>
               Shuffle!
             </button>
+            <p className="text-xs text-gray-600 mt-6">
+              Arcade, puzzle, word, strategy, sports -- all free, no download needed.
+            </p>
           </div>
         ) : (
           // Game view
