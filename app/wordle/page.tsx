@@ -5,7 +5,7 @@ import MoreGames from "../components/MoreGames";
 export const metadata: Metadata = {
   title: "Play Word Guess Online Free - Wordle Game | PlayMini",
   description:
-    "Play Word Guess online free! Wordle-style 5-letter word game with unlimited plays. Guess the word in 6 tries, track your streak. Browser-based, no download.",
+    "Play Word Guess online free! 10 campaign levels + endless mode with power-ups, hard mode, and timed challenges. Wordle-style word game, no download needed.",
   keywords: [
     "word guess",
     "wordle clone",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Play Word Guess Online Free - Wordle Game | PlayMini",
     description:
-      "Play Word Guess online free! Wordle-style 5-letter word game with unlimited plays. Guess the word in 6 tries, track your streak. Browser-based, no download.",
+      "Play Word Guess online free! 10 campaign levels + endless mode with power-ups, hard mode, and timed challenges. Wordle-style word game, no download needed.",
     url: "https://playmini.fun/wordle",
     siteName: "PlayMini",
     type: "website",

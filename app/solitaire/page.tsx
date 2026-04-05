@@ -5,7 +5,7 @@ import MoreGames from "../components/MoreGames";
 export const metadata: Metadata = {
   title: "Play Solitaire Online Free - Klondike Card Game | PlayMini",
   description:
-    "Play Solitaire online free! Classic Klondike card game, drag and drop to build foundations. Browser-based patience game, no download required. Mobile-friendly.",
+    "Play Solitaire online free! 10 campaign levels + endless mode with power-ups, lives, and star ratings. Classic Klondike card game, no download required.",
   keywords:
     "solitaire, klondike, card game, patience, free solitaire, online card game, classic solitaire",
   alternates: {
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Play Solitaire Online Free - Klondike Card Game | PlayMini",
     description:
-      "Play Solitaire online free! Classic Klondike card game, drag and drop to build foundations. Browser-based patience game, no download required. Mobile-friendly.",
+      "Play Solitaire online free! 10 campaign levels + endless mode with power-ups, lives, and star ratings. Classic Klondike card game, no download required.",
     type: "website",
     url: "https://playmini.fun/solitaire",
   },

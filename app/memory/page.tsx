@@ -5,7 +5,7 @@ import MoreGames from "../components/MoreGames";
 export const metadata: Metadata = {
   title: "Play Memory Match Online Free - Card Game | PlayMini",
   description:
-    "Play Memory Match online free! Flip cards to find matching pairs in this classic brain game. 3 difficulty levels, track your moves. Browser-based, no download needed.",
+    "Play Memory Match online free! 10 campaign levels + endless mode with power-ups, combo system, and themed card sets. Flip cards to find matching pairs. No download needed.",
   keywords:
     "memory match, memory game, card flip game, matching game, concentration game, brain game, memory test, online memory game, free memory game",
   alternates: {
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Play Memory Match Online Free - Card Game | PlayMini",
     description:
-      "Play Memory Match online free! Flip cards to find matching pairs in this classic brain game. 3 difficulty levels, track your moves. Browser-based, no download needed.",
+      "Play Memory Match online free! 10 campaign levels + endless mode with power-ups, combo system, and themed card sets. Flip cards to find matching pairs. No download needed.",
     type: "website",
     url: "https://playmini.fun/memory",
   },
