@@ -3,25 +3,27 @@ import HangmanGame from "../components/HangmanGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Play Hangman Online Free - Word Guess Game | PlayMini",
+  title: "Hangman Game Online Free - Classic Word Puzzle | PlayMini",
   description:
-    "Play Hangman online free! Guess the word letter by letter, 200+ words across 10 categories. Classic word guessing game in browser. No download, mobile-friendly.",
+    "Play Hangman game online free! Guess the word letter by letter, 200+ words across 10 categories. Classic word guessing game in your browser, no download needed, mobile-friendly.",
   keywords: [
     "hangman game online free",
+    "hangman game",
     "play hangman online",
     "hangman online",
     "free hangman game",
     "word guessing game",
     "hangman word game",
     "online hangman unblocked",
+    "hangman online free no download",
   ],
   alternates: {
     canonical: "/hangman",
   },
   openGraph: {
-    title: "Play Hangman Online Free - Word Guess Game | PlayMini",
+    title: "Hangman Game Online Free - Classic Word Puzzle | PlayMini",
     description:
-      "Play Hangman online free! Guess the word letter by letter, 200+ words across 10 categories. Classic word guessing game in browser. No download, mobile-friendly.",
+      "Play Hangman game online free! Guess the word letter by letter, 200+ words across 10 categories. Classic word guessing game in your browser, no download needed.",
     type: "website",
     url: "https://playmini.fun/hangman",
   },
@@ -37,7 +39,7 @@ export default function HangmanPage() {
             Hangman
           </h1>
           <p className="text-gray-300 text-lg">
-            Guess the word one letter at a time. Six wrong guesses and it's game over!
+            Guess the word one letter at a time. 200+ words, 10 categories, 6 lives!
           </p>
         </div>
 

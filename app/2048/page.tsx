@@ -3,26 +3,28 @@ import Game2048 from "../components/Game2048";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Play 2048 Online Free - 2048 Game Browser | PlayMini",
+  title: "2048 Game Online Free - Classic Puzzle Game | PlayMini",
   description:
-    "Play 2048 online free! Combine numbered tiles to reach 2048 in this addictive puzzle game. No download needed. Touch controls for mobile, arrow keys for desktop.",
+    "Play 2048 game online free! Slide and merge numbered tiles to reach 2048. Addictive puzzle game, no download, works on mobile and desktop. Beat your high score!",
   keywords: [
+    "2048 game online",
     "play 2048 online free",
-    "2048 game browser",
+    "2048 game",
+    "2048 puzzle game",
     "2048 online",
     "free 2048 game",
-    "2048 puzzle game",
     "2048 unblocked",
     "number puzzle online",
     "merge game 2048",
+    "2048 browser game",
   ],
   alternates: {
     canonical: "/2048",
   },
   openGraph: {
-    title: "Play 2048 Online Free - 2048 Game Browser | PlayMini",
+    title: "2048 Game Online Free - Classic Puzzle Game | PlayMini",
     description:
-      "Play 2048 online free! Combine numbered tiles to reach 2048 in this addictive puzzle game.",
+      "Play 2048 game online free! Slide and merge numbered tiles to reach 2048. Addictive puzzle game, no download, works on mobile and desktop.",
     type: "website",
     url: "https://playmini.fun/2048",
   },
@@ -60,6 +62,14 @@ export default function Page2048() {
                 acceptedAnswer: {
                   "@type": "Answer",
                   text: "Keep your highest-value tile in one corner (usually bottom-left or bottom-right) and build tiles in descending order. Avoid random moves. Focus on merging smaller tiles first and plan several moves ahead. Try to keep one row or column filled to create more merging opportunities.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Can I play 2048 on mobile?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes! 2048 works perfectly on mobile devices. Use swipe gestures to move tiles in any direction (up, down, left, right). The game is fully responsive and optimized for touchscreens, making it easy to play on phones and tablets.",
                 },
               },
             ],

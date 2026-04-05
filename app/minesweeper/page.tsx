@@ -3,25 +3,27 @@ import MinesweeperGame from "../components/MinesweeperGame";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Play Minesweeper Online Free - Classic Game | PlayMini",
+  title: "Minesweeper Game Online Free - Classic Logic Puzzle | PlayMini",
   description:
-    "Play Minesweeper online free in your browser! Classic logic puzzle game with 3 difficulty levels. Clear all mines to win. No download, mobile-friendly.",
+    "Play Minesweeper game online free in your browser! Classic logic puzzle with 3 difficulty levels (Easy, Medium, Hard). Clear all mines to win. No download needed, mobile-friendly.",
   keywords: [
+    "minesweeper game online",
     "play minesweeper online free",
-    "minesweeper browser game",
     "minesweeper online",
+    "minesweeper game",
     "free minesweeper",
     "classic minesweeper",
-    "minesweeper game online",
+    "minesweeper game online free",
     "minesweeper unblocked",
+    "minesweeper browser game",
   ],
   alternates: {
     canonical: "/minesweeper",
   },
   openGraph: {
-    title: "Play Minesweeper Online Free - Classic Game | PlayMini",
+    title: "Minesweeper Game Online Free - Classic Logic Puzzle | PlayMini",
     description:
-      "Play Minesweeper online free in your browser! Classic logic puzzle game with 3 difficulty levels. Clear all mines to win. No download, mobile-friendly.",
+      "Play Minesweeper game online free in your browser! Classic logic puzzle with 3 difficulty levels. Clear all mines to win. No download needed, mobile-friendly.",
     url: "https://playmini.fun/minesweeper",
     siteName: "PlayMini",
     type: "website",
@@ -36,9 +38,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Play Minesweeper Online Free - Minesweeper Browser Game",
+    title: "Minesweeper Game Online Free - Classic Logic Puzzle",
     description:
-      "Play minesweeper online free! Classic logic puzzle with 3 difficulty levels.",
+      "Play Minesweeper game online free! Classic logic puzzle with 3 difficulty levels. No download, browser-based.",
   },
 };
 
@@ -69,6 +71,22 @@ export default function MinesweeperPage() {
         acceptedAnswer: {
           "@type": "Answer",
           text: "There are three difficulty levels: Easy (9x9 grid with 10 mines), Medium (16x16 grid with 40 mines), and Hard (16x30 grid with 99 mines). Each difficulty tracks your personal best time separately.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Can I play Minesweeper on mobile?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes! This Minesweeper game works perfectly on mobile devices. Tap to reveal cells and long-press to place flags. The game is fully responsive and optimized for touchscreens, making it easy to play on phones and tablets.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Is the first click in Minesweeper always safe?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes! The first click is always safe. The mines are generated after your first click to ensure you don't hit a mine on your opening move. This gives you a fair start and allows you to begin building your strategy.",
         },
       },
     ],

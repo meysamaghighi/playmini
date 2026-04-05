@@ -3,11 +3,13 @@ import CarRacer from "../components/CarRacer";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Play Car Racing Game Online Free - 10 Levels | PlayMini",
+  title: "Car Racing Game Online Free - Drive & Dodge Traffic | PlayMini",
   description:
-    "Play Car Racing game online free! 10 levels, dodge traffic, collect power-ups, beat high scores. Top-down browser racing game. No download, mobile-friendly.",
+    "Play car racing game online free! 10 levels, dodge traffic, collect power-ups, beat high scores. Top-down arcade racing game in your browser, no download needed, mobile-friendly.",
   keywords: [
     "car racing game online free",
+    "car racing game",
+    "play car game online",
     "browser car game",
     "car racer online",
     "free racing game",
@@ -15,15 +17,15 @@ export const metadata: Metadata = {
     "top-down racing",
     "arcade racing game",
     "level-based racing",
-    "power-up racing game",
+    "car game unblocked",
   ],
   alternates: {
     canonical: "/car-racer",
   },
   openGraph: {
-    title: "Play Car Racing Game Online Free - 10 Levels | PlayMini",
+    title: "Car Racing Game Online Free - Drive & Dodge Traffic | PlayMini",
     description:
-      "Play Car Racing game online free! 10 levels, dodge traffic, collect power-ups, beat high scores. Top-down browser racing game. No download, mobile-friendly.",
+      "Play car racing game online free! 10 levels, dodge traffic, collect power-ups. Top-down arcade racing game in your browser, no download needed, mobile-friendly.",
     type: "website",
     url: "https://playmini.fun/car-racer",
   },
