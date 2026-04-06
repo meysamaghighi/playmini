@@ -5,6 +5,8 @@ import DownloadButton from "./DownloadButton";
 
 type Position = { x: number; y: number };
 type TetrominoType = "I" | "O" | "T" | "S" | "Z" | "J" | "L";
+type PowerUpType = "slowTime" | "clearBottom" | "holdSwap" | "bomb";
+type GameMode = "campaign" | "endless";
 
 interface Tetromino {
   type: TetrominoType;
@@ -12,11 +14,29 @@ interface Tetromino {
   color: string;
 }
 
+interface PowerUp {
+  x: number;
+  y: number;
+  type: PowerUpType;
+}
+
+interface LevelConfig {
+  level: number;
+  name: string;
+  description: string;
+  speed: number; // ms per drop
+  garbageRows: number; // rows of garbage at start
+  invisibleBlocks: boolean;
+  limitedRotations: number | null; // null = unlimited
+  restrictedPieces: TetrominoType[] | null; // null = all pieces
+  ghostPiece: boolean;
+  powerUpChance: number;
+}
+
 const GRID_WIDTH = 10;
 const GRID_HEIGHT = 20;
-const INITIAL_SPEED = 800;
-const SPEED_INCREASE = 40;
-const MIN_SPEED = 100;
+const POWERUP_DURATION = 8000; // 8 seconds
+const POWERUP_DROP_CHANCE = 0.15;
 
 const TETROMINOES: Record<TetrominoType, { shape: number[][]; color: string }> = {
   I: {
@@ -79,15 +99,142 @@ const TETROMINOES: Record<TetrominoType, { shape: number[][]; color: string }> =
 
 const PIECE_ORDER: TetrominoType[] = ["I", "O", "T", "S", "Z", "J", "L"];
 
+const LEVEL_CONFIGS: LevelConfig[] = [
+  {
+    level: 1,
+    name: "Classic Start",
+    description: "Standard Tetris gameplay",
+    speed: 800,
+    garbageRows: 0,
+    invisibleBlocks: false,
+    limitedRotations: null,
+    restrictedPieces: null,
+    ghostPiece: true,
+    powerUpChance: 0.15,
+  },
+  {
+    level: 2,
+    name: "Speed Boost",
+    description: "Faster falling pieces",
+    speed: 600,
+    garbageRows: 0,
+    invisibleBlocks: false,
+    limitedRotations: null,
+    restrictedPieces: null,
+    ghostPiece: true,
+    powerUpChance: 0.15,
+  },
+  {
+    level: 3,
+    name: "Garbage Pile",
+    description: "Start with 3 rows of garbage",
+    speed: 700,
+    garbageRows: 3,
+    invisibleBlocks: false,
+    limitedRotations: null,
+    restrictedPieces: null,
+    ghostPiece: true,
+    powerUpChance: 0.2,
+  },
+  {
+    level: 4,
+    name: "No Ghost",
+    description: "Ghost piece disabled",
+    speed: 650,
+    garbageRows: 0,
+    invisibleBlocks: false,
+    limitedRotations: null,
+    restrictedPieces: null,
+    ghostPiece: false,
+    powerUpChance: 0.15,
+  },
+  {
+    level: 5,
+    name: "Lightning Speed",
+    description: "Very fast drops",
+    speed: 400,
+    garbageRows: 0,
+    invisibleBlocks: false,
+    limitedRotations: null,
+    restrictedPieces: null,
+    ghostPiece: true,
+    powerUpChance: 0.2,
+  },
+  {
+    level: 6,
+    name: "Limited Rotations",
+    description: "Only 2 rotations per piece",
+    speed: 600,
+    garbageRows: 2,
+    invisibleBlocks: false,
+    limitedRotations: 2,
+    restrictedPieces: null,
+    ghostPiece: true,
+    powerUpChance: 0.2,
+  },
+  {
+    level: 7,
+    name: "Invisible Blocks",
+    description: "Locked blocks fade away",
+    speed: 700,
+    garbageRows: 0,
+    invisibleBlocks: true,
+    limitedRotations: null,
+    restrictedPieces: null,
+    ghostPiece: false,
+    powerUpChance: 0.25,
+  },
+  {
+    level: 8,
+    name: "Limited Pieces",
+    description: "Only I, O, and T pieces",
+    speed: 500,
+    garbageRows: 4,
+    invisibleBlocks: false,
+    limitedRotations: null,
+    restrictedPieces: ["I", "O", "T"],
+    ghostPiece: true,
+    powerUpChance: 0.2,
+  },
+  {
+    level: 9,
+    name: "Chaos Mode",
+    description: "Fast, invisible, limited rotations",
+    speed: 350,
+    garbageRows: 2,
+    invisibleBlocks: true,
+    limitedRotations: 1,
+    restrictedPieces: null,
+    ghostPiece: false,
+    powerUpChance: 0.3,
+  },
+  {
+    level: 10,
+    name: "Final Challenge",
+    description: "The ultimate test",
+    speed: 300,
+    garbageRows: 5,
+    invisibleBlocks: true,
+    limitedRotations: 1,
+    restrictedPieces: null,
+    ghostPiece: false,
+    powerUpChance: 0.25,
+  },
+];
+
 export default function BlockDrop() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [displayState, setDisplayState] = useState<"START" | "PLAYING" | "PAUSED" | "GAME_OVER">("START");
+  const [displayState, setDisplayState] = useState<"START" | "LEVEL_SELECT" | "PLAYING" | "PAUSED" | "GAME_OVER" | "LEVEL_COMPLETE">("START");
   const [score, setScore] = useState(0);
   const [lines, setLines] = useState(0);
-  const [level, setLevel] = useState(1);
+  const [lives, setLives] = useState(3);
+  const [currentLevel, setCurrentLevel] = useState(1);
+  const [gameMode, setGameMode] = useState<GameMode>("campaign");
   const [bestScore, setBestScore] = useState(0);
+  const [campaignProgress, setCampaignProgress] = useState(1);
   const [scoreFlash, setScoreFlash] = useState(false);
   const [levelUp, setLevelUp] = useState<number | null>(null);
+  const [activePowerUp, setActivePowerUp] = useState<PowerUpType | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const boardRef = useRef<(string | null)[][]>(
@@ -98,14 +245,29 @@ export default function BlockDrop() {
   const currentPieceRef = useRef<Tetromino | null>(null);
   const currentPosRef = useRef<Position>({ x: 0, y: 0 });
   const nextPieceRef = useRef<TetrominoType | null>(null);
-  const speedRef = useRef(INITIAL_SPEED);
+  const holdPieceRef = useRef<TetrominoType | null>(null);
+  const canHoldRef = useRef(true);
+  const speedRef = useRef(800);
   const lastMoveTimeRef = useRef(0);
   const gameLoopRef = useRef<number | null>(null);
   const scoreRef = useRef(0);
   const linesRef = useRef(0);
+  const livesRef = useRef(3);
   const levelRef = useRef(1);
   const bestScoreRef = useRef(0);
-  const gameStateRef = useRef<"START" | "PLAYING" | "PAUSED" | "GAME_OVER">("START");
+  const gameStateRef = useRef<"START" | "LEVEL_SELECT" | "PLAYING" | "PAUSED" | "GAME_OVER" | "LEVEL_COMPLETE">("START");
+  const powerUpsRef = useRef<PowerUp[]>([]);
+  const activePowerUpRef = useRef<PowerUpType | null>(null);
+  const powerUpTimerRef = useRef<number | null>(null);
+  const rotationsLeftRef = useRef<number | null>(null);
+  const gameModeRef = useRef<GameMode>("campaign");
+  const campaignProgressRef = useRef(1);
+  const linesRequiredRef = useRef(10); // Lines needed to complete campaign level
+  const invisibleTimestampsRef = useRef<number[][]>(
+    Array(GRID_HEIGHT)
+      .fill(null)
+      .map(() => Array(GRID_WIDTH).fill(0))
+  );
 
   useEffect(() => {
     const saved = localStorage.getItem("pb-blockdrop");
@@ -114,10 +276,17 @@ export default function BlockDrop() {
       setBestScore(val);
       bestScoreRef.current = val;
     }
+    const progress = localStorage.getItem("blockdrop-progress");
+    if (progress) {
+      const val = parseInt(progress, 10);
+      setCampaignProgress(val);
+      campaignProgressRef.current = val;
+    }
   }, []);
 
-  const randomPiece = (): TetrominoType => {
-    return PIECE_ORDER[Math.floor(Math.random() * PIECE_ORDER.length)];
+  const randomPiece = (restrictedPieces: TetrominoType[] | null = null): TetrominoType => {
+    const pool = restrictedPieces || PIECE_ORDER;
+    return pool[Math.floor(Math.random() * pool.length)];
   };
 
   const createPiece = (type: TetrominoType): Tetromino => {
@@ -160,6 +329,7 @@ export default function BlockDrop() {
           const boardX = pos.x + x;
           if (boardY >= 0) {
             boardRef.current[boardY][boardX] = piece.color;
+            invisibleTimestampsRef.current[boardY][boardX] = Date.now();
           }
         }
       }
@@ -172,8 +342,15 @@ export default function BlockDrop() {
       if (boardRef.current[y].every((cell) => cell !== null)) {
         boardRef.current.splice(y, 1);
         boardRef.current.unshift(Array(GRID_WIDTH).fill(null));
+        invisibleTimestampsRef.current.splice(y, 1);
+        invisibleTimestampsRef.current.unshift(Array(GRID_WIDTH).fill(0));
         cleared++;
         y++;
+
+        // Drop power-up
+        if (Math.random() < POWERUP_DROP_CHANCE && gameStateRef.current === "PLAYING") {
+          spawnPowerUp();
+        }
       }
     }
     return cleared;
@@ -186,6 +363,73 @@ export default function BlockDrop() {
     }
     return ghostY;
   };
+
+  const spawnPowerUp = () => {
+    const types: PowerUpType[] = ["slowTime", "clearBottom", "holdSwap", "bomb"];
+    const type = types[Math.floor(Math.random() * types.length)];
+    const x = Math.floor(Math.random() * GRID_WIDTH);
+    powerUpsRef.current.push({ x, y: 0, type });
+  };
+
+  const activatePowerUpFn = useCallback((type: PowerUpType) => {
+    if (powerUpTimerRef.current !== null) {
+      clearTimeout(powerUpTimerRef.current);
+    }
+
+    activePowerUpRef.current = type;
+    setActivePowerUp(type);
+
+    if (type === "slowTime") {
+      // Speed is temporarily halved in game loop
+      powerUpTimerRef.current = window.setTimeout(() => {
+        activePowerUpRef.current = null;
+        setActivePowerUp(null);
+      }, POWERUP_DURATION);
+    } else if (type === "clearBottom") {
+      // Clear bottom 2 rows
+      for (let i = 0; i < 2; i++) {
+        if (GRID_HEIGHT - 1 - i >= 0) {
+          boardRef.current[GRID_HEIGHT - 1 - i] = Array(GRID_WIDTH).fill(null);
+          invisibleTimestampsRef.current[GRID_HEIGHT - 1 - i] = Array(GRID_WIDTH).fill(0);
+        }
+      }
+      activePowerUpRef.current = null;
+      setActivePowerUp(null);
+      scoreRef.current += 100;
+      setScore(scoreRef.current);
+    } else if (type === "holdSwap") {
+      // Allow one extra hold swap immediately
+      if (holdPieceRef.current && currentPieceRef.current) {
+        const temp = holdPieceRef.current;
+        holdPieceRef.current = currentPieceRef.current.type;
+        currentPieceRef.current = createPiece(temp);
+        const startX = Math.floor((GRID_WIDTH - currentPieceRef.current.shape[0].length) / 2);
+        currentPosRef.current = { x: startX, y: 0 };
+        canHoldRef.current = false;
+      }
+      activePowerUpRef.current = null;
+      setActivePowerUp(null);
+    } else if (type === "bomb") {
+      // Clear 3x3 area around current piece
+      const pos = currentPosRef.current;
+      const centerX = pos.x + 1;
+      const centerY = pos.y + 1;
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          const bx = centerX + dx;
+          const by = centerY + dy;
+          if (by >= 0 && by < GRID_HEIGHT && bx >= 0 && bx < GRID_WIDTH) {
+            boardRef.current[by][bx] = null;
+            invisibleTimestampsRef.current[by][bx] = 0;
+          }
+        }
+      }
+      activePowerUpRef.current = null;
+      setActivePowerUp(null);
+      scoreRef.current += 150;
+      setScore(scoreRef.current);
+    }
+  }, []);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -216,23 +460,55 @@ export default function BlockDrop() {
     }
 
     // Draw locked board
+    const config = gameModeRef.current === "campaign" ? LEVEL_CONFIGS[levelRef.current - 1] : null;
+    const isInvisible = config?.invisibleBlocks;
+    const now = Date.now();
+
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
         const color = boardRef.current[y][x];
         if (color) {
-          ctx.fillStyle = color;
-          ctx.fillRect(x * cellW + 1, y * cellH + 1, cellW - 2, cellH - 2);
-          // Highlight
-          ctx.fillStyle = "rgba(255,255,255,0.3)";
-          ctx.fillRect(x * cellW + 2, y * cellH + 2, cellW / 3, cellH / 3);
+          let alpha = 1.0;
+          if (isInvisible) {
+            const age = now - invisibleTimestampsRef.current[y][x];
+            if (age > 2000) {
+              alpha = Math.max(0, 1 - (age - 2000) / 1000);
+            }
+          }
+          if (alpha > 0) {
+            ctx.globalAlpha = alpha;
+            ctx.fillStyle = color;
+            ctx.fillRect(x * cellW + 1, y * cellH + 1, cellW - 2, cellH - 2);
+            // Highlight
+            ctx.fillStyle = "rgba(255,255,255,0.3)";
+            ctx.fillRect(x * cellW + 2, y * cellH + 2, cellW / 3, cellH / 3);
+            ctx.globalAlpha = 1.0;
+          }
         }
       }
+    }
+
+    // Draw power-ups
+    for (const powerUp of powerUpsRef.current) {
+      const px = powerUp.x * cellW + cellW / 2;
+      const py = powerUp.y * cellH + cellH / 2;
+      ctx.fillStyle = "#fbbf24";
+      ctx.beginPath();
+      ctx.arc(px, py, cellW / 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 12px monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const icon = powerUp.type === "slowTime" ? "⏱" : powerUp.type === "clearBottom" ? "⬇" : powerUp.type === "holdSwap" ? "↔" : "💣";
+      ctx.fillText(icon, px, py);
     }
 
     // Ghost piece
     const piece = currentPieceRef.current;
     const pos = currentPosRef.current;
-    if (piece && gameStateRef.current === "PLAYING") {
+    const showGhost = config ? config.ghostPiece : true;
+    if (piece && gameStateRef.current === "PLAYING" && showGhost) {
       const ghostY = getGhostY(piece, pos);
       ctx.fillStyle = "rgba(255,255,255,0.1)";
       for (let y = 0; y < piece.shape.length; y++) {
@@ -269,22 +545,72 @@ export default function BlockDrop() {
     }
   }, []);
 
+  const createGarbageRow = (): (string | null)[] => {
+    const row = Array(GRID_WIDTH).fill("#64748b");
+    const emptyIndex = Math.floor(Math.random() * GRID_WIDTH);
+    row[emptyIndex] = null;
+    return row;
+  };
+
+  const initLevel = useCallback((level: number) => {
+    const config = LEVEL_CONFIGS[level - 1];
+    speedRef.current = config.speed;
+
+    // Create garbage rows
+    boardRef.current = Array(GRID_HEIGHT)
+      .fill(null)
+      .map(() => Array(GRID_WIDTH).fill(null));
+    invisibleTimestampsRef.current = Array(GRID_HEIGHT)
+      .fill(null)
+      .map(() => Array(GRID_WIDTH).fill(0));
+
+    for (let i = 0; i < config.garbageRows; i++) {
+      boardRef.current[GRID_HEIGHT - 1 - i] = createGarbageRow();
+    }
+
+    rotationsLeftRef.current = config.limitedRotations;
+  }, []);
+
   const spawnPiece = useCallback(() => {
-    const type = nextPieceRef.current || randomPiece();
-    nextPieceRef.current = randomPiece();
+    const config = gameModeRef.current === "campaign" ? LEVEL_CONFIGS[levelRef.current - 1] : null;
+    const restrictedPieces = config?.restrictedPieces || null;
+
+    const type = nextPieceRef.current || randomPiece(restrictedPieces);
+    nextPieceRef.current = randomPiece(restrictedPieces);
     const piece = createPiece(type);
     const startX = Math.floor((GRID_WIDTH - piece.shape[0].length) / 2);
     const startY = 0;
 
     if (collides(piece, { x: startX, y: startY })) {
-      gameStateRef.current = "GAME_OVER";
-      setDisplayState("GAME_OVER");
-      gameLoopRef.current = null;
-      return false;
+      // Lost a life
+      livesRef.current--;
+      setLives(livesRef.current);
+
+      if (livesRef.current <= 0) {
+        gameStateRef.current = "GAME_OVER";
+        setDisplayState("GAME_OVER");
+        gameLoopRef.current = null;
+        return false;
+      } else {
+        // Clear some of the board (partial reset)
+        for (let y = 0; y < 5; y++) {
+          boardRef.current[y] = Array(GRID_WIDTH).fill(null);
+          invisibleTimestampsRef.current[y] = Array(GRID_WIDTH).fill(0);
+        }
+        currentPieceRef.current = piece;
+        currentPosRef.current = { x: startX, y: startY };
+        return true;
+      }
     }
 
     currentPieceRef.current = piece;
     currentPosRef.current = { x: startX, y: startY };
+    canHoldRef.current = true;
+
+    // Reset rotation limit
+    const levelConfig = gameModeRef.current === "campaign" ? LEVEL_CONFIGS[levelRef.current - 1] : null;
+    rotationsLeftRef.current = levelConfig?.limitedRotations || null;
+
     return true;
   }, []);
 
@@ -312,15 +638,34 @@ export default function BlockDrop() {
         localStorage.setItem("pb-blockdrop", scoreRef.current.toString());
       }
 
-      // Level up every 10 lines
-      const newLevel = Math.floor(linesRef.current / 10) + 1;
-      if (newLevel !== levelRef.current) {
-        levelRef.current = newLevel;
-        setLevel(newLevel);
-        speedRef.current = Math.max(MIN_SPEED, INITIAL_SPEED - (newLevel - 1) * SPEED_INCREASE);
-        // Show level-up announcement
-        setLevelUp(newLevel);
-        setTimeout(() => setLevelUp(null), 2000);
+      // Campaign mode: check for level completion
+      if (gameModeRef.current === "campaign" && linesRef.current >= linesRequiredRef.current) {
+        gameStateRef.current = "LEVEL_COMPLETE";
+        setDisplayState("LEVEL_COMPLETE");
+        gameLoopRef.current = null;
+
+        // Update progress
+        if (levelRef.current >= campaignProgressRef.current && levelRef.current < 10) {
+          campaignProgressRef.current = levelRef.current + 1;
+          setCampaignProgress(campaignProgressRef.current);
+          localStorage.setItem("blockdrop-progress", campaignProgressRef.current.toString());
+        }
+        return;
+      }
+
+      // Endless mode: level up every 10 lines
+      if (gameModeRef.current === "endless") {
+        const newLevel = Math.floor(linesRef.current / 10) + 1;
+        if (newLevel !== levelRef.current) {
+          levelRef.current = newLevel;
+          setCurrentLevel(newLevel);
+          const baseSpeed = 800;
+          const speedDecrease = 50;
+          const minSpeed = 100;
+          speedRef.current = Math.max(minSpeed, baseSpeed - (newLevel - 1) * speedDecrease);
+          setLevelUp(newLevel);
+          setTimeout(() => setLevelUp(null), 2000);
+        }
       }
     }
 
@@ -336,7 +681,35 @@ export default function BlockDrop() {
         return;
       }
 
-      if (timestamp - lastMoveTimeRef.current < speedRef.current) {
+      // Update power-ups
+      powerUpsRef.current = powerUpsRef.current.filter((powerUp) => {
+        powerUp.y += 0.1;
+
+        // Check collision with current piece
+        const piece = currentPieceRef.current;
+        const pos = currentPosRef.current;
+        if (piece) {
+          for (let y = 0; y < piece.shape.length; y++) {
+            for (let x = 0; x < piece.shape[y].length; x++) {
+              if (piece.shape[y][x]) {
+                const boardX = pos.x + x;
+                const boardY = pos.y + y;
+                const powerUpGridY = Math.floor(powerUp.y);
+                if (boardX === powerUp.x && boardY === powerUpGridY) {
+                  activatePowerUpFn(powerUp.type);
+                  return false; // Remove power-up
+                }
+              }
+            }
+          }
+        }
+
+        return powerUp.y < GRID_HEIGHT;
+      });
+
+      const currentSpeed = activePowerUpRef.current === "slowTime" ? speedRef.current * 2 : speedRef.current;
+
+      if (timestamp - lastMoveTimeRef.current < currentSpeed) {
         draw();
         gameLoopRef.current = requestAnimationFrame(gameLoop);
         return;
@@ -360,7 +733,7 @@ export default function BlockDrop() {
       draw();
       gameLoopRef.current = requestAnimationFrame(gameLoop);
     },
-    [draw, lockPiece]
+    [draw, lockPiece, activatePowerUpFn]
   );
 
   const movePiece = useCallback((dx: number) => {
@@ -378,6 +751,12 @@ export default function BlockDrop() {
     const piece = currentPieceRef.current;
     const pos = currentPosRef.current;
     if (!piece || gameStateRef.current !== "PLAYING") return;
+
+    // Check rotation limit
+    if (rotationsLeftRef.current !== null) {
+      if (rotationsLeftRef.current <= 0) return;
+      rotationsLeftRef.current--;
+    }
 
     const rotated = rotatePiece(piece.shape);
     const testPiece = { ...piece, shape: rotated };
@@ -424,19 +803,90 @@ export default function BlockDrop() {
     draw();
   }, [lockPiece, draw]);
 
-  const startGame = useCallback(() => {
-    boardRef.current = Array(GRID_HEIGHT)
-      .fill(null)
-      .map(() => Array(GRID_WIDTH).fill(null));
+  const holdPiece = useCallback(() => {
+    if (!canHoldRef.current || gameStateRef.current !== "PLAYING") return;
+
+    const currentType = currentPieceRef.current?.type;
+    if (!currentType) return;
+
+    if (holdPieceRef.current === null) {
+      holdPieceRef.current = currentType;
+      spawnPiece();
+    } else {
+      const temp = holdPieceRef.current;
+      holdPieceRef.current = currentType;
+      currentPieceRef.current = createPiece(temp);
+      const startX = Math.floor((GRID_WIDTH - currentPieceRef.current.shape[0].length) / 2);
+      currentPosRef.current = { x: startX, y: 0 };
+    }
+
+    canHoldRef.current = false;
+    draw();
+  }, [spawnPiece, draw]);
+
+  const startCampaignLevel = useCallback((level: number) => {
+    levelRef.current = level;
+    setCurrentLevel(level);
+    gameModeRef.current = "campaign";
+    setGameMode("campaign");
+
+    initLevel(level);
+
     nextPieceRef.current = null;
-    speedRef.current = INITIAL_SPEED;
+    holdPieceRef.current = null;
+    powerUpsRef.current = [];
+    activePowerUpRef.current = null;
+    setActivePowerUp(null);
+    if (powerUpTimerRef.current) clearTimeout(powerUpTimerRef.current);
+
     lastMoveTimeRef.current = 0;
     scoreRef.current = 0;
     linesRef.current = 0;
-    levelRef.current = 1;
+    livesRef.current = 3;
+    linesRequiredRef.current = 10;
+
     setScore(0);
     setLines(0);
-    setLevel(1);
+    setLives(3);
+
+    gameStateRef.current = "PLAYING";
+    setDisplayState("PLAYING");
+    spawnPiece();
+    draw();
+    gameLoopRef.current = requestAnimationFrame(gameLoop);
+  }, [initLevel, spawnPiece, draw, gameLoop]);
+
+  const startEndlessMode = useCallback(() => {
+    gameModeRef.current = "endless";
+    setGameMode("endless");
+    levelRef.current = 1;
+    setCurrentLevel(1);
+
+    boardRef.current = Array(GRID_HEIGHT)
+      .fill(null)
+      .map(() => Array(GRID_WIDTH).fill(null));
+    invisibleTimestampsRef.current = Array(GRID_HEIGHT)
+      .fill(null)
+      .map(() => Array(GRID_WIDTH).fill(0));
+
+    nextPieceRef.current = null;
+    holdPieceRef.current = null;
+    powerUpsRef.current = [];
+    activePowerUpRef.current = null;
+    setActivePowerUp(null);
+    if (powerUpTimerRef.current) clearTimeout(powerUpTimerRef.current);
+
+    speedRef.current = 800;
+    lastMoveTimeRef.current = 0;
+    scoreRef.current = 0;
+    linesRef.current = 0;
+    livesRef.current = 3;
+    rotationsLeftRef.current = null;
+
+    setScore(0);
+    setLines(0);
+    setLives(3);
+
     gameStateRef.current = "PLAYING";
     setDisplayState("PLAYING");
     spawnPiece();
@@ -455,6 +905,11 @@ export default function BlockDrop() {
       gameLoopRef.current = requestAnimationFrame(gameLoop);
     }
   }, [gameLoop]);
+
+  const showLevelSelect = useCallback(() => {
+    gameStateRef.current = "LEVEL_SELECT";
+    setDisplayState("LEVEL_SELECT");
+  }, []);
 
   // Touch gestures
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
@@ -518,6 +973,14 @@ export default function BlockDrop() {
         return;
       }
 
+      if (e.key === "c" || e.key === "C") {
+        e.preventDefault();
+        if (gameStateRef.current === "PLAYING") {
+          holdPiece();
+        }
+        return;
+      }
+
       if (e.key === "p" || e.key === "P" || e.key === "Escape") {
         e.preventDefault();
         if (gameStateRef.current === "PLAYING" || gameStateRef.current === "PAUSED") {
@@ -545,7 +1008,7 @@ export default function BlockDrop() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [movePiece, rotatePieceFn, softDrop, hardDrop, togglePause]);
+  }, [movePiece, rotatePieceFn, softDrop, hardDrop, holdPiece, togglePause]);
 
   useEffect(() => {
     draw();
@@ -594,10 +1057,46 @@ export default function BlockDrop() {
     }
   };
 
+  const drawHoldPiece = () => {
+    const holdCanvas = document.getElementById("holdCanvas") as HTMLCanvasElement;
+    if (!holdCanvas) return;
+    const ctx = holdCanvas.getContext("2d");
+    if (!ctx) return;
+
+    const cellSize = 20;
+    ctx.fillStyle = "#0f172a";
+    ctx.fillRect(0, 0, holdCanvas.width, holdCanvas.height);
+
+    if (holdPieceRef.current) {
+      const hold = createPiece(holdPieceRef.current);
+      ctx.fillStyle = canHoldRef.current ? hold.color : "#334155";
+      const offsetX = (4 - hold.shape[0].length) * cellSize / 2;
+      const offsetY = (4 - hold.shape.length) * cellSize / 2;
+
+      for (let y = 0; y < hold.shape.length; y++) {
+        for (let x = 0; x < hold.shape[y].length; x++) {
+          if (hold.shape[y][x]) {
+            ctx.fillRect(offsetX + x * cellSize + 1, offsetY + y * cellSize + 1, cellSize - 2, cellSize - 2);
+            if (canHoldRef.current) {
+              ctx.fillStyle = "rgba(255,255,255,0.3)";
+              ctx.fillRect(offsetX + x * cellSize + 2, offsetY + y * cellSize + 2, cellSize / 3, cellSize / 3);
+              ctx.fillStyle = hold.color;
+            }
+          }
+        }
+      }
+    }
+  };
+
   useEffect(() => {
-    const interval = setInterval(drawNextPiece, 100);
+    const interval = setInterval(() => {
+      drawNextPiece();
+      drawHoldPiece();
+    }, 100);
     return () => clearInterval(interval);
   }, []);
+
+  const config = gameMode === "campaign" && currentLevel <= 10 ? LEVEL_CONFIGS[currentLevel - 1] : null;
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -618,8 +1117,12 @@ export default function BlockDrop() {
           <div className="text-2xl font-black text-cyan-400 tabular-nums">{lines}</div>
         </div>
         <div>
+          <div className="text-xs text-gray-500 uppercase tracking-wider">Lives</div>
+          <div className="text-2xl font-black text-red-400 tabular-nums">{"❤️".repeat(lives)}</div>
+        </div>
+        <div>
           <div className="text-xs text-gray-500 uppercase tracking-wider">Level</div>
-          <div className="text-2xl font-black text-green-400 tabular-nums">{level}</div>
+          <div className="text-2xl font-black text-green-400 tabular-nums">{currentLevel}</div>
         </div>
         <div>
           <div className="text-xs text-gray-500 uppercase tracking-wider">Best</div>
@@ -627,8 +1130,21 @@ export default function BlockDrop() {
         </div>
       </div>
 
+      {/* Active Power-up Indicator */}
+      {activePowerUp && (
+        <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-2 rounded-lg font-bold text-sm animate-pulse">
+          Power-up: {activePowerUp === "slowTime" ? "Slow Time" : activePowerUp === "clearBottom" ? "Clear Bottom" : activePowerUp === "holdSwap" ? "Hold Swap" : "Bomb"}
+        </div>
+      )}
+
       {/* Game Area */}
       <div className="flex flex-col md:flex-row gap-4 items-start">
+        {/* Hold Piece */}
+        <div className="bg-gray-900 rounded-xl p-4 border border-gray-800">
+          <div className="text-xs text-gray-500 uppercase tracking-wider mb-2 text-center">Hold (C)</div>
+          <canvas id="holdCanvas" width={80} height={80} className="rounded-lg" />
+        </div>
+
         {/* Main Canvas */}
         <div className="relative" style={{ maxWidth: "min(300px, 90vw)" }}>
           <canvas
@@ -645,13 +1161,53 @@ export default function BlockDrop() {
               <div className="text-6xl mb-3">🎮</div>
               <h2 className="text-3xl font-black text-purple-400 mb-2">Block Drop</h2>
               <p className="text-gray-400 mb-6 text-sm text-center px-4">
-                Swipe to move, swipe up to rotate, tap to drop
+                Campaign with 10 levels or endless mode
               </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={showLevelSelect}
+                  className="px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-2xl transition-all hover:scale-105 active:scale-95"
+                >
+                  Campaign
+                </button>
+                <button
+                  onClick={startEndlessMode}
+                  className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all hover:scale-105 active:scale-95"
+                >
+                  Endless
+                </button>
+              </div>
+            </div>
+          )}
+
+          {displayState === "LEVEL_SELECT" && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/95 rounded-xl backdrop-blur-sm overflow-y-auto p-4">
+              <h2 className="text-2xl font-black text-purple-400 mb-4">Select Level</h2>
+              <div className="grid grid-cols-2 gap-2 max-h-96 overflow-y-auto">
+                {LEVEL_CONFIGS.map((cfg) => (
+                  <button
+                    key={cfg.level}
+                    onClick={() => startCampaignLevel(cfg.level)}
+                    disabled={cfg.level > campaignProgress}
+                    className={`p-3 rounded-lg font-bold text-sm transition-all ${
+                      cfg.level <= campaignProgress
+                        ? "bg-purple-600 hover:bg-purple-500 text-white hover:scale-105"
+                        : "bg-gray-700 text-gray-500 cursor-not-allowed"
+                    }`}
+                  >
+                    <div className="text-lg">{cfg.level}</div>
+                    <div className="text-xs">{cfg.name}</div>
+                  </button>
+                ))}
+              </div>
               <button
-                onClick={startGame}
-                className="px-10 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-2xl transition-all hover:scale-105 active:scale-95"
+                onClick={() => {
+                  gameStateRef.current = "START";
+                  setDisplayState("START");
+                }}
+                className="mt-4 px-6 py-2 bg-gray-600 hover:bg-gray-500 text-white font-bold rounded-lg transition-all"
               >
-                Play
+                Back
               </button>
             </div>
           )}
@@ -679,6 +1235,41 @@ export default function BlockDrop() {
             </div>
           )}
 
+          {displayState === "LEVEL_COMPLETE" && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/90 rounded-xl backdrop-blur-sm">
+              <h2 className="text-3xl font-black text-green-400 mb-4">Level Complete!</h2>
+              <div className="bg-slate-900/80 rounded-xl px-6 py-3 mb-6">
+                <p className="text-white text-lg font-bold">Score: {score}</p>
+                <p className="text-cyan-400 text-sm">Lines: {lines}</p>
+              </div>
+              <div className="flex gap-3">
+                {currentLevel < 10 && (
+                  <button
+                    onClick={() => startCampaignLevel(currentLevel + 1)}
+                    className="px-6 py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+                  >
+                    Next Level
+                  </button>
+                )}
+                <button
+                  onClick={showLevelSelect}
+                  className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+                >
+                  Level Select
+                </button>
+                <button
+                  onClick={() => {
+                    gameStateRef.current = "START";
+                    setDisplayState("START");
+                  }}
+                  className="px-6 py-3 bg-gray-600 hover:bg-gray-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+                >
+                  Menu
+                </button>
+              </div>
+            </div>
+          )}
+
           {displayState === "GAME_OVER" && (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/90 rounded-xl backdrop-blur-sm">
               <h2 className="text-3xl font-black text-red-400 mb-4">Game Over</h2>
@@ -689,16 +1280,32 @@ export default function BlockDrop() {
                   <p className="text-yellow-400 text-sm font-bold mt-1">New Best!</p>
                 )}
               </div>
-              <div className="flex gap-3">
+              <div className="flex gap-3 flex-wrap justify-center">
+                {gameMode === "campaign" && (
+                  <button
+                    onClick={() => startCampaignLevel(currentLevel)}
+                    className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+                  >
+                    Retry Level
+                  </button>
+                )}
+                {gameMode === "endless" && (
+                  <button
+                    onClick={startEndlessMode}
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+                  >
+                    Play Again
+                  </button>
+                )}
                 <button
-                  onClick={startGame}
+                  onClick={showLevelSelect}
                   className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
                 >
-                  Play Again
+                  Levels
                 </button>
                 <button
                   onClick={handleShare}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+                  className="px-6 py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
                 >
                   Share
                 </button>
@@ -714,13 +1321,23 @@ export default function BlockDrop() {
             <div className="text-xs text-gray-500 uppercase tracking-wider mb-2 text-center">Next</div>
             <canvas id="nextCanvas" width={80} height={80} className="rounded-lg" />
           </div>
+
+          {config && (
+            <div className="bg-gray-900 rounded-xl p-4 border border-gray-800 max-w-[200px]">
+              <div className="text-xs text-yellow-400 uppercase tracking-wider mb-1 font-bold">{config.name}</div>
+              <div className="text-xs text-gray-400">{config.description}</div>
+              {config.limitedRotations !== null && (
+                <div className="text-xs text-orange-400 mt-2">Rotations: {rotationsLeftRef.current ?? config.limitedRotations}</div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
       <div className="text-center text-xs text-gray-600">
         {displayState === "PLAYING" && (
           <>
-            <p className="hidden md:block">Arrow keys to move, Space to drop, P to pause</p>
+            <p className="hidden md:block">Arrows to move, Space to drop, C to hold, P to pause</p>
             <p className="md:hidden">Swipe to move, swipe up to rotate, tap to drop</p>
           </>
         )}
