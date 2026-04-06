@@ -757,14 +757,25 @@ export default function FlappyBird() {
 
     const endGame = () => {
       gameStateRef.current = 'gameover';
-      setGameState('gameover');
       if (scoreRef.current > bestScore) {
         setBestScore(scoreRef.current);
         localStorage.setItem('pb-flappy', scoreRef.current.toString());
       }
       if (animationIdRef.current !== null) {
         cancelAnimationFrame(animationIdRef.current);
+        animationIdRef.current = null;
       }
+
+      // Draw final frame with game-over screen
+      const levelConfig = gameModeRef.current === 'campaign'
+        ? LEVEL_CONFIGS[currentLevelRef.current]
+        : gameModeRef.current === 'endless'
+        ? getEndlessDifficulty()
+        : getFreeDifficulty();
+      draw(ctx, levelConfig);
+
+      // Update state to show game-over UI
+      setGameState('gameover');
     };
 
     if (gameStateRef.current === 'playing') {
@@ -999,7 +1010,7 @@ export default function FlappyBird() {
         )}
 
         {gameState === 'gameover' && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 rounded-lg">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 rounded-lg" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-4xl font-bold text-white mb-6">Game Over!</h2>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-6">
               <p className="text-sm text-gray-300 mb-2">
