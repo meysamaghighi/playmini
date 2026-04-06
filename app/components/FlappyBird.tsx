@@ -25,7 +25,7 @@ interface ActivePowerUp {
   endTime: number;
 }
 
-type BirdType = 'classic' | 'blueJay' | 'cardinal' | 'parrot' | 'penguin' | 'phoenix';
+type BirdType = 'classic' | 'blueJay' | 'cardinal' | 'parrot' | 'penguin' | 'phoenix' | 'rooster' | 'chicken';
 type GameMode = 'campaign' | 'endless' | 'freeplay';
 type FreeDifficulty = 'easy' | 'medium' | 'hard';
 
@@ -126,6 +126,26 @@ const BIRDS: Record<BirdType, BirdTheme> = {
     wingOutline: '#CC2200',
     beak: '#FFE066',
     beakLine: '#DDBB33',
+  },
+  rooster: {
+    label: 'Rooster',
+    body: '#C85A28',
+    belly: '#E8A060',
+    outline: '#8A3A18',
+    wing: '#2A8A40',
+    wingOutline: '#1A6030',
+    beak: '#F5C542',
+    beakLine: '#D4A830',
+  },
+  chicken: {
+    label: 'Chicken',
+    body: '#F5F5DC',
+    belly: '#FFFFFF',
+    outline: '#D4D4B8',
+    wing: '#E8E8D0',
+    wingOutline: '#C8C8B0',
+    beak: '#F5C542',
+    beakLine: '#D4A830',
   },
 };
 
@@ -311,6 +331,34 @@ export default function FlappyBird() {
         ctx.moveTo(0, -BIRD_SIZE / 2);
         ctx.lineTo(-3, -BIRD_SIZE / 2 - 10);
         ctx.lineTo(5, -BIRD_SIZE / 2 - 2);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // Rooster special: red comb
+      if (birdTypeRef.current === 'rooster') {
+        ctx.fillStyle = '#DC143C';
+        ctx.beginPath();
+        ctx.moveTo(-2, -BIRD_SIZE / 2);
+        ctx.lineTo(-4, -BIRD_SIZE / 2 - 8);
+        ctx.lineTo(0, -BIRD_SIZE / 2 - 6);
+        ctx.lineTo(2, -BIRD_SIZE / 2 - 10);
+        ctx.lineTo(4, -BIRD_SIZE / 2 - 7);
+        ctx.lineTo(6, -BIRD_SIZE / 2 - 3);
+        ctx.lineTo(3, -BIRD_SIZE / 2);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // Chicken special: red comb (smaller than rooster)
+      if (birdTypeRef.current === 'chicken') {
+        ctx.fillStyle = '#DC143C';
+        ctx.beginPath();
+        ctx.moveTo(-1, -BIRD_SIZE / 2);
+        ctx.lineTo(-2, -BIRD_SIZE / 2 - 5);
+        ctx.lineTo(1, -BIRD_SIZE / 2 - 6);
+        ctx.lineTo(3, -BIRD_SIZE / 2 - 5);
+        ctx.lineTo(2, -BIRD_SIZE / 2);
         ctx.closePath();
         ctx.fill();
       }
@@ -883,6 +931,10 @@ export default function FlappyBird() {
         <ellipse cx={r + 1} cy={r + 4} rx={r * 0.5} ry={r * 0.35} fill={t.belly} />
         {/* Cardinal crest */}
         {type === 'cardinal' && <polygon points={`${r + 2},2 ${r - 1},-4 ${r + 5},1`} fill={t.body} />}
+        {/* Rooster comb */}
+        {type === 'rooster' && <polygon points={`${r},1 ${r - 2},-3 ${r + 1},-2 ${r + 3},-4 ${r + 5},-2 ${r + 4},1`} fill="#DC143C" />}
+        {/* Chicken comb */}
+        {type === 'chicken' && <polygon points={`${r + 1},1 ${r},-1 ${r + 2},-2 ${r + 4},-1 ${r + 3},1`} fill="#DC143C" />}
         {/* Penguin face */}
         {type === 'penguin' && <ellipse cx={r + 5} cy={r} rx={r * 0.35} ry={r * 0.5} fill="#E8E8E8" />}
         {/* Phoenix tail */}
