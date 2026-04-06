@@ -38,7 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/sliding-puzzle`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/solitaire`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/word-builder`, lastModified: now, priority: 0.9 },
-    { url: `${BASE}/random-game`, lastModified: now, priority: 0.8 },
+    { url: "https://random.playmini.fun", lastModified: now, priority: 0.8 },
     { url: `${BASE}/about`, lastModified: now, priority: 0.3 },
   ];
 }
