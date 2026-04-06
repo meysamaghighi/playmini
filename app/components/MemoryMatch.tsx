@@ -34,9 +34,9 @@ interface LevelConfig {
 }
 
 const LEVELS: LevelConfig[] = [
-  { level: 1, name: "Tiny Grid", rows: 2, cols: 3, pairs: 3, description: "Tutorial level" },
-  { level: 2, name: "Small Grid", rows: 2, cols: 4, pairs: 4, description: "Warmup" },
-  { level: 3, name: "Classic Easy", rows: 3, cols: 4, pairs: 6, description: "Standard board" },
+  { level: 1, name: "Tiny Grid", rows: 2, cols: 3, pairs: 3, flashStart: true, description: "Tutorial level" },
+  { level: 2, name: "Small Grid", rows: 2, cols: 4, pairs: 4, flashStart: true, description: "Warmup" },
+  { level: 3, name: "Classic Easy", rows: 3, cols: 4, pairs: 6, flashStart: true, description: "Standard board" },
   { level: 4, name: "Standard", rows: 4, cols: 4, pairs: 8, description: "Getting harder" },
   { level: 5, name: "Wide Board", rows: 4, cols: 5, pairs: 10, description: "More cards" },
   { level: 6, name: "Big Board", rows: 4, cols: 6, pairs: 12, description: "Large grid" },
@@ -259,10 +259,12 @@ export default function MemoryMatch() {
     // Flash cards at start if configured
     if (config.flashStart) {
       setCards(newCards.map(c => ({ ...c, isFlipped: true })));
+      // Longer preview for early levels: 4s for levels 1-2, 3s for level 3, 2s for others
+      const previewTime = level <= 2 ? 4000 : level === 3 ? 3000 : 2000;
       setTimeout(() => {
         setCards(newCards.map(c => ({ ...c, isFlipped: false })));
         setFlashedAtStart(true);
-      }, 2000);
+      }, previewTime);
     }
   }, []);
 
@@ -373,11 +375,12 @@ export default function MemoryMatch() {
           setIsChecking(false);
           setHintPair(null);
 
-          // Update wrong streak
+          // Update wrong streak (more forgiving on early levels)
           setConsecutiveWrong((w) => {
             const newWrong = w + 1;
-            if (newWrong >= 3) {
-              loseLife("3 consecutive wrong matches!");
+            const wrongLimit = currentLevel <= 2 ? 5 : currentLevel === 3 ? 4 : 3; // 5 for levels 1-2, 4 for level 3, 3 for rest
+            if (newWrong >= wrongLimit) {
+              loseLife(`${wrongLimit} consecutive wrong matches!`);
               return 0;
             }
             return newWrong;
@@ -397,8 +400,11 @@ export default function MemoryMatch() {
     const config = LEVELS[currentLevel - 1];
     const minMoves = config.pairs; // Perfect = exactly pairs in moves
     let stars = 1;
-    if (moves + 1 <= minMoves + 2) stars = 3;
-    else if (moves + 1 <= minMoves + 6) stars = 2;
+    // More forgiving star requirements for early levels
+    const threeStarBuffer = currentLevel <= 3 ? 4 : 2; // levels 1-3 get +4 moves buffer
+    const twoStarBuffer = currentLevel <= 3 ? 8 : 6;   // levels 1-3 get +8 moves buffer
+    if (moves + 1 <= minMoves + threeStarBuffer) stars = 3;
+    else if (moves + 1 <= minMoves + twoStarBuffer) stars = 2;
 
     // Bonus points for stars
     const starBonus = stars * 500;
@@ -554,8 +560,10 @@ export default function MemoryMatch() {
   const getStarRating = () => {
     const config = LEVELS[currentLevel - 1];
     const minMoves = config.pairs;
-    if (moves <= minMoves + 2) return 3;
-    if (moves <= minMoves + 6) return 2;
+    const threeStarBuffer = currentLevel <= 3 ? 4 : 2;
+    const twoStarBuffer = currentLevel <= 3 ? 8 : 6;
+    if (moves <= minMoves + threeStarBuffer) return 3;
+    if (moves <= minMoves + twoStarBuffer) return 2;
     return 1;
   };
 
@@ -799,7 +807,7 @@ export default function MemoryMatch() {
             <p>{config.description}</p>
             {consecutiveWrong > 0 && (
               <p className="text-red-400 mt-2 font-bold">
-                Wrong matches: {consecutiveWrong}/3 (Lose a life at 3!)
+                Wrong matches: {consecutiveWrong}/{currentLevel <= 2 ? 5 : currentLevel === 3 ? 4 : 3} (Lose a life at limit!)
               </p>
             )}
           </div>

@@ -135,6 +135,9 @@ export default function WordleGame() {
   const [endlessWordsCleared, setEndlessWordsCleared] = useState(0);
   const [endlessLives, setEndlessLives] = useState(3);
 
+  // Word completion message
+  const [wordCompleteMessage, setWordCompleteMessage] = useState<string | null>(null);
+
   useEffect(() => {
     const savedCampaign = localStorage.getItem("pb-wordle-campaign");
     if (savedCampaign) {
@@ -213,6 +216,7 @@ export default function WordleGame() {
     setFlipRow(null);
     setRevealedLetters([]);
     setMustInclude(new Set());
+    setWordCompleteMessage(null);
 
     if (level.timeLimit) {
       setTimeLeft(level.timeLimit);
@@ -249,6 +253,7 @@ export default function WordleGame() {
     setEliminateUsed(false);
     setExtraGuessUsed(false);
     setExtraGuesses(0);
+    setWordCompleteMessage(null);
   };
 
   const startClassicMode = () => {
@@ -268,6 +273,7 @@ export default function WordleGame() {
     setMustInclude(new Set());
     setTimeLeft(null);
     setTimerActive(false);
+    setWordCompleteMessage(null);
   };
 
   const saveCampaignProgress = (newProgress: CampaignProgress) => {
@@ -285,6 +291,7 @@ export default function WordleGame() {
 
     const nextIndex = currentWordIndex + 1;
     if (nextIndex < targetWords.length) {
+      setWordCompleteMessage(null);
       setCurrentWordIndex(nextIndex);
       setGuesses([]);
       setCurrentGuess("");
@@ -294,6 +301,7 @@ export default function WordleGame() {
       setFlipRow(null);
     } else {
       // Level complete
+      setWordCompleteMessage(null);
       completeLevel(true);
     }
   };
@@ -458,7 +466,16 @@ export default function WordleGame() {
           setFlipRow(null);
         }, 1500);
       } else {
-        setTimeout(() => moveToNextWord(), 1500);
+        // Campaign mode with potential multi-word levels
+        const isMultiWord = currentLevel && currentLevel.wordCount && currentLevel.wordCount > 1;
+        if (isMultiWord && currentWordIndex + 1 < targetWords.length) {
+          // Show "Word X Complete!" message before advancing
+          setWordCompleteMessage(`Word ${currentWordIndex + 1}/${targetWords.length} Complete!`);
+          setTimeout(() => moveToNextWord(), 2500);
+        } else {
+          // Last word or single-word level, proceed normally
+          setTimeout(() => moveToNextWord(), 1500);
+        }
       }
     } else if (newGuesses.length >= maxGuesses) {
       // Failed to guess
@@ -479,7 +496,14 @@ export default function WordleGame() {
         if (newLives <= 0) {
           completeLevel(false);
         } else {
-          setTimeout(() => moveToNextWord(), 1500);
+          // Show the answer before moving to next word
+          const isMultiWord = currentLevel && currentLevel.wordCount && currentLevel.wordCount > 1;
+          if (isMultiWord && currentWordIndex + 1 < targetWords.length) {
+            setWordCompleteMessage(`Word was: ${targetWord}. Moving to word ${currentWordIndex + 2}/${targetWords.length}`);
+          } else {
+            setWordCompleteMessage(`Word was: ${targetWord}`);
+          }
+          setTimeout(() => moveToNextWord(), 2500);
         }
       } else if (mode === "endless") {
         setStreak(0);
@@ -874,6 +898,15 @@ export default function WordleGame() {
           )}
         </div>
       </div>
+
+      {/* Word Complete Message */}
+      {wordCompleteMessage && (
+        <div className="mb-4 p-4 bg-blue-600 rounded-lg text-center">
+          <div className="text-white font-bold text-lg">
+            {wordCompleteMessage}
+          </div>
+        </div>
+      )}
 
       {/* Game Grid */}
       <div className="flex flex-col items-center gap-2 mb-4">

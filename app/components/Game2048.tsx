@@ -393,6 +393,7 @@ export default function Game2048() {
   );
   const [scorePopup, setScorePopup] = useState<{ value: number; key: number } | null>(null);
   const [levelUpText, setLevelUpText] = useState<string | null>(null);
+  const [powerUpFeedback, setPowerUpFeedback] = useState<{ type: PowerUpType; action: "used" | "earned" } | null>(null);
 
   // Refs
   const prevBoardRef = useRef<GameBoard>(emptyGameBoard());
@@ -472,6 +473,12 @@ export default function Game2048() {
         remove: Math.min(3, prev.remove + 1),
         shuffle: Math.min(3, prev.shuffle + 1),
       }));
+
+      // Show power-up earned notification
+      setTimeout(() => {
+        setPowerUpFeedback({ type: "undo", action: "earned" });
+        setTimeout(() => setPowerUpFeedback(null), 2000);
+      }, 1600);
     }
 
     // Show level-up animation
@@ -634,6 +641,10 @@ export default function Game2048() {
 
   const usePowerUp = (type: PowerUpType) => {
     if (powerUps[type] <= 0 || gameOver) return;
+
+    // Show feedback immediately
+    setPowerUpFeedback({ type, action: "used" });
+    setTimeout(() => setPowerUpFeedback(null), 1000);
 
     if (type === "undo") {
       if (history.length === 0) return;
@@ -966,45 +977,76 @@ export default function Game2048() {
         </div>
       </div>
 
+      {/* Power-up feedback popup */}
+      {powerUpFeedback && (
+        <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
+          <div
+            className={`${
+              powerUpFeedback.action === "earned" ? "bg-green-500" : "bg-amber-500"
+            } text-white font-black text-xl px-6 py-3 rounded-xl shadow-2xl`}
+            style={{ animation: "fadeInOut 1000ms ease-out" }}
+          >
+            {powerUpFeedback.action === "earned"
+              ? "+1 Power-up (All Types)"
+              : `${powerUpFeedback.type.charAt(0).toUpperCase() + powerUpFeedback.type.slice(1)} Used!`}
+          </div>
+        </div>
+      )}
+
       {/* Power-ups (3 buttons) */}
       <div className="flex gap-2 mb-3">
         <button
           onClick={() => usePowerUp("undo")}
           disabled={powerUps.undo <= 0 || gameOver}
-          className={`flex-1 py-2 px-3 rounded-xl font-bold text-sm transition-all ${
+          className={`flex-1 py-2.5 px-3 rounded-xl font-bold text-sm transition-all border-2 ${
             powerUps.undo > 0 && !gameOver
-              ? "bg-blue-600 hover:bg-blue-500 text-white hover:scale-105 active:scale-95"
-              : "bg-slate-700 text-gray-500 cursor-not-allowed"
+              ? "bg-blue-600 hover:bg-blue-500 text-white hover:scale-105 active:scale-95 border-blue-400"
+              : "bg-slate-700/50 text-gray-400 cursor-not-allowed border-slate-600"
           }`}
         >
-          <div>Undo</div>
-          <div className="text-xs opacity-70">{powerUps.undo}/3</div>
+          <div className="flex items-center justify-center gap-1">
+            <span>↶</span>
+            <span>Undo</span>
+          </div>
+          <div className={`text-xs font-bold mt-0.5 ${powerUps.undo > 0 ? "opacity-90" : "opacity-60"}`}>
+            {powerUps.undo}/3
+          </div>
         </button>
         <button
           onClick={() => usePowerUp("remove")}
           disabled={powerUps.remove <= 0 || gameOver}
-          className={`flex-1 py-2 px-3 rounded-xl font-bold text-sm transition-all ${
+          className={`flex-1 py-2.5 px-3 rounded-xl font-bold text-sm transition-all border-2 ${
             powerUps.remove > 0 && !gameOver
               ? removingTile
-                ? "bg-red-700 text-white ring-2 ring-red-500"
-                : "bg-red-600 hover:bg-red-500 text-white hover:scale-105 active:scale-95"
-              : "bg-slate-700 text-gray-500 cursor-not-allowed"
+                ? "bg-red-700 text-white border-red-500 ring-2 ring-red-400"
+                : "bg-red-600 hover:bg-red-500 text-white hover:scale-105 active:scale-95 border-red-400"
+              : "bg-slate-700/50 text-gray-400 cursor-not-allowed border-slate-600"
           }`}
         >
-          <div>Remove</div>
-          <div className="text-xs opacity-70">{powerUps.remove}/3</div>
+          <div className="flex items-center justify-center gap-1">
+            <span>✖</span>
+            <span>Remove</span>
+          </div>
+          <div className={`text-xs font-bold mt-0.5 ${powerUps.remove > 0 ? "opacity-90" : "opacity-60"}`}>
+            {powerUps.remove}/3
+          </div>
         </button>
         <button
           onClick={() => usePowerUp("shuffle")}
           disabled={powerUps.shuffle <= 0 || gameOver}
-          className={`flex-1 py-2 px-3 rounded-xl font-bold text-sm transition-all ${
+          className={`flex-1 py-2.5 px-3 rounded-xl font-bold text-sm transition-all border-2 ${
             powerUps.shuffle > 0 && !gameOver
-              ? "bg-purple-600 hover:bg-purple-500 text-white hover:scale-105 active:scale-95"
-              : "bg-slate-700 text-gray-500 cursor-not-allowed"
+              ? "bg-purple-600 hover:bg-purple-500 text-white hover:scale-105 active:scale-95 border-purple-400"
+              : "bg-slate-700/50 text-gray-400 cursor-not-allowed border-slate-600"
           }`}
         >
-          <div>Shuffle</div>
-          <div className="text-xs opacity-70">{powerUps.shuffle}/3</div>
+          <div className="flex items-center justify-center gap-1">
+            <span>⟲</span>
+            <span>Shuffle</span>
+          </div>
+          <div className={`text-xs font-bold mt-0.5 ${powerUps.shuffle > 0 ? "opacity-90" : "opacity-60"}`}>
+            {powerUps.shuffle}/3
+          </div>
         </button>
       </div>
 
