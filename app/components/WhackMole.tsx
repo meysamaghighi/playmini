@@ -198,6 +198,16 @@ export default function WhackMole() {
       return;
     }
 
+    // Clean up all active moles and timers before transitioning
+    gameActiveRef.current = false;
+    if (spawnTimerRef.current) {
+      clearTimeout(spawnTimerRef.current);
+      spawnTimerRef.current = null;
+    }
+    hideTimersRef.current.forEach((t) => clearTimeout(t));
+    hideTimersRef.current.clear();
+    setMoleHoles(Array.from({ length: 9 }, () => ({ visible: false, type: 'normal', hit: false })));
+
     // Level up!
     setGameState('levelUp');
     setLevelUpMessage(`Level ${currentLevel} Complete!`);
@@ -212,8 +222,9 @@ export default function WhackMole() {
       }));
     }
 
+    const nextLevel = currentLevel + 1;
     setTimeout(() => {
-      setCurrentLevel((prev) => prev + 1);
+      setCurrentLevel(nextLevel);
       setGameState('countdown');
       setCountdown(3);
 
@@ -227,15 +238,13 @@ export default function WhackMole() {
         }
       }, 1000);
     }, 2000);
-  }, [currentLevel, isEndless]);
+  }, [currentLevel, isEndless, getLevelConfig, endGame]);
 
   const checkLevelComplete = useCallback(() => {
-    if (isEndless) return;
-    const cfg = getLevelConfig();
-    if (scoreRef.current >= cfg.target) {
-      advanceLevel();
-    }
-  }, [isEndless, getLevelConfig, advanceLevel]);
+    // Level completion is now only checked when time runs out, not on every hit
+    // This ensures players experience the full level duration
+    return;
+  }, []);
 
   const updateCombo = useCallback((hit: boolean) => {
     if (hit) {
@@ -258,12 +267,21 @@ export default function WhackMole() {
       }
       return newLives;
     });
-    // Flash screen
+    // Flash screen for life lost (from escapes)
     const flashDiv = document.createElement('div');
-    flashDiv.style.cssText = 'position:fixed;inset:0;background:red;opacity:0.3;pointer-events:none;z-index:9999;';
+    flashDiv.style.cssText = 'position:fixed;inset:0;background:red;opacity:0.4;pointer-events:none;z-index:9999;';
+    document.body.appendChild(flashDiv);
+    setTimeout(() => flashDiv.remove(), 300);
+  }, [endGame]);
+
+  const flashBombHit = useCallback((holeElement: HTMLElement) => {
+    // Flash specific hole when bomb is hit
+    const flashDiv = document.createElement('div');
+    const rect = holeElement.getBoundingClientRect();
+    flashDiv.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;height:${rect.height}px;background:red;opacity:0.6;pointer-events:none;z-index:9999;border-radius:50%;`;
     document.body.appendChild(flashDiv);
     setTimeout(() => flashDiv.remove(), 200);
-  }, [endGame]);
+  }, []);
 
   const spawnMole = useCallback(() => {
     if (!gameActiveRef.current) return;
@@ -373,14 +391,15 @@ export default function WhackMole() {
         if (isEndless) {
           endGame(false);
         } else {
-          checkLevelComplete();
+          // Time's up - check if level target was met
+          advanceLevel();
         }
       }
     }, 100);
 
     // Start spawning moles
     spawnMole();
-  }, [getLevelConfig, isEndless, endGame, checkLevelComplete, spawnMole]);
+  }, [getLevelConfig, isEndless, endGame, advanceLevel, spawnMole]);
 
   const startGame = (level: number, endless: boolean = false) => {
     setIsEndless(endless);
@@ -416,7 +435,7 @@ export default function WhackMole() {
     }, 1000);
   };
 
-  const whackMole = (idx: number) => {
+  const whackMole = (idx: number, event?: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
     if (!gameActiveRef.current) return;
 
     setMoleHoles((prev) => {
@@ -428,10 +447,16 @@ export default function WhackMole() {
       let hitSuccess = true;
 
       if (mole.type === 'bomb') {
-        // Hit a bomb - lose points
+        // Hit a bomb - lose points and flash red
         points = -3;
         updateCombo(false);
         hitSuccess = false;
+
+        // Flash the hole red
+        if (event) {
+          const target = event.currentTarget;
+          flashBombHit(target);
+        }
       } else if (mole.type === 'helmet') {
         // Helmet mole needs 2 hits
         const hits = (mole.helmetHits || 0) + 1;
@@ -523,7 +548,6 @@ export default function WhackMole() {
 
       scoreRef.current += points;
       setScore(scoreRef.current);
-      checkLevelComplete();
 
       if (shouldHide) {
         const hideTimer = hideTimersRef.current.get(idx);
@@ -821,7 +845,7 @@ export default function WhackMole() {
                 return (
                   <button
                     key={idx}
-                    onClick={() => whackMole(idx)}
+                    onClick={(e) => whackMole(idx, e)}
                     className="relative aspect-square cursor-pointer select-none active:scale-95 transition-transform"
                   >
                     {/* Hole background */}

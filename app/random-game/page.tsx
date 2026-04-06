@@ -119,7 +119,10 @@ export default function GameShufflePage() {
     // Track shuffle event
     if (typeof window !== "undefined" && window.gtag) {
       window.gtag("event", "game_shuffle", {
+        event_category: "game_interaction",
+        event_label: game.slug,
         game_name: game.slug,
+        game_display_name: game.name,
         game_category: game.category,
       });
     }
@@ -137,9 +140,12 @@ export default function GameShufflePage() {
     // Track vote event
     if (typeof window !== "undefined" && window.gtag) {
       window.gtag("event", "game_vote", {
+        event_category: "game_interaction",
+        event_label: `${currentGame.slug}_${vote}`,
         game_name: currentGame.slug,
-        vote: vote,
+        game_display_name: currentGame.name,
         game_category: currentGame.category,
+        vote_type: vote,
       });
     }
 
