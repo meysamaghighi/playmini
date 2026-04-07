@@ -7,16 +7,18 @@ export const metadata: Metadata = {
   description:
     "Play 2048 game online free! Slide and merge numbered tiles to reach 2048. Addictive puzzle game, no download, works on mobile and desktop. Beat your high score!",
   keywords: [
-    "2048 game online",
     "play 2048 online free",
-    "2048 game",
+    "2048 game online",
     "2048 puzzle game",
-    "2048 online",
-    "free 2048 game",
-    "2048 unblocked",
-    "number puzzle online",
-    "merge game 2048",
+    "2048 game free",
     "2048 browser game",
+    "how to win 2048",
+    "2048 strategy",
+    "2048 online no download",
+    "2048 unblocked",
+    "merge puzzle game",
+    "sliding tile puzzle",
+    "number puzzle game",
   ],
   alternates: {
     canonical: "/2048",
@@ -42,10 +44,34 @@ export default function Page2048() {
             mainEntity: [
               {
                 "@type": "Question",
-                name: "How do you play 2048?",
+                name: "How do you play 2048 online?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Use arrow keys (or swipe on mobile) to move tiles. When two tiles with the same number touch, they merge into one with double the value. The goal is to create a tile with the number 2048. After each move, a new tile (2 or 4) appears randomly on the board.",
+                  text: "Use arrow keys on desktop or swipe on mobile to slide tiles across a 4x4 grid. When two tiles with the same number touch, they merge into one with double the value. The goal is to create a tile with the number 2048. After each move, a new tile (2 or 4) appears randomly on the board.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Is 2048 free to play?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes! 2048 is completely free to play online with no download required. Just open your browser and start playing immediately. No registration, no ads interrupting gameplay, and your high score is saved automatically in your browser.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Can I play 2048 on my phone?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Absolutely! 2048 works perfectly on mobile devices. Use swipe gestures to move tiles in any direction - up, down, left, or right. The game is fully responsive and optimized for touchscreens on both phones and tablets.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "What is the best strategy to win 2048?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Keep your highest-value tile in one corner (usually bottom-left or bottom-right) and build tiles in descending order around it. Avoid random moves and plan several moves ahead. Focus on merging smaller tiles first and try to keep one row or column filled to create more merging opportunities.",
                 },
               },
               {
@@ -53,23 +79,31 @@ export default function Page2048() {
                 name: "What happens when you reach 2048?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "When you successfully create a 2048 tile, you win! However, you can choose to continue playing to achieve a higher score and create even larger numbered tiles like 4096, 8192, and beyond.",
+                  text: "When you successfully create a 2048 tile, you win the game! However, you can choose to continue playing to achieve a higher score and create even larger tiles like 4096, 8192, 16384, and beyond.",
                 },
               },
               {
                 "@type": "Question",
-                name: "What is the strategy to win 2048?",
+                name: "How do you get a high score in 2048?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Keep your highest-value tile in one corner (usually bottom-left or bottom-right) and build tiles in descending order. Avoid random moves. Focus on merging smaller tiles first and plan several moves ahead. Try to keep one row or column filled to create more merging opportunities.",
+                  text: "To maximize your score, focus on creating larger tiles through strategic merging. Keep your highest tile in a corner and avoid filling the board randomly. Each merge adds the tile value to your score, so creating bigger tiles (512, 1024, 2048) gives massive score boosts.",
                 },
               },
               {
                 "@type": "Question",
-                name: "Can I play 2048 on mobile?",
+                name: "Can you play 2048 without downloading?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Yes! 2048 works perfectly on mobile devices. Use swipe gestures to move tiles in any direction (up, down, left, right). The game is fully responsive and optimized for touchscreens, making it easy to play on phones and tablets.",
+                  text: "Yes! 2048 runs entirely in your browser with no download or installation needed. It works on any device with a modern web browser - desktop, laptop, phone, or tablet. Just visit the page and start playing instantly.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "What are the rules of 2048?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "The rules are simple: slide tiles in four directions to merge matching numbers. When two tiles with the same number touch, they combine into one tile with their sum. A new tile (2 or 4) appears after each move. The game ends when the board is full and no moves are possible.",
                 },
               },
             ],

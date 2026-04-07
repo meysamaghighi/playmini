@@ -10,10 +10,15 @@ export const metadata: Metadata = {
     "play snake game online free",
     "snake game browser",
     "snake game online",
+    "classic snake game",
+    "browser snake game",
+    "snake game no download",
     "free snake game",
-    "classic snake online",
     "snake game unblocked",
     "retro snake game",
+    "nokia snake game",
+    "arcade snake online",
+    "mobile snake game",
   ],
   alternates: {
     canonical: "/snake",
@@ -101,26 +106,66 @@ export default function SnakePage() {
               mainEntity: [
                 {
                   "@type": "Question",
-                  name: "How do I control the snake?",
+                  name: "How do I play snake game online?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "On desktop, use the arrow keys or W/A/S/D keys to change direction. On mobile, swipe in the direction you want the snake to move. Press the spacebar to pause and resume the game.",
+                    text: "Use arrow keys (or W/A/S/D) on desktop to control the snake's direction. On mobile, swipe in the direction you want to move. Guide the snake to eat red food squares to grow longer. Avoid hitting walls or your own tail, or the game ends.",
                   },
                 },
                 {
                   "@type": "Question",
-                  name: "How does scoring work in Snake?",
+                  name: "Is snake game free to play?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "You earn 1 point for each piece of food (red square) that your snake eats. Your score increases as you grow longer, and your best score is saved in your browser so you can try to beat it.",
+                    text: "Yes! Snake game is completely free with no download required. Play instantly in your browser on any device - desktop, laptop, phone, or tablet. Your high score is automatically saved so you can keep track of your best games.",
                   },
                 },
                 {
                   "@type": "Question",
-                  name: "Does the game get faster as I play?",
+                  name: "Can I play snake game on my phone?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Yes! Every time your snake eats food and grows longer, the game speed increases slightly. This makes the game progressively more challenging as you achieve higher scores.",
+                    text: "Absolutely! The snake game is fully optimized for mobile devices. Use simple swipe gestures to control the snake - swipe up, down, left, or right to change direction. It works smoothly on both phones and tablets with touch controls.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "What are the rules of snake game?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "The rules are simple: guide the snake to eat food (red squares) to grow longer and score points. The snake moves continuously in one direction until you change it. You lose if the snake hits a wall or runs into its own body. Try to get the highest score possible!",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "How does scoring work in snake game?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "You earn 1 point for each piece of food your snake eats. As your snake grows longer, the challenge increases. Your personal best score is saved automatically in your browser, so you can always try to beat your high score.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Does snake game get faster as I play?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Yes! Every time your snake eats food and grows longer, the game speed increases slightly. This progressive difficulty makes the game more challenging as you achieve higher scores, testing your reflexes and strategy.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Can I play snake game without downloading?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Yes! Snake game runs entirely in your web browser with no download or installation needed. Just visit the page and start playing instantly. It works on any modern browser on desktop, mobile, or tablet devices.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "What is the best strategy for snake game?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Stay near the walls and move in controlled patterns to avoid trapping yourself. Plan your path ahead and avoid creating tight spaces your snake can't escape from. As you grow longer, use the edges of the board to safely navigate around your own body.",
                   },
                 },
               ],

@@ -8,13 +8,17 @@ export const metadata: Metadata = {
     "Play Space Invaders online free! 10 levels + endless mode, 3 enemy types, power-ups (shield, rapid fire, spread shot). Classic arcade shooter in your browser. No download needed.",
   keywords: [
     "play space invaders online free",
-    "space invaders browser game",
     "space invaders online",
-    "free space invaders",
-    "space invaders game",
-    "arcade shooter",
+    "space invaders free",
+    "classic space invaders game",
+    "space invaders browser game",
+    "retro arcade games online",
+    "space invaders no download",
+    "arcade shooter game",
     "space invaders levels",
-    "retro game online",
+    "alien shooter game",
+    "classic arcade game online",
+    "space shooter game free",
   ],
   alternates: {
     canonical: "/space-invaders",
@@ -88,26 +92,66 @@ export default function SpaceInvadersPage() {
             mainEntity: [
               {
                 "@type": "Question",
-                name: "How do I play Space Invaders?",
+                name: "How do I play Space Invaders online?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Use the arrow keys or A/D to move your ship left and right. Your ship auto-shoots. Destroy all aliens to advance to the next level. Collect power-ups (shield, rapid fire, spread shot) to gain an advantage.",
+                  text: "Use arrow keys or A/D to move your spaceship left and right. Your ship automatically shoots at the alien invaders. Destroy all aliens to advance to the next level. Collect power-ups (shield, rapid fire, spread shot) dropped by defeated aliens to boost your firepower and survive longer.",
                 },
               },
               {
                 "@type": "Question",
-                name: "What happens when I lose all my lives?",
+                name: "Is Space Invaders free to play?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "The game ends when you lose all lives. You start with 3 lives and earn a bonus life every 5 levels (max 5). Your high score is saved automatically.",
+                  text: "Yes! Space Invaders is completely free to play online with no download or registration required. Just open your browser and start defending Earth from alien invaders. Your high score is saved automatically in your browser.",
                 },
               },
               {
                 "@type": "Question",
-                name: "How many levels are there?",
+                name: "Can I play Space Invaders on mobile?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "There are 10 handcrafted levels with increasing difficulty, plus an endless mode that scales infinitely. Each level has more aliens, faster movement, and tougher enemy types (blue takes 2 hits, gold takes 3 hits).",
+                  text: "Absolutely! Space Invaders works great on mobile devices with touch controls. Use the on-screen touch buttons to move your ship left and right. The game is fully responsive and plays smoothly on phones and tablets.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "What are the rules of Space Invaders?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Move your ship horizontally at the bottom of the screen and shoot upward to destroy waves of alien invaders. Avoid enemy bullets and clear all aliens to advance. You have 3 lives (with bonus lives every 5 levels) and face three enemy types with increasing difficulty.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "How many levels are in Space Invaders?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Space Invaders features 10 handcrafted levels with progressively harder challenges, plus an endless mode after level 10 that scales infinitely. Each level introduces more aliens, faster movement speeds, and tougher enemy types (blue takes 2 hits, gold takes 3 hits).",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "What are the power-ups in Space Invaders?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "There are three power-ups dropped randomly by defeated aliens: Shield (absorbs one hit), Rapid Fire (doubles your shooting speed), and Spread Shot (fires three bullets at once). These power-ups are essential for surviving the harder levels and endless mode.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Can you play Space Invaders without downloading?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Yes! Space Invaders runs directly in your web browser with zero downloads or installations required. It works on any device with a modern browser - desktop computers, laptops, smartphones, and tablets. Just load the page and start playing instantly.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "What are the different enemy types in Space Invaders?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "There are three enemy types: Normal aliens (red, destroyed in one hit), Tough aliens (blue, require two hits), and Elite aliens (gold, require three hits). Higher levels introduce more tough and elite enemies, making the game progressively more challenging.",
                 },
               },
             ],

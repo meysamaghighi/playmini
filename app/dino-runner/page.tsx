@@ -7,16 +7,18 @@ export const metadata: Metadata = {
   description:
     "Play Dino Run game online free! 10+ levels, power-ups, multiple biomes. Jump and duck like Chrome's T-Rex runner. Browser game, works on mobile and desktop.",
   keywords: [
+    "chrome dino game online",
     "dino run game online",
-    "chrome dinosaur game online",
-    "dino game online",
-    "t-rex runner",
-    "chrome dino game",
-    "dinosaur game online free",
+    "play dino game online",
+    "t-rex runner game",
+    "chrome dinosaur game",
+    "dinosaur game no internet",
+    "dino game free",
     "endless runner game",
-    "dino runner",
+    "chrome dino runner",
+    "offline dino game",
     "dino game levels",
-    "power up runner game",
+    "dinosaur jump game",
   ],
   alternates: {
     canonical: "/dino-runner",
@@ -128,34 +130,66 @@ export default function DinoRunnerPage() {
               mainEntity: [
                 {
                   "@type": "Question",
-                  name: "How do I play Dino Runner?",
+                  name: "How do I play dino game online?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "On desktop, press Space or Up Arrow to jump over obstacles, and press Down Arrow to duck under pterodactyls. On mobile, tap to jump and swipe down to duck. Collect floating power-ups by running into them. Progress through 10+ levels with different biomes and increasing difficulty.",
+                    text: "Press Space or Up Arrow to make the dinosaur jump over obstacles like cacti and rocks. Press Down Arrow to duck under flying pterodactyls. On mobile, tap to jump and swipe down to duck. Collect floating power-ups and progress through 10+ levels with different biomes and increasing difficulty.",
                   },
                 },
                 {
                   "@type": "Question",
-                  name: "What are the power-ups in Dino Runner?",
+                  name: "Is the chrome dino game free?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "There are four power-ups: Shield (S) absorbs one hit, Slow-Mo (T) slows the game for 3 seconds, 2x Points doubles your score for 5 seconds, and Tiny (T) shrinks your hitbox for 5 seconds making dodging easier. Power-ups appear randomly as you play.",
+                    text: "Yes! The dino runner game is completely free to play online with no download required. Play instantly in your browser on desktop or mobile. This enhanced version includes 10+ levels, multiple biomes, power-ups, and a lives system - all free with no ads interrupting gameplay.",
                   },
                 },
                 {
                   "@type": "Question",
-                  name: "How many levels are in Dino Runner?",
+                  name: "Can I play dino game on my phone?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Dino Runner has 10 handcrafted levels across 5 biomes (Desert, Forest, Arctic, Volcano, City), plus an endless Level 11+ with scaling difficulty. Each level has unique themes, obstacle types, and increasing speed. You gain a bonus life every 5 levels.",
+                    text: "Absolutely! Dino Runner is fully optimized for mobile devices. Tap anywhere on the screen to jump over obstacles and swipe down to duck under flying pterodactyls. The game runs smoothly on both phones and tablets with responsive touch controls.",
                   },
                 },
                 {
                   "@type": "Question",
-                  name: "What are the obstacles in Dino Runner?",
+                  name: "What are the power-ups in dino runner?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Obstacles include ground cacti (jump over), rocks (small and big, jump over), double cacti (two close together), and flying pterodactyls (duck under). Higher levels introduce more obstacle variety and tighter spacing, requiring quick reflexes.",
+                    text: "There are four power-ups: Shield (absorbs one hit), Slow-Mo (slows the game for 3 seconds), 2x Points (doubles score gain for 5 seconds), and Tiny (shrinks your hitbox for 5 seconds, making dodging easier). Power-ups appear as floating icons during gameplay - just run into them to collect.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "How many levels are in the dino game?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Dino Runner features 10 handcrafted levels across 5 unique biomes (Desert, Forest, Arctic, Volcano, City), plus an endless mode starting at Level 11+ with infinite scaling difficulty. Each level has distinct themes, obstacle patterns, and progressively faster speeds. You gain bonus lives every 5 levels.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "What are the obstacles in chrome dino game?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Obstacles include ground cacti (jump over), rocks in various sizes (jump over), double cacti stacked close together (requires precise timing), and flying pterodactyls (duck under). Higher levels introduce more obstacle variety, tighter spacing, and faster speeds, testing your reflexes.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Can you play dino game without internet?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "This version of Dino Runner requires an internet connection to load initially, but once loaded, it plays smoothly with minimal data usage. For the original Chrome offline dino game, disconnect your internet and visit any website in Chrome to access it.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "What is the difference between this and chrome dino?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "While inspired by Chrome's T-Rex runner, this version greatly expands the gameplay with 10+ handcrafted levels, multiple biomes (Desert, Forest, Arctic, Volcano, City), four different power-ups, a lives system with bonus lives, and three playable characters. It offers much more variety and replayability than the original endless runner.",
                   },
                 },
               ],
