@@ -55,6 +55,24 @@ const games: Array<{
   icon: React.ReactNode;
 }> = [
   {
+    href: "/chess",
+    title: "Chess",
+    description: "Play chess against the computer",
+    color: "from-amber-400 to-yellow-600",
+    category: "Strategy",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="38" width="40" height="6" rx="2" fill="#f0d9b5" />
+        <rect x="8" y="32" width="32" height="6" rx="1" fill="#f0d9b5" />
+        <rect x="18" y="14" width="12" height="18" rx="2" fill="#f0d9b5" />
+        <rect x="14" y="26" width="20" height="6" rx="1" fill="#f0d9b5" />
+        <circle cx="24" cy="10" r="6" fill="#f0d9b5" />
+        <rect x="20" y="4" width="8" height="4" rx="1" fill="#f0d9b5" />
+        <rect x="22" y="2" width="4" height="4" rx="1" fill="#f0d9b5" />
+      </svg>
+    ),
+  },
+  {
     href: "/frogger",
     title: "Frogger",
     description: "Cross roads and rivers to reach home",
@@ -335,22 +353,6 @@ const games: Array<{
         <line x1="14" y1="10" x2="10" y2="14" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" />
         <circle cx="36" cy="12" r="3" stroke="#fb7185" strokeWidth="2" fill="none" />
         <circle cx="12" cy="36" r="3" stroke="#fb7185" strokeWidth="2" fill="none" />
-      </svg>
-    ),
-  },
-  {
-    href: "/flappy",
-    title: "Flappy Bird",
-    description: "Tap to flap through the pipes",
-    color: "from-sky-400 to-blue-500",
-    category: "Arcade",
-    icon: (
-      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
-        <circle cx="24" cy="24" r="12" fill="#facc15" />
-        <circle cx="29" cy="20" r="3" fill="white" />
-        <circle cx="30" cy="20" r="1.5" fill="#111" />
-        <path d="M32 24h8l-4 4z" fill="#f97316" />
-        <path d="M12 22h10v4H12z" fill="#a3e635" />
       </svg>
     ),
   },
