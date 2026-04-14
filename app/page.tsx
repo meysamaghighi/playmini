@@ -55,6 +55,20 @@ const games: Array<{
   icon: React.ReactNode;
 }> = [
   {
+    href: "/asteroids",
+    title: "Asteroids",
+    description: "Shoot asteroids before they get you",
+    color: "from-cyan-500 to-blue-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <polygon points="24,4 18,36 6,30 12,30 2,42" fill="none" stroke="#22d3ee" strokeWidth="2" strokeLinejoin="round" />
+        <polygon points="36,10 28,18 22,8 30,14 34,4 40,14 48,10 42,20 48,28 38,22 36,32 30,22 20,26 28,18" fill="none" stroke="#9ca3af" strokeWidth="1.5" strokeLinejoin="round" />
+        <circle cx="40" cy="36" r="6" fill="none" stroke="#9ca3af" strokeWidth="1.5" />
+      </svg>
+    ),
+  },
+  {
     href: "/chess",
     title: "Chess",
     description: "Play chess against the computer",
