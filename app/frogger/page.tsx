@@ -1,0 +1,72 @@
+import type { Metadata } from "next";
+import FroggerGame from "../components/FroggerGame";
+import MoreGames from "../components/MoreGames";
+
+export const metadata: Metadata = {
+  title: "Play Frogger Online Free - Classic Frogger Browser Game | PlayMini",
+  description:
+    "Play Frogger online free! Hop across busy roads and rivers to reach home. Classic arcade game in your browser — no download, no sign-up. Desktop and mobile.",
+  keywords: [
+    "frogger online",
+    "play frogger free",
+    "frogger browser game",
+    "frogger unblocked",
+    "classic frogger game",
+    "frogger no download",
+    "arcade frogger online",
+    "frog crossing game",
+    "frogger mobile",
+  ],
+  alternates: { canonical: "/frogger" },
+  openGraph: {
+    title: "Play Frogger Online Free | PlayMini",
+    description: "Hop across traffic and rivers to reach home. Classic Frogger in your browser.",
+    type: "website",
+    url: "https://playmini.fun/frogger",
+  },
+};
+
+export default function FroggerPage() {
+  return (
+    <main className="min-h-screen bg-gray-950 text-white">
+      <div className="container mx-auto px-4 py-12 max-w-4xl">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+            Frogger
+          </h1>
+          <p className="text-gray-300 text-lg">
+            Guide your frog across busy roads and treacherous rivers — reach all 5 home slots to win!
+          </p>
+        </div>
+
+        <FroggerGame />
+
+        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+          <h2 className="text-2xl font-bold mb-4 text-green-400">How to Play</h2>
+          <div className="space-y-4 text-gray-300">
+            <div>
+              <h3 className="font-semibold text-white mb-2">Controls</h3>
+              <ul className="list-disc list-inside space-y-1 ml-2">
+                <li>Arrow keys or WASD to hop in any direction</li>
+                <li>Swipe on mobile — tap to hop forward</li>
+                <li>Space or tap to start / restart</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-white mb-2">Rules</h3>
+              <ul className="list-disc list-inside space-y-1 ml-2">
+                <li>Cross the road without getting hit by cars or trucks</li>
+                <li>Cross the river by jumping on logs and turtles — falling in is fatal</li>
+                <li>Fill all 5 home slots at the top to clear the level</li>
+                <li>You have 30 seconds per frog — bonus points for speed</li>
+                <li>3 lives total — each level gets faster</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <MoreGames />
+      </div>
+    </main>
+  );
+}

@@ -55,6 +55,26 @@ const games: Array<{
   icon: React.ReactNode;
 }> = [
   {
+    href: "/frogger",
+    title: "Frogger",
+    description: "Cross roads and rivers to reach home",
+    color: "from-green-500 to-emerald-600",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <ellipse cx="24" cy="28" rx="12" ry="10" fill="#00cc44" />
+        <circle cx="17" cy="20" r="5" fill="#00cc44" />
+        <circle cx="31" cy="20" r="5" fill="#00cc44" />
+        <circle cx="17" cy="19" r="3" fill="#fff" />
+        <circle cx="31" cy="19" r="3" fill="#fff" />
+        <circle cx="18" cy="19" r="1.5" fill="#000" />
+        <circle cx="32" cy="19" r="1.5" fill="#000" />
+        <path d="M12 34 L6 38 M36 34 L42 38" stroke="#00cc44" strokeWidth="3" strokeLinecap="round" />
+        <path d="M12 30 L6 26 M36 30 L42 26" stroke="#00cc44" strokeWidth="3" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
     href: "/pac-man",
     title: "Pac-Man",
     description: "Eat dots, dodge ghosts, grab power pellets",
