@@ -55,6 +55,24 @@ const games: Array<{
   icon: React.ReactNode;
 }> = [
   {
+    href: "/pac-man",
+    title: "Pac-Man",
+    description: "Eat dots, dodge ghosts, grab power pellets",
+    color: "from-yellow-400 to-amber-500",
+    category: "Arcade",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <circle cx="24" cy="24" r="18" fill="#ffe000" />
+        <path d="M24 24 L42 18 A18 18 0 0 0 42 30 Z" fill="#000" />
+        <circle cx="24" cy="14" r="2.5" fill="#000" />
+        <circle cx="10" cy="18" r="5" fill="#ff0000" />
+        <circle cx="10" cy="30" r="5" fill="#ffb8ff" />
+        <circle cx="20" cy="36" r="5" fill="#00ffff" />
+        <circle cx="36" cy="36" r="5" fill="#ffb852" />
+      </svg>
+    ),
+  },
+  {
     href: "/space-invaders",
     title: "Space Invaders",
     description: "Defend Earth from alien invaders",
