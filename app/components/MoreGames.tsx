@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const games = [
+  { href: "/reversi", label: "Reversi", color: "from-green-600 to-teal-600" },
   { href: "/asteroids", label: "Asteroids", color: "from-cyan-500 to-blue-600" },
   { href: "/chess", label: "Chess", color: "from-amber-400 to-yellow-600" },
   { href: "/frogger", label: "Frogger", color: "from-green-500 to-emerald-600" },

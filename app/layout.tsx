@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 const navLinks = [
+  { href: "/reversi", label: "Reversi" },
   { href: "/asteroids", label: "Asteroids" },
   { href: "/chess", label: "Chess" },
   { href: "/frogger", label: "Frogger" },

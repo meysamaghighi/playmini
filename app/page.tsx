@@ -55,6 +55,22 @@ const games: Array<{
   icon: React.ReactNode;
 }> = [
   {
+    href: "/reversi",
+    title: "Reversi",
+    description: "Flip pieces and dominate the board",
+    color: "from-green-600 to-teal-600",
+    category: "Strategy",
+    icon: (
+      <svg viewBox="0 0 48 48" className="w-12 h-12" fill="none">
+        <rect x="4" y="4" width="40" height="40" rx="4" fill="#166534" />
+        <circle cx="16" cy="16" r="8" fill="#111" />
+        <circle cx="32" cy="16" r="8" fill="#fff" />
+        <circle cx="16" cy="32" r="8" fill="#fff" />
+        <circle cx="32" cy="32" r="8" fill="#111" />
+      </svg>
+    ),
+  },
+  {
     href: "/asteroids",
     title: "Asteroids",
     description: "Shoot asteroids before they get you",
