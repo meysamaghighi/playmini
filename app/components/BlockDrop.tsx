@@ -1096,6 +1096,12 @@ export default function BlockDrop() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (gameLoopRef.current !== null) cancelAnimationFrame(gameLoopRef.current);
+    };
+  }, []);
+
   const config = gameMode === "campaign" && currentLevel <= 10 ? LEVEL_CONFIGS[currentLevel - 1] : null;
 
   return (

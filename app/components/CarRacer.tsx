@@ -1014,6 +1014,12 @@ export default function CarRacer() {
 
   useEffect(() => { draw(); }, [draw]);
 
+  useEffect(() => {
+    return () => {
+      if (loopRef.current !== null) cancelAnimationFrame(loopRef.current);
+    };
+  }, []);
+
   const handleShare = async () => {
     const levelText = levelRef.current <= 10 ? `reached level ${levelRef.current}` : "conquered all 10 levels";
     const text = `I scored ${scoreRef.current} and ${levelText} in Car Racer driving a ${VEHICLE_STATS[vehicleRef.current].label}! https://playmini.fun/car-racer`;

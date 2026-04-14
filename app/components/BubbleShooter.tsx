@@ -747,6 +747,12 @@ export default function BubbleShooter() {
     draw();
   }, [draw]);
 
+  useEffect(() => {
+    return () => {
+      if (gameLoopRef.current !== null) cancelAnimationFrame(gameLoopRef.current);
+    };
+  }, []);
+
   const handleShare = async () => {
     const levelText = levelRef.current <= 10 ? `reached level ${levelRef.current}` : "conquered all 10 levels";
     const text = `I scored ${scoreRef.current} and ${levelText} in Bubble Shooter! Can you beat me? https://playmini.fun/bubble-shooter`;

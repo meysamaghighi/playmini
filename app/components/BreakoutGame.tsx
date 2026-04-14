@@ -128,6 +128,7 @@ export default function BreakoutGame() {
   const [gameOver, setGameOver] = useState(false);
   const [started, setStarted] = useState(false);
   const [levelUpFlash, setLevelUpFlash] = useState(0);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const best = localStorage.getItem("pb-breakout");
@@ -757,7 +758,7 @@ export default function BreakoutGame() {
       ctx.restore();
     }
 
-    requestAnimationFrame(gameLoop);
+    rafRef.current = requestAnimationFrame(gameLoop);
   }, [levelUpFlash]);
 
   const launchBall = () => {
@@ -816,7 +817,7 @@ export default function BreakoutGame() {
     setStarted(true);
     setLevelUpFlash(0);
 
-    requestAnimationFrame(gameLoop);
+    rafRef.current = requestAnimationFrame(gameLoop);
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -949,6 +950,7 @@ export default function BreakoutGame() {
       clearTimeout(state.powerUpTimers.wide);
       clearTimeout(state.powerUpTimers.laser);
       clearTimeout(state.powerUpTimers.slow);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
