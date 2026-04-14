@@ -35,16 +35,16 @@ interface Level {
 }
 
 const LEVELS: Level[] = [
-  { id: 1, name: 'Garden Pests', duration: 30, target: 10, spawnRate: 1200, visibleDuration: 1500, maxVisible: 1, moleTypes: ['normal'] },
-  { id: 2, name: 'Mole Mayhem', duration: 30, target: 18, spawnRate: 1000, visibleDuration: 1300, maxVisible: 1, moleTypes: ['normal', 'golden'] },
-  { id: 3, name: 'Bomb Alert', duration: 30, target: 25, spawnRate: 900, visibleDuration: 1200, maxVisible: 1, moleTypes: ['normal', 'golden', 'bomb'] },
-  { id: 4, name: 'Speed Round', duration: 25, target: 30, spawnRate: 700, visibleDuration: 900, maxVisible: 1, moleTypes: ['normal', 'golden', 'bomb'] },
-  { id: 5, name: 'Helmet Moles', duration: 30, target: 40, spawnRate: 800, visibleDuration: 1200, maxVisible: 1, moleTypes: ['normal', 'golden', 'bomb', 'helmet'] },
-  { id: 6, name: 'Night Shift', duration: 25, target: 45, spawnRate: 800, visibleDuration: 1100, maxVisible: 1, moleTypes: ['normal', 'golden', 'bomb', 'helmet'], special: 'dark' },
-  { id: 7, name: 'Mole Swarm', duration: 30, target: 55, spawnRate: 600, visibleDuration: 1000, maxVisible: 3, moleTypes: ['normal', 'golden', 'bomb', 'helmet'] },
-  { id: 8, name: 'Ninja Moles', duration: 25, target: 65, spawnRate: 650, visibleDuration: 950, maxVisible: 2, moleTypes: ['normal', 'golden', 'bomb', 'helmet'], special: 'ninja' },
-  { id: 9, name: 'Ultimate Test', duration: 25, target: 80, spawnRate: 500, visibleDuration: 800, maxVisible: 3, moleTypes: ['normal', 'golden', 'bomb', 'helmet'] },
-  { id: 10, name: 'Grand Finale', duration: 30, target: 100, spawnRate: 600, visibleDuration: 1000, maxVisible: 3, moleTypes: ['normal', 'golden', 'bomb', 'helmet', 'boss'], special: 'boss' },
+  { id: 1, name: 'Garden Pests', duration: 20, target: 8, spawnRate: 1200, visibleDuration: 1500, maxVisible: 1, moleTypes: ['normal'] },
+  { id: 2, name: 'Mole Mayhem', duration: 20, target: 12, spawnRate: 1000, visibleDuration: 1300, maxVisible: 1, moleTypes: ['normal', 'golden'] },
+  { id: 3, name: 'Bomb Alert', duration: 20, target: 16, spawnRate: 900, visibleDuration: 1200, maxVisible: 1, moleTypes: ['normal', 'golden', 'bomb'] },
+  { id: 4, name: 'Speed Round', duration: 15, target: 18, spawnRate: 700, visibleDuration: 900, maxVisible: 1, moleTypes: ['normal', 'golden', 'bomb'] },
+  { id: 5, name: 'Helmet Moles', duration: 20, target: 22, spawnRate: 800, visibleDuration: 1200, maxVisible: 1, moleTypes: ['normal', 'golden', 'bomb', 'helmet'] },
+  { id: 6, name: 'Night Shift', duration: 20, target: 26, spawnRate: 800, visibleDuration: 1100, maxVisible: 1, moleTypes: ['normal', 'golden', 'bomb', 'helmet'], special: 'dark' },
+  { id: 7, name: 'Mole Swarm', duration: 20, target: 32, spawnRate: 600, visibleDuration: 1000, maxVisible: 3, moleTypes: ['normal', 'golden', 'bomb', 'helmet'] },
+  { id: 8, name: 'Ninja Moles', duration: 15, target: 36, spawnRate: 650, visibleDuration: 950, maxVisible: 2, moleTypes: ['normal', 'golden', 'bomb', 'helmet'], special: 'ninja' },
+  { id: 9, name: 'Ultimate Test', duration: 15, target: 42, spawnRate: 500, visibleDuration: 800, maxVisible: 3, moleTypes: ['normal', 'golden', 'bomb', 'helmet'] },
+  { id: 10, name: 'Grand Finale', duration: 20, target: 55, spawnRate: 600, visibleDuration: 1000, maxVisible: 3, moleTypes: ['normal', 'golden', 'bomb', 'helmet', 'boss'], special: 'boss' },
 ];
 
 export default function WhackMole() {
@@ -56,7 +56,7 @@ export default function WhackMole() {
   const [lives, setLives] = useState(3);
   const [combo, setCombo] = useState(0);
   const [maxCombo, setMaxCombo] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(20);
   const [countdown, setCountdown] = useState(3);
   const [escapeStreak, setEscapeStreak] = useState(0);
   const [levelUpMessage, setLevelUpMessage] = useState('');
@@ -200,6 +200,7 @@ export default function WhackMole() {
 
     // Clean up all active moles and timers before transitioning
     gameActiveRef.current = false;
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
     if (spawnTimerRef.current) {
       clearTimeout(spawnTimerRef.current);
       spawnTimerRef.current = null;

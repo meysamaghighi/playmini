@@ -54,6 +54,7 @@ const LEVELS: Level[] = [
 
 export default function DinoRunner() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef = useRef<number | null>(null);
   const gameStateRef = useRef({
     isRunning: false,
     gameOver: false,
@@ -869,7 +870,7 @@ export default function DinoRunner() {
       }
     }
 
-    requestAnimationFrame(gameLoop);
+    rafRef.current = requestAnimationFrame(gameLoop);
   };
 
   const startGame = () => {
@@ -901,7 +902,7 @@ export default function DinoRunner() {
     setDisplayLives(3);
     setGameOver(false);
     setStarted(true);
-    requestAnimationFrame(gameLoop);
+    rafRef.current = requestAnimationFrame(gameLoop);
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -1000,6 +1001,12 @@ export default function DinoRunner() {
       canvas.removeEventListener("touchstart", onTouchStart);
       canvas.removeEventListener("touchmove", onTouchMove);
       canvas.removeEventListener("touchend", onTouchEnd);
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 

@@ -708,6 +708,12 @@ export default function Connect4Game() {
     draw();
   }, [draw]);
 
+  useEffect(() => {
+    return () => {
+      if (animationFrameRef.current !== null) cancelAnimationFrame(animationFrameRef.current);
+    };
+  }, []);
+
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;

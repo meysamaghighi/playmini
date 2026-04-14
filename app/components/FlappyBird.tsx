@@ -174,6 +174,7 @@ export default function FlappyBird() {
   const levelCompleteOpacityRef = useRef(0);
   const gameStateRef = useRef<'modeselect' | 'birdselect' | 'playing' | 'gameover' | 'levelcomplete'>('modeselect');
   const animationIdRef = useRef<number | null>(null);
+  const bestScoreRef = useRef(0);
   const birdTypeRef = useRef<BirdType>('classic');
   const gameModeRef = useRef<GameMode>('campaign');
   const freeDifficultyRef = useRef<FreeDifficulty>('medium');
@@ -190,7 +191,7 @@ export default function FlappyBird() {
 
   useEffect(() => {
     const saved = localStorage.getItem('pb-flappy');
-    if (saved) setBestScore(parseInt(saved));
+    if (saved) { const v = parseInt(saved); setBestScore(v); bestScoreRef.current = v; }
     const savedBird = localStorage.getItem('flappy-bird-type');
     if (savedBird && savedBird in BIRDS) {
       setSelectedBird(savedBird as BirdType);
@@ -805,7 +806,8 @@ export default function FlappyBird() {
 
     const endGame = () => {
       gameStateRef.current = 'gameover';
-      if (scoreRef.current > bestScore) {
+      if (scoreRef.current > bestScoreRef.current) {
+        bestScoreRef.current = scoreRef.current;
         setBestScore(scoreRef.current);
         localStorage.setItem('pb-flappy', scoreRef.current.toString());
       }
@@ -840,7 +842,7 @@ export default function FlappyBird() {
         cancelAnimationFrame(animationIdRef.current);
       }
     };
-  }, [gameState, bestScore, selectedBird, campaignProgress, selectedMode, freeDifficulty]);
+  }, [gameState, selectedBird, campaignProgress, selectedMode, freeDifficulty]);
 
   const flap = () => {
     if (gameStateRef.current === 'playing') {
