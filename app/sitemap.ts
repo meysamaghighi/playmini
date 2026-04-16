@@ -38,6 +38,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/sliding-puzzle`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/solitaire`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/word-builder`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/asteroids`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/chess`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/frogger`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/pac-man`, lastModified: now, priority: 0.9 },
+    { url: `${BASE}/reversi`, lastModified: now, priority: 0.9 },
     { url: `${BASE}/about`, lastModified: now, priority: 0.3 },
   ];
 }
