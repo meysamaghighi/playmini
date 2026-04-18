@@ -16,5 +16,10 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next|favicon.ico|manifest|api).*)'],
+  // Exclude SEO assets so Googlebot/GSC never hit the middleware path when
+  // fetching sitemap or robots. GSC aggressively caches "Couldn't fetch"
+  // errors when middleware interferes with these routes.
+  matcher: [
+    '/((?!_next|favicon.ico|manifest|api|robots.txt|sitemap.xml|sitemap/|ads.txt).*)',
+  ],
 };
