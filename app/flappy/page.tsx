@@ -4,7 +4,7 @@ import MoreGames from '../components/MoreGames';
 
 export const metadata: Metadata = {
   title: 'Play Flappy Bird Online Free - Tap to Flap | PlayMini',
-  description: 'Play Flappy Bird online free! 10 campaign levels + endless mode with power-ups, lives system, and 6 bird types. Addictive arcade game, no download needed!',
+  description: 'Play Flappy Bird online free! Tap to flap through pipes, beat your high score. Classic arcade game in your browser, no download needed.',
   keywords: [
     'play flappy bird online free',
     'flappy bird online',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Play Flappy Bird Online Free - Tap to Flap | PlayMini',
-    description: 'Play Flappy Bird online free! 10 campaign levels + endless mode with power-ups, lives system, and 6 bird types. Addictive arcade game, no download needed!',
+    description: 'Play Flappy Bird online free! Tap to flap through pipes, beat your high score. Classic arcade game in your browser, no download needed.',
     url: 'https://playmini.fun/flappy',
     siteName: 'PlayMini',
     type: 'website',

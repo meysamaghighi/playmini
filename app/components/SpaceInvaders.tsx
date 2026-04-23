@@ -700,12 +700,16 @@ export default function SpaceInvaders() {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
 
-      // Cleanup intervals and timeouts
+      // Cleanup intervals, timeouts, and animation frame
       if (autoShootIntervalRef.current !== null) {
         clearInterval(autoShootIntervalRef.current);
       }
       if (powerUpTimerRef.current !== null) {
         clearTimeout(powerUpTimerRef.current);
+      }
+      if (gameLoopRef.current !== null) {
+        cancelAnimationFrame(gameLoopRef.current);
+        gameLoopRef.current = null;
       }
     };
   }, []);
