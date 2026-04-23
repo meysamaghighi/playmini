@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import DownloadButton from "./DownloadButton";
+import { useGameLoop } from "./useGameLoop";
 
 const CANVAS_W = 420;
 const CANVAS_H = 600;
@@ -71,7 +72,6 @@ export default function BubbleShooter() {
   const aimAngleRef = useRef<number>(-Math.PI / 2);
   const scoreRef = useRef(0);
   const stateRef = useRef<GameState>("playing");
-  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     try {
@@ -306,15 +306,9 @@ export default function BubbleShooter() {
       }
     }
     draw();
-    rafRef.current = requestAnimationFrame(tick);
   }, [attachBubble, draw]);
 
-  useEffect(() => {
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    };
-  }, [tick]);
+  useGameLoop(tick);
 
   const onMouseMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import DownloadButton from "./DownloadButton";
+import { useGameLoop } from "./useGameLoop";
 
 const CANVAS_W = 600;
 const CANVAS_H = 400;
@@ -25,7 +26,6 @@ export default function TableTennis() {
   const ballRef = useRef({ x: CANVAS_W / 2, y: CANVAS_H / 2, vx: 5, vy: 3 });
   const keysRef = useRef<{ up: boolean; down: boolean }>({ up: false, down: false });
   const stateRef = useRef<GameState>("ready");
-  const rafRef = useRef<number | null>(null);
   const pScoreRef = useRef(0);
   const aScoreRef = useRef(0);
 
@@ -170,15 +170,9 @@ export default function TableTennis() {
     }
 
     draw();
-    rafRef.current = requestAnimationFrame(tick);
   }, [draw, serve]);
 
-  useEffect(() => {
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    };
-  }, [tick]);
+  useGameLoop(tick);
 
   useEffect(() => {
     const onDown = (e: KeyboardEvent) => {

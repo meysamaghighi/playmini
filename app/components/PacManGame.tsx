@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { useGameLoop } from "./useGameLoop";
 
 type Dir = 0 | 1 | 2 | 3; // 0=R 1=D 2=L 3=U
 const DX = [1, 0, -1, 0];
@@ -68,7 +69,6 @@ interface Ghost {
 
 export default function PacManGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number | null>(null);
   const gameRef = useRef({
     state: "start" as "start" | "playing" | "dead" | "win" | "gameover",
     maze: freshMaze(),
@@ -477,14 +477,7 @@ export default function PacManGame() {
   }, [resetRound]);
 
   // Game loop
-  useEffect(() => {
-    const loop = () => {
-      tick();
-      rafRef.current = requestAnimationFrame(loop);
-    };
-    rafRef.current = requestAnimationFrame(loop);
-    return () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); };
-  }, [tick]);
+  useGameLoop(tick);
 
   // Keyboard
   useEffect(() => {

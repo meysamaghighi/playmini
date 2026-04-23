@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { useGameLoop } from "./useGameLoop";
 
 const W = 480;
 const H = 480;
@@ -52,7 +53,6 @@ function circlesCollide(a: Vec, ra: number, b: Vec, rb: number) {
 
 export default function AsteroidsGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number | null>(null);
   const g = useRef({
     state: "start" as "start" | "playing" | "dead" | "gameover",
     ship: { pos: { x: W / 2, y: H / 2 }, vel: { x: 0, y: 0 }, angle: -Math.PI / 2, thrusting: false, invincible: 120 },
@@ -307,11 +307,7 @@ export default function AsteroidsGame() {
   }, []);
 
   // Loop
-  useEffect(() => {
-    const loop = () => { tick(); draw(); rafRef.current = requestAnimationFrame(loop); };
-    rafRef.current = requestAnimationFrame(loop);
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [tick, draw]);
+  useGameLoop(useCallback(() => { tick(); draw(); }, [tick, draw]));
 
   // Keys
   useEffect(() => {

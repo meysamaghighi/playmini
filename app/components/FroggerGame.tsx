@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { useGameLoop } from "./useGameLoop";
 
 const COLS = 13;
 const ROWS = 14;
@@ -66,7 +67,6 @@ function spaced(count: number, objW: number, totalW: number): LaneObject[] {
 
 export default function FroggerGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number | null>(null);
   const gameRef = useRef({
     state: "start" as "start" | "playing" | "dead" | "win" | "gameover",
     lanes: buildLanes(1),
@@ -392,11 +392,7 @@ export default function FroggerGame() {
   }, []);
 
   // Game loop
-  useEffect(() => {
-    const loop = () => { tick(); rafRef.current = requestAnimationFrame(loop); };
-    rafRef.current = requestAnimationFrame(loop);
-    return () => { if (rafRef.current !== null) cancelAnimationFrame(rafRef.current); };
-  }, [tick]);
+  useGameLoop(tick);
 
   // Keyboard
   useEffect(() => {

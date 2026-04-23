@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import DownloadButton from "./DownloadButton";
+import { useGameLoop } from "./useGameLoop";
 
 const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 600;
@@ -29,7 +30,6 @@ export default function FlappyBird() {
   const pipesRef = useRef<Pipe[]>([]);
   const scoreRef = useRef(0);
   const stateRef = useRef<GameState>("ready");
-  const rafRef = useRef<number | null>(null);
 
   const reset = useCallback(() => {
     birdYRef.current = CANVAS_HEIGHT / 2;
@@ -177,8 +177,9 @@ export default function FlappyBird() {
     }
 
     draw();
-    rafRef.current = requestAnimationFrame(tick);
   }, [draw, gameOver]);
+
+  useGameLoop(tick);
 
   useEffect(() => {
     try {
@@ -186,11 +187,7 @@ export default function FlappyBird() {
       if (saved) setBest(parseInt(saved, 10) || 0);
     } catch {}
     reset();
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    };
-  }, [reset, tick]);
+  }, [reset]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

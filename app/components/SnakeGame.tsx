@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import DownloadButton from "./DownloadButton";
+import { useGameLoop } from "./useGameLoop";
 
 const GRID = 20;
 const CELL = 20;
@@ -45,7 +46,6 @@ export default function SnakeGame() {
   const scoreRef = useRef(0);
   const stateRef = useRef<GameState>("ready");
   const lastTickRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
 
   const speedMs = useCallback(() => {
     return Math.max(70, 160 - Math.floor(scoreRef.current / 5) * 10);
@@ -145,17 +145,20 @@ export default function SnakeGame() {
   }, []);
 
   const tick = useCallback(
-    (t: number) => {
-      if (!lastTickRef.current) lastTickRef.current = t;
-      if (stateRef.current === "playing" && t - lastTickRef.current >= speedMs()) {
-        lastTickRef.current = t;
-        step();
+    (dt: number) => {
+      if (stateRef.current === "playing") {
+        lastTickRef.current += dt;
+        if (lastTickRef.current >= speedMs()) {
+          lastTickRef.current = 0;
+          step();
+        }
       }
       draw();
-      rafRef.current = requestAnimationFrame(tick);
     },
     [draw, speedMs, step]
   );
+
+  useGameLoop(tick);
 
   useEffect(() => {
     try {
@@ -163,11 +166,7 @@ export default function SnakeGame() {
       if (saved) setBest(parseInt(saved, 10) || 0);
     } catch {}
     reset();
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    };
-  }, [reset, tick]);
+  }, [reset]);
 
   useEffect(() => {
     const map: Record<string, Dir> = {

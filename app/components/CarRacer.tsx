@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import DownloadButton from "./DownloadButton";
+import { useGameLoop } from "./useGameLoop";
 
 const CANVAS_W = 360;
 const CANVAS_H = 600;
@@ -35,7 +36,6 @@ export default function CarRacer() {
   const spawnCdRef = useRef(0);
   const scoreRef = useRef(0);
   const dashOffsetRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
 
   const reset = useCallback(() => {
     laneRef.current = 1;
@@ -153,19 +153,16 @@ export default function CarRacer() {
       }
     }
     draw();
-    rafRef.current = requestAnimationFrame(tick);
   }, [draw, gameOver]);
+
+  useGameLoop(tick);
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem("pb-carracer-best");
       if (saved) setBest(parseInt(saved, 10) || 0);
     } catch {}
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    };
-  }, [tick]);
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

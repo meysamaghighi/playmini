@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import DownloadButton from "./DownloadButton";
+import { useGameLoop } from "./useGameLoop";
 
 const COLS = 10;
 const ROWS = 20;
@@ -141,7 +142,6 @@ export default function BlockDrop() {
   const levelRef = useRef(1);
   const stateRef = useRef<GameState>("ready");
   const dropTimerRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
 
   const dropIntervalMs = useCallback(
     () => Math.max(100, 800 - (levelRef.current - 1) * 70),
@@ -312,32 +312,29 @@ export default function BlockDrop() {
   }, []);
 
   const tick = useCallback(
-    (t: number) => {
+    (dt: number) => {
       if (stateRef.current === "playing") {
-        if (!dropTimerRef.current) dropTimerRef.current = t;
-        if (t - dropTimerRef.current >= dropIntervalMs()) {
-          dropTimerRef.current = t;
+        dropTimerRef.current += dt;
+        if (dropTimerRef.current >= dropIntervalMs()) {
+          dropTimerRef.current = 0;
           if (!move(0, 1)) lockPiece();
         }
       } else {
-        dropTimerRef.current = t;
+        dropTimerRef.current = 0;
       }
       draw();
-      rafRef.current = requestAnimationFrame(tick);
     },
     [draw, dropIntervalMs, lockPiece, move]
   );
+
+  useGameLoop(tick);
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem("pb-blockdrop-best");
       if (saved) setBest(parseInt(saved, 10) || 0);
     } catch {}
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    };
-  }, [tick]);
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

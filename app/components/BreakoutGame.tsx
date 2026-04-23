@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import DownloadButton from "./DownloadButton";
+import { useGameLoop } from "./useGameLoop";
 
 const CANVAS_W = 600;
 const CANVAS_H = 480;
@@ -51,7 +52,6 @@ export default function BreakoutGame() {
   const scoreRef = useRef(0);
   const livesRef = useRef(3);
   const levelRef = useRef(1);
-  const rafRef = useRef<number | null>(null);
   const keysRef = useRef<{ left: boolean; right: boolean }>({ left: false, right: false });
 
   const baseSpeed = useCallback(() => 4 + (levelRef.current - 1) * 0.6, []);
@@ -205,8 +205,9 @@ export default function BreakoutGame() {
     }
 
     draw();
-    rafRef.current = requestAnimationFrame(tick);
   }, [draw, resetBall, resetLevel]);
+
+  useGameLoop(tick);
 
   useEffect(() => {
     try {
@@ -214,11 +215,7 @@ export default function BreakoutGame() {
       if (saved) setBest(parseInt(saved, 10) || 0);
     } catch {}
     resetLevel();
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    };
-  }, [resetLevel, tick]);
+  }, [resetLevel]);
 
   useEffect(() => {
     const onDown = (e: KeyboardEvent) => {

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import DownloadButton from "./DownloadButton";
+import { useGameLoop } from "./useGameLoop";
 
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 260;
@@ -44,7 +45,6 @@ export default function DinoRunner() {
   const spawnCdRef = useRef(90);
   const scoreRef = useRef(0);
   const stateRef = useRef<GameState>("ready");
-  const rafRef = useRef<number | null>(null);
   const groundOffsetRef = useRef(0);
 
   const reset = useCallback(() => {
@@ -196,8 +196,9 @@ export default function DinoRunner() {
     }
 
     draw();
-    rafRef.current = requestAnimationFrame(tick);
   }, [draw, gameOver]);
+
+  useGameLoop(tick);
 
   useEffect(() => {
     try {
@@ -205,11 +206,7 @@ export default function DinoRunner() {
       if (saved) setBest(parseInt(saved, 10) || 0);
     } catch {}
     reset();
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    };
-  }, [reset, tick]);
+  }, [reset]);
 
   useEffect(() => {
     const onDown = (e: KeyboardEvent) => {

@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import DownloadButton from "./DownloadButton";
+import { useGameLoop } from "./useGameLoop";
 
 const CANVAS_W = 600;
 const CANVAS_H = 450;
@@ -31,7 +32,6 @@ export default function SoccerGame() {
   const ballRef = useRef({ x: CANVAS_W / 2, y: BALL_START_Y, vx: 0, vy: 0 });
   const keeperXRef = useRef(CANVAS_W / 2);
   const keeperTargetRef = useRef(CANVAS_W / 2);
-  const rafRef = useRef<number | null>(null);
   const phaseRef = useRef<Phase>("aim");
 
   useEffect(() => {
@@ -218,15 +218,9 @@ export default function SoccerGame() {
       }
     }
 
-    rafRef.current = requestAnimationFrame(tick);
   }, [aim, endShot]);
 
-  useEffect(() => {
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    };
-  }, [tick]);
+  useGameLoop(tick);
 
   const newGame = () => {
     setScore(0);
