@@ -1,744 +1,300 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import DownloadButton from "./DownloadButton";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-type Player = "RED" | "BLACK" | null;
-type Piece = { player: Player; isKing: boolean } | null;
-type Board = Piece[][];
-type GameState = "START" | "PLAYING" | "PLAYER_WON" | "AI_WON" | "DRAW";
-type Position = { row: number; col: number };
-type Move = { from: Position; to: Position; captures: Position[] };
+type Side = "r" | "b";
+type Piece = { side: Side; king: boolean };
+type Board = (Piece | null)[][];
+type Pos = [number, number];
+type Move = { from: Pos; to: Pos; captured: Pos[] };
 
-const BOARD_SIZE = 8;
-const CELL_SIZE = 60;
-const PADDING = 10;
-const CANVAS_WIDTH = BOARD_SIZE * CELL_SIZE + PADDING * 2;
-const CANVAS_HEIGHT = BOARD_SIZE * CELL_SIZE + PADDING * 2;
+function initialBoard(): Board {
+  const b: Board = Array.from({ length: 8 }, () => Array<Piece | null>(8).fill(null));
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 8; c++) {
+      if ((r + c) % 2 === 1) b[r][c] = { side: "b", king: false };
+    }
+  }
+  for (let r = 5; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      if ((r + c) % 2 === 1) b[r][c] = { side: "r", king: false };
+    }
+  }
+  return b;
+}
 
-interface Stats {
-  wins: number;
-  losses: number;
-  draws: number;
+function inBounds(r: number, c: number) {
+  return r >= 0 && r < 8 && c >= 0 && c < 8;
+}
+
+function pieceDirs(p: Piece): [number, number][] {
+  if (p.king) return [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+  return p.side === "r"
+    ? [[-1, -1], [-1, 1]]
+    : [[1, -1], [1, 1]];
+}
+
+function findCaptureChains(
+  board: Board,
+  r: number,
+  c: number,
+  piece: Piece,
+  captured: Pos[] = []
+): Move[] {
+  const chains: Move[] = [];
+  for (const [dr, dc] of pieceDirs(piece)) {
+    const mr = r + dr;
+    const mc = c + dc;
+    const lr = r + dr * 2;
+    const lc = c + dc * 2;
+    if (!inBounds(lr, lc)) continue;
+    const mid = board[mr]?.[mc];
+    if (!mid || mid.side === piece.side) continue;
+    if (board[lr][lc]) continue;
+    if (captured.some(([cr, cc]) => cr === mr && cc === mc)) continue;
+
+    const newBoard = board.map((row) => row.slice());
+    newBoard[r][c] = null;
+    newBoard[mr][mc] = null;
+    newBoard[lr][lc] = piece;
+    const nextCaptured = [...captured, [mr, mc] as Pos];
+    const sub = findCaptureChains(newBoard, lr, lc, piece, nextCaptured);
+    if (sub.length === 0) {
+      chains.push({ from: [r, c], to: [lr, lc], captured: nextCaptured });
+    } else {
+      for (const s of sub) {
+        chains.push({ from: [r, c], to: s.to, captured: s.captured });
+      }
+    }
+  }
+  return chains;
+}
+
+function legalMoves(board: Board, side: Side): Move[] {
+  const caps: Move[] = [];
+  const quiet: Move[] = [];
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      const p = board[r][c];
+      if (!p || p.side !== side) continue;
+      const chains = findCaptureChains(board, r, c, p);
+      caps.push(...chains);
+      if (chains.length === 0) {
+        for (const [dr, dc] of pieceDirs(p)) {
+          const nr = r + dr;
+          const nc = c + dc;
+          if (inBounds(nr, nc) && !board[nr][nc]) {
+            quiet.push({ from: [r, c], to: [nr, nc], captured: [] });
+          }
+        }
+      }
+    }
+  }
+  return caps.length ? caps : quiet;
+}
+
+function applyMove(board: Board, move: Move): Board {
+  const next = board.map((row) => row.slice());
+  const [fr, fc] = move.from;
+  const [tr, tc] = move.to;
+  const piece = next[fr][fc]!;
+  next[fr][fc] = null;
+  for (const [cr, cc] of move.captured) next[cr][cc] = null;
+  const promoted =
+    (piece.side === "r" && tr === 0) || (piece.side === "b" && tr === 7);
+  next[tr][tc] = { ...piece, king: piece.king || promoted };
+  return next;
+}
+
+function evalBoard(board: Board): number {
+  let score = 0;
+  for (const row of board) {
+    for (const p of row) {
+      if (!p) continue;
+      const val = p.king ? 3 : 1;
+      score += p.side === "b" ? val : -val;
+    }
+  }
+  return score;
+}
+
+function minimax(
+  board: Board,
+  depth: number,
+  alpha: number,
+  beta: number,
+  side: Side
+): { score: number; move: Move | null } {
+  const moves = legalMoves(board, side);
+  if (depth === 0 || moves.length === 0) {
+    if (moves.length === 0) {
+      return { score: side === "b" ? -9999 : 9999, move: null };
+    }
+    return { score: evalBoard(board), move: null };
+  }
+  let bestMove: Move | null = moves[0];
+  if (side === "b") {
+    let value = -Infinity;
+    for (const m of moves) {
+      const { score } = minimax(applyMove(board, m), depth - 1, alpha, beta, "r");
+      if (score > value) {
+        value = score;
+        bestMove = m;
+      }
+      alpha = Math.max(alpha, value);
+      if (alpha >= beta) break;
+    }
+    return { score: value, move: bestMove };
+  } else {
+    let value = Infinity;
+    for (const m of moves) {
+      const { score } = minimax(applyMove(board, m), depth - 1, alpha, beta, "b");
+      if (score < value) {
+        value = score;
+        bestMove = m;
+      }
+      beta = Math.min(beta, value);
+      if (alpha >= beta) break;
+    }
+    return { score: value, move: bestMove };
+  }
 }
 
 export default function CheckersGame() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [gameState, setGameState] = useState<GameState>("START");
-  const [board, setBoard] = useState<Board>(createInitialBoard());
-  const [currentPlayer, setCurrentPlayer] = useState<Player>("RED");
-  const [selectedPiece, setSelectedPiece] = useState<Position | null>(null);
-  const [validMoves, setValidMoves] = useState<Move[]>([]);
-  const [isAiThinking, setIsAiThinking] = useState(false);
-  const [stats, setStats] = useState<Stats>({ wins: 0, losses: 0, draws: 0 });
-  const [moveCount, setMoveCount] = useState(0);
-
-  // Load stats from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem("pb-checkers");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setStats(parsed);
-      } catch {}
-    }
-  }, []);
-
-  const saveStats = (newStats: Stats) => {
-    setStats(newStats);
-    localStorage.setItem("pb-checkers", JSON.stringify(newStats));
-  };
-
-  function createInitialBoard(): Board {
-    const board: Board = Array(BOARD_SIZE).fill(null).map(() => Array(BOARD_SIZE).fill(null));
-
-    // Place RED pieces (bottom, player)
-    for (let row = 5; row < 8; row++) {
-      for (let col = 0; col < BOARD_SIZE; col++) {
-        if ((row + col) % 2 === 1) {
-          board[row][col] = { player: "RED", isKing: false };
-        }
-      }
-    }
-
-    // Place BLACK pieces (top, AI)
-    for (let row = 0; row < 3; row++) {
-      for (let col = 0; col < BOARD_SIZE; col++) {
-        if ((row + col) % 2 === 1) {
-          board[row][col] = { player: "BLACK", isKing: false };
-        }
-      }
-    }
-
-    return board;
-  }
-
-  function isValidPosition(row: number, col: number): boolean {
-    return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE;
-  }
-
-  function getValidMoves(board: Board, player: Player): Move[] {
-    const moves: Move[] = [];
-    const captureMoves: Move[] = [];
-
-    for (let row = 0; row < BOARD_SIZE; row++) {
-      for (let col = 0; col < BOARD_SIZE; col++) {
-        const piece = board[row][col];
-        if (piece && piece.player === player) {
-          const pieceMoves = getValidMovesForPiece(board, row, col);
-          pieceMoves.forEach(move => {
-            if (move.captures.length > 0) {
-              captureMoves.push(move);
-            } else {
-              moves.push(move);
-            }
-          });
-        }
-      }
-    }
-
-    // If there are capture moves, only return those (mandatory captures)
-    return captureMoves.length > 0 ? captureMoves : moves;
-  }
-
-  function getValidMovesForPiece(board: Board, row: number, col: number): Move[] {
-    const piece = board[row][col];
-    if (!piece) return [];
-
-    const moves: Move[] = [];
-    const directions = piece.isKing
-      ? [[-1, -1], [-1, 1], [1, -1], [1, 1]] // Kings move in all diagonal directions
-      : piece.player === "RED"
-      ? [[-1, -1], [-1, 1]] // Red moves up
-      : [[1, -1], [1, 1]]; // Black moves down
-
-    // Check normal moves
-    for (const [dr, dc] of directions) {
-      const newRow = row + dr;
-      const newCol = col + dc;
-      if (isValidPosition(newRow, newCol) && !board[newRow][newCol]) {
-        moves.push({
-          from: { row, col },
-          to: { row: newRow, col: newCol },
-          captures: []
-        });
-      }
-    }
-
-    // Check capture moves (can jump in all diagonal directions)
-    const allDirections = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
-    for (const [dr, dc] of allDirections) {
-      const captureRow = row + dr;
-      const captureCol = col + dc;
-      const landRow = row + dr * 2;
-      const landCol = col + dc * 2;
-
-      if (
-        isValidPosition(landRow, landCol) &&
-        isValidPosition(captureRow, captureCol)
-      ) {
-        const capturedPiece = board[captureRow][captureCol];
-        const landPiece = board[landRow][landCol];
-
-        if (
-          capturedPiece &&
-          capturedPiece.player !== piece.player &&
-          !landPiece
-        ) {
-          // Check for multi-jump
-          const multiJumps = findMultiJumps(
-            board,
-            landRow,
-            landCol,
-            piece,
-            [{ row: captureRow, col: captureCol }],
-            { row, col }
-          );
-          moves.push(...multiJumps);
-        }
-      }
-    }
-
-    return moves;
-  }
-
-  function findMultiJumps(
-    board: Board,
-    row: number,
-    col: number,
-    piece: Piece,
-    capturedSoFar: Position[],
-    originalFrom: Position
-  ): Move[] {
-    const moves: Move[] = [];
-    const allDirections = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
-    let foundJump = false;
-
-    for (const [dr, dc] of allDirections) {
-      const captureRow = row + dr;
-      const captureCol = col + dc;
-      const landRow = row + dr * 2;
-      const landCol = col + dc * 2;
-
-      if (
-        isValidPosition(landRow, landCol) &&
-        isValidPosition(captureRow, captureCol)
-      ) {
-        const capturedPiece = board[captureRow][captureCol];
-        const landPiece = board[landRow][landCol];
-
-        // Don't capture same piece twice
-        const alreadyCaptured = capturedSoFar.some(
-          p => p.row === captureRow && p.col === captureCol
-        );
-
-        if (
-          capturedPiece &&
-          capturedPiece.player !== piece!.player &&
-          !landPiece &&
-          !alreadyCaptured
-        ) {
-          foundJump = true;
-          const newCaptured = [...capturedSoFar, { row: captureRow, col: captureCol }];
-          const furtherJumps = findMultiJumps(board, landRow, landCol, piece, newCaptured, originalFrom);
-          moves.push(...furtherJumps);
-        }
-      }
-    }
-
-    // If no further jumps, this is an end position
-    if (!foundJump) {
-      moves.push({
-        from: originalFrom,
-        to: { row, col },
-        captures: capturedSoFar
-      });
-    }
-
-    return moves;
-  }
-
-  function makeMove(board: Board, move: Move): Board {
-    const newBoard = board.map(row => row.map(cell => cell ? { ...cell } : null));
-    const piece = newBoard[move.from.row][move.from.col];
-
-    if (!piece) return newBoard;
-
-    // Remove captured pieces
-    move.captures.forEach(cap => {
-      newBoard[cap.row][cap.col] = null;
-    });
-
-    // Move piece
-    newBoard[move.from.row][move.from.col] = null;
-    newBoard[move.to.row][move.to.col] = piece;
-
-    // Check for king promotion
-    if (piece.player === "RED" && move.to.row === 0) {
-      newBoard[move.to.row][move.to.col]!.isKing = true;
-    } else if (piece.player === "BLACK" && move.to.row === BOARD_SIZE - 1) {
-      newBoard[move.to.row][move.to.col]!.isKing = true;
-    }
-
-    return newBoard;
-  }
-
-  function evaluateBoard(board: Board): number {
-    let score = 0;
-
-    for (let row = 0; row < BOARD_SIZE; row++) {
-      for (let col = 0; col < BOARD_SIZE; col++) {
-        const piece = board[row][col];
-        if (piece) {
-          const value = piece.isKing ? 30 : 10;
-          const positionBonus = piece.player === "BLACK"
-            ? (BOARD_SIZE - 1 - row) * 0.5 // Black wants to advance down
-            : row * 0.5; // Red wants to advance up
-
-          if (piece.player === "BLACK") {
-            score += value + positionBonus;
-          } else {
-            score -= value + positionBonus;
-          }
-        }
-      }
-    }
-
-    return score;
-  }
-
-  function minimax(
-    board: Board,
-    depth: number,
-    alpha: number,
-    beta: number,
-    maximizingPlayer: boolean
-  ): [number, Move | null] {
-    const currentPlayerColor = maximizingPlayer ? "BLACK" : "RED";
-    const moves = getValidMoves(board, currentPlayerColor);
-
-    if (depth === 0 || moves.length === 0) {
-      return [evaluateBoard(board), null];
-    }
-
-    if (maximizingPlayer) {
-      let maxScore = -Infinity;
-      let bestMove = moves[Math.floor(Math.random() * moves.length)];
-
-      for (const move of moves) {
-        const newBoard = makeMove(board, move);
-        const [score] = minimax(newBoard, depth - 1, alpha, beta, false);
-
-        if (score > maxScore) {
-          maxScore = score;
-          bestMove = move;
-        }
-
-        alpha = Math.max(alpha, score);
-        if (beta <= alpha) break;
-      }
-
-      return [maxScore, bestMove];
-    } else {
-      let minScore = Infinity;
-      let bestMove = moves[Math.floor(Math.random() * moves.length)];
-
-      for (const move of moves) {
-        const newBoard = makeMove(board, move);
-        const [score] = minimax(newBoard, depth - 1, alpha, beta, true);
-
-        if (score < minScore) {
-          minScore = score;
-          bestMove = move;
-        }
-
-        beta = Math.min(beta, score);
-        if (beta <= alpha) break;
-      }
-
-      return [minScore, bestMove];
-    }
-  }
-
-  function getBestMove(board: Board): Move | null {
-    const [, move] = minimax(board, 5, -Infinity, Infinity, true);
-    return move;
-  }
-
-  function checkGameOver(board: Board, player: Player): "WON" | "LOST" | "DRAW" | null {
-    const playerMoves = getValidMoves(board, player);
-    const opponentMoves = getValidMoves(board, player === "RED" ? "BLACK" : "RED");
-
-    if (playerMoves.length === 0 && opponentMoves.length === 0) {
-      return "DRAW";
-    }
-
-    if (playerMoves.length === 0) {
-      return "LOST";
-    }
-
-    if (opponentMoves.length === 0) {
-      return "WON";
-    }
-
-    // Draw after 100 moves without capture
-    if (moveCount > 100) {
-      return "DRAW";
-    }
-
-    return null;
-  }
-
-  const handleCellClick = useCallback((row: number, col: number) => {
-    if (gameState !== "PLAYING" || currentPlayer !== "RED" || isAiThinking) {
-      return;
-    }
-
-    const piece = board[row][col];
-
-    // If clicking on own piece, select it
-    if (piece && piece.player === "RED") {
-      const moves = getValidMovesForPiece(board, row, col);
-      const allMoves = getValidMoves(board, "RED");
-      const hasCaptureMove = allMoves.some(m => m.captures.length > 0);
-
-      // If there are capture moves available, only show capture moves for this piece
-      const filteredMoves = hasCaptureMove
-        ? moves.filter(m => m.captures.length > 0)
-        : moves;
-
-      // Don't select pieces with no valid moves when captures are mandatory
-      if (hasCaptureMove && filteredMoves.length === 0) {
-        return; // This piece can't capture, don't select it
-      }
-
-      setSelectedPiece({ row, col });
-      setValidMoves(filteredMoves);
-      return;
-    }
-
-    // If no piece selected, do nothing
-    if (!selectedPiece) return;
-
-    // Check if this is a valid move
-    const move = validMoves.find(m => m.to.row === row && m.to.col === col);
-    if (!move) {
-      setSelectedPiece(null);
-      setValidMoves([]);
-      return;
-    }
-
-    // Make the move
-    const newBoard = makeMove(board, move);
-    setBoard(newBoard);
-    setSelectedPiece(null);
-    setValidMoves([]);
-    setMoveCount(move.captures.length > 0 ? 0 : moveCount + 1);
-
-    // Check game over
-    const gameOver = checkGameOver(newBoard, "RED");
-    if (gameOver === "WON") {
-      setGameState("PLAYER_WON");
-      saveStats({ ...stats, wins: stats.wins + 1 });
-      return;
-    }
-    if (gameOver === "LOST") {
-      setGameState("AI_WON");
-      saveStats({ ...stats, losses: stats.losses + 1 });
-      return;
-    }
-    if (gameOver === "DRAW") {
-      setGameState("DRAW");
-      saveStats({ ...stats, draws: stats.draws + 1 });
-      return;
-    }
-
-    // AI's turn
-    setCurrentPlayer("BLACK");
-    setIsAiThinking(true);
-
-    setTimeout(() => {
-      const aiMove = getBestMove(newBoard);
-      if (!aiMove) {
-        setGameState("PLAYER_WON");
-        saveStats({ ...stats, wins: stats.wins + 1 });
-        setIsAiThinking(false);
-        return;
-      }
-
-      const aiBoard = makeMove(newBoard, aiMove);
-      setBoard(aiBoard);
-      setMoveCount(aiMove.captures.length > 0 ? 0 : moveCount + 1);
-
-      const aiGameOver = checkGameOver(aiBoard, "BLACK");
-      if (aiGameOver === "WON") {
-        setGameState("AI_WON");
-        saveStats({ ...stats, losses: stats.losses + 1 });
-        setIsAiThinking(false);
-        return;
-      }
-      if (aiGameOver === "LOST") {
-        setGameState("PLAYER_WON");
-        saveStats({ ...stats, wins: stats.wins + 1 });
-        setIsAiThinking(false);
-        return;
-      }
-      if (aiGameOver === "DRAW") {
-        setGameState("DRAW");
-        saveStats({ ...stats, draws: stats.draws + 1 });
-        setIsAiThinking(false);
-        return;
-      }
-
-      setCurrentPlayer("RED");
-      setIsAiThinking(false);
-    }, 600);
-  }, [gameState, currentPlayer, isAiThinking, board, selectedPiece, validMoves, stats, moveCount]);
-
-  const startGame = useCallback(() => {
-    setBoard(createInitialBoard());
-    setCurrentPlayer("RED");
-    setGameState("PLAYING");
-    setSelectedPiece(null);
-    setValidMoves([]);
-    setIsAiThinking(false);
-    setMoveCount(0);
-  }, []);
-
-  const draw = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    // Background
-    ctx.fillStyle = "#1e293b";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Draw board
-    for (let row = 0; row < BOARD_SIZE; row++) {
-      for (let col = 0; col < BOARD_SIZE; col++) {
-        const x = PADDING + col * CELL_SIZE;
-        const y = PADDING + row * CELL_SIZE;
-
-        // Checkerboard pattern
-        ctx.fillStyle = (row + col) % 2 === 0 ? "#9ca3af" : "#4b5563";
-        ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
-
-        // Highlight selected piece
-        if (selectedPiece && selectedPiece.row === row && selectedPiece.col === col) {
-          ctx.fillStyle = "rgba(59, 130, 246, 0.5)";
-          ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
-        }
-
-        // Highlight valid moves
-        const isValidMove = validMoves.some(m => m.to.row === row && m.to.col === col);
-        if (isValidMove) {
-          ctx.fillStyle = "rgba(34, 197, 94, 0.4)";
-          ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
-
-          // Draw indicator circle
-          ctx.fillStyle = "rgba(34, 197, 94, 0.8)";
-          ctx.beginPath();
-          ctx.arc(x + CELL_SIZE / 2, y + CELL_SIZE / 2, 8, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        // Draw pieces
-        const piece = board[row][col];
-        if (piece) {
-          const centerX = x + CELL_SIZE / 2;
-          const centerY = y + CELL_SIZE / 2;
-          const radius = CELL_SIZE / 2 - 8;
-
-          // Shadow
-          ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
-          ctx.beginPath();
-          ctx.arc(centerX + 2, centerY + 2, radius, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Piece gradient
-          const gradient = ctx.createRadialGradient(
-            centerX - radius / 3,
-            centerY - radius / 3,
-            0,
-            centerX,
-            centerY,
-            radius
-          );
-
-          if (piece.player === "RED") {
-            gradient.addColorStop(0, "#fca5a5");
-            gradient.addColorStop(0.7, "#ef4444");
-            gradient.addColorStop(1, "#b91c1c");
-          } else {
-            gradient.addColorStop(0, "#6b7280");
-            gradient.addColorStop(0.7, "#374151");
-            gradient.addColorStop(1, "#1f2937");
-          }
-
-          ctx.fillStyle = gradient;
-          ctx.beginPath();
-          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Border
-          ctx.strokeStyle = piece.player === "RED" ? "#7f1d1d" : "#111827";
-          ctx.lineWidth = 2;
-          ctx.stroke();
-
-          // Highlight
-          ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
-          ctx.beginPath();
-          ctx.arc(centerX - radius / 3, centerY - radius / 3, radius / 4, 0, Math.PI * 2);
-          ctx.fill();
-
-          // King crown
-          if (piece.isKing) {
-            ctx.fillStyle = "#fbbf24";
-            ctx.font = "bold 24px Arial";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText("♔", centerX, centerY);
-          }
-        }
-      }
-    }
-
-    // Highlight pieces that must capture
-    if (gameState === "PLAYING" && currentPlayer === "RED" && !isAiThinking) {
-      const allMoves = getValidMoves(board, "RED");
-      const hasCaptureMove = allMoves.some(m => m.captures.length > 0);
-      if (hasCaptureMove) {
-        const capturePieces = new Set(allMoves.filter(m => m.captures.length > 0).map(m => `${m.from.row},${m.from.col}`));
-        for (const key of capturePieces) {
-          const [r, c] = key.split(',').map(Number);
-          const x = PADDING + c * CELL_SIZE;
-          const y = PADDING + r * CELL_SIZE;
-          ctx.strokeStyle = "#fbbf24";
-          ctx.lineWidth = 3;
-          ctx.strokeRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4);
-        }
-      }
-    }
-  }, [board, selectedPiece, validMoves, gameState, currentPlayer, isAiThinking]);
+  const [board, setBoard] = useState<Board>(initialBoard);
+  const [turn, setTurn] = useState<Side>("r");
+  const [selected, setSelected] = useState<Pos | null>(null);
+  const [aiThinking, setAiThinking] = useState(false);
+  const [winner, setWinner] = useState<Side | null>(null);
+
+  const moves = useMemo(() => legalMoves(board, turn), [board, turn]);
 
   useEffect(() => {
-    draw();
-  }, [draw]);
-
-  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    const col = Math.floor((x * scaleX - PADDING) / CELL_SIZE);
-    const row = Math.floor((y * scaleY - PADDING) / CELL_SIZE);
-
-    if (row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE) {
-      handleCellClick(row, col);
+    if (moves.length === 0) {
+      setWinner(turn === "r" ? "b" : "r");
     }
+  }, [moves, turn]);
+
+  useEffect(() => {
+    if (turn !== "b" || winner) return;
+    setAiThinking(true);
+    const t = setTimeout(() => {
+      const { move } = minimax(board, 5, -Infinity, Infinity, "b");
+      if (move) {
+        setBoard(applyMove(board, move));
+        setTurn("r");
+      }
+      setAiThinking(false);
+    }, 300);
+    return () => clearTimeout(t);
+  }, [turn, board, winner]);
+
+  const movesFromSelected = useMemo(() => {
+    if (!selected) return [];
+    const [sr, sc] = selected;
+    return moves.filter((m) => m.from[0] === sr && m.from[1] === sc);
+  }, [moves, selected]);
+
+  const newGame = () => {
+    setBoard(initialBoard());
+    setTurn("r");
+    setSelected(null);
+    setAiThinking(false);
+    setWinner(null);
   };
 
-  const handleShare = async () => {
-    const text = `I won ${stats.wins} games in Checkers! Can you beat me? https://playmini.fun/checkers`;
-    if (navigator.share) {
-      try {
-        await navigator.share({ text });
-      } catch {}
+  const onCellClick = (r: number, c: number) => {
+    if (winner || aiThinking || turn !== "r") return;
+    const piece = board[r][c];
+
+    if (selected) {
+      const move = movesFromSelected.find((m) => m.to[0] === r && m.to[1] === c);
+      if (move) {
+        setBoard(applyMove(board, move));
+        setTurn("b");
+        setSelected(null);
+        return;
+      }
+    }
+    if (piece && piece.side === "r") {
+      if (moves.some((m) => m.from[0] === r && m.from[1] === c)) {
+        setSelected([r, c]);
+      }
     } else {
-      try {
-        await navigator.clipboard.writeText(text);
-        alert("Copied!");
-      } catch {}
+      setSelected(null);
     }
   };
+
+  const isMoveTarget = (r: number, c: number) =>
+    movesFromSelected.some((m) => m.to[0] === r && m.to[1] === c);
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center gap-4">
-      {/* Stats */}
-      <div className="flex gap-6 text-center">
-        <div>
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Wins</div>
-          <div className="text-2xl font-black text-green-400 tabular-nums">{stats.wins}</div>
-        </div>
-        <div>
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Losses</div>
-          <div className="text-2xl font-black text-red-400 tabular-nums">{stats.losses}</div>
-        </div>
-        <div>
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Draws</div>
-          <div className="text-2xl font-black text-yellow-400 tabular-nums">{stats.draws}</div>
-        </div>
-      </div>
-
-      {/* Canvas */}
-      <div className="relative">
-        <canvas
-          ref={canvasRef}
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
-          onClick={handleCanvasClick}
-          className="rounded-2xl max-w-full h-auto cursor-pointer"
-          style={{ touchAction: "none" }}
-        />
-
-        {gameState === "START" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
-            <div className="text-6xl mb-3">🔴⚫</div>
-            <h2 className="text-3xl font-black bg-gradient-to-r from-red-400 to-gray-500 bg-clip-text text-transparent mb-2">
-              Checkers
-            </h2>
-            <p className="text-gray-400 mb-6 text-sm">Click a piece to see valid moves</p>
-            <button
-              onClick={startGame}
-              className="px-10 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all hover:scale-105 active:scale-95"
-            >
-              Play vs AI
-            </button>
-          </div>
-        )}
-
-        {gameState === "PLAYER_WON" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
-            <h2 className="text-3xl font-black text-green-400 mb-4">You Won!</h2>
-            <div className="bg-slate-900/80 rounded-xl px-6 py-3 mb-6">
-              <p className="text-white text-lg font-bold">Wins: {stats.wins}</p>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={startGame}
-                className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
-              >
-                Play Again
-              </button>
-              <button
-                onClick={handleShare}
-                className="px-6 py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
-              >
-                Share
-              </button>
-              <DownloadButton canvasRef={canvasRef} filename="checkers-win" label="Save" />
-            </div>
-          </div>
-        )}
-
-        {gameState === "AI_WON" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
-            <h2 className="text-3xl font-black text-red-400 mb-4">AI Won!</h2>
-            <div className="bg-slate-900/80 rounded-xl px-6 py-3 mb-6">
-              <p className="text-white text-lg font-bold">Better luck next time!</p>
-            </div>
-            <button
-              onClick={startGame}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
-            >
-              Play Again
-            </button>
-          </div>
-        )}
-
-        {gameState === "DRAW" && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
-            <h2 className="text-3xl font-black text-yellow-400 mb-4">Draw!</h2>
-            <div className="bg-slate-900/80 rounded-xl px-6 py-3 mb-6">
-              <p className="text-white text-lg font-bold">Game ended in a draw</p>
-            </div>
-            <button
-              onClick={startGame}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
-            >
-              Play Again
-            </button>
-          </div>
+    <div className="flex flex-col items-center gap-4">
+      <div className="text-white text-lg">
+        {winner ? (
+          <span className="font-bold text-yellow-400">
+            {winner === "r" ? "You win!" : "AI wins"}
+          </span>
+        ) : (
+          <span>
+            Turn:{" "}
+            <span className={turn === "r" ? "text-red-400 font-bold" : "text-gray-300 font-bold"}>
+              {turn === "r" ? "You (Red)" : "AI (Black)"}
+            </span>
+            {aiThinking && " (thinking…)"}
+          </span>
         )}
       </div>
 
-      {gameState === "PLAYING" && (
-        <div className="text-center">
-          {isAiThinking ? (
-            <p className="text-yellow-400 font-semibold">AI is thinking...</p>
-          ) : (
-            <p className="text-gray-400">
-              {currentPlayer === "RED"
-                ? selectedPiece
-                  ? "Click a highlighted square to move"
-                  : (() => {
-                      const allMoves = getValidMoves(board, "RED");
-                      const hasCaptureMove = allMoves.some(m => m.captures.length > 0);
-                      return hasCaptureMove
-                        ? "You must capture! (pieces with yellow border)"
-                        : "Your turn - Select a red piece";
-                    })()
-                : "AI's turn"}
-            </p>
+      <div className="inline-block bg-amber-900 p-2 rounded">
+        <div className="grid grid-cols-8 border-2 border-amber-950">
+          {board.map((row, r) =>
+            row.map((piece, c) => {
+              const dark = (r + c) % 2 === 1;
+              const isSelected = selected && selected[0] === r && selected[1] === c;
+              const target = isMoveTarget(r, c);
+              return (
+                <button
+                  key={`${r}-${c}`}
+                  onClick={() => onCellClick(r, c)}
+                  className={`relative w-10 h-10 md:w-12 md:h-12 flex items-center justify-center ${
+                    dark ? "bg-amber-800" : "bg-amber-200"
+                  } ${isSelected ? "ring-4 ring-yellow-400 ring-inset" : ""}`}
+                  aria-label={`Row ${r + 1} col ${c + 1}`}
+                >
+                  {piece && (
+                    <div
+                      className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-lg ${
+                        piece.side === "r"
+                          ? "bg-red-600 text-white"
+                          : "bg-gray-900 text-white"
+                      } shadow-md`}
+                    >
+                      {piece.king ? "♚" : ""}
+                    </div>
+                  )}
+                  {target && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="w-3 h-3 rounded-full bg-green-400/70" />
+                    </div>
+                  )}
+                </button>
+              );
+            })
           )}
         </div>
-      )}
+      </div>
+
+      <button
+        onClick={newGame}
+        className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+      >
+        New Game
+      </button>
+
+      <p className="text-sm text-gray-400 text-center max-w-md">
+        Captures are mandatory. Pieces reaching the far row become kings and can move backward.
+      </p>
     </div>
   );
 }

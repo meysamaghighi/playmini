@@ -1,433 +1,176 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from "react";
 
-type Cell = 'X' | 'O' | null;
-type Board = Cell[];
-type GameMode = 'ai' | 'friend';
-type Difficulty = 'easy' | 'medium' | 'hard';
-type WinLine = [number, number, number] | null;
+type Cell = "X" | "O" | null;
+type Mode = "vs-ai" | "two-player";
 
-const WINNING_COMBINATIONS = [
-  [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-  [0, 3, 6], [1, 4, 7], [2, 5, 8], // cols
-  [0, 4, 8], [2, 4, 6] // diagonals
+const LINES: [number, number, number][] = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8],
+  [0, 3, 6], [1, 4, 7], [2, 5, 8],
+  [0, 4, 8], [2, 4, 6],
 ];
 
+function checkWinner(board: Cell[]): { winner: Cell; line: [number, number, number] | null } {
+  for (const line of LINES) {
+    const [a, b, c] = line;
+    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+      return { winner: board[a], line };
+    }
+  }
+  return { winner: null, line: null };
+}
+
+function minimax(board: Cell[], ai: Cell, current: Cell): { score: number; move: number } {
+  const { winner } = checkWinner(board);
+  if (winner === ai) return { score: 10, move: -1 };
+  if (winner && winner !== ai) return { score: -10, move: -1 };
+  if (board.every((c) => c !== null)) return { score: 0, move: -1 };
+
+  const best = { score: current === ai ? -Infinity : Infinity, move: -1 };
+  for (let i = 0; i < 9; i++) {
+    if (board[i]) continue;
+    const next = board.slice();
+    next[i] = current;
+    const { score } = minimax(next, ai, current === "X" ? "O" : "X");
+    if (current === ai ? score > best.score : score < best.score) {
+      best.score = score;
+      best.move = i;
+    }
+  }
+  return best;
+}
+
 export default function TicTacToe() {
-  const [board, setBoard] = useState<Board>(Array(9).fill(null));
-  const [isXNext, setIsXNext] = useState(true);
-  const [gameMode, setGameMode] = useState<GameMode>('ai');
-  const [difficulty, setDifficulty] = useState<Difficulty>('medium');
-  const [winner, setWinner] = useState<'X' | 'O' | 'Draw' | null>(null);
-  const [winLine, setWinLine] = useState<WinLine>(null);
-  const [scores, setScores] = useState({ xWins: 0, oWins: 0, draws: 0 });
-  const [isThinking, setIsThinking] = useState(false);
+  const [board, setBoard] = useState<Cell[]>(Array(9).fill(null));
+  const [turn, setTurn] = useState<Cell>("X");
+  const [mode, setMode] = useState<Mode>("vs-ai");
+  const [stats, setStats] = useState({ x: 0, o: 0, draws: 0 });
 
-  // Load stats from localStorage
+  const { winner, line } = useMemo(() => checkWinner(board), [board]);
+  const full = board.every((c) => c !== null);
+  const done = !!winner || full;
+
   useEffect(() => {
-    const saved = localStorage.getItem('pb-tictactoe');
-    if (saved) {
-      try {
-        const stats = JSON.parse(saved);
-        setScores(stats);
-      } catch (e) {
-        // ignore parse errors
-      }
-    }
-  }, []);
+    if (!done) return;
+    setStats((prev) => {
+      if (winner === "X") return { ...prev, x: prev.x + 1 };
+      if (winner === "O") return { ...prev, o: prev.o + 1 };
+      return { ...prev, draws: prev.draws + 1 };
+    });
+  }, [done, winner]);
 
-  // Save stats to localStorage
   useEffect(() => {
-    localStorage.setItem('pb-tictactoe', JSON.stringify(scores));
-  }, [scores]);
-
-  // AI move effect
-  useEffect(() => {
-    if (gameMode === 'ai' && !isXNext && !winner && board.some(cell => cell === null)) {
-      setIsThinking(true);
-      const timeout = setTimeout(() => {
-        makeAIMove();
-        setIsThinking(false);
-      }, 500);
-      return () => clearTimeout(timeout);
-    }
-  }, [isXNext, winner, board, gameMode, difficulty]);
-
-  const checkWinner = (currentBoard: Board): { winner: 'X' | 'O' | 'Draw' | null, line: WinLine } => {
-    // Check winning combinations
-    for (const [a, b, c] of WINNING_COMBINATIONS) {
-      if (currentBoard[a] && currentBoard[a] === currentBoard[b] && currentBoard[a] === currentBoard[c]) {
-        return { winner: currentBoard[a] as 'X' | 'O', line: [a, b, c] };
+    if (mode !== "vs-ai" || turn !== "O" || done) return;
+    const t = setTimeout(() => {
+      const { move } = minimax(board, "O", "O");
+      if (move >= 0) {
+        const next = board.slice();
+        next[move] = "O";
+        setBoard(next);
+        setTurn("X");
       }
-    }
+    }, 250);
+    return () => clearTimeout(t);
+  }, [board, mode, turn, done]);
 
-    // Check for draw
-    if (currentBoard.every(cell => cell !== null)) {
-      return { winner: 'Draw', line: null };
-    }
-
-    return { winner: null, line: null };
+  const play = (i: number) => {
+    if (done || board[i]) return;
+    if (mode === "vs-ai" && turn !== "X") return;
+    const next = board.slice();
+    next[i] = turn;
+    setBoard(next);
+    setTurn(turn === "X" ? "O" : "X");
   };
 
-  const handleClick = (index: number) => {
-    if (board[index] || winner || (gameMode === 'ai' && !isXNext)) return;
-
-    const newBoard = [...board];
-    newBoard[index] = isXNext ? 'X' : 'O';
-    setBoard(newBoard);
-
-    const result = checkWinner(newBoard);
-    if (result.winner) {
-      setWinner(result.winner);
-      setWinLine(result.line);
-      updateScores(result.winner);
-    } else {
-      setIsXNext(!isXNext);
-    }
-  };
-
-  const makeAIMove = () => {
-    const newBoard = [...board];
-    let moveIndex: number;
-
-    if (difficulty === 'easy') {
-      // 50% random
-      if (Math.random() < 0.5) {
-        moveIndex = getRandomMove(newBoard);
-      } else {
-        moveIndex = getBestMove(newBoard);
-      }
-    } else if (difficulty === 'medium') {
-      // 20% random
-      if (Math.random() < 0.2) {
-        moveIndex = getRandomMove(newBoard);
-      } else {
-        moveIndex = getBestMove(newBoard);
-      }
-    } else {
-      // Hard: always best move
-      moveIndex = getBestMove(newBoard);
-    }
-
-    newBoard[moveIndex] = 'O';
-    setBoard(newBoard);
-
-    const result = checkWinner(newBoard);
-    if (result.winner) {
-      setWinner(result.winner);
-      setWinLine(result.line);
-      updateScores(result.winner);
-    } else {
-      setIsXNext(true);
-    }
-  };
-
-  const getRandomMove = (currentBoard: Board): number => {
-    const available = currentBoard.map((cell, idx) => cell === null ? idx : -1).filter(idx => idx !== -1);
-    return available[Math.floor(Math.random() * available.length)];
-  };
-
-  const getBestMove = (currentBoard: Board): number => {
-    let bestScore = -Infinity;
-    let bestMove = 0;
-
-    for (let i = 0; i < 9; i++) {
-      if (currentBoard[i] === null) {
-        currentBoard[i] = 'O';
-        const score = minimax(currentBoard, 0, false);
-        currentBoard[i] = null;
-
-        if (score > bestScore) {
-          bestScore = score;
-          bestMove = i;
-        }
-      }
-    }
-
-    return bestMove;
-  };
-
-  const minimax = (currentBoard: Board, depth: number, isMaximizing: boolean): number => {
-    const result = checkWinner(currentBoard);
-
-    if (result.winner === 'O') return 10 - depth;
-    if (result.winner === 'X') return depth - 10;
-    if (result.winner === 'Draw') return 0;
-
-    if (isMaximizing) {
-      let bestScore = -Infinity;
-      for (let i = 0; i < 9; i++) {
-        if (currentBoard[i] === null) {
-          currentBoard[i] = 'O';
-          const score = minimax(currentBoard, depth + 1, false);
-          currentBoard[i] = null;
-          bestScore = Math.max(score, bestScore);
-        }
-      }
-      return bestScore;
-    } else {
-      let bestScore = Infinity;
-      for (let i = 0; i < 9; i++) {
-        if (currentBoard[i] === null) {
-          currentBoard[i] = 'X';
-          const score = minimax(currentBoard, depth + 1, true);
-          currentBoard[i] = null;
-          bestScore = Math.min(score, bestScore);
-        }
-      }
-      return bestScore;
-    }
-  };
-
-  const updateScores = (result: 'X' | 'O' | 'Draw') => {
-    if (result === 'X') {
-      setScores(prev => ({ ...prev, xWins: prev.xWins + 1 }));
-    } else if (result === 'O') {
-      setScores(prev => ({ ...prev, oWins: prev.oWins + 1 }));
-    } else {
-      setScores(prev => ({ ...prev, draws: prev.draws + 1 }));
-    }
-  };
-
-  const resetGame = () => {
+  const reset = () => {
     setBoard(Array(9).fill(null));
-    setIsXNext(true);
-    setWinner(null);
-    setWinLine(null);
+    setTurn("X");
   };
-
-  const resetScores = () => {
-    setScores({ xWins: 0, oWins: 0, draws: 0 });
-    localStorage.setItem('pb-tictactoe', JSON.stringify({ xWins: 0, oWins: 0, draws: 0 }));
-  };
-
-  const handleShare = async () => {
-    const text = `I've played Tic-Tac-Toe on PlayMini!\n\nX Wins: ${scores.xWins} | O Wins: ${scores.oWins} | Draws: ${scores.draws}\n\nPlay at playmini.fun/tic-tac-toe`;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ text });
-      } catch (err) {
-        // User cancelled or error
-      }
-    } else {
-      navigator.clipboard.writeText(text);
-      alert('Stats copied to clipboard!');
-    }
-  };
-
-  const winSet = new Set(winLine ?? []);
 
   return (
-    <div className="max-w-2xl mx-auto">
-      {/* Mode Selector */}
-      <div className="flex gap-2 mb-6 justify-center">
-        <button
-          onClick={() => { setGameMode('ai'); resetGame(); }}
-          className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
-            gameMode === 'ai'
-              ? 'bg-cyan-500 text-white'
-              : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-          }`}
-        >
-          vs AI
-        </button>
-        <button
-          onClick={() => { setGameMode('friend'); resetGame(); }}
-          className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
-            gameMode === 'friend'
-              ? 'bg-cyan-500 text-white'
-              : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-          }`}
-        >
-          vs Friend
-        </button>
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex items-center gap-2">
+        {(["vs-ai", "two-player"] as Mode[]).map((m) => (
+          <button
+            key={m}
+            onClick={() => {
+              setMode(m);
+              reset();
+            }}
+            className={`px-4 py-2 rounded font-bold ${
+              mode === m ? "bg-indigo-600 text-white" : "bg-gray-700 text-gray-200"
+            }`}
+          >
+            {m === "vs-ai" ? "Vs AI" : "Two Player"}
+          </button>
+        ))}
       </div>
 
-      {/* Difficulty Selector (AI mode only) */}
-      {gameMode === 'ai' && (
-        <div className="flex gap-2 mb-6 justify-center">
-          <button
-            onClick={() => { setDifficulty('easy'); resetGame(); }}
-            className={`px-4 py-1.5 rounded text-sm font-medium transition-colors ${
-              difficulty === 'easy'
-                ? 'bg-green-500 text-white'
-                : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
-            }`}
-          >
-            Easy
-          </button>
-          <button
-            onClick={() => { setDifficulty('medium'); resetGame(); }}
-            className={`px-4 py-1.5 rounded text-sm font-medium transition-colors ${
-              difficulty === 'medium'
-                ? 'bg-yellow-500 text-white'
-                : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
-            }`}
-          >
-            Medium
-          </button>
-          <button
-            onClick={() => { setDifficulty('hard'); resetGame(); }}
-            className={`px-4 py-1.5 rounded text-sm font-medium transition-colors ${
-              difficulty === 'hard'
-                ? 'bg-red-500 text-white'
-                : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
-            }`}
-          >
-            Hard
-          </button>
+      <div className="flex items-center gap-6 text-white">
+        <div>
+          X: <span className="font-bold text-blue-400">{stats.x}</span>
         </div>
-      )}
+        <div>
+          Draws: <span className="font-bold text-gray-300">{stats.draws}</span>
+        </div>
+        <div>
+          O: <span className="font-bold text-pink-400">{stats.o}</span>
+        </div>
+      </div>
 
-      {/* Game Status */}
-      <div className="text-center mb-6">
+      <div className="text-white text-lg">
         {winner ? (
-          <div className="animate-bounce-in">
-            <p className="text-3xl font-bold mb-2">
-              {winner === 'Draw' ? (
-                <span className="text-slate-300">It's a Draw!</span>
-              ) : (
-                <span className={winner === 'X' ? 'text-cyan-400' : 'text-rose-400'}>
-                  {winner} Wins!
-                </span>
-              )}
-            </p>
-          </div>
+          <span className="font-bold text-yellow-400">
+            {mode === "vs-ai"
+              ? winner === "X"
+                ? "You win!"
+                : "AI wins"
+              : `${winner} wins!`}
+          </span>
+        ) : full ? (
+          <span className="font-bold text-gray-300">Draw</span>
         ) : (
-          <p className="text-xl text-slate-300">
-            {isThinking ? (
-              <span className="text-rose-400">AI is thinking...</span>
-            ) : (
-              <>
-                Next: <span className={isXNext ? 'text-cyan-400 font-bold' : 'text-rose-400 font-bold'}>
-                  {isXNext ? 'X' : 'O'}
-                </span>
-              </>
-            )}
-          </p>
+          <span>
+            Turn:{" "}
+            <span className={turn === "X" ? "text-blue-400 font-bold" : "text-pink-400 font-bold"}>
+              {turn}
+            </span>
+          </span>
         )}
       </div>
 
-      {/* Board */}
-      <div className="bg-slate-900 p-6 rounded-xl mb-6">
-        <div className="relative aspect-square max-w-md mx-auto">
-          <div className="grid grid-cols-3 gap-3 h-full">
-            {board.map((cell, index) => {
-              const isWin = winSet.has(index);
-              return (
-                <button
-                  key={index}
-                  onClick={() => handleClick(index)}
-                  disabled={!!cell || !!winner || (gameMode === 'ai' && !isXNext)}
-                  className={`rounded-lg flex items-center justify-center text-5xl font-bold transition-all ${
-                    isWin
-                      ? 'bg-green-600/40 ring-2 ring-green-400'
-                      : 'bg-slate-800'
-                  } ${
-                    !cell && !winner && !(gameMode === 'ai' && !isXNext)
-                      ? 'hover:bg-slate-700 cursor-pointer'
-                      : 'cursor-default'
-                  } ${cell === 'X' ? 'text-cyan-400' : cell === 'O' ? 'text-rose-400' : ''}`}
-                  style={{ minHeight: '80px' }}
-                >
-                  {cell && (
-                    <span className={cell === 'X' ? 'animate-draw-x' : 'animate-draw-o'}>
-                      {cell}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+      <div className="grid grid-cols-3 gap-2 bg-gray-800 p-2 rounded-lg">
+        {board.map((v, i) => {
+          const isWin = line?.includes(i);
+          return (
+            <button
+              key={i}
+              onClick={() => play(i)}
+              disabled={!!v || done}
+              className={`w-20 h-20 md:w-24 md:h-24 rounded text-5xl font-bold ${
+                isWin
+                  ? "bg-yellow-400 text-gray-900"
+                  : v === "X"
+                  ? "bg-blue-500 text-white"
+                  : v === "O"
+                  ? "bg-pink-500 text-white"
+                  : "bg-gray-700 hover:bg-gray-600 text-white"
+              }`}
+              aria-label={`Cell ${i + 1}`}
+            >
+              {v ?? ""}
+            </button>
+          );
+        })}
       </div>
 
-      {/* Scores */}
-      <div className="bg-slate-800 p-6 rounded-xl mb-6">
-        <div className="grid grid-cols-3 gap-4 text-center">
-          <div>
-            <p className="text-cyan-400 text-3xl font-bold">{scores.xWins}</p>
-            <p className="text-slate-400 text-sm mt-1">X Wins</p>
-          </div>
-          <div>
-            <p className="text-slate-300 text-3xl font-bold">{scores.draws}</p>
-            <p className="text-slate-400 text-sm mt-1">Draws</p>
-          </div>
-          <div>
-            <p className="text-rose-400 text-3xl font-bold">{scores.oWins}</p>
-            <p className="text-slate-400 text-sm mt-1">O Wins</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="flex gap-3 justify-center flex-wrap">
-        <button
-          onClick={resetGame}
-          className="px-6 py-3 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg font-semibold transition-colors"
-        >
-          {winner ? 'Play Again' : 'New Game'}
-        </button>
-        <button
-          onClick={resetScores}
-          className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg font-semibold transition-colors"
-        >
-          Reset Scores
-        </button>
-        <button
-          onClick={handleShare}
-          className="px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white rounded-lg font-semibold transition-colors"
-        >
-          Share Stats
-        </button>
-      </div>
-
-      <style jsx>{`
-        @keyframes draw-x {
-          from {
-            opacity: 0;
-            transform: scale(0) rotate(-180deg);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1) rotate(0deg);
-          }
-        }
-
-        @keyframes draw-o {
-          from {
-            opacity: 0;
-            transform: scale(0);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-
-        @keyframes bounce-in {
-          0%, 100% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.1);
-          }
-        }
-
-        .animate-draw-x {
-          animation: draw-x 0.3s ease-out;
-        }
-
-        .animate-draw-o {
-          animation: draw-o 0.3s ease-out;
-        }
-
-        .animate-bounce-in {
-          animation: bounce-in 0.6s ease-out;
-        }
-      `}</style>
+      <button
+        onClick={reset}
+        className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+      >
+        New Game
+      </button>
     </div>
   );
 }
