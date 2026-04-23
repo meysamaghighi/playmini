@@ -5,7 +5,7 @@ import MoreGames from "../components/MoreGames";
 export const metadata: Metadata = {
   title: "Play Memory Match Online Free - Card Game | PlayMini",
   description:
-    "Play Memory Match online free! 10 campaign levels + endless mode with power-ups, combo system, and themed card sets. Flip cards to find matching pairs. No download needed.",
+    "Play Memory Match online free! Flip cards to find matching pairs. Three difficulty levels, timer, fewest-moves best score saved. No download needed.",
   keywords:
     "memory match, memory game, card flip game, matching game, concentration game, brain game, memory test, online memory game, free memory game",
   alternates: {
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Play Memory Match Online Free - Card Game | PlayMini",
     description:
-      "Play Memory Match online free! 10 campaign levels + endless mode with power-ups, combo system, and themed card sets. Flip cards to find matching pairs. No download needed.",
+      "Play Memory Match online free! Flip cards to find matching pairs. Three difficulty levels, timer, fewest-moves best score saved. No download needed.",
     type: "website",
     url: "https://playmini.fun/memory",
   },
@@ -55,17 +55,17 @@ export default function MemoryMatchPage() {
             <div>
               <h3 className="font-semibold text-white mb-2">Difficulty Levels:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
-                <li><strong>Easy:</strong> 6 pairs (4×3 grid) - perfect for beginners</li>
-                <li><strong>Medium:</strong> 8 pairs (4×4 grid) - balanced challenge</li>
-                <li><strong>Hard:</strong> 12 pairs (6×4 grid) - ultimate memory test</li>
+                <li><strong>Easy:</strong> 6 pairs (4 cols) - perfect for beginners</li>
+                <li><strong>Medium:</strong> 10 pairs (5 cols) - balanced challenge</li>
+                <li><strong>Hard:</strong> 15 pairs (6 cols) - ultimate memory test</li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold text-white mb-2">Scoring:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>Your score is based on the number of moves (card flips)</li>
-                <li>Fewer moves = higher star rating (1-3 stars)</li>
+                <li>Your score is the number of moves (card flips) to clear the board</li>
                 <li>Personal best is saved for each difficulty level</li>
+                <li>Timer runs while you play — both moves and time are shown at the end</li>
                 <li>Try to complete the game in the minimum possible moves!</li>
               </ul>
             </div>
@@ -109,7 +109,7 @@ export default function MemoryMatchPage() {
                   name: "What are the different difficulty levels?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Memory Match offers three difficulty levels: Easy (6 pairs in a 4×3 grid), Medium (8 pairs in a 4×4 grid), and Hard (12 pairs in a 6×4 grid). Each level challenges your memory differently, with more cards requiring better concentration and recall.",
+                    text: "Memory Match offers three difficulty levels: Easy (6 pairs, 4 columns), Medium (10 pairs, 5 columns), and Hard (15 pairs, 6 columns). Each level challenges your memory differently, with more cards requiring better concentration and recall.",
                   },
                 },
                 {
@@ -117,7 +117,7 @@ export default function MemoryMatchPage() {
                   name: "Does Memory Match save my best scores?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Yes! Your personal best score (fewest moves) is saved separately for each difficulty level in your browser's local storage. Try to beat your own records by completing games in fewer moves to earn 3-star ratings!",
+                    text: "Yes. Your personal best (fewest moves) is saved separately for each difficulty level in your browser's local storage. Try to beat your own records by completing games in fewer moves.",
                   },
                 },
               ],

@@ -5,7 +5,7 @@ import MoreGames from "../components/MoreGames";
 export const metadata: Metadata = {
   title: "Play Connect 4 Online Free - Four in a Row | PlayMini",
   description:
-    "Play Connect 4 online free! 10 campaign levels vs progressively smarter AI + power-ups and lives system. Classic strategy game, works on mobile and desktop.",
+    "Play Connect 4 online free! Challenging minimax AI plus two-player mode. Drop pieces and connect four in a row. Browser-based, no download needed.",
   keywords:
     "connect 4, connect four, free connect 4, online board game, strategy game, connect 4 vs ai, four in a row",
   alternates: {
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Play Connect 4 Online Free - Four in a Row | PlayMini",
     description:
-      "Play Connect 4 online free! 10 campaign levels vs progressively smarter AI + power-ups and lives system. Classic strategy game, works on mobile and desktop.",
+      "Play Connect 4 online free! Challenging minimax AI plus two-player mode. Drop pieces and connect four in a row. Browser-based, no download needed.",
     type: "website",
     url: "https://playmini.fun/connect4",
   },
@@ -30,7 +30,7 @@ export default function Connect4Page() {
             Connect 4
           </h1>
           <p className="text-gray-300 text-lg">
-            Drop your pieces and connect four in a row to win! Play against a challenging AI opponent.
+            Drop your pieces and connect four in a row to win. Play a challenging minimax AI or two-player.
           </p>
         </div>
 

@@ -5,16 +5,16 @@ import MoreGames from "../components/MoreGames";
 export const metadata: Metadata = {
   title: "Play Sudoku Online Free - 9x9 Puzzle Game | PlayMini",
   description:
-    "Play Sudoku online free with 10 campaign levels + endless mode! Classic 9x9 number puzzle with power-ups, lives system, and progressive difficulty. Browser-based, no download required.",
+    "Play Sudoku online free! Classic 9x9 number puzzle with Easy, Medium, and Hard difficulty. Timer, error tracking, best time per difficulty. Browser-based, no download required.",
   keywords:
-    "sudoku, sudoku online, free sudoku, sudoku game, logic puzzle, number puzzle, sudoku campaign, sudoku levels, brain game, sudoku power ups",
+    "sudoku, sudoku online, free sudoku, sudoku game, logic puzzle, number puzzle, brain game, 9x9 puzzle",
   alternates: {
     canonical: "/sudoku",
   },
   openGraph: {
     title: "Play Sudoku Online Free - 9x9 Puzzle Game | PlayMini",
     description:
-      "Play Sudoku online free with 10 campaign levels + endless mode! Classic 9x9 number puzzle with power-ups, lives system, and progressive difficulty. Browser-based, no download required.",
+      "Play Sudoku online free! Classic 9x9 number puzzle with Easy, Medium, and Hard difficulty. Timer, error tracking, best time per difficulty. Browser-based, no download required.",
     url: "https://playmini.fun/sudoku",
     siteName: "PlayMini",
     type: "website",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Sudoku - Free Online | PlayMini",
     description:
-      "Play free Sudoku online with 3 difficulty levels. Classic 9x9 logic puzzle with pencil marks, undo, and timer.",
+      "Play free Sudoku online with 3 difficulty levels. Classic 9x9 logic puzzle with timer, error tracking, and best-time records.",
     images: ["https://playmini.fun/og-image.png"],
   },
 };
@@ -46,7 +46,7 @@ export default function SudokuPage() {
         name: "How do I play Sudoku?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Fill the 9x9 grid so that each row, column, and 3x3 box contains the digits 1-9 without repetition. Click a cell to select it, then type a number or use the number pad below the grid. Use notes mode for pencil marks.",
+          text: "Fill the 9x9 grid so that each row, column, and 3x3 box contains the digits 1-9 without repetition. Click a cell to select it, then type a number or use the number pad below the grid.",
         },
       },
       {
@@ -54,15 +54,15 @@ export default function SudokuPage() {
         name: "What are the difficulty levels?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Easy provides 40 starting clues, Medium provides 30 clues, and Hard provides 22 clues. Fewer clues mean a more challenging puzzle that requires advanced solving techniques.",
+          text: "Easy provides 46 starting clues, Medium provides 36 clues, and Hard provides 26 clues. Fewer clues mean a more challenging puzzle that requires more solving techniques.",
         },
       },
       {
         "@type": "Question",
-        name: "How do notes mode and pencil marks work?",
+        name: "Are my best times saved?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Click the Notes button to toggle notes mode. In notes mode, clicking numbers adds or removes pencil marks (candidate digits) in the selected cell. This helps track possible values as you solve the puzzle.",
+          text: "Yes. Your fastest solve time is saved separately for each difficulty level in your browser's local storage. Beat your own records to see your best time update.",
         },
       },
     ],
@@ -74,7 +74,7 @@ export default function SudokuPage() {
     name: "Sudoku",
     url: "https://playmini.fun/sudoku",
     description:
-      "Free online Sudoku game with 3 difficulty levels, pencil marks, undo, and timer. Track your personal best times.",
+      "Free online Sudoku game with 3 difficulty levels, timer, and error tracking. Personal best times saved per difficulty.",
     applicationCategory: "Game",
     operatingSystem: "Any",
     offers: {
@@ -128,22 +128,19 @@ export default function SudokuPage() {
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold mb-2 text-blue-400">Advanced Features</h3>
+                <h3 className="text-xl font-semibold mb-2 text-blue-400">Features</h3>
                 <ul className="text-slate-300 space-y-2 list-disc list-inside">
                   <li>
-                    <strong>Notes Mode:</strong> Toggle to add pencil marks (small candidate numbers) in cells
-                  </li>
-                  <li>
-                    <strong>Undo:</strong> Revert your last move if you make a mistake
-                  </li>
-                  <li>
-                    <strong>Highlighting:</strong> Selected cell's row, column, and 3x3 box are highlighted
+                    <strong>Highlighting:</strong> Selected cell&apos;s row, column, and 3x3 box are highlighted, plus matching values
                   </li>
                   <li>
                     <strong>Error Detection:</strong> Conflicting numbers are shown in red
                   </li>
                   <li>
-                    <strong>Personal Bests:</strong> Track your fastest solve time for each difficulty
+                    <strong>Keyboard support:</strong> Arrow keys to navigate, 1-9 to enter, Backspace to erase
+                  </li>
+                  <li>
+                    <strong>Personal Bests:</strong> Fastest solve time saved per difficulty
                   </li>
                 </ul>
               </div>
@@ -152,13 +149,13 @@ export default function SudokuPage() {
                 <h3 className="text-xl font-semibold mb-2 text-blue-400">Difficulty Levels</h3>
                 <ul className="text-slate-300 space-y-2 list-disc list-inside">
                   <li>
-                    <strong>Easy:</strong> 40 starting clues - great for beginners and quick games
+                    <strong>Easy:</strong> 46 starting clues - great for beginners and quick games
                   </li>
                   <li>
-                    <strong>Medium:</strong> 30 starting clues - requires basic Sudoku techniques
+                    <strong>Medium:</strong> 36 starting clues - requires basic Sudoku techniques
                   </li>
                   <li>
-                    <strong>Hard:</strong> 22 starting clues - demands advanced solving strategies
+                    <strong>Hard:</strong> 26 starting clues - demands more solving strategies
                   </li>
                 </ul>
               </div>
@@ -167,8 +164,7 @@ export default function SudokuPage() {
                 <h3 className="text-xl font-semibold mb-2 text-blue-400">Solving Tips</h3>
                 <ul className="text-slate-300 space-y-2 list-disc list-inside">
                   <li>Start by scanning rows, columns, and boxes for obvious placements</li>
-                  <li>Use notes mode to track candidate digits in difficult cells</li>
-                  <li>Look for "naked singles" (cells with only one possible value)</li>
+                  <li>Look for &ldquo;naked singles&rdquo; (cells with only one possible value)</li>
                   <li>Eliminate candidates when you place a number in a row/column/box</li>
                   <li>Take your time - Sudoku rewards logical thinking over speed</li>
                 </ul>
@@ -191,9 +187,9 @@ export default function SudokuPage() {
                 similar puzzles existed earlier in French newspapers.
               </p>
               <p>
-                Our free online Sudoku offers three difficulty levels, each generated with a guaranteed unique
-                solution. Features like pencil marks, undo, and error highlighting make it perfect for both
-                beginners learning the ropes and experienced solvers chasing their best times.
+                Our free online Sudoku offers three difficulty levels, each generated fresh on demand.
+                Error highlighting, matching-number highlighting, and a running timer make it easy to
+                work through puzzles and track your best time.
               </p>
               <p>
                 Play Sudoku daily to improve your logical thinking, pattern recognition, and concentration. Track

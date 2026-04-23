@@ -5,7 +5,7 @@ import MoreGames from "../components/MoreGames";
 export const metadata: Metadata = {
   title: "Play Word Guess Online Free - Wordle Game | PlayMini",
   description:
-    "Play Word Guess online free! 10 campaign levels + endless mode with power-ups, hard mode, and timed challenges. Wordle-style word game, no download needed.",
+    "Play Word Guess online free! Guess the 5-letter word in 6 tries. Wordle-style word game with unlimited plays, color feedback, and streak tracking.",
   keywords: [
     "word guess",
     "wordle clone",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Play Word Guess Online Free - Wordle Game | PlayMini",
     description:
-      "Play Word Guess online free! 10 campaign levels + endless mode with power-ups, hard mode, and timed challenges. Wordle-style word game, no download needed.",
+      "Play Word Guess online free! Guess the 5-letter word in 6 tries. Wordle-style word game with unlimited plays, color feedback, and streak tracking.",
     url: "https://playmini.fun/wordle",
     siteName: "PlayMini",
     type: "website",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Word Guess - Free Wordle Game Online | PlayMini",
     description:
-      "Guess the 5-letter word in 6 tries. Unlimited plays, daily challenges, and track your streak!",
+      "Guess the 5-letter word in 6 tries. Unlimited plays, color feedback, streak tracking.",
     images: ["https://playmini.fun/og-image.png"],
   },
 };
@@ -72,7 +72,7 @@ export default function WordlePage() {
         name: "How are my stats tracked in Word Guess?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Word Guess tracks your games played, win percentage, current streak, and max streak. All stats are saved locally in your browser using localStorage, so they persist across sessions. Your streak increases with each consecutive win and resets if you lose a game.",
+          text: "Word Guess tracks your games played, wins, and current streak. All stats are saved locally in your browser, so they persist across sessions. Your streak increases with each consecutive win and resets if you lose a game.",
         },
       },
     ],
@@ -83,7 +83,7 @@ export default function WordlePage() {
     "@type": "WebApplication",
     name: "Word Guess - Free Wordle Game",
     description:
-      "A free Wordle-style word puzzle game where you guess a 5-letter word in 6 tries. Features unlimited plays, streak tracking, and shareable results.",
+      "A free Wordle-style word puzzle game where you guess a 5-letter word in 6 tries. Features unlimited plays and streak tracking.",
     url: "https://playmini.fun/wordle",
     applicationCategory: "Game",
     operatingSystem: "Web Browser",
@@ -193,11 +193,10 @@ export default function WordlePage() {
                 How are my stats tracked in Word Guess?
               </h3>
               <p className="text-gray-300">
-                Word Guess tracks your games played, win percentage, current
-                streak, and max streak. All stats are saved locally in your
-                browser using localStorage, so they persist across sessions.
-                Your streak increases with each consecutive win and resets if
-                you lose a game.
+                Word Guess tracks your games played, wins, and current streak.
+                All stats are saved locally in your browser, so they persist
+                across sessions. Your streak increases with each consecutive
+                win and resets if you lose a game.
               </p>
             </div>
           </div>
@@ -222,9 +221,8 @@ export default function WordlePage() {
           <p className="text-gray-300">
             The game features a carefully curated word list of common 5-letter
             words, ensuring fair and enjoyable gameplay. Track your progress
-            with built-in statistics that show your games played, win rate,
-            current streak, and maximum streak. Share your results with friends
-            using the colored emoji grid!
+            with built-in statistics that show your games played, wins, and
+            current streak.
           </p>
         </div>
       </div>
