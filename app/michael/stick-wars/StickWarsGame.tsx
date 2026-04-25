@@ -79,7 +79,9 @@ interface Projectile {
   x: number;
   y: number;
   vx: number;
+  vy: number;
   damage: number;
+  variant: "arrow" | "bullet";
 }
 
 interface Damage {
@@ -850,7 +852,9 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
             x: u.x + def.width / 2,
             y: u.y + 10,
             vx: direction * 400,
-            damage: 0, // visual only
+            vy: 0,
+            damage: 0, // visual only — damage already applied above
+            variant: "arrow",
           });
         }
         u.attackCooldown = def.attackInterval;
@@ -915,7 +919,7 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
         const useBullets = upgrades.rifle_bullets;
         const dmg = useBullets ? DOME_BULLET_DAMAGE : DOME_ARROW_DAMAGE;
         const speed = useBullets ? DOME_BULLET_SPEED : DOME_ARROW_SPEED;
-        // Damage applies on impact (simulate with instant hit + visual projectile).
+        // Apply damage immediately; spawn an AIMED projectile for visuals.
         closest.hp -= dmg;
         s.damages.push({
           id: s.nextId++,
@@ -923,13 +927,24 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
           y: closest.y,
           amount: Math.round(dmg), ttl: 0.6,
         });
+        // Spawn from the cannon muzzle on top of the dome.
+        // baseY = GROUND_Y - CASTLE_H + 30, topY = baseY - CASTLE_W/2, barrel offset 24px right & 3px up.
+        const fromX = PLAYER_CASTLE_X + CASTLE_W / 2 + 24;
+        const fromY = GROUND_Y - CASTLE_H + 30 - CASTLE_W / 2 - 3;
+        const targetX = closest.x + UNIT_DEFS[closest.type].width / 2;
+        const targetY = closest.y + UNIT_DEFS[closest.type].height / 2;
+        const dx = targetX - fromX;
+        const dy = targetY - fromY;
+        const dist = Math.hypot(dx, dy) || 1;
         s.projectiles.push({
           id: s.nextId++,
           team: playerTeam,
-          x: PLAYER_CASTLE_X + CASTLE_W / 2,
-          y: GROUND_Y - CASTLE_H - 10,
-          vx: speed,
+          x: fromX,
+          y: fromY,
+          vx: (dx / dist) * speed,
+          vy: (dy / dist) * speed,
           damage: 0,
+          variant: useBullets ? "bullet" : "arrow",
         });
         s.domeCooldown = useBullets ? DOME_BULLET_INTERVAL : DOME_ARROW_INTERVAL;
       } else {
@@ -941,8 +956,11 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
   // Update projectiles (visual only).
   for (const p of s.projectiles) {
     p.x += p.vx * dt;
+    p.y += p.vy * dt;
   }
-  s.projectiles = s.projectiles.filter((p) => p.x > -20 && p.x < FIELD_W + 20);
+  s.projectiles = s.projectiles.filter(
+    (p) => p.x > -20 && p.x < FIELD_W + 20 && p.y > -20 && p.y < GROUND_Y + 20
+  );
 
   // Update damage popups.
   for (const d of s.damages) {
@@ -1030,22 +1048,26 @@ function draw(ctx: CanvasRenderingContext2D, s: GameState, upgrades: Upgrades) {
     ctx.setLineDash([]);
   }
 
-  // Projectiles. Arrows = thin dark lines; bullets (fast) = bright yellow streaks.
+  // Projectiles drawn as a line along the velocity vector (so aimed shots look right).
   for (const p of s.projectiles) {
-    const isFast = Math.abs(p.vx) >= DOME_BULLET_SPEED * 0.9;
-    if (isFast) {
+    const speed = Math.hypot(p.vx, p.vy) || 1;
+    const ux = p.vx / speed;
+    const uy = p.vy / speed;
+    if (p.variant === "bullet") {
       ctx.strokeStyle = "#facc15";
       ctx.lineWidth = 3;
+      const len = 18;
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
-      ctx.lineTo(p.x + (p.vx > 0 ? -16 : 16), p.y);
+      ctx.lineTo(p.x - ux * len, p.y - uy * len);
       ctx.stroke();
     } else {
       ctx.strokeStyle = "#374151";
       ctx.lineWidth = 2;
+      const len = 12;
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
-      ctx.lineTo(p.x + (p.vx > 0 ? -10 : 10), p.y);
+      ctx.lineTo(p.x - ux * len, p.y - uy * len);
       ctx.stroke();
     }
   }
@@ -1068,26 +1090,36 @@ function draw(ctx: CanvasRenderingContext2D, s: GameState, upgrades: Upgrades) {
 
 function drawDome(ctx: CanvasRenderingContext2D, castleX: number, hasBullets: boolean) {
   const cx = castleX + CASTLE_W / 2;
-  const baseY = GROUND_Y - CASTLE_H;
-  // Dome (half circle on top of castle).
+  const radius = CASTLE_W / 2; // dome diameter == castle width
+  // Dome sits on top of the castle wall; baseY is the wall's top edge.
+  const baseY = GROUND_Y - CASTLE_H + 30;
+  // Half-dome.
   ctx.fillStyle = hasBullets ? "#7c3aed" : "#475569";
   ctx.beginPath();
-  ctx.arc(cx, baseY + 8, 22, Math.PI, 0);
+  ctx.arc(cx, baseY, radius, Math.PI, 0);
   ctx.closePath();
   ctx.fill();
   ctx.strokeStyle = "#1f2937";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.arc(cx, baseY + 8, 22, Math.PI, 0);
+  ctx.arc(cx, baseY, radius, Math.PI, 0);
   ctx.stroke();
-  // Cannon/barrel sticking out the right.
+  // Window slits along the dome (cosmetic).
+  ctx.fillStyle = "#0f172a";
+  for (const a of [Math.PI * 0.85, Math.PI * 0.65, Math.PI * 0.5, Math.PI * 0.35, Math.PI * 0.15]) {
+    const wx = cx + Math.cos(a + Math.PI) * (radius - 10);
+    const wy = baseY + Math.sin(a + Math.PI) * (radius - 10);
+    ctx.fillRect(wx - 2, wy - 4, 4, 8);
+  }
+  // Cannon barrel on top, pointing right toward enemy.
+  const topY = baseY - radius;
   ctx.fillStyle = hasBullets ? "#1f2937" : "#374151";
-  ctx.fillRect(cx, baseY - 4, 18, 5);
+  ctx.fillRect(cx - 4, topY - 6, 28, 6);
   if (hasBullets) {
-    // Glowing dot to indicate rifle upgrade.
+    // Glowing muzzle to indicate rifle upgrade.
     ctx.fillStyle = "#facc15";
     ctx.beginPath();
-    ctx.arc(cx + 18, baseY - 1.5, 2.5, 0, Math.PI * 2);
+    ctx.arc(cx + 24, topY - 3, 3, 0, Math.PI * 2);
     ctx.fill();
   }
 }
