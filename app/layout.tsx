@@ -39,7 +39,7 @@ const navLinks = [
   { href: "/block-drop", label: "Block Drop" },
   { href: "/sudoku", label: "Sudoku" },
   { href: "/connect4", label: "Connect 4" },
-  { href: "/table-tennis", label: "Table Tennis" },
+  { href: "/pong", label: "Pong" },
   { href: "/soccer", label: "Penalty Kicks" },
   { href: "/wordle", label: "Word Guess" },
   { href: "/crossword", label: "Crossword" },

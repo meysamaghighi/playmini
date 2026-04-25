@@ -14,7 +14,7 @@ const PADDLE_SPEED = 6;
 
 type GameState = "ready" | "playing" | "gameover";
 
-export default function TableTennis() {
+export default function Pong() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameState, setGameState] = useState<GameState>("ready");
   const [playerScore, setPlayerScore] = useState(0);
@@ -230,7 +230,7 @@ export default function TableTennis() {
             <div className="bg-white text-gray-900 px-8 py-6 rounded-lg text-center">
               {gameState === "ready" ? (
                 <>
-                  <div className="text-2xl font-bold mb-2">Table Tennis</div>
+                  <div className="text-2xl font-bold mb-2">Pong</div>
                   <div className="text-sm text-gray-600 mb-4">W/S, arrows or mouse</div>
                 </>
               ) : (
@@ -254,7 +254,7 @@ export default function TableTennis() {
         )}
       </div>
 
-      <DownloadButton canvasRef={canvasRef} filename="table-tennis" />
+      <DownloadButton canvasRef={canvasRef} filename="pong" />
     </div>
   );
 }

@@ -11,7 +11,7 @@ const games = [
   "2048", "snake", "minesweeper", "memory", "whack-a-mole",
   "tic-tac-toe", "flappy", "block-drop", "wordle", "dino-runner",
   "sudoku", "voxel", "car-racer", "tower-builder", "soccer",
-  "table-tennis", "music-trivia", "connect4", "hangman", "crossword",
+  "pong", "music-trivia", "connect4", "hangman", "crossword",
   "checkers", "breakout", "typing-race", "word-search", "maze",
   "space-invaders", "bubble-shooter", "simon", "sliding-puzzle",
   "solitaire", "word-builder", "asteroids", "chess", "frogger",

@@ -38,7 +38,7 @@ const GAMES = [
   { slug: "word-search", name: "Word Search", category: "Word" },
   { slug: "music-trivia", name: "Music Trivia", category: "Word" },
   { slug: "soccer", name: "Penalty Kicks", category: "Sports" },
-  { slug: "table-tennis", name: "Table Tennis", category: "Sports" },
+  { slug: "pong", name: "Pong", category: "Sports" },
   { slug: "simon", name: "Simon Says", category: "Puzzle" },
   { slug: "voxel", name: "Voxel Builder", category: "Creative" },
 ];

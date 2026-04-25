@@ -1,39 +1,39 @@
 import type { Metadata } from "next";
-import TableTennis from "../components/TableTennis";
+import Pong from "../components/Pong";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
-  title: "Play Table Tennis Online Free - Pong Game | PlayMini",
+  title: "Play Pong Online Free - Classic Paddle Game | PlayMini",
   description:
-    "Play Table Tennis (Pong) online free! Classic paddle game vs AI. Return the ball, first to 7 wins. Browser-based, works on mobile and desktop. No download.",
+    "Play Pong online free! Classic paddle game vs AI. Return the ball, first to 7 wins. Browser-based, works on mobile and desktop. No download.",
   keywords:
-    "table tennis game, pong game, free pong, online ping pong, paddle game, browser game, arcade game",
+    "pong game, free pong, online pong, paddle game, classic arcade, browser game, ping pong",
   alternates: {
-    canonical: "/table-tennis",
+    canonical: "/pong",
   },
   openGraph: {
-    title: "Play Table Tennis Online Free - Pong Game | PlayMini",
+    title: "Play Pong Online Free - Classic Paddle Game | PlayMini",
     description:
-      "Play Table Tennis (Pong) online free! Classic paddle game vs AI. Return the ball, first to 7 wins. Browser-based, works on mobile and desktop. No download.",
+      "Play Pong online free! Classic paddle game vs AI. Return the ball, first to 7 wins. Browser-based, works on mobile and desktop. No download.",
     type: "website",
-    url: "https://playmini.fun/table-tennis",
+    url: "https://playmini.fun/pong",
   },
 };
 
-export default function TableTennisPage() {
+export default function PongPage() {
   return (
     <main className="min-h-screen bg-gray-950 text-white">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-400 to-teal-500 bg-clip-text text-transparent">
-            Table Tennis
+            Pong
           </h1>
           <p className="text-gray-300 text-lg">
             Classic paddle vs AI. Move your paddle, return the ball, and be the first to score 7 points!
           </p>
         </div>
 
-        <TableTennis />
+        <Pong />
 
         <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
           <h2 className="text-2xl font-bold mb-4 text-teal-400">How to Play</h2>
@@ -64,10 +64,10 @@ export default function TableTennisPage() {
         </section>
 
         <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
-          <h2 className="text-2xl font-bold mb-4 text-teal-400">About Table Tennis</h2>
+          <h2 className="text-2xl font-bold mb-4 text-teal-400">About Pong</h2>
           <div className="text-gray-300 space-y-3">
             <p>
-              Table Tennis, also known as Ping Pong, is one of the fastest racket sports in the world. This digital version captures the essence of the classic Pong arcade game with modern visuals.
+              Pong is the classic arcade paddle game — one of the original video games. This digital version captures the essence of the original with modern visuals.
             </p>
             <p>
               Face off against an AI opponent that adapts to your skill level. The AI tracks the ball more accurately as the match progresses, so you need quick reflexes and smart paddle positioning to win. How many matches can you win in a row?
@@ -109,10 +109,10 @@ export default function TableTennisPage() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebApplication",
-              name: "Table Tennis",
+              name: "Pong",
               description:
-                "Free online table tennis game. Play against AI in this classic paddle game.",
-              url: "https://playmini.fun/table-tennis",
+                "Free online Pong game. Play against AI in this classic paddle game.",
+              url: "https://playmini.fun/pong",
               applicationCategory: "Game",
               operatingSystem: "Any",
               offers: {
