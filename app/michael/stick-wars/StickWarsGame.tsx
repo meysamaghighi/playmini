@@ -19,10 +19,21 @@ const WALL_X = FIELD_W / 2;
 const WALL_W = 24;
 const WALL_H = 110;
 const WALL_HP = 250;
+const PLAYER_DEFENSE_X = PLAYER_CASTLE_X + CASTLE_W + 180;
+// Castle dome turret (upgrade).
+const DOME_RANGE = 300;
+const DOME_ARROW_DAMAGE = 8;
+const DOME_ARROW_INTERVAL = 1.5;
+const DOME_ARROW_SPEED = 400;
+// Rifle bullets (upgrade on top of dome).
+const DOME_BULLET_DAMAGE = 16;
+const DOME_BULLET_INTERVAL = 0.7;
+const DOME_BULLET_SPEED = 900;
 
-type UnitType = "miner" | "swordsman" | "archer" | "boss";
+type UnitType = "miner" | "swordsman" | "archer" | "cavalry" | "boss";
 type Team = "green" | "red";
 type Difficulty = "easy" | "normal" | "hard";
+type Stance = "offend" | "defend";
 
 interface UnitDef {
   cost: number;
@@ -39,6 +50,7 @@ const UNIT_DEFS: Record<UnitType, UnitDef> = {
   miner:     { cost: 20,  hp: 30,  damage: 0,  attackInterval: 0,    range: 0,   speed: 60,  width: 16, height: 36 },
   swordsman: { cost: 30,  hp: 80,  damage: 15, attackInterval: 1.0,  range: 30,  speed: 50,  width: 18, height: 42 },
   archer:    { cost: 50,  hp: 50,  damage: 12, attackInterval: 1.5,  range: 200, speed: 40,  width: 18, height: 42 },
+  cavalry:   { cost: 40,  hp: 110, damage: 18, attackInterval: 0.9,  range: 32,  speed: 95,  width: 36, height: 50 },
   boss:      { cost: 200, hp: 500, damage: 40, attackInterval: 1.5,  range: 40,  speed: 30,  width: 32, height: 70 },
 };
 
@@ -92,6 +104,8 @@ interface GameState {
   enemyCastleMaxHp: number;
   wallHp: number;
   enemyCooldown: { sword: number; archer: number; boss: number };
+  domeCooldown: number;
+  playerStance: Stance;
   outcome: "playing" | "win" | "lose";
   nextId: number;
 }
@@ -102,6 +116,8 @@ interface Upgrades {
   faster_miners: boolean;
   royal_boss: boolean;
   flag_emblem: boolean;
+  castle_dome: boolean;
+  rifle_bullets: boolean;
 }
 
 const DEFAULT_UPGRADES: Upgrades = {
@@ -110,14 +126,18 @@ const DEFAULT_UPGRADES: Upgrades = {
   faster_miners: false,
   royal_boss: false,
   flag_emblem: false,
+  castle_dome: false,
+  rifle_bullets: false,
 };
 
-const SHOP_ITEMS: { id: keyof Upgrades; name: string; cost: number; emoji: string; desc: string }[] = [
+const SHOP_ITEMS: { id: keyof Upgrades; name: string; cost: number; emoji: string; desc: string; requires?: keyof Upgrades }[] = [
   { id: "castle_armor",   name: "Castle Armor",         cost: 20, emoji: "🛡️", desc: "+20% castle HP" },
   { id: "sharper_swords", name: "Sharper Swords",       cost: 25, emoji: "⚔️", desc: "+25% unit damage" },
   { id: "faster_miners",  name: "Faster Miners",        cost: 30, emoji: "🏃", desc: "+50% gold from miners" },
   { id: "royal_boss",     name: "Royal Boss",           cost: 40, emoji: "👑", desc: "Boss costs 150g" },
   { id: "flag_emblem",    name: "Custom Flag Emblem",   cost: 15, emoji: "🎨", desc: "Star on your flag" },
+  { id: "castle_dome",    name: "Castle Dome",          cost: 35, emoji: "🏰", desc: "Castle auto-shoots arrows" },
+  { id: "rifle_bullets",  name: "Rifle Bullets",        cost: 50, emoji: "🎯", desc: "Dome shoots fast bullets", requires: "castle_dome" },
 ];
 
 function loadDiamonds(): number {
@@ -334,6 +354,10 @@ function Shop({
         {SHOP_ITEMS.map((item) => {
           const owned = upgrades[item.id];
           const canAfford = diamonds >= item.cost;
+          const reqMissing = item.requires && !upgrades[item.requires];
+          const reqLabel = item.requires
+            ? SHOP_ITEMS.find((s) => s.id === item.requires)?.name
+            : undefined;
           return (
             <div
               key={item.id}
@@ -350,21 +374,26 @@ function Shop({
                   <p className="text-lg text-amber-700" style={{ fontFamily: FONT }}>
                     {item.desc}
                   </p>
+                  {reqMissing && (
+                    <p className="text-sm text-red-600" style={{ fontFamily: FONT }}>
+                      Needs: {reqLabel}
+                    </p>
+                  )}
                 </div>
               </div>
               <button
                 onClick={() => onBuy(item.id, item.cost)}
-                disabled={owned || !canAfford}
+                disabled={owned || !canAfford || reqMissing}
                 className={`w-full mt-2 py-2 text-xl font-bold rounded-lg ${
                   owned
                     ? "bg-green-600 text-white cursor-default"
-                    : canAfford
+                    : canAfford && !reqMissing
                     ? "bg-amber-600 hover:bg-amber-500 text-white"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
                 style={{ fontFamily: FONT }}
               >
-                {owned ? "Owned ✓" : `💎 ${item.cost}`}
+                {owned ? "Owned ✓" : reqMissing ? "Locked" : `💎 ${item.cost}`}
               </button>
             </div>
           );
@@ -403,8 +432,18 @@ function Battle({
     enemyHp: CASTLE_HP,
     playerHpMax: castleMaxHp(upgrades),
     enemyHpMax: CASTLE_HP,
+    wallHp: WALL_HP,
     outcome: "playing" as "playing" | "win" | "lose",
   });
+  const [stance, setStance] = useState<Stance>("offend");
+
+  const toggleStance = useCallback(() => {
+    const s = stateRef.current;
+    if (!s || s.outcome !== "playing") return;
+    const next: Stance = s.playerStance === "offend" ? "defend" : "offend";
+    s.playerStance = next;
+    setStance(next);
+  }, []);
 
   // Init game state once.
   if (stateRef.current === null) {
@@ -423,6 +462,8 @@ function Battle({
       enemyCastleMaxHp: CASTLE_HP,
       wallHp: WALL_HP,
       enemyCooldown: { sword: 4, archer: 10, boss: 60 },
+      domeCooldown: 0,
+      playerStance: "offend",
       outcome: "playing",
       nextId: 1,
     };
@@ -501,6 +542,7 @@ function Battle({
           enemyHp: Math.max(0, Math.round(s.enemyCastleHp)),
           playerHpMax: s.playerCastleMaxHp,
           enemyHpMax: s.enemyCastleMaxHp,
+          wallHp: Math.max(0, Math.round(s.wallHp)),
           outcome: s.outcome,
         });
       }
@@ -524,7 +566,9 @@ function Battle({
       if (e.key === "1") spawnPlayerUnit("miner");
       if (e.key === "2") spawnPlayerUnit("swordsman");
       if (e.key === "3") spawnPlayerUnit("archer");
-      if (e.key === "4") spawnPlayerUnit("boss");
+      if (e.key === "4") spawnPlayerUnit("cavalry");
+      if (e.key === "5") spawnPlayerUnit("boss");
+      if (e.key === "d" || e.key === "D") toggleStance();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -598,8 +642,23 @@ function Battle({
         />
       </div>
 
-      <div className="mt-3 grid grid-cols-4 gap-2">
-        {(["miner", "swordsman", "archer", "boss"] as UnitType[]).map((t, i) => {
+      <div className="mt-3 flex gap-2 justify-center">
+        <button
+          onClick={toggleStance}
+          disabled={hud.outcome !== "playing"}
+          className={`px-4 py-2 rounded-xl border-4 text-xl font-bold transition-all ${
+            stance === "offend"
+              ? "border-red-700 bg-red-100 text-red-800"
+              : "border-blue-700 bg-blue-100 text-blue-800"
+          } ${hud.outcome !== "playing" ? "opacity-50 cursor-not-allowed" : "hover:opacity-90"}`}
+          style={{ fontFamily: FONT }}
+          title="Toggle stance (D)"
+        >
+          {stance === "offend" ? "⚔️ Attack" : "🛡️ Defend"} <span className="text-sm text-gray-500">[D]</span>
+        </button>
+      </div>
+      <div className="mt-2 grid grid-cols-3 sm:grid-cols-5 gap-2">
+        {(["miner", "swordsman", "archer", "cavalry", "boss"] as UnitType[]).map((t, i) => {
           const cost = playerCost(t);
           const canAfford = hud.gold >= cost;
           return (
@@ -662,6 +721,7 @@ function unitEmoji(t: UnitType): string {
     case "miner": return "⛏️";
     case "swordsman": return "🗡️";
     case "archer": return "🏹";
+    case "cavalry": return "🐴";
     case "boss": return "👹";
   }
 }
@@ -758,9 +818,13 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
     }
 
     // Forward structure: wall while alive, otherwise enemy castle.
+    // Player on "defend" stance ignores structures and holds the line instead.
+    const playerDefending = isPlayer && s.playerStance === "defend";
     let structureX: number;
     let attackingWall = false;
-    if (wallAlive) {
+    if (playerDefending) {
+      structureX = PLAYER_DEFENSE_X;
+    } else if (wallAlive) {
       structureX = isPlayer ? wallLeftEdge : wallRightEdge;
       attackingWall = true;
     } else {
@@ -791,8 +855,8 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
         }
         u.attackCooldown = def.attackInterval;
       }
-    } else if (distToStructure <= def.range) {
-      // Attack wall or enemy castle.
+    } else if (!playerDefending && distToStructure <= def.range) {
+      // Attack wall or enemy castle (defenders never strike structures).
       if (u.attackCooldown <= 0) {
         const dmg = def.damage * dmgMult;
         if (attackingWall) {
@@ -815,6 +879,11 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
         }
         u.attackCooldown = def.attackInterval;
       }
+    } else if (playerDefending) {
+      // Hold the line: walk toward defense X, then stand.
+      const target = PLAYER_DEFENSE_X - def.width;
+      if (u.x < target - 2) u.x = Math.min(target, u.x + def.speed * dt);
+      else if (u.x > target + 2) u.x = Math.max(target, u.x - def.speed * dt);
     } else {
       // Walk toward forward structure, but never cross a live wall.
       const desiredX = u.x + direction * def.speed * dt;
@@ -823,6 +892,48 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
         else u.x = Math.max(desiredX, wallRightEdge);
       } else {
         u.x = desiredX;
+      }
+    }
+  }
+
+  // Castle dome turret (player-only upgrade).
+  if (upgrades.castle_dome) {
+    s.domeCooldown -= dt;
+    if (s.domeCooldown <= 0) {
+      // Pick the closest enemy unit on the field.
+      let closest: Unit | null = null;
+      let closestDist = Infinity;
+      for (const v of s.units) {
+        if (v.team === playerTeam || v.hp <= 0) continue;
+        const d = v.x - (PLAYER_CASTLE_X + CASTLE_W / 2);
+        if (d > 0 && d < DOME_RANGE && d < closestDist) {
+          closestDist = d;
+          closest = v;
+        }
+      }
+      if (closest) {
+        const useBullets = upgrades.rifle_bullets;
+        const dmg = useBullets ? DOME_BULLET_DAMAGE : DOME_ARROW_DAMAGE;
+        const speed = useBullets ? DOME_BULLET_SPEED : DOME_ARROW_SPEED;
+        // Damage applies on impact (simulate with instant hit + visual projectile).
+        closest.hp -= dmg;
+        s.damages.push({
+          id: s.nextId++,
+          x: closest.x + UNIT_DEFS[closest.type].width / 2,
+          y: closest.y,
+          amount: Math.round(dmg), ttl: 0.6,
+        });
+        s.projectiles.push({
+          id: s.nextId++,
+          team: playerTeam,
+          x: PLAYER_CASTLE_X + CASTLE_W / 2,
+          y: GROUND_Y - CASTLE_H - 10,
+          vx: speed,
+          damage: 0,
+        });
+        s.domeCooldown = useBullets ? DOME_BULLET_INTERVAL : DOME_ARROW_INTERVAL;
+      } else {
+        s.domeCooldown = 0.3; // re-check soon
       }
     }
   }
@@ -899,17 +1010,44 @@ function draw(ctx: CanvasRenderingContext2D, s: GameState, upgrades: Upgrades) {
   drawCastle(ctx, PLAYER_CASTLE_X, playerTeam, upgrades.flag_emblem);
   drawCastle(ctx, ENEMY_CASTLE_X, enemyTeam, false);
 
+  // Player castle dome turret (upgrade).
+  if (upgrades.castle_dome) {
+    drawDome(ctx, PLAYER_CASTLE_X, upgrades.rifle_bullets);
+  }
+
   // Wall.
   drawWall(ctx, s.wallHp);
 
-  // Projectiles (arrows).
-  ctx.strokeStyle = "#374151";
-  ctx.lineWidth = 2;
-  for (const p of s.projectiles) {
+  // Defense line (visible only when player is defending).
+  if (s.playerStance === "defend") {
+    ctx.strokeStyle = "#3b82f6";
+    ctx.setLineDash([6, 6]);
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(p.x, p.y);
-    ctx.lineTo(p.x + (p.vx > 0 ? -10 : 10), p.y);
+    ctx.moveTo(PLAYER_DEFENSE_X, 30);
+    ctx.lineTo(PLAYER_DEFENSE_X, GROUND_Y);
     ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Projectiles. Arrows = thin dark lines; bullets (fast) = bright yellow streaks.
+  for (const p of s.projectiles) {
+    const isFast = Math.abs(p.vx) >= DOME_BULLET_SPEED * 0.9;
+    if (isFast) {
+      ctx.strokeStyle = "#facc15";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + (p.vx > 0 ? -16 : 16), p.y);
+      ctx.stroke();
+    } else {
+      ctx.strokeStyle = "#374151";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + (p.vx > 0 ? -10 : 10), p.y);
+      ctx.stroke();
+    }
   }
 
   // Units.
@@ -926,6 +1064,32 @@ function draw(ctx: CanvasRenderingContext2D, s: GameState, upgrades: Upgrades) {
     ctx.fillText(`-${d.amount}`, d.x, d.y);
   }
   ctx.globalAlpha = 1;
+}
+
+function drawDome(ctx: CanvasRenderingContext2D, castleX: number, hasBullets: boolean) {
+  const cx = castleX + CASTLE_W / 2;
+  const baseY = GROUND_Y - CASTLE_H;
+  // Dome (half circle on top of castle).
+  ctx.fillStyle = hasBullets ? "#7c3aed" : "#475569";
+  ctx.beginPath();
+  ctx.arc(cx, baseY + 8, 22, Math.PI, 0);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = "#1f2937";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(cx, baseY + 8, 22, Math.PI, 0);
+  ctx.stroke();
+  // Cannon/barrel sticking out the right.
+  ctx.fillStyle = hasBullets ? "#1f2937" : "#374151";
+  ctx.fillRect(cx, baseY - 4, 18, 5);
+  if (hasBullets) {
+    // Glowing dot to indicate rifle upgrade.
+    ctx.fillStyle = "#facc15";
+    ctx.beginPath();
+    ctx.arc(cx + 18, baseY - 1.5, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
 }
 
 function drawWall(ctx: CanvasRenderingContext2D, hp: number) {
@@ -1025,10 +1189,78 @@ function drawCastle(ctx: CanvasRenderingContext2D, x: number, team: Team, emblem
   }
 }
 
+function drawCavalry(ctx: CanvasRenderingContext2D, u: Unit, fill: string, outline: string) {
+  const def = UNIT_DEFS[u.type];
+  const horseY = u.y + def.height - 22;
+  const horseLeftX = u.x + 4;
+  const horseRightX = u.x + def.width - 4;
+  ctx.fillStyle = "#7c3f00";
+  ctx.strokeStyle = "#3b1f00";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.ellipse((horseLeftX + horseRightX) / 2, horseY, (horseRightX - horseLeftX) / 2, 8, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(horseRightX - 2, horseY - 2);
+  ctx.lineTo(horseRightX + 6, horseY - 10);
+  ctx.lineTo(horseRightX + 12, horseY - 8);
+  ctx.lineTo(horseRightX + 12, horseY - 2);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  const phase = Math.floor(u.x / 6) % 2 === 0 ? 1 : -1;
+  ctx.strokeStyle = "#3b1f00";
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(horseLeftX + 2, horseY + 6);
+  ctx.lineTo(horseLeftX + 2 + 3 * phase, u.y + def.height);
+  ctx.moveTo(horseLeftX + 10, horseY + 6);
+  ctx.lineTo(horseLeftX + 10 - 3 * phase, u.y + def.height);
+  ctx.moveTo(horseRightX - 10, horseY + 6);
+  ctx.lineTo(horseRightX - 10 + 3 * phase, u.y + def.height);
+  ctx.moveTo(horseRightX - 2, horseY + 6);
+  ctx.lineTo(horseRightX - 2 - 3 * phase, u.y + def.height);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(horseLeftX, horseY - 2);
+  ctx.lineTo(horseLeftX - 6, horseY + 4);
+  ctx.stroke();
+  const riderCx = (horseLeftX + horseRightX) / 2 + 2;
+  const riderHeadY = horseY - 18;
+  ctx.fillStyle = fill;
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(riderCx, riderHeadY, 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(riderCx, riderHeadY + 5);
+  ctx.lineTo(riderCx, horseY - 4);
+  ctx.stroke();
+  ctx.strokeStyle = "#9ca3af";
+  ctx.beginPath();
+  ctx.moveTo(riderCx + 2, riderHeadY + 8);
+  ctx.lineTo(riderCx + 18, riderHeadY + 2);
+  ctx.stroke();
+  if (u.hp < u.maxHp) {
+    const barY = u.y - 4;
+    ctx.fillStyle = "#374151";
+    ctx.fillRect(u.x, barY, def.width, 3);
+    ctx.fillStyle = fill;
+    ctx.fillRect(u.x, barY, def.width * (u.hp / u.maxHp), 3);
+  }
+}
+
 function drawUnit(ctx: CanvasRenderingContext2D, u: Unit) {
   const fill = teamFill(u.team);
   const outline = teamOutline(u.team);
   const def = UNIT_DEFS[u.type];
+  if (u.type === "cavalry") {
+    drawCavalry(ctx, u, fill, outline);
+    return;
+  }
   const cx = u.x + def.width / 2;
   const headR = u.type === "boss" ? 9 : 5;
   const headY = u.y + headR;
@@ -1116,3 +1348,4 @@ function drawUnit(ctx: CanvasRenderingContext2D, u: Unit) {
     ctx.fillRect(u.x, barY, barW * (u.hp / u.maxHp), 3);
   }
 }
+
