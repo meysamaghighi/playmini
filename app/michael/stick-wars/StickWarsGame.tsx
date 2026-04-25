@@ -13,8 +13,12 @@ const PLAYER_CASTLE_X = 20;
 const ENEMY_CASTLE_X = FIELD_W - CASTLE_W - 20;
 const PLAYER_MINE_X = PLAYER_CASTLE_X + CASTLE_W + 40;
 const ENEMY_MINE_X = ENEMY_CASTLE_X - 70;
-const STARTING_GOLD = 50;
+const STARTING_GOLD = 75;
 const CASTLE_HP = 1000;
+const WALL_X = FIELD_W / 2;
+const WALL_W = 24;
+const WALL_H = 110;
+const WALL_HP = 250;
 
 type UnitType = "miner" | "swordsman" | "archer" | "boss";
 type Team = "green" | "red";
@@ -39,9 +43,9 @@ const UNIT_DEFS: Record<UnitType, UnitDef> = {
 };
 
 const DIFFICULTY: Record<Difficulty, { goldRate: number; sword: number; archer: number; boss: number }> = {
-  easy:   { goldRate: 0.7, sword: 6, archer: 12, boss: 90 },
-  normal: { goldRate: 1.0, sword: 4, archer: 9,  boss: 60 },
-  hard:   { goldRate: 1.3, sword: 3, archer: 7,  boss: 45 },
+  easy:   { goldRate: 0.3, sword: 12, archer: 25, boss: 200 },
+  normal: { goldRate: 0.7, sword: 6,  archer: 12, boss: 90 },
+  hard:   { goldRate: 1.1, sword: 4,  archer: 8,  boss: 55 },
 };
 
 interface Unit {
@@ -86,6 +90,7 @@ interface GameState {
   enemyCastleHp: number;
   playerCastleMaxHp: number;
   enemyCastleMaxHp: number;
+  wallHp: number;
   enemyCooldown: { sword: number; archer: number; boss: number };
   outcome: "playing" | "win" | "lose";
   nextId: number;
@@ -416,13 +421,16 @@ function Battle({
       enemyCastleHp: CASTLE_HP,
       playerCastleMaxHp: playerHpMax,
       enemyCastleMaxHp: CASTLE_HP,
-      enemyCooldown: { sword: 2, archer: 5, boss: 30 },
+      wallHp: WALL_HP,
+      enemyCooldown: { sword: 4, archer: 10, boss: 60 },
       outcome: "playing",
       nextId: 1,
     };
-    // Free starting miner for player.
-    init.units.push(makeUnit(init, "miner", "player", team));
-    init.units.push(makeUnit(init, "miner", "enemy", team));
+    // Free starting miner for player — pre-positioned AT the mine so gold flows immediately.
+    const playerMiner = makeUnit(init, "miner", "player", team);
+    playerMiner.x = PLAYER_MINE_X;
+    playerMiner.atMine = true;
+    init.units.push(playerMiner);
     stateRef.current = init;
   }
 
@@ -718,11 +726,18 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
       continue;
     }
 
-    // Combat unit: find nearest enemy in range.
+    const wallAlive = s.wallHp > 0;
+    const wallLeftEdge = WALL_X - WALL_W / 2;
+    const wallRightEdge = WALL_X + WALL_W / 2;
+    const onPlayerSide = (v: Unit) => v.x + UNIT_DEFS[v.type].width / 2 < WALL_X;
+    const myUnitOnPlayerSide = onPlayerSide(u);
+
+    // Combat unit: find nearest enemy in range. While wall is alive, only see enemies on same side.
     let nearestEnemy: Unit | null = null;
     let nearestDist = Infinity;
     for (const v of s.units) {
       if (v.team === u.team || v.hp <= 0 || v.type === "miner") continue;
+      if (wallAlive && onPlayerSide(v) !== myUnitOnPlayerSide) continue;
       const d = Math.abs(v.x - u.x);
       if (d < nearestDist) {
         nearestDist = d;
@@ -733,6 +748,7 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
     if (!nearestEnemy || nearestDist > def.range) {
       for (const v of s.units) {
         if (v.team === u.team || v.hp <= 0 || v.type !== "miner") continue;
+        if (wallAlive && onPlayerSide(v) !== myUnitOnPlayerSide) continue;
         const d = Math.abs(v.x - u.x);
         if (d < def.range && d < nearestDist) {
           nearestDist = d;
@@ -741,8 +757,16 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
       }
     }
 
-    const enemyCastleX = isPlayer ? ENEMY_CASTLE_X : PLAYER_CASTLE_X + CASTLE_W;
-    const distToCastle = isPlayer ? enemyCastleX - (u.x + def.width) : u.x - enemyCastleX;
+    // Forward structure: wall while alive, otherwise enemy castle.
+    let structureX: number;
+    let attackingWall = false;
+    if (wallAlive) {
+      structureX = isPlayer ? wallLeftEdge : wallRightEdge;
+      attackingWall = true;
+    } else {
+      structureX = isPlayer ? ENEMY_CASTLE_X : PLAYER_CASTLE_X + CASTLE_W;
+    }
+    const distToStructure = isPlayer ? structureX - (u.x + def.width) : u.x - structureX;
 
     u.attackCooldown -= dt;
 
@@ -767,23 +791,39 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
         }
         u.attackCooldown = def.attackInterval;
       }
-    } else if (distToCastle <= def.range) {
-      // Attack castle.
+    } else if (distToStructure <= def.range) {
+      // Attack wall or enemy castle.
       if (u.attackCooldown <= 0) {
         const dmg = def.damage * dmgMult;
-        if (isPlayer) s.enemyCastleHp -= dmg;
-        else s.playerCastleHp -= dmg;
-        s.damages.push({
-          id: s.nextId++,
-          x: isPlayer ? enemyCastleX + 20 : enemyCastleX - 20,
-          y: GROUND_Y - CASTLE_H + 20,
-          amount: Math.round(dmg), ttl: 0.6,
-        });
+        if (attackingWall) {
+          s.wallHp -= dmg;
+          s.damages.push({
+            id: s.nextId++,
+            x: WALL_X,
+            y: GROUND_Y - WALL_H + 20,
+            amount: Math.round(dmg), ttl: 0.6,
+          });
+        } else {
+          if (isPlayer) s.enemyCastleHp -= dmg;
+          else s.playerCastleHp -= dmg;
+          s.damages.push({
+            id: s.nextId++,
+            x: isPlayer ? structureX + 20 : structureX - 20,
+            y: GROUND_Y - CASTLE_H + 20,
+            amount: Math.round(dmg), ttl: 0.6,
+          });
+        }
         u.attackCooldown = def.attackInterval;
       }
     } else {
-      // Walk toward enemy castle.
-      u.x += direction * def.speed * dt;
+      // Walk toward forward structure, but never cross a live wall.
+      const desiredX = u.x + direction * def.speed * dt;
+      if (wallAlive) {
+        if (isPlayer) u.x = Math.min(desiredX, wallLeftEdge - def.width);
+        else u.x = Math.max(desiredX, wallRightEdge);
+      } else {
+        u.x = desiredX;
+      }
     }
   }
 
@@ -859,6 +899,9 @@ function draw(ctx: CanvasRenderingContext2D, s: GameState, upgrades: Upgrades) {
   drawCastle(ctx, PLAYER_CASTLE_X, playerTeam, upgrades.flag_emblem);
   drawCastle(ctx, ENEMY_CASTLE_X, enemyTeam, false);
 
+  // Wall.
+  drawWall(ctx, s.wallHp);
+
   // Projectiles (arrows).
   ctx.strokeStyle = "#374151";
   ctx.lineWidth = 2;
@@ -883,6 +926,46 @@ function draw(ctx: CanvasRenderingContext2D, s: GameState, upgrades: Upgrades) {
     ctx.fillText(`-${d.amount}`, d.x, d.y);
   }
   ctx.globalAlpha = 1;
+}
+
+function drawWall(ctx: CanvasRenderingContext2D, hp: number) {
+  if (hp <= 0) return;
+  const wallY = GROUND_Y - WALL_H;
+  const x = WALL_X - WALL_W / 2;
+  // Brick body.
+  ctx.fillStyle = "#7c2d12";
+  ctx.fillRect(x, wallY, WALL_W, WALL_H);
+  ctx.strokeStyle = "#451a03";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(x, wallY, WALL_W, WALL_H);
+  // Crenellations on top.
+  for (let i = 0; i < 3; i++) {
+    const cx = x + 1 + i * 8;
+    ctx.fillRect(cx, wallY - 6, 6, 6);
+  }
+  // Brick rows.
+  ctx.strokeStyle = "#451a03";
+  ctx.lineWidth = 1;
+  const brickH = 12;
+  for (let row = 1; row < Math.floor(WALL_H / brickH); row++) {
+    const y = wallY + row * brickH;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + WALL_W, y);
+    ctx.stroke();
+    if (row % 2 === 0) {
+      ctx.beginPath();
+      ctx.moveTo(x + WALL_W / 2, y - brickH);
+      ctx.lineTo(x + WALL_W / 2, y);
+      ctx.stroke();
+    }
+  }
+  // HP bar above wall.
+  const barY = wallY - 14;
+  ctx.fillStyle = "#374151";
+  ctx.fillRect(x - 6, barY, WALL_W + 12, 4);
+  ctx.fillStyle = "#dc2626";
+  ctx.fillRect(x - 6, barY, (WALL_W + 12) * (hp / WALL_HP), 4);
 }
 
 function drawMine(ctx: CanvasRenderingContext2D, x: number, groundY: number) {
