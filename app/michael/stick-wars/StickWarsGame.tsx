@@ -16,9 +16,9 @@ const ENEMY_MINE_X = ENEMY_CASTLE_X - 70;
 const STARTING_GOLD = 75;
 const CASTLE_HP = 1000;
 const WALL_X = FIELD_W / 2;
-const WALL_W = 24;
-const WALL_H = 110;
-const WALL_HP = 250;
+const WALL_W = 32;
+const WALL_H = 120;
+const WALL_HP = 500;
 const PLAYER_DEFENSE_X = PLAYER_CASTLE_X + CASTLE_W + 180;
 // Castle dome turret (upgrade).
 const DOME_RANGE = 300;
@@ -30,7 +30,7 @@ const DOME_BULLET_DAMAGE = 16;
 const DOME_BULLET_INTERVAL = 0.7;
 const DOME_BULLET_SPEED = 900;
 
-type UnitType = "miner" | "swordsman" | "archer" | "cavalry" | "boss";
+type UnitType = "miner" | "swordsman" | "archer" | "rifleman" | "cavalry" | "boss";
 type Team = "green" | "red";
 type Difficulty = "easy" | "normal" | "hard";
 type Stance = "offend" | "defend";
@@ -50,14 +50,15 @@ const UNIT_DEFS: Record<UnitType, UnitDef> = {
   miner:     { cost: 20,  hp: 30,  damage: 0,  attackInterval: 0,    range: 0,   speed: 60,  width: 16, height: 36 },
   swordsman: { cost: 30,  hp: 80,  damage: 15, attackInterval: 1.0,  range: 30,  speed: 50,  width: 18, height: 42 },
   archer:    { cost: 50,  hp: 50,  damage: 12, attackInterval: 1.5,  range: 200, speed: 40,  width: 18, height: 42 },
+  rifleman:  { cost: 75,  hp: 55,  damage: 14, attackInterval: 0.55, range: 240, speed: 38,  width: 18, height: 42 },
   cavalry:   { cost: 40,  hp: 110, damage: 18, attackInterval: 0.9,  range: 32,  speed: 95,  width: 36, height: 50 },
-  boss:      { cost: 200, hp: 500, damage: 40, attackInterval: 1.5,  range: 40,  speed: 30,  width: 32, height: 70 },
+  boss:      { cost: 200, hp: 500, damage: 40, attackInterval: 1.5,  range: 40,  speed: 30,  width: 36, height: 78 },
 };
 
-const DIFFICULTY: Record<Difficulty, { goldRate: number; sword: number; archer: number; boss: number }> = {
-  easy:   { goldRate: 0.3, sword: 12, archer: 25, boss: 200 },
-  normal: { goldRate: 0.7, sword: 6,  archer: 12, boss: 90 },
-  hard:   { goldRate: 1.1, sword: 4,  archer: 8,  boss: 55 },
+const DIFFICULTY: Record<Difficulty, { goldRate: number; sword: number; archer: number; rifle: number; boss: number }> = {
+  easy:   { goldRate: 0.3, sword: 12, archer: 25, rifle: 35, boss: 200 },
+  normal: { goldRate: 0.7, sword: 6,  archer: 12, rifle: 18, boss: 90 },
+  hard:   { goldRate: 1.1, sword: 4,  archer: 8,  rifle: 11, boss: 55 },
 };
 
 interface Unit {
@@ -105,7 +106,7 @@ interface GameState {
   playerCastleMaxHp: number;
   enemyCastleMaxHp: number;
   wallHp: number;
-  enemyCooldown: { sword: number; archer: number; boss: number };
+  enemyCooldown: { sword: number; archer: number; rifle: number; boss: number };
   domeCooldown: number;
   playerStance: Stance;
   outcome: "playing" | "win" | "lose";
@@ -463,7 +464,7 @@ function Battle({
       playerCastleMaxHp: playerHpMax,
       enemyCastleMaxHp: CASTLE_HP,
       wallHp: WALL_HP,
-      enemyCooldown: { sword: 4, archer: 10, boss: 60 },
+      enemyCooldown: { sword: 4, archer: 10, rifle: 22, boss: 60 },
       domeCooldown: 0,
       playerStance: "offend",
       outcome: "playing",
@@ -568,8 +569,9 @@ function Battle({
       if (e.key === "1") spawnPlayerUnit("miner");
       if (e.key === "2") spawnPlayerUnit("swordsman");
       if (e.key === "3") spawnPlayerUnit("archer");
-      if (e.key === "4") spawnPlayerUnit("cavalry");
-      if (e.key === "5") spawnPlayerUnit("boss");
+      if (e.key === "4") spawnPlayerUnit("rifleman");
+      if (e.key === "5") spawnPlayerUnit("cavalry");
+      if (e.key === "6") spawnPlayerUnit("boss");
       if (e.key === "d" || e.key === "D") toggleStance();
     }
     window.addEventListener("keydown", onKey);
@@ -659,8 +661,8 @@ function Battle({
           {stance === "offend" ? "⚔️ Attack" : "🛡️ Defend"} <span className="text-sm text-gray-500">[D]</span>
         </button>
       </div>
-      <div className="mt-2 grid grid-cols-3 sm:grid-cols-5 gap-2">
-        {(["miner", "swordsman", "archer", "cavalry", "boss"] as UnitType[]).map((t, i) => {
+      <div className="mt-2 grid grid-cols-3 sm:grid-cols-6 gap-2">
+        {(["miner", "swordsman", "archer", "rifleman", "cavalry", "boss"] as UnitType[]).map((t, i) => {
           const cost = playerCost(t);
           const canAfford = hud.gold >= cost;
           return (
@@ -723,6 +725,7 @@ function unitEmoji(t: UnitType): string {
     case "miner": return "⛏️";
     case "swordsman": return "🗡️";
     case "archer": return "🏹";
+    case "rifleman": return "🔫";
     case "cavalry": return "🐴";
     case "boss": return "👹";
   }
@@ -742,6 +745,7 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
   // Enemy spawn timers.
   s.enemyCooldown.sword -= dt;
   s.enemyCooldown.archer -= dt;
+  s.enemyCooldown.rifle -= dt;
   s.enemyCooldown.boss -= dt;
   if (s.enemyCooldown.sword <= 0 && s.enemyGold >= UNIT_DEFS.swordsman.cost) {
     s.enemyGold -= UNIT_DEFS.swordsman.cost;
@@ -752,6 +756,11 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
     s.enemyGold -= UNIT_DEFS.archer.cost;
     s.units.push(makeUnitFromGame(s, "archer", "enemy"));
     s.enemyCooldown.archer = diff.archer;
+  }
+  if (s.enemyCooldown.rifle <= 0 && s.enemyGold >= UNIT_DEFS.rifleman.cost) {
+    s.enemyGold -= UNIT_DEFS.rifleman.cost;
+    s.units.push(makeUnitFromGame(s, "rifleman", "enemy"));
+    s.enemyCooldown.rifle = diff.rifle;
   }
   if (s.enemyCooldown.boss <= 0 && s.enemyGold >= UNIT_DEFS.boss.cost) {
     const hasBoss = s.units.find((u) => u.team === enemyTeam && u.type === "boss");
@@ -855,6 +864,17 @@ function step(s: GameState, dt: number, upgrades: Upgrades) {
             vy: 0,
             damage: 0, // visual only — damage already applied above
             variant: "arrow",
+          });
+        } else if (u.type === "rifleman") {
+          s.projectiles.push({
+            id: s.nextId++,
+            team: u.team,
+            x: u.x + def.width / 2,
+            y: u.y + 8,
+            vx: direction * 850,
+            vy: 0,
+            damage: 0,
+            variant: "bullet",
           });
         }
         u.attackCooldown = def.attackInterval;
@@ -1074,7 +1094,7 @@ function draw(ctx: CanvasRenderingContext2D, s: GameState, upgrades: Upgrades) {
 
   // Units.
   for (const u of s.units) {
-    drawUnit(ctx, u);
+    drawUnit(ctx, u, playerTeam);
   }
 
   // Damage popups.
@@ -1128,39 +1148,83 @@ function drawWall(ctx: CanvasRenderingContext2D, hp: number) {
   if (hp <= 0) return;
   const wallY = GROUND_Y - WALL_H;
   const x = WALL_X - WALL_W / 2;
-  // Brick body.
-  ctx.fillStyle = "#7c2d12";
+  // Stone body with vertical gradient.
+  const grad = ctx.createLinearGradient(x, wallY, x, GROUND_Y);
+  grad.addColorStop(0, "#6b7280");
+  grad.addColorStop(0.5, "#4b5563");
+  grad.addColorStop(1, "#374151");
+  ctx.fillStyle = grad;
   ctx.fillRect(x, wallY, WALL_W, WALL_H);
-  ctx.strokeStyle = "#451a03";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(x, wallY, WALL_W, WALL_H);
-  // Crenellations on top.
-  for (let i = 0; i < 3; i++) {
-    const cx = x + 1 + i * 8;
-    ctx.fillRect(cx, wallY - 6, 6, 6);
-  }
-  // Brick rows.
-  ctx.strokeStyle = "#451a03";
-  ctx.lineWidth = 1;
-  const brickH = 12;
-  for (let row = 1; row < Math.floor(WALL_H / brickH); row++) {
+  // Buttress/base flare.
+  ctx.fillStyle = "#374151";
+  ctx.beginPath();
+  ctx.moveTo(x - 4, GROUND_Y);
+  ctx.lineTo(x, GROUND_Y - 14);
+  ctx.lineTo(x + WALL_W, GROUND_Y - 14);
+  ctx.lineTo(x + WALL_W + 4, GROUND_Y);
+  ctx.closePath();
+  ctx.fill();
+  // Stone block courses (offset like real masonry).
+  const brickH = 14;
+  const halfW = WALL_W / 2;
+  ctx.strokeStyle = "#1f2937";
+  ctx.lineWidth = 1.2;
+  const rows = Math.floor(WALL_H / brickH);
+  for (let row = 0; row < rows; row++) {
     const y = wallY + row * brickH;
+    // Horizontal mortar line.
     ctx.beginPath();
     ctx.moveTo(x, y);
     ctx.lineTo(x + WALL_W, y);
     ctx.stroke();
+    // Vertical seam, offset every other row.
+    const seamX = row % 2 === 0 ? x + halfW : x;
+    ctx.beginPath();
+    ctx.moveTo(seamX, y);
+    ctx.lineTo(seamX, y + brickH);
+    ctx.stroke();
     if (row % 2 === 0) {
-      ctx.beginPath();
-      ctx.moveTo(x + WALL_W / 2, y - brickH);
-      ctx.lineTo(x + WALL_W / 2, y);
-      ctx.stroke();
+      // small highlight on each block to suggest stone shading
+      ctx.fillStyle = "rgba(255,255,255,0.06)";
+      ctx.fillRect(x + 1, y + 1, halfW - 2, 2);
+      ctx.fillRect(x + halfW + 1, y + 1, halfW - 2, 2);
     }
   }
+  // Outline.
+  ctx.strokeStyle = "#1f2937";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(x, wallY, WALL_W, WALL_H);
+  // Crenellations on top.
+  ctx.fillStyle = "#4b5563";
+  const merlonW = 8;
+  const merlonGap = 4;
+  const merlonH = 8;
+  for (let i = 0; i < 3; i++) {
+    const mx = x + i * (merlonW + merlonGap);
+    if (mx + merlonW <= x + WALL_W) {
+      ctx.fillRect(mx, wallY - merlonH, merlonW, merlonH);
+      ctx.strokeStyle = "#1f2937";
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(mx, wallY - merlonH, merlonW, merlonH);
+    }
+  }
+  // Iron banding (reinforcement bands).
+  ctx.fillStyle = "#1f2937";
+  ctx.fillRect(x - 2, wallY + WALL_H * 0.33 - 1, WALL_W + 4, 3);
+  ctx.fillRect(x - 2, wallY + WALL_H * 0.66 - 1, WALL_W + 4, 3);
+  // Rivets on bands.
+  ctx.fillStyle = "#9ca3af";
+  for (const by of [wallY + WALL_H * 0.33, wallY + WALL_H * 0.66]) {
+    ctx.beginPath();
+    ctx.arc(x + 4, by, 1.2, 0, Math.PI * 2);
+    ctx.arc(x + WALL_W - 4, by, 1.2, 0, Math.PI * 2);
+    ctx.fill();
+  }
   // HP bar above wall.
-  const barY = wallY - 14;
+  const barY = wallY - merlonH - 8;
   ctx.fillStyle = "#374151";
   ctx.fillRect(x - 6, barY, WALL_W + 12, 4);
-  ctx.fillStyle = "#dc2626";
+  ctx.fillStyle = hp / WALL_HP > 0.5 ? "#22c55e" : hp / WALL_HP > 0.25 ? "#f59e0b" : "#dc2626";
   ctx.fillRect(x - 6, barY, (WALL_W + 12) * (hp / WALL_HP), 4);
 }
 
@@ -1221,61 +1285,182 @@ function drawCastle(ctx: CanvasRenderingContext2D, x: number, team: Team, emblem
   }
 }
 
-function drawCavalry(ctx: CanvasRenderingContext2D, u: Unit, fill: string, outline: string) {
+function drawCavalry(ctx: CanvasRenderingContext2D, u: Unit, fill: string, outline: string, facingRight: boolean) {
   const def = UNIT_DEFS[u.type];
   const horseY = u.y + def.height - 22;
   const horseLeftX = u.x + 4;
   const horseRightX = u.x + def.width - 4;
-  ctx.fillStyle = "#7c3f00";
-  ctx.strokeStyle = "#3b1f00";
+  const cxBody = (horseLeftX + horseRightX) / 2;
+  const headSide = facingRight ? horseRightX : horseLeftX;
+  const tailSide = facingRight ? horseLeftX : horseRightX;
+  const dir = facingRight ? 1 : -1;
+
+  // Body with subtle dappling.
+  const bodyGrad = ctx.createLinearGradient(cxBody, horseY - 8, cxBody, horseY + 10);
+  bodyGrad.addColorStop(0, "#8b4513");
+  bodyGrad.addColorStop(1, "#5a2c0a");
+  ctx.fillStyle = bodyGrad;
+  ctx.strokeStyle = "#2a1505";
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.ellipse((horseLeftX + horseRightX) / 2, horseY, (horseRightX - horseLeftX) / 2, 8, 0, 0, Math.PI * 2);
+  ctx.ellipse(cxBody, horseY, (horseRightX - horseLeftX) / 2, 9, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
+  // Dapple spots.
+  ctx.fillStyle = "rgba(0,0,0,0.18)";
   ctx.beginPath();
-  ctx.moveTo(horseRightX - 2, horseY - 2);
-  ctx.lineTo(horseRightX + 6, horseY - 10);
-  ctx.lineTo(horseRightX + 12, horseY - 8);
-  ctx.lineTo(horseRightX + 12, horseY - 2);
+  ctx.arc(cxBody - 4, horseY + 1, 1.5, 0, Math.PI * 2);
+  ctx.arc(cxBody + 4, horseY - 2, 1.5, 0, Math.PI * 2);
+  ctx.arc(cxBody - 1, horseY + 4, 1.2, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Saddle.
+  ctx.fillStyle = "#1f2937";
+  ctx.beginPath();
+  ctx.moveTo(cxBody - 8, horseY - 6);
+  ctx.lineTo(cxBody + 8, horseY - 6);
+  ctx.lineTo(cxBody + 6, horseY - 1);
+  ctx.lineTo(cxBody - 6, horseY - 1);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = teamFill(u.team);
+  ctx.fillRect(cxBody - 7, horseY - 5, 14, 1.5); // saddle-blanket trim
+
+  // Neck + head.
+  ctx.fillStyle = "#7a3f0a";
+  ctx.strokeStyle = "#2a1505";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(headSide - 2 * dir, horseY - 2);
+  ctx.lineTo(headSide + 6 * dir, horseY - 12);
+  ctx.lineTo(headSide + 14 * dir, horseY - 10);
+  ctx.lineTo(headSide + 14 * dir, horseY - 2);
+  ctx.lineTo(headSide + 8 * dir, horseY);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
-  const phase = Math.floor(u.x / 6) % 2 === 0 ? 1 : -1;
-  ctx.strokeStyle = "#3b1f00";
+  // Ear.
+  ctx.fillStyle = "#5a2c0a";
+  ctx.beginPath();
+  ctx.moveTo(headSide + 6 * dir, horseY - 12);
+  ctx.lineTo(headSide + 8 * dir, horseY - 16);
+  ctx.lineTo(headSide + 10 * dir, horseY - 12);
+  ctx.closePath();
+  ctx.fill();
+  // Eye.
+  ctx.fillStyle = "#000";
+  ctx.beginPath();
+  ctx.arc(headSide + 10 * dir, horseY - 8, 1, 0, Math.PI * 2);
+  ctx.fill();
+  // Bridle/reins.
+  ctx.strokeStyle = "#1f2937";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(headSide + 13 * dir, horseY - 5);
+  ctx.lineTo(headSide + 1 * dir, horseY - 8);
+  ctx.lineTo(cxBody, horseY - 8);
+  ctx.stroke();
+
+  // Mane (along the neck).
+  ctx.strokeStyle = "#1f1305";
+  ctx.lineWidth = 2;
+  for (let i = 0; i < 4; i++) {
+    const mx = headSide + (2 + i * 1.5) * dir;
+    const my = horseY - 10 + i * 1.5;
+    ctx.beginPath();
+    ctx.moveTo(mx, my);
+    ctx.lineTo(mx - 2 * dir, my + 4);
+    ctx.stroke();
+  }
+
+  // Tail (on opposite side of head).
+  ctx.strokeStyle = "#1f1305";
   ctx.lineWidth = 2.5;
   ctx.beginPath();
-  ctx.moveTo(horseLeftX + 2, horseY + 6);
-  ctx.lineTo(horseLeftX + 2 + 3 * phase, u.y + def.height);
-  ctx.moveTo(horseLeftX + 10, horseY + 6);
-  ctx.lineTo(horseLeftX + 10 - 3 * phase, u.y + def.height);
-  ctx.moveTo(horseRightX - 10, horseY + 6);
-  ctx.lineTo(horseRightX - 10 + 3 * phase, u.y + def.height);
-  ctx.moveTo(horseRightX - 2, horseY + 6);
-  ctx.lineTo(horseRightX - 2 - 3 * phase, u.y + def.height);
+  ctx.moveTo(tailSide + 2 * -dir, horseY - 2);
+  ctx.quadraticCurveTo(tailSide + 10 * -dir, horseY + 2, tailSide + 12 * -dir, horseY + 10);
   ctx.stroke();
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(horseLeftX, horseY - 2);
-  ctx.lineTo(horseLeftX - 6, horseY + 4);
+  ctx.moveTo(tailSide + 4 * -dir, horseY);
+  ctx.quadraticCurveTo(tailSide + 8 * -dir, horseY + 6, tailSide + 7 * -dir, horseY + 12);
   ctx.stroke();
-  const riderCx = (horseLeftX + horseRightX) / 2 + 2;
-  const riderHeadY = horseY - 18;
+
+  // Legs — animated, with hooves (dark caps).
+  const phase = Math.floor(u.x / 6) % 2 === 0 ? 1 : -1;
+  const legPositions = [
+    horseLeftX + 3,
+    horseLeftX + 10,
+    horseRightX - 10,
+    horseRightX - 3,
+  ];
+  ctx.strokeStyle = "#2a1505";
+  ctx.lineWidth = 3;
+  legPositions.forEach((lx, i) => {
+    const swing = (i % 2 === 0 ? 1 : -1) * phase * 3;
+    ctx.beginPath();
+    ctx.moveTo(lx, horseY + 6);
+    ctx.lineTo(lx + swing, u.y + def.height - 2);
+    ctx.stroke();
+    // Hoof.
+    ctx.fillStyle = "#0f172a";
+    ctx.fillRect(lx + swing - 2, u.y + def.height - 2, 4, 2);
+  });
+
+  // Rider.
+  const riderCx = cxBody + 2 * dir;
+  const riderHeadY = horseY - 22;
   ctx.fillStyle = fill;
   ctx.strokeStyle = outline;
   ctx.lineWidth = 2;
+  // Helmet rim.
+  ctx.fillStyle = "#374151";
+  ctx.fillRect(riderCx - 6, riderHeadY - 1, 12, 2);
+  // Head.
+  ctx.fillStyle = fill;
   ctx.beginPath();
   ctx.arc(riderCx, riderHeadY, 5, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
+  // Helmet plume.
+  ctx.fillStyle = teamOutline(u.team);
+  ctx.beginPath();
+  ctx.moveTo(riderCx - 1, riderHeadY - 5);
+  ctx.lineTo(riderCx + 2, riderHeadY - 10);
+  ctx.lineTo(riderCx + 4, riderHeadY - 5);
+  ctx.closePath();
+  ctx.fill();
+  // Torso.
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.moveTo(riderCx, riderHeadY + 5);
-  ctx.lineTo(riderCx, horseY - 4);
+  ctx.lineTo(riderCx, horseY - 6);
   ctx.stroke();
-  ctx.strokeStyle = "#9ca3af";
+  // Lance.
+  ctx.strokeStyle = "#7c3f00";
+  ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(riderCx + 2, riderHeadY + 8);
-  ctx.lineTo(riderCx + 18, riderHeadY + 2);
+  ctx.moveTo(riderCx + 2 * dir, riderHeadY + 8);
+  ctx.lineTo(riderCx + 22 * dir, riderHeadY - 2);
   ctx.stroke();
+  // Lance tip.
+  ctx.fillStyle = "#cbd5e1";
+  ctx.beginPath();
+  ctx.moveTo(riderCx + 22 * dir, riderHeadY - 2);
+  ctx.lineTo(riderCx + 28 * dir, riderHeadY - 5);
+  ctx.lineTo(riderCx + 22 * dir, riderHeadY + 1);
+  ctx.closePath();
+  ctx.fill();
+  // Pennant.
+  ctx.fillStyle = teamFill(u.team);
+  ctx.beginPath();
+  ctx.moveTo(riderCx + 16 * dir, riderHeadY + 1);
+  ctx.lineTo(riderCx + 22 * dir, riderHeadY - 4);
+  ctx.lineTo(riderCx + 16 * dir, riderHeadY - 4);
+  ctx.closePath();
+  ctx.fill();
+
   if (u.hp < u.maxHp) {
     const barY = u.y - 4;
     ctx.fillStyle = "#374151";
@@ -1285,23 +1470,55 @@ function drawCavalry(ctx: CanvasRenderingContext2D, u: Unit, fill: string, outli
   }
 }
 
-function drawUnit(ctx: CanvasRenderingContext2D, u: Unit) {
+function drawUnit(ctx: CanvasRenderingContext2D, u: Unit, playerTeam: Team) {
   const fill = teamFill(u.team);
   const outline = teamOutline(u.team);
   const def = UNIT_DEFS[u.type];
+  const facingRight = u.team === playerTeam;
+  const dir = facingRight ? 1 : -1;
   if (u.type === "cavalry") {
-    drawCavalry(ctx, u, fill, outline);
+    drawCavalry(ctx, u, fill, outline, facingRight);
+    return;
+  }
+  if (u.type === "boss") {
+    drawBoss(ctx, u, fill, outline, facingRight);
     return;
   }
   const cx = u.x + def.width / 2;
-  const headR = u.type === "boss" ? 9 : 5;
+  const headR = 5;
   const headY = u.y + headR;
   const bodyTopY = headY + headR;
   const bodyBottomY = u.y + def.height - 8;
   const legY = u.y + def.height;
 
+  // Backpack for miners — drawn first so the body covers near edges.
+  if (u.type === "miner") {
+    // Pack sits opposite to direction of travel (on the back).
+    const packX = cx - 7 * dir;
+    const packY = bodyTopY + 3;
+    ctx.fillStyle = "#92400e";
+    ctx.strokeStyle = "#451a03";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(packX - 4, packY, 8, 11, 2) : ctx.rect(packX - 4, packY, 8, 11);
+    ctx.fill();
+    ctx.stroke();
+    // Strap across body.
+    ctx.strokeStyle = "#451a03";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(packX + 2 * dir, packY);
+    ctx.lineTo(cx + 2 * dir, bodyTopY + 1);
+    ctx.stroke();
+    // A nugget peeking out the top.
+    ctx.fillStyle = "#facc15";
+    ctx.beginPath();
+    ctx.arc(packX, packY + 1, 1.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
   ctx.strokeStyle = outline;
-  ctx.lineWidth = u.type === "boss" ? 3 : 2;
+  ctx.lineWidth = 2;
   ctx.fillStyle = fill;
 
   // Head.
@@ -1309,8 +1526,14 @@ function drawUnit(ctx: CanvasRenderingContext2D, u: Unit) {
   ctx.arc(cx, headY, headR, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
+  // Eye dot toward the facing direction.
+  ctx.fillStyle = "#0f172a";
+  ctx.beginPath();
+  ctx.arc(cx + 1.6 * dir, headY - 0.5, 0.9, 0, Math.PI * 2);
+  ctx.fill();
 
   // Body.
+  ctx.strokeStyle = outline;
   ctx.beginPath();
   ctx.moveTo(cx, bodyTopY);
   ctx.lineTo(cx, bodyBottomY);
@@ -1327,46 +1550,218 @@ function drawUnit(ctx: CanvasRenderingContext2D, u: Unit) {
 
   // Arms / weapon.
   if (u.type === "swordsman") {
+    // Forearm extending from shoulder to grip.
+    const gripX = cx + 11 * dir;
+    const gripY = bodyTopY - 2;
+    ctx.strokeStyle = outline;
+    ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(cx, bodyTopY + 4);
-    ctx.lineTo(cx + 10, bodyTopY - 2);
+    ctx.lineTo(gripX, gripY);
     ctx.stroke();
-    // Sword.
-    ctx.strokeStyle = "#9ca3af";
+    // Pommel.
+    ctx.fillStyle = "#fde68a";
     ctx.beginPath();
-    ctx.moveTo(cx + 10, bodyTopY - 2);
-    ctx.lineTo(cx + 18, bodyTopY - 12);
+    ctx.arc(gripX - 1 * dir, gripY + 2, 1.6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#78350f";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    // Hilt grip (brown bound handle).
+    ctx.strokeStyle = "#7c3f00";
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(gripX, gripY);
+    ctx.lineTo(gripX + 3 * dir, gripY - 3);
+    ctx.stroke();
+    // Crossguard.
+    ctx.strokeStyle = "#fde68a";
+    ctx.lineWidth = 2;
+    const guardX = gripX + 3 * dir;
+    const guardY = gripY - 3;
+    ctx.beginPath();
+    ctx.moveTo(guardX - 4, guardY - 4);
+    ctx.lineTo(guardX + 4, guardY + 4);
+    ctx.stroke();
+    // Blade — thick silver line w/ highlight.
+    const tipX = gripX + 16 * dir;
+    const tipY = gripY - 16;
+    ctx.strokeStyle = "#cbd5e1";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(guardX, guardY);
+    ctx.lineTo(tipX, tipY);
+    ctx.stroke();
+    // Highlight stripe.
+    ctx.strokeStyle = "#f8fafc";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(guardX + dir, guardY - 1);
+    ctx.lineTo(tipX, tipY + 1);
+    ctx.stroke();
+    // Edge outline.
+    ctx.strokeStyle = "#1f2937";
+    ctx.lineWidth = 0.6;
+    ctx.beginPath();
+    ctx.moveTo(guardX, guardY);
+    ctx.lineTo(tipX, tipY);
     ctx.stroke();
   } else if (u.type === "archer") {
+    // Arm to bow grip.
+    ctx.strokeStyle = outline;
+    ctx.lineWidth = 2;
+    const gripX = cx + 8 * dir;
+    const gripY = bodyTopY + 2;
     ctx.beginPath();
     ctx.moveTo(cx, bodyTopY + 4);
-    ctx.lineTo(cx + 8, bodyTopY + 2);
+    ctx.lineTo(gripX, gripY);
     ctx.stroke();
-    // Bow.
+    // Bow body (curved).
+    const bowCx = cx + 12 * dir;
+    const bowCy = bodyTopY + 2;
     ctx.strokeStyle = "#7c3f00";
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(cx + 12, bodyTopY + 2, 8, -Math.PI / 2, Math.PI / 2);
+    ctx.arc(bowCx, bowCy, 9, facingRight ? -Math.PI / 2 : Math.PI / 2, facingRight ? Math.PI / 2 : -Math.PI / 2);
     ctx.stroke();
-  } else if (u.type === "boss") {
+    // Bowstring (drawn).
+    ctx.strokeStyle = "#f9fafb";
+    ctx.lineWidth = 1;
+    const stringX = bowCx - 3 * dir; // pulled back toward archer
+    ctx.beginPath();
+    ctx.moveTo(bowCx, bowCy - 9);
+    ctx.lineTo(stringX, bowCy);
+    ctx.lineTo(bowCx, bowCy + 9);
+    ctx.stroke();
+    // Nocked arrow.
+    ctx.strokeStyle = "#1f2937";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(stringX, bowCy);
+    ctx.lineTo(stringX + 9 * dir, bowCy);
+    ctx.stroke();
+    // Arrow head.
+    ctx.fillStyle = "#475569";
+    ctx.beginPath();
+    ctx.moveTo(stringX + 9 * dir, bowCy - 1.5);
+    ctx.lineTo(stringX + 12 * dir, bowCy);
+    ctx.lineTo(stringX + 9 * dir, bowCy + 1.5);
+    ctx.closePath();
+    ctx.fill();
+    // Quiver on back.
+    ctx.fillStyle = "#7c3f00";
+    ctx.fillRect(cx - 4 * dir, bodyTopY + 2, 3, 12);
+    ctx.fillStyle = "#fef3c7";
+    for (let i = 0; i < 3; i++) {
+      ctx.fillRect(cx - 4 * dir + i * 0.8, bodyTopY + 1, 0.8, 3);
+    }
+  } else if (u.type === "rifleman") {
+    // Helmet (green/red beret-ish cap).
+    ctx.fillStyle = "#1f2937";
+    ctx.beginPath();
+    ctx.arc(cx, headY - 2, headR + 1, Math.PI, Math.PI * 2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = teamFill(u.team);
+    ctx.fillRect(cx - headR, headY - 2, (headR + 1) * 2, 1.5);
+    // Front arm.
+    ctx.strokeStyle = outline;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, bodyTopY + 4);
+    ctx.lineTo(cx + 9 * dir, bodyTopY + 1);
+    ctx.stroke();
+    // Rear arm holding stock.
     ctx.beginPath();
     ctx.moveTo(cx, bodyTopY + 6);
-    ctx.lineTo(cx + 14, bodyTopY + 2);
+    ctx.lineTo(cx + 4 * dir, bodyTopY + 4);
     ctx.stroke();
-    // Club.
+    // Rifle body — wood stock + dark barrel.
+    const stockStartX = cx + 2 * dir;
+    const stockEndX = cx + 10 * dir;
+    const barrelEndX = cx + 22 * dir;
+    const rifleY = bodyTopY + 1;
+    // Stock (wood).
     ctx.fillStyle = "#7c3f00";
+    ctx.fillRect(
+      Math.min(stockStartX, stockEndX),
+      rifleY - 1,
+      Math.abs(stockEndX - stockStartX),
+      3.5
+    );
+    ctx.strokeStyle = "#451a03";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(
+      Math.min(stockStartX, stockEndX),
+      rifleY - 1,
+      Math.abs(stockEndX - stockStartX),
+      3.5
+    );
+    // Barrel.
+    ctx.fillStyle = "#1f2937";
+    ctx.fillRect(
+      Math.min(stockEndX, barrelEndX),
+      rifleY - 0.5,
+      Math.abs(barrelEndX - stockEndX),
+      2
+    );
+    // Sight.
+    ctx.fillRect(stockEndX + 4 * dir - 0.5, rifleY - 2, 1, 1.5);
+    // Trigger guard.
+    ctx.strokeStyle = "#1f2937";
+    ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.arc(cx + 16, bodyTopY - 4, 7, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.arc(stockEndX, rifleY + 3.5, 1.6, 0, Math.PI);
+    ctx.stroke();
+    // Bandolier across chest.
+    ctx.strokeStyle = "#7c3f00";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx - 4, bodyTopY);
+    ctx.lineTo(cx + 4, bodyBottomY - 4);
+    ctx.stroke();
+    // Bullet pips.
+    ctx.fillStyle = "#facc15";
+    for (let i = 0; i < 3; i++) {
+      const t = 0.25 + i * 0.25;
+      const bx = cx - 4 + 8 * t;
+      const by = bodyTopY + (bodyBottomY - 4 - bodyTopY) * t;
+      ctx.beginPath();
+      ctx.arc(bx, by, 1.1, 0, Math.PI * 2);
+      ctx.fill();
+    }
   } else if (u.type === "miner") {
-    // Pickaxe.
+    // Hard hat.
+    ctx.fillStyle = "#facc15";
+    ctx.beginPath();
+    ctx.arc(cx, headY - 1, headR + 1, Math.PI, Math.PI * 2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = "#a16207";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    // Helmet lamp.
+    ctx.fillStyle = "#fef9c3";
+    ctx.fillRect(cx + 1 * dir, headY - 4, 3, 2);
+    // Pickaxe shaft.
+    ctx.strokeStyle = "#7c3f00";
+    ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(cx, bodyTopY + 4);
-    ctx.lineTo(cx + 8, bodyTopY - 4);
+    ctx.lineTo(cx + 10 * dir, bodyTopY - 6);
     ctx.stroke();
-    ctx.strokeStyle = "#9ca3af";
+    // Pickaxe head (double-pointed).
+    ctx.strokeStyle = "#475569";
+    ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.moveTo(cx + 6, bodyTopY - 6);
-    ctx.lineTo(cx + 12, bodyTopY - 2);
+    ctx.moveTo(cx + 5 * dir, bodyTopY - 8);
+    ctx.lineTo(cx + 14 * dir, bodyTopY - 4);
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#1f2937";
+    ctx.beginPath();
+    ctx.moveTo(cx + 5 * dir, bodyTopY - 8);
+    ctx.lineTo(cx + 14 * dir, bodyTopY - 4);
     ctx.stroke();
   }
 
@@ -1379,5 +1774,180 @@ function drawUnit(ctx: CanvasRenderingContext2D, u: Unit) {
     ctx.fillStyle = fill;
     ctx.fillRect(u.x, barY, barW * (u.hp / u.maxHp), 3);
   }
+}
+
+function drawBoss(ctx: CanvasRenderingContext2D, u: Unit, fill: string, outline: string, facingRight: boolean) {
+  const def = UNIT_DEFS[u.type];
+  const cx = u.x + def.width / 2;
+  const dir = facingRight ? 1 : -1;
+  const headR = 11;
+  const headY = u.y + headR + 2;
+  const bodyTopY = headY + headR;
+  const bodyBottomY = u.y + def.height - 12;
+  const legY = u.y + def.height;
+  const phase = Math.floor(u.x / 8) % 2 === 0 ? 1 : -1;
+
+  // Shadow on ground.
+  ctx.fillStyle = "rgba(0,0,0,0.25)";
+  ctx.beginPath();
+  ctx.ellipse(cx, legY + 1, def.width / 2 + 4, 3, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Cape behind boss.
+  ctx.fillStyle = teamOutline(u.team);
+  ctx.beginPath();
+  ctx.moveTo(cx - 6 * dir, bodyTopY - 2);
+  ctx.lineTo(cx - 14 * dir, bodyBottomY);
+  ctx.lineTo(cx - 4 * dir, bodyBottomY - 4);
+  ctx.closePath();
+  ctx.fill();
+
+  // Beefy body trapezoid.
+  ctx.fillStyle = fill;
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(cx - 14, bodyTopY);
+  ctx.lineTo(cx + 14, bodyTopY);
+  ctx.lineTo(cx + 11, bodyBottomY);
+  ctx.lineTo(cx - 11, bodyBottomY);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // Shoulder spikes.
+  ctx.fillStyle = "#1f2937";
+  for (const sx of [cx - 13, cx - 6, cx + 1, cx + 8]) {
+    ctx.beginPath();
+    ctx.moveTo(sx, bodyTopY + 1);
+    ctx.lineTo(sx + 3, bodyTopY - 5);
+    ctx.lineTo(sx + 6, bodyTopY + 1);
+    ctx.closePath();
+    ctx.fill();
+  }
+  // Belt.
+  ctx.fillStyle = "#1f2937";
+  ctx.fillRect(cx - 12, bodyBottomY - 5, 24, 4);
+  ctx.fillStyle = "#facc15";
+  ctx.fillRect(cx - 2, bodyBottomY - 5, 4, 4);
+
+  // Head (big, dark).
+  ctx.fillStyle = "#3f1f1f";
+  ctx.strokeStyle = "#0f172a";
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(cx, headY, headR, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  // Horns.
+  ctx.fillStyle = "#0f172a";
+  ctx.beginPath();
+  ctx.moveTo(cx - 7, headY - 8);
+  ctx.lineTo(cx - 12, headY - 16);
+  ctx.lineTo(cx - 4, headY - 10);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(cx + 7, headY - 8);
+  ctx.lineTo(cx + 12, headY - 16);
+  ctx.lineTo(cx + 4, headY - 10);
+  ctx.closePath();
+  ctx.fill();
+  // Glowing eyes.
+  ctx.fillStyle = "#fde047";
+  ctx.beginPath();
+  ctx.arc(cx - 3, headY - 1, 1.6, 0, Math.PI * 2);
+  ctx.arc(cx + 3, headY - 1, 1.6, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#dc2626";
+  ctx.beginPath();
+  ctx.arc(cx - 3, headY - 1, 0.8, 0, Math.PI * 2);
+  ctx.arc(cx + 3, headY - 1, 0.8, 0, Math.PI * 2);
+  ctx.fill();
+  // Fangs.
+  ctx.fillStyle = "#f8fafc";
+  ctx.beginPath();
+  ctx.moveTo(cx - 3, headY + 5);
+  ctx.lineTo(cx - 2, headY + 8);
+  ctx.lineTo(cx - 1, headY + 5);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(cx + 1, headY + 5);
+  ctx.lineTo(cx + 2, headY + 8);
+  ctx.lineTo(cx + 3, headY + 5);
+  ctx.closePath();
+  ctx.fill();
+
+  // Legs (thicker).
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(cx - 6, bodyBottomY);
+  ctx.lineTo(cx - 6 + 3 * phase, legY);
+  ctx.moveTo(cx + 6, bodyBottomY);
+  ctx.lineTo(cx + 6 - 3 * phase, legY);
+  ctx.stroke();
+  // Boots.
+  ctx.fillStyle = "#0f172a";
+  ctx.fillRect(cx - 10 + 3 * phase, legY - 2, 8, 3);
+  ctx.fillRect(cx + 2 - 3 * phase, legY - 2, 8, 3);
+
+  // Arm holding spiked club.
+  const armEndX = cx + 16 * dir;
+  const armEndY = bodyTopY + 6;
+  ctx.strokeStyle = outline;
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(cx + 12 * dir, bodyTopY + 4);
+  ctx.lineTo(armEndX, armEndY);
+  ctx.stroke();
+  // Club shaft.
+  ctx.strokeStyle = "#5a2c0a";
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(armEndX, armEndY);
+  ctx.lineTo(armEndX + 6 * dir, armEndY - 18);
+  ctx.stroke();
+  // Club head (dark wood orb).
+  const ccx = armEndX + 8 * dir;
+  const ccy = armEndY - 22;
+  ctx.fillStyle = "#3a1f0a";
+  ctx.strokeStyle = "#1a0a02";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(ccx, ccy, 8, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  // Club spikes.
+  ctx.fillStyle = "#cbd5e1";
+  ctx.strokeStyle = "#475569";
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    const sx = ccx + Math.cos(a) * 8;
+    const sy = ccy + Math.sin(a) * 8;
+    const tx = ccx + Math.cos(a) * 13;
+    const ty = ccy + Math.sin(a) * 13;
+    const ox = -Math.sin(a) * 2;
+    const oy = Math.cos(a) * 2;
+    ctx.beginPath();
+    ctx.moveTo(sx + ox, sy + oy);
+    ctx.lineTo(tx, ty);
+    ctx.lineTo(sx - ox, sy - oy);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  // HP bar (always visible for boss).
+  const barW = def.width;
+  const barY = u.y - 6;
+  ctx.fillStyle = "#374151";
+  ctx.fillRect(u.x, barY, barW, 4);
+  ctx.fillStyle = fill;
+  ctx.fillRect(u.x, barY, barW * (u.hp / u.maxHp), 4);
+  ctx.strokeStyle = "#0f172a";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(u.x, barY, barW, 4);
 }
 
