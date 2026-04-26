@@ -764,6 +764,9 @@ export default function Home() {
 
       <div className="mt-8 text-center text-sm text-gray-500">
         <p>More games coming soon!</p>
+        <p className="mt-4 text-xs text-gray-700">
+          <Link href="/michael" className="hover:text-gray-500 transition-colors">·</Link>
+        </p>
       </div>
 
       <script
