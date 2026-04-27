@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useImperativeHandle, forwardRef } from "react";
 import DownloadButton from "./DownloadButton";
 import { useGameLoop } from "./useGameLoop";
 
@@ -33,7 +33,19 @@ function randomFood(snake: Cell[]): Cell {
   }
 }
 
-export default function SnakeGame() {
+export type SnakeGameHandle = { start: () => void };
+
+export type SnakeGameProps = {
+  /** Called when the game ends. Score is the final value. When provided,
+   * SnakeGame suppresses its own game-over modal so a parent shell can
+   * own the end-state UI. */
+  onGameOver?: (score: number) => void;
+};
+
+const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame(
+  { onGameOver },
+  ref
+) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameState, setGameState] = useState<GameState>("ready");
   const [score, setScore] = useState(0);
@@ -74,13 +86,16 @@ export default function SnakeGame() {
       } catch {}
       return next;
     });
-  }, []);
+    onGameOver?.(scoreRef.current);
+  }, [onGameOver]);
 
   const start = useCallback(() => {
     reset();
     stateRef.current = "playing";
     setGameState("playing");
   }, [reset]);
+
+  useImperativeHandle(ref, () => ({ start }), [start]);
 
   const step = useCallback(() => {
     dirRef.current = nextDirRef.current;
@@ -216,7 +231,7 @@ export default function SnakeGame() {
           className="border-4 border-gray-700 rounded-lg max-w-full h-auto"
         />
 
-        {gameState !== "playing" && (
+        {gameState !== "playing" && !(onGameOver && gameState === "gameover") && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-lg">
             <div className="bg-white text-gray-900 px-8 py-6 rounded-lg text-center">
               {gameState === "ready" ? (
@@ -276,4 +291,6 @@ export default function SnakeGame() {
       <DownloadButton canvasRef={canvasRef} filename="snake" />
     </div>
   );
-}
+});
+
+export default SnakeGame;
