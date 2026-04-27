@@ -21,6 +21,7 @@ const games = [
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: BASE, lastModified: SITE_LAST_MODIFIED, priority: 1.0, changeFrequency: "weekly" },
+    { url: `${BASE}/daily`, lastModified: SITE_LAST_MODIFIED, priority: 0.95, changeFrequency: "daily" },
     ...games.map((slug) => ({
       url: `${BASE}/${slug}`,
       lastModified: GAMES_LAST_MODIFIED,

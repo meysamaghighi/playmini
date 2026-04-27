@@ -2,10 +2,10 @@ import Link from "next/link";
 import MobileNav from "./MobileNav";
 
 const navLinks = [
+  { href: "/daily", label: "🔥 Daily" },
   { href: "/snake", label: "Snake" },
   { href: "/2048", label: "2048" },
   { href: "/chess", label: "Chess" },
-  { href: "/pac-man", label: "Pac-Man" },
   { href: "/minesweeper", label: "Minesweeper" },
   { href: "/wordle", label: "Word Guess" },
 ];
