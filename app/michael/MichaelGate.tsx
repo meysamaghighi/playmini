@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const PASSWORD = "78910mike";
+const PASSWORD = "M253596A";
 const STORAGE_KEY = "michael_unlocked";
 
 export default function MichaelGate({ children }: { children: React.ReactNode }) {
