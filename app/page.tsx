@@ -38,12 +38,12 @@ type GameCategory = "Puzzle" | "Arcade" | "Word" | "Strategy" | "Creative" | "Sp
 const categoryOrder: GameCategory[] = ["Arcade", "Puzzle", "Word", "Strategy", "Sports", "Creative"];
 
 const categoryColors: Record<GameCategory, string> = {
-  Arcade: "text-red-400",
-  Puzzle: "text-blue-400",
-  Word: "text-emerald-400",
-  Strategy: "text-amber-400",
-  Sports: "text-green-400",
-  Creative: "text-purple-400",
+  Arcade: "text-ink",
+  Puzzle: "text-ink",
+  Word: "text-ink",
+  Strategy: "text-ink",
+  Sports: "text-ink",
+  Creative: "text-ink",
 };
 
 const games: Array<{
@@ -714,46 +714,43 @@ export default function Home() {
 
   return (
     <main className="max-w-4xl mx-auto px-4 pt-6 pb-12">
-      <div className="text-center mb-6">
-        <h1 className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-2">
-          PlayMini
+      <div className="text-center mb-8">
+        <p className="font-mono text-xs uppercase tracking-wider text-ink-3 mb-3">
+          Today&apos;s Game
+        </p>
+        <h1
+          className="font-display text-5xl sm:text-7xl text-ink mb-3"
+          style={{ fontWeight: 900, letterSpacing: "-0.02em", lineHeight: 0.95 }}
+        >
+          PlayMini.
         </h1>
-        <p className="text-gray-400 text-base sm:text-lg">
+        <p className="text-ink-2 text-base sm:text-lg">
           {games.length} free browser games. No download, no sign-up. Just play.
         </p>
-      </div>
-
-      <div className="flex flex-wrap justify-center gap-3 mb-6 text-xs text-gray-500">
-        <span>Also try:</span>
-        <a href="https://benchmybrain.com" className="text-cyan-400 hover:text-cyan-300 transition-colors">BenchMyBrain - Brain Tests</a>
-        <span className="text-gray-700">|</span>
-        <a href="https://doodlelab.fun" className="text-pink-400 hover:text-pink-300 transition-colors">DoodleLab - Drawing Games</a>
-        <span className="text-gray-700">|</span>
-        <a href="https://cashcalcs.com" className="text-green-400 hover:text-green-300 transition-colors">CashCalcs - Financial Tools</a>
       </div>
 
       {grouped.map(({ category, games: catGames }) => (
         <section key={category} className="mb-8">
           <h2 className={`text-lg font-bold ${categoryColors[category]} mb-3 flex items-center gap-2`}>
             {category}
-            <span className="text-sm font-normal text-gray-500">({catGames.length})</span>
+            <span className="text-sm font-normal text-ink-3">({catGames.length})</span>
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {catGames.map((game) => (
               <Link
                 key={game.href}
                 href={game.href}
-                className="group bg-gray-900 rounded-xl p-3 border border-gray-800 hover:border-gray-700 transition-all"
+                className="group bg-paper-2 rounded-xl p-3 border border-line hover:border-ink-3 transition-all"
               >
                 <div className="flex flex-col items-center gap-2">
                   <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${game.color} flex items-center justify-center flex-shrink-0`}>
                     {game.icon}
                   </div>
                   <div className="text-center w-full">
-                    <h3 className="text-sm sm:text-base font-bold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-purple-400 transition-all">
+                    <h3 className="text-sm sm:text-base font-bold text-ink transition-colors" style={{ }}>
                       {game.title}
                     </h3>
-                    <p className="text-gray-400 text-xs hidden sm:block">{game.description}</p>
+                    <p className="text-ink-2 text-xs hidden sm:block">{game.description}</p>
                   </div>
                 </div>
               </Link>
@@ -762,7 +759,7 @@ export default function Home() {
         </section>
       ))}
 
-      <div className="mt-8 text-center text-sm text-gray-500">
+      <div className="mt-8 text-center text-sm text-ink-3">
         <p>More games coming soon!</p>
         <p className="mt-4 text-xs text-gray-700">
           <Link href="/michael" className="hover:text-gray-500 transition-colors">·</Link>

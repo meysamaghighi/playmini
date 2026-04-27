@@ -14,7 +14,7 @@ export default function MobileNav({
     <div className="sm:hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="text-gray-400 hover:text-white p-2"
+        className="text-ink-2 hover:text-ink p-2"
         aria-label="Menu"
       >
         <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -26,13 +26,13 @@ export default function MobileNav({
         </svg>
       </button>
       {open && (
-        <div className="absolute top-full left-0 right-0 bg-gray-950 border-b border-gray-800 p-4 flex flex-wrap gap-3">
+        <div className="absolute top-full left-0 right-0 bg-paper border-b border-line p-4 flex flex-wrap gap-3">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="text-sm text-gray-400 hover:text-white transition-colors"
+              className="text-sm text-ink-2 hover:text-ink transition-colors"
             >
               {link.label}
             </Link>
