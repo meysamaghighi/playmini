@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useProgress } from "../hooks/useProgress";
+import { generateShareCard, shareCard } from "../lib/shareCard";
 
 type DailyEntry = {
   slug: string;
@@ -82,6 +83,15 @@ export default function DailyGame() {
     bumpStreak();
   };
 
+  const handleShare = async () => {
+    const dataUrl = generateShareCard({
+      headline: `${streakCount}-day streak`,
+      subline: `Today's daily · ${pick.title}`,
+    });
+    if (!dataUrl) return;
+    await shareCard(dataUrl, `playmini-streak-${streakCount}.png`);
+  };
+
   return (
     <main className="max-w-4xl mx-auto px-4 pt-6 pb-12">
       <section
@@ -126,6 +136,15 @@ export default function DailyGame() {
               {streakCount} {streakCount === 1 ? "day" : "days"}
             </span>
           </div>
+          {streakCount >= 1 && (
+            <button
+              type="button"
+              onClick={handleShare}
+              className="px-5 py-3 rounded-full text-sm text-ink-2 border border-line hover:bg-paper-2 transition-colors"
+            >
+              Share streak
+            </button>
+          )}
         </div>
 
         {/* decorative grid bottom-right per the canvas */}
