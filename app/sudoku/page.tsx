@@ -96,7 +96,7 @@ export default function SudokuPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
       />
 
-      <div className="min-h-screen bg-slate-900 text-white">
+      <div className="min-h-screen bg-slate-900 text-ink">
         <div className="max-w-6xl mx-auto px-4 py-8">
           <h1 className="text-4xl sm:text-5xl font-bold text-center mb-2">Sudoku</h1>
           <p className="text-slate-400 text-center mb-8 text-lg">

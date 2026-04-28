@@ -31,14 +31,14 @@ export const metadata: Metadata = {
 
 export default function HangmanPage() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-red-600 bg-clip-text text-transparent">
             Hangman
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-ink-2 text-lg">
             Guess the word one letter at a time. 200+ words, 10 categories, 6 lives!
           </p>
         </div>
@@ -47,11 +47,11 @@ export default function HangmanPage() {
         <HangmanGame />
 
         {/* How to Play */}
-        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-orange-400">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="font-semibold text-white mb-2">Game Rules:</h3>
+              <h3 className="font-semibold text-ink mb-2">Game Rules:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>A random word is chosen from 200+ words across 10 categories</li>
                 <li>You see the category as a hint (Animals, Countries, Foods, etc.)</li>
@@ -62,7 +62,7 @@ export default function HangmanPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Controls:</h3>
+              <h3 className="font-semibold text-ink mb-2">Controls:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Click letter buttons on screen (mobile-friendly)</li>
                 <li>Or type letters on your keyboard (A-Z)</li>
@@ -70,7 +70,7 @@ export default function HangmanPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Scoring:</h3>
+              <h3 className="font-semibold text-ink mb-2">Scoring:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Win Streak: consecutive games won</li>
                 <li>Best Streak: your longest winning streak (saved)</li>
@@ -81,9 +81,9 @@ export default function HangmanPage() {
         </section>
 
         {/* About Hangman */}
-        <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-orange-400">About Hangman</h2>
-          <div className="text-gray-300 space-y-3">
+          <div className="text-ink-2 space-y-3">
             <p>
               Hangman is a classic word guessing game that has been enjoyed for generations.
               The game challenges your vocabulary, spelling knowledge, and deductive reasoning

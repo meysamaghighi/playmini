@@ -33,38 +33,38 @@ export const metadata: Metadata = {
 
 export default function DinoRunnerPage() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-400 to-lime-500 bg-clip-text text-transparent">
             Dino Runner
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-ink-2 text-lg">
             Jump over cacti, duck under pterodactyls, and see how far you can go.
           </p>
         </div>
 
         <DinoRunner />
 
-        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-green-400">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="font-semibold text-white mb-2">Desktop:</h3>
+              <h3 className="font-semibold text-ink mb-2">Desktop:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Space or Up Arrow to jump</li>
                 <li>Down Arrow to duck under pterodactyls</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Mobile:</h3>
+              <h3 className="font-semibold text-ink mb-2">Mobile:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Tap the screen (or the Jump button) to jump</li>
                 <li>Hold the Duck button to duck</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Gameplay:</h3>
+              <h3 className="font-semibold text-ink mb-2">Gameplay:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Dodge cacti on the ground and flying pterodactyls overhead</li>
                 <li>Score rises with distance — the game speeds up the further you run</li>
@@ -74,9 +74,9 @@ export default function DinoRunnerPage() {
           </div>
         </section>
 
-        <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-green-400">About Dino Runner</h2>
-          <div className="text-gray-300 space-y-3">
+          <div className="text-ink-2 space-y-3">
             <p>
               Dino Runner is a minimal browser take on the classic Chrome dinosaur endless runner.
               Jump and duck past obstacles; the game speeds up as you score, and the only goal is to

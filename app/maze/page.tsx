@@ -24,18 +24,18 @@ export default function MazePage() {
   return (
     <main className="max-w-4xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-white mb-3">Maze Runner</h1>
-        <p className="text-gray-400">Navigate from start to finish through the maze</p>
+        <h1 className="text-4xl font-black text-ink mb-3">Maze Runner</h1>
+        <p className="text-ink-2">Navigate from start to finish through the maze</p>
       </div>
 
       <MazeRunner />
 
       {/* How to Play */}
-      <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-purple-400">How to Play</h2>
-        <div className="space-y-4 text-gray-300">
+        <div className="space-y-4 text-ink-2">
           <div>
-            <h3 className="font-semibold text-white mb-2">Desktop Controls:</h3>
+            <h3 className="font-semibold text-ink mb-2">Desktop Controls:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Use Arrow Keys to move up, down, left, or right</li>
               <li>Alternative: W, A, S, D keys</li>
@@ -43,14 +43,14 @@ export default function MazePage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Mobile Controls:</h3>
+            <h3 className="font-semibold text-ink mb-2">Mobile Controls:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Swipe in any direction to move</li>
               <li>Use on-screen arrow buttons</li>
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Goal:</h3>
+            <h3 className="font-semibold text-ink mb-2">Goal:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Find the shortest path through the maze</li>
               <li>Complete it as fast as possible</li>
@@ -62,9 +62,9 @@ export default function MazePage() {
       </section>
 
       {/* About Maze Runner */}
-      <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-purple-400">About Maze Runner</h2>
-        <div className="text-gray-300 space-y-3">
+        <div className="text-ink-2 space-y-3">
           <p>
             Maze Runner features procedurally generated mazes using a recursive backtracking algorithm. Each maze is unique and guaranteed to have a path from start to finish.
           </p>

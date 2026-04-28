@@ -174,13 +174,13 @@ export default function GameShufflePage() {
     .filter(Boolean);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white flex flex-col">
+    <div className="min-h-screen bg-paper text-ink flex flex-col">
       {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-950/90 backdrop-blur">
+      <div className="border-b border-line bg-paper/90 backdrop-blur">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
             <h1 className="font-black text-2xl">GameShuffle</h1>
-            <p className="text-sm text-gray-400 mt-1">Discover your next favorite game</p>
+            <p className="text-sm text-ink-2 mt-1">Discover your next favorite game</p>
           </div>
           <Link
             href="https://playmini.fun"
@@ -197,12 +197,12 @@ export default function GameShufflePage() {
           // Landing state
           <div className="text-center max-w-lg mx-auto">
             <h2 className="text-4xl font-black mb-3">Tinder for Games</h2>
-            <p className="text-gray-400 mb-8">
+            <p className="text-ink-2 mb-8">
               Shuffle through 31 free games. Vote thumbs up or down. Discover your favorites.
             </p>
             <button
               onClick={handleShuffle}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold text-xl px-12 py-6 rounded-xl shadow-lg transition-all transform hover:scale-105 flex items-center gap-3 mx-auto"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-ink font-bold text-xl px-12 py-6 rounded-xl shadow-lg transition-all transform hover:scale-105 flex items-center gap-3 mx-auto"
             >
               <svg
                 className="w-8 h-8"
@@ -219,7 +219,7 @@ export default function GameShufflePage() {
               </svg>
               Shuffle!
             </button>
-            <p className="text-xs text-gray-600 mt-6">
+            <p className="text-xs text-ink-3 mt-6">
               Arcade, puzzle, word, strategy, sports -- all free, no download needed.
             </p>
           </div>
@@ -229,11 +229,11 @@ export default function GameShufflePage() {
             {/* Game info with animation */}
             <div className="text-center mb-4">
               <h2 className="text-3xl font-bold">{currentGame.name}</h2>
-              <p className="text-gray-400 text-sm mt-1">{currentGame.category}</p>
+              <p className="text-ink-2 text-sm mt-1">{currentGame.category}</p>
             </div>
 
             {/* Game iframe */}
-            <div className="relative w-full bg-gray-900 rounded-lg overflow-hidden shadow-2xl border border-gray-800">
+            <div className="relative w-full bg-paper-2 rounded-lg overflow-hidden shadow-2xl border border-line">
               <iframe
                 src={`https://playmini.fun/${currentGame.slug}`}
                 className="w-full"
@@ -254,7 +254,7 @@ export default function GameShufflePage() {
                 <>
                   <button
                     onClick={() => handleVote("up")}
-                    className="bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-4 rounded-lg transition-all transform hover:scale-105 flex items-center gap-2"
+                    className="bg-green-600 hover:bg-green-700 text-ink font-bold px-8 py-4 rounded-lg transition-all transform hover:scale-105 flex items-center gap-2"
                     title="Thumbs up"
                   >
                     <svg
@@ -269,14 +269,14 @@ export default function GameShufflePage() {
 
                   <button
                     onClick={handleNext}
-                    className="bg-gray-700 hover:bg-gray-600 text-white font-bold px-8 py-4 rounded-lg transition-all transform hover:scale-105"
+                    className="bg-paper-2 hover:bg-gray-600 text-ink font-bold px-8 py-4 rounded-lg transition-all transform hover:scale-105"
                   >
                     Next Game
                   </button>
 
                   <button
                     onClick={() => handleVote("down")}
-                    className="bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-4 rounded-lg transition-all transform hover:scale-105 flex items-center gap-2"
+                    className="bg-red-600 hover:bg-red-700 text-ink font-bold px-8 py-4 rounded-lg transition-all transform hover:scale-105 flex items-center gap-2"
                     title="Thumbs down"
                   >
                     <svg
@@ -297,20 +297,20 @@ export default function GameShufflePage() {
 
       {/* Stats section */}
       {gamesPlayed > 0 && (
-        <div className="border-t border-gray-800 bg-gray-900/50">
+        <div className="border-t border-line bg-paper-2/50">
           <div className="max-w-6xl mx-auto px-4 py-8">
             <h3 className="text-xl font-bold mb-4">Your Stats</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <div className="bg-gray-800 rounded-lg p-4 text-center">
+              <div className="bg-paper-2 rounded-lg p-4 text-center">
                 <p className="text-3xl font-bold text-blue-400">{gamesPlayed}</p>
-                <p className="text-sm text-gray-400 mt-1">Games Played</p>
+                <p className="text-sm text-ink-2 mt-1">Games Played</p>
               </div>
-              <div className="bg-gray-800 rounded-lg p-4 text-center">
+              <div className="bg-paper-2 rounded-lg p-4 text-center">
                 <p className="text-3xl font-bold text-purple-400">{totalVotes}</p>
-                <p className="text-sm text-gray-400 mt-1">Total Votes</p>
+                <p className="text-sm text-ink-2 mt-1">Total Votes</p>
               </div>
-              <div className="bg-gray-800 rounded-lg p-4">
-                <p className="text-sm text-gray-400 mb-2">Top Favorites:</p>
+              <div className="bg-paper-2 rounded-lg p-4">
+                <p className="text-sm text-ink-2 mb-2">Top Favorites:</p>
                 {topFavorites.length > 0 ? (
                   <ul className="text-sm space-y-1">
                     {topFavorites.map((game, index) => (
@@ -320,7 +320,7 @@ export default function GameShufflePage() {
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-sm text-gray-500">Vote to build your list!</p>
+                  <p className="text-sm text-ink-3">Vote to build your list!</p>
                 )}
               </div>
             </div>

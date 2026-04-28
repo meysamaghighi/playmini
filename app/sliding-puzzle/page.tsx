@@ -24,18 +24,18 @@ export default function SlidingPuzzlePage() {
   return (
     <main className="max-w-4xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-white mb-3">Sliding Puzzle</h1>
-        <p className="text-gray-400">Arrange the tiles from 1 to 15</p>
+        <h1 className="text-4xl font-black text-ink mb-3">Sliding Puzzle</h1>
+        <p className="text-ink-2">Arrange the tiles from 1 to 15</p>
       </div>
 
       <SlidingPuzzle />
 
       {/* How to Play section */}
-      <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-green-400">How to Play</h2>
-        <div className="space-y-4 text-gray-300">
+        <div className="space-y-4 text-ink-2">
           <div>
-            <h3 className="font-semibold text-white mb-2">Controls:</h3>
+            <h3 className="font-semibold text-ink mb-2">Controls:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Click on any tile adjacent to the empty space</li>
               <li>The tile will slide into the empty space</li>
@@ -43,7 +43,7 @@ export default function SlidingPuzzlePage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Goal:</h3>
+            <h3 className="font-semibold text-ink mb-2">Goal:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Arrange all tiles in numerical order from 1 to 15</li>
               <li>The empty space should be in the bottom-right corner</li>
@@ -52,7 +52,7 @@ export default function SlidingPuzzlePage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Tips:</h3>
+            <h3 className="font-semibold text-ink mb-2">Tips:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Solve the top rows first, then work your way down</li>
               <li>The last row is the trickiest - take your time</li>
@@ -63,9 +63,9 @@ export default function SlidingPuzzlePage() {
       </section>
 
       {/* About Sliding Puzzle */}
-      <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-green-400">About Sliding Puzzle</h2>
-        <div className="text-gray-300 space-y-3">
+        <div className="text-ink-2 space-y-3">
           <p>
             The 15-puzzle, also known as the Sliding Puzzle, was invented in 1874 and became a worldwide craze in the 1880s. It's one of the most famous sliding tile puzzles.
           </p>

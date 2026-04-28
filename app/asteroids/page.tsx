@@ -29,24 +29,24 @@ export const metadata: Metadata = {
 
 export default function AsteroidsPage() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
             Asteroids
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-ink-2 text-lg">
             Destroy all asteroids to advance — but watch out, they split into smaller, faster pieces!
           </p>
         </div>
 
         <AsteroidsGame />
 
-        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-cyan-400">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="font-semibold text-white mb-2">Controls</h3>
+              <h3 className="font-semibold text-ink mb-2">Controls</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Left / Right arrows (or A/D) — rotate ship</li>
                 <li>Up arrow (or W) — thrust forward</li>
@@ -55,7 +55,7 @@ export default function AsteroidsPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Scoring</h3>
+              <h3 className="font-semibold text-ink mb-2">Scoring</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Large asteroid — 20 pts</li>
                 <li>Medium asteroid — 50 pts</li>

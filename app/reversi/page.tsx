@@ -29,24 +29,24 @@ export const metadata: Metadata = {
 
 export default function ReversiPage() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-400 to-teal-500 bg-clip-text text-transparent">
             Reversi
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-ink-2 text-lg">
             Outflank your opponent and flip their pieces. Most discs at the end wins.
           </p>
         </div>
 
         <ReversiGame />
 
-        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-green-400">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="font-semibold text-white mb-2">Rules</h3>
+              <h3 className="font-semibold text-ink mb-2">Rules</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>You play Black — you go first</li>
                 <li>Place a disc to sandwich one or more of the opponent&apos;s discs — they flip to your colour</li>
@@ -55,7 +55,7 @@ export default function ReversiPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Strategy</h3>
+              <h3 className="font-semibold text-ink mb-2">Strategy</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Corners are the most valuable squares — they can never be flipped</li>
                 <li>Avoid squares adjacent to empty corners — they let your opponent grab the corner</li>

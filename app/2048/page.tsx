@@ -133,12 +133,12 @@ export default function Page2048() {
         }}
       />
 
-      <div className="min-h-screen bg-gray-950 text-white py-8 px-4">
+      <div className="min-h-screen bg-paper text-ink py-8 px-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-2">
             2048 Game
           </h1>
-          <p className="text-gray-400 text-center mb-8">
+          <p className="text-ink-2 text-center mb-8">
             Combine tiles to reach 2048!
           </p>
 
@@ -147,10 +147,10 @@ export default function Page2048() {
           {/* How to Play */}
           <section className="mt-12 max-w-2xl mx-auto">
             <h2 className="text-2xl font-bold mb-4">How to Play</h2>
-            <div className="bg-gray-900 rounded-lg p-6 space-y-4">
+            <div className="bg-paper-2 rounded-lg p-6 space-y-4">
               <div>
                 <h3 className="font-semibold text-lg mb-2">Controls</h3>
-                <ul className="list-disc list-inside text-gray-300 space-y-1">
+                <ul className="list-disc list-inside text-ink-2 space-y-1">
                   <li>
                     <strong>Desktop:</strong> Use arrow keys (↑ ↓ ← →) to move
                     tiles
@@ -164,7 +164,7 @@ export default function Page2048() {
 
               <div>
                 <h3 className="font-semibold text-lg mb-2">Rules</h3>
-                <ul className="list-disc list-inside text-gray-300 space-y-1">
+                <ul className="list-disc list-inside text-ink-2 space-y-1">
                   <li>
                     Tiles slide as far as possible in the chosen direction
                   </li>
@@ -186,7 +186,7 @@ export default function Page2048() {
 
               <div>
                 <h3 className="font-semibold text-lg mb-2">Tips & Strategy</h3>
-                <ul className="list-disc list-inside text-gray-300 space-y-1">
+                <ul className="list-disc list-inside text-ink-2 space-y-1">
                   <li>
                     Keep your highest tile in a corner (bottom-left or
                     bottom-right works best)
@@ -206,7 +206,7 @@ export default function Page2048() {
           {/* About 2048 */}
           <section className="mt-12 max-w-2xl mx-auto">
             <h2 className="text-2xl font-bold mb-4">About 2048</h2>
-            <div className="bg-gray-900 rounded-lg p-6 text-gray-300 space-y-3">
+            <div className="bg-paper-2 rounded-lg p-6 text-ink-2 space-y-3">
               <p>
                 2048 is a sliding tile puzzle game where you combine numbered
                 tiles to create larger numbers. The game was created by Italian

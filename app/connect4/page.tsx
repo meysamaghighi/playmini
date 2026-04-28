@@ -22,14 +22,14 @@ export const metadata: Metadata = {
 
 export default function Connect4Page() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-red-400 to-yellow-500 bg-clip-text text-transparent">
             Connect 4
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-ink-2 text-lg">
             Drop your pieces and connect four in a row to win. Play a challenging minimax AI or two-player.
           </p>
         </div>
@@ -38,11 +38,11 @@ export default function Connect4Page() {
         <Connect4Game />
 
         {/* How to Play */}
-        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-red-400">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="font-semibold text-white mb-2">Controls:</h3>
+              <h3 className="font-semibold text-ink mb-2">Controls:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Click on any column to drop your red piece</li>
                 <li>Hover over columns to preview your move</li>
@@ -50,7 +50,7 @@ export default function Connect4Page() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Rules:</h3>
+              <h3 className="font-semibold text-ink mb-2">Rules:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>You play as Red, the AI plays as Yellow</li>
                 <li>Take turns dropping pieces into the 7-column grid</li>
@@ -60,7 +60,7 @@ export default function Connect4Page() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Strategy Tips:</h3>
+              <h3 className="font-semibold text-ink mb-2">Strategy Tips:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Control the center columns for more winning opportunities</li>
                 <li>Look for ways to create multiple winning threats at once</li>
@@ -72,9 +72,9 @@ export default function Connect4Page() {
         </section>
 
         {/* About Connect 4 */}
-        <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-red-400">About Connect 4</h2>
-          <div className="text-gray-300 space-y-3">
+          <div className="text-ink-2 space-y-3">
             <p>
               Connect 4, also known as Four in a Row or Captain's Mistress, is a classic two-player connection board game. First launched commercially in 1974, it has become one of the most popular strategy games worldwide.
             </p>

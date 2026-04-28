@@ -22,37 +22,37 @@ export const metadata: Metadata = {
 
 export default function BreakoutPage() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-red-400 via-yellow-400 to-purple-600 bg-clip-text text-transparent">
             Breakout
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-ink-2 text-lg">
             Bounce the ball, clear the bricks, don&apos;t let it fall.
           </p>
         </div>
 
         <BreakoutGame />
 
-        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-purple-400">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="font-semibold text-white mb-2">Desktop Controls:</h3>
+              <h3 className="font-semibold text-ink mb-2">Desktop Controls:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Left/Right arrows or A/D to move the paddle</li>
                 <li>Or just move the mouse over the canvas</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Mobile Controls:</h3>
+              <h3 className="font-semibold text-ink mb-2">Mobile Controls:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Slide your finger along the canvas to move the paddle</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Gameplay:</h3>
+              <h3 className="font-semibold text-ink mb-2">Gameplay:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Bounce the ball off your paddle to destroy the coloured bricks</li>
                 <li>Each cleared board sends you to the next level — the ball gets a little faster</li>
@@ -63,9 +63,9 @@ export default function BreakoutPage() {
           </div>
         </section>
 
-        <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-purple-400">About Breakout</h2>
-          <div className="text-gray-300 space-y-3">
+          <div className="text-ink-2 space-y-3">
             <p>
               Breakout is a timeless arcade classic. Move the paddle, bounce the ball into the
               brick wall, and clear every brick on the screen. Miss the ball and you lose a life.

@@ -87,7 +87,7 @@ export default function VoxelPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
       />
 
-      <div className="min-h-screen bg-slate-900 text-white py-8 px-4">
+      <div className="min-h-screen bg-slate-900 text-ink py-8 px-4">
         <div className="max-w-4xl mx-auto">
           <header className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
@@ -105,22 +105,22 @@ export default function VoxelPage() {
             <h2 className="text-2xl font-bold mb-4">How to Play</h2>
             <div className="space-y-3 text-slate-300">
               <p>
-                <strong className="text-white">Select a Block:</strong> Click any block type in the palette at the bottom (Grass, Stone, Wood, Water, Sand, or Brick).
+                <strong className="text-ink">Select a Block:</strong> Click any block type in the palette at the bottom (Grass, Stone, Wood, Water, Sand, or Brick).
               </p>
               <p>
-                <strong className="text-white">Place Blocks:</strong> On desktop, left-click on the grid to place blocks. They automatically stack on top of each other. On mobile, tap to place.
+                <strong className="text-ink">Place Blocks:</strong> On desktop, left-click on the grid to place blocks. They automatically stack on top of each other. On mobile, tap to place.
               </p>
               <p>
-                <strong className="text-white">Remove Blocks:</strong> On desktop, right-click to remove the top block at any position. On mobile, long-press (hold) to remove.
+                <strong className="text-ink">Remove Blocks:</strong> On desktop, right-click to remove the top block at any position. On mobile, long-press (hold) to remove.
               </p>
               <p>
-                <strong className="text-white">Zoom:</strong> Use the Zoom In/Out buttons to get closer or see more of your creation.
+                <strong className="text-ink">Zoom:</strong> Use the Zoom In/Out buttons to get closer or see more of your creation.
               </p>
               <p>
-                <strong className="text-white">Clear All:</strong> Start fresh by clicking the "Clear All" button.
+                <strong className="text-ink">Clear All:</strong> Start fresh by clicking the "Clear All" button.
               </p>
               <p>
-                <strong className="text-white">Auto-Save:</strong> Your creation is automatically saved and will be restored when you return!
+                <strong className="text-ink">Auto-Save:</strong> Your creation is automatically saved and will be restored when you return!
               </p>
             </div>
           </section>

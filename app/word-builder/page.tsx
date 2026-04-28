@@ -32,18 +32,18 @@ export default function WordBuilderPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-white mb-3">Word Builder</h1>
-        <p className="text-gray-400">How many words can you make from one word?</p>
+        <h1 className="text-4xl font-black text-ink mb-3">Word Builder</h1>
+        <p className="text-ink-2">How many words can you make from one word?</p>
       </div>
 
       <WordBuilder />
 
       {/* How to Play */}
-      <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-emerald-400">How to Play</h2>
-        <div className="space-y-4 text-gray-300">
+        <div className="space-y-4 text-ink-2">
           <div>
-            <h3 className="font-semibold text-white mb-2">Objective:</h3>
+            <h3 className="font-semibold text-ink mb-2">Objective:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Create as many valid English words as possible from the letters of a source word</li>
               <li>Each word must be at least 3 letters long</li>
@@ -52,7 +52,7 @@ export default function WordBuilderPage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Scoring:</h3>
+            <h3 className="font-semibold text-ink mb-2">Scoring:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>3-letter words: 1 point</li>
               <li>4-letter words: 2 points</li>
@@ -62,7 +62,7 @@ export default function WordBuilderPage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Tips:</h3>
+            <h3 className="font-semibold text-ink mb-2">Tips:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Start with short 3-letter words to build momentum</li>
               <li>Look for common prefixes and suffixes</li>
@@ -74,9 +74,9 @@ export default function WordBuilderPage() {
       </section>
 
       {/* About Word Builder */}
-      <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-emerald-400">About Word Builder</h2>
-        <div className="text-gray-300 space-y-3">
+        <div className="text-ink-2 space-y-3">
           <p>
             Word Builder is a vocabulary challenge game that tests how many words you can create from the letters of a single source word.
             Each source word is carefully selected to have many possible sub-words, ranging from simple 3-letter combinations to complex

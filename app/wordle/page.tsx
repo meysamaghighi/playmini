@@ -109,9 +109,9 @@ export default function WordlePage() {
 
       {/* How to Play */}
       <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="bg-slate-800 rounded-lg p-6 mb-8 border border-gray-700">
-          <h2 className="text-2xl font-bold text-white mb-4">How to Play</h2>
-          <ul className="space-y-3 text-gray-300">
+        <div className="bg-slate-800 rounded-lg p-6 mb-8 border border-line">
+          <h2 className="text-2xl font-bold text-ink mb-4">How to Play</h2>
+          <ul className="space-y-3 text-ink-2">
             <li className="flex items-start">
               <span className="text-[#22c55e] mr-2">✓</span>
               <span>
@@ -135,7 +135,7 @@ export default function WordlePage() {
               </span>
             </li>
             <li className="flex items-start">
-              <span className="text-gray-500 mr-2">✓</span>
+              <span className="text-ink-3 mr-2">✓</span>
               <span>
                 <strong>Gray tile:</strong> The letter is not in the word.
               </span>
@@ -159,16 +159,16 @@ export default function WordlePage() {
         </div>
 
         {/* FAQ */}
-        <div className="bg-slate-800 rounded-lg p-6 mb-8 border border-gray-700">
-          <h2 className="text-2xl font-bold text-white mb-4">
+        <div className="bg-slate-800 rounded-lg p-6 mb-8 border border-line">
+          <h2 className="text-2xl font-bold text-ink mb-4">
             Frequently Asked Questions
           </h2>
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-ink mb-2">
                 How do I play Word Guess?
               </h3>
-              <p className="text-gray-300">
+              <p className="text-ink-2">
                 You have 6 attempts to guess a 5-letter word. After each guess,
                 the tiles change color: green means the letter is correct and in
                 the right position, yellow means the letter is in the word but
@@ -178,10 +178,10 @@ export default function WordlePage() {
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-ink mb-2">
                 Can I play Word Guess unlimited times?
               </h3>
-              <p className="text-gray-300">
+              <p className="text-ink-2">
                 Yes! Unlike daily word games, Word Guess lets you play as many
                 times as you want. Each game picks a new random word from our
                 curated list of common 5-letter words. Click "New Game" after
@@ -189,10 +189,10 @@ export default function WordlePage() {
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-ink mb-2">
                 How are my stats tracked in Word Guess?
               </h3>
-              <p className="text-gray-300">
+              <p className="text-ink-2">
                 Word Guess tracks your games played, wins, and current streak.
                 All stats are saved locally in your browser, so they persist
                 across sessions. Your streak increases with each consecutive
@@ -203,22 +203,22 @@ export default function WordlePage() {
         </div>
 
         {/* About */}
-        <div className="bg-slate-800 rounded-lg p-6 mb-8 border border-gray-700">
-          <h2 className="text-2xl font-bold text-white mb-4">
+        <div className="bg-slate-800 rounded-lg p-6 mb-8 border border-line">
+          <h2 className="text-2xl font-bold text-ink mb-4">
             About Word Guess
           </h2>
-          <p className="text-gray-300 mb-4">
+          <p className="text-ink-2 mb-4">
             Word Guess is a free Wordle-style word puzzle game where you try to
             guess a 5-letter word in 6 attempts. Each guess provides feedback
             through colored tiles, helping you narrow down the correct word.
           </p>
-          <p className="text-gray-300 mb-4">
+          <p className="text-ink-2 mb-4">
             Unlike daily word games that limit you to one puzzle per day, Word
             Guess offers unlimited gameplay. Practice your vocabulary, improve
             your deduction skills, and challenge yourself to maintain long win
             streaks.
           </p>
-          <p className="text-gray-300">
+          <p className="text-ink-2">
             The game features a carefully curated word list of common 5-letter
             words, ensuring fair and enjoyable gameplay. Track your progress
             with built-in statistics that show your games played, wins, and

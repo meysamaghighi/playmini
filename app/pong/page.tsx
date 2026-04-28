@@ -22,37 +22,37 @@ export const metadata: Metadata = {
 
 export default function PongPage() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-400 to-teal-500 bg-clip-text text-transparent">
             Pong
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-ink-2 text-lg">
             Classic paddle vs AI. Move your paddle, return the ball, and be the first to score 7 points!
           </p>
         </div>
 
         <Pong />
 
-        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-teal-400">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="font-semibold text-white mb-2">Desktop Controls:</h3>
+              <h3 className="font-semibold text-ink mb-2">Desktop Controls:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Move your mouse up and down to control the paddle</li>
                 <li>Arrow keys Up/Down also work</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Mobile Controls:</h3>
+              <h3 className="font-semibold text-ink mb-2">Mobile Controls:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Touch and drag on the left side of the table to move your paddle</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Rules:</h3>
+              <h3 className="font-semibold text-ink mb-2">Rules:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>First player to 7 points wins the match</li>
                 <li>Hit the ball with different parts of your paddle to add spin</li>
@@ -63,9 +63,9 @@ export default function PongPage() {
           </div>
         </section>
 
-        <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-teal-400">About Pong</h2>
-          <div className="text-gray-300 space-y-3">
+          <div className="text-ink-2 space-y-3">
             <p>
               Pong is the classic arcade paddle game — one of the original video games. This digital version captures the essence of the original with modern visuals.
             </p>

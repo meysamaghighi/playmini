@@ -32,24 +32,24 @@ export default function BubbleShooterPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-white mb-3">Bubble Shooter</h1>
-        <p className="text-gray-400">Aim, shoot, match 3+ of the same color</p>
+        <h1 className="text-4xl font-black text-ink mb-3">Bubble Shooter</h1>
+        <p className="text-ink-2">Aim, shoot, match 3+ of the same color</p>
       </div>
 
       <BubbleShooter />
 
-      <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-purple-400">How to Play</h2>
-        <div className="space-y-4 text-gray-300">
+        <div className="space-y-4 text-ink-2">
           <div>
-            <h3 className="font-semibold text-white mb-2">Controls:</h3>
+            <h3 className="font-semibold text-ink mb-2">Controls:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Desktop: move the mouse to aim, click to shoot</li>
               <li>Mobile: drag to aim, tap to shoot</li>
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Goal:</h3>
+            <h3 className="font-semibold text-ink mb-2">Goal:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Match 3 or more bubbles of the same color to pop them</li>
               <li>Bubbles that lose their connection to the top row fall for bonus points</li>
@@ -57,7 +57,7 @@ export default function BubbleShooterPage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Tips:</h3>
+            <h3 className="font-semibold text-ink mb-2">Tips:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Bounce shots off the side walls to reach awkward gaps</li>
               <li>Chain clusters — dropping bubbles by cutting their anchor is the big points move</li>
@@ -67,9 +67,9 @@ export default function BubbleShooterPage() {
         </div>
       </section>
 
-      <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-purple-400">About Bubble Shooter</h2>
-        <div className="text-gray-300 space-y-3">
+        <div className="text-ink-2 space-y-3">
           <p>
             Bubble Shooter is a classic match-3 puzzle: aim the bubble at the bottom, shoot it into
             the pack, and pop groups of the same color. Easy to pick up, satisfying to chain.

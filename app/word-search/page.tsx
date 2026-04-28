@@ -24,18 +24,18 @@ export default function WordSearchPage() {
   return (
     <main className="max-w-6xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-white mb-3">Word Search</h1>
-        <p className="text-gray-400">Find all the hidden words in the grid</p>
+        <h1 className="text-4xl font-black text-ink mb-3">Word Search</h1>
+        <p className="text-ink-2">Find all the hidden words in the grid</p>
       </div>
 
       <WordSearchGame />
 
       {/* How to Play */}
-      <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800 max-w-2xl mx-auto">
+      <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line max-w-2xl mx-auto">
         <h2 className="text-2xl font-bold mb-4 text-green-400">How to Play</h2>
-        <div className="space-y-4 text-gray-300">
+        <div className="space-y-4 text-ink-2">
           <div>
-            <h3 className="font-semibold text-white mb-2">Controls:</h3>
+            <h3 className="font-semibold text-ink mb-2">Controls:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Drag across letters to select a word</li>
               <li>Words can be horizontal, vertical, or diagonal</li>
@@ -44,7 +44,7 @@ export default function WordSearchPage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Goal:</h3>
+            <h3 className="font-semibold text-ink mb-2">Goal:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Find all words from the list on the right</li>
               <li>Words turn green when found</li>
@@ -56,9 +56,9 @@ export default function WordSearchPage() {
       </section>
 
       {/* About Word Search */}
-      <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800 max-w-2xl mx-auto">
+      <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line max-w-2xl mx-auto">
         <h2 className="text-2xl font-bold mb-4 text-green-400">About Word Search</h2>
-        <div className="text-gray-300 space-y-3">
+        <div className="text-ink-2 space-y-3">
           <p>
             Word Search, also known as Word Find, is a classic puzzle game that challenges your vocabulary and pattern recognition skills. Words are hidden in a grid of letters, running horizontally, vertically, or diagonally in any direction.
           </p>

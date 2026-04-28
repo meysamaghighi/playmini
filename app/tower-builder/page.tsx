@@ -90,13 +90,13 @@ export default function TowerBuilderPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-ink">
         <div className="container mx-auto px-4 py-8">
           <header className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Tower Builder
             </h1>
-            <p className="text-xl text-gray-300">
+            <p className="text-xl text-ink-2">
               Stack blocks perfectly to build the tallest tower!
             </p>
           </header>
@@ -106,7 +106,7 @@ export default function TowerBuilderPage() {
           <section className="max-w-3xl mx-auto mt-12 space-y-8">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-4">How to Play</h2>
-              <ol className="list-decimal list-inside space-y-2 text-gray-200">
+              <ol className="list-decimal list-inside space-y-2 text-ink">
                 <li>
                   A block swings back and forth at the top of the screen
                 </li>
@@ -137,7 +137,7 @@ export default function TowerBuilderPage() {
                   <h3 className="text-xl font-semibold mb-2">
                     How do I play Tower Builder?
                   </h3>
-                  <p className="text-gray-200">
+                  <p className="text-ink">
                     Tap or click the canvas to drop the swinging block. Try to
                     align it perfectly with the previous block. The overlapping
                     area becomes the next block&apos;s width. Stack as many blocks as
@@ -148,7 +148,7 @@ export default function TowerBuilderPage() {
                   <h3 className="text-xl font-semibold mb-2">
                     What happens if I drop a block perfectly?
                   </h3>
-                  <p className="text-gray-200">
+                  <p className="text-ink">
                     If you drop a block very close to perfect alignment (within
                     a few pixels), you&apos;ll see a &quot;Perfect!&quot; message and the block
                     will keep its full width instead of shrinking. This helps
@@ -159,7 +159,7 @@ export default function TowerBuilderPage() {
                   <h3 className="text-xl font-semibold mb-2">
                     When does the game end?
                   </h3>
-                  <p className="text-gray-200">
+                  <p className="text-ink">
                     The game ends when your block becomes too narrow (less than
                     10 pixels wide) or when you miss the previous block
                     entirely. Your score is the number of blocks you
@@ -171,7 +171,7 @@ export default function TowerBuilderPage() {
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <h2 className="text-2xl font-bold mb-4">About Tower Builder</h2>
-              <p className="text-gray-200 mb-4">
+              <p className="text-ink mb-4">
                 Tower Builder is a precision-based stacking game where you build
                 a tower by dropping blocks from a swinging crane. The challenge
                 is to align each block as perfectly as possible with the one
@@ -179,14 +179,14 @@ export default function TowerBuilderPage() {
                 block narrower. Perfect drops reward you by keeping the full
                 width, allowing you to build taller towers.
               </p>
-              <p className="text-gray-200 mb-4">
+              <p className="text-ink mb-4">
                 The game progressively gets faster every 5 blocks, testing your
                 reaction time and precision. Your personal best is saved
                 locally, so you can always try to beat your high score. The
                 colorful blocks and smooth camera panning make for a satisfying
                 gameplay experience.
               </p>
-              <p className="text-gray-200">
+              <p className="text-ink">
                 Tower Builder works on all devices with a modern web browser. No
                 download or installation required. Play for free right in your
                 browser!

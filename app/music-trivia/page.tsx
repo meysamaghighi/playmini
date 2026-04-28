@@ -22,15 +22,15 @@ export const metadata: Metadata = {
 
 export default function MusicTriviaPage() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <MusicTrivia />
 
-        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-purple-400">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="font-semibold text-white mb-2">Music Trivia</h3>
+              <h3 className="font-semibold text-ink mb-2">Music Trivia</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>You get 10 random songs, each with 3 trivia questions</li>
                 <li>Click "Show Answer" to reveal, then mark if you got it right</li>
@@ -39,7 +39,7 @@ export default function MusicTriviaPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Timeline Challenge</h3>
+              <h3 className="font-semibold text-ink mb-2">Timeline Challenge</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Songs appear one by one -- you don't see the year</li>
                 <li>Place each song in the correct position on the timeline</li>
@@ -50,9 +50,9 @@ export default function MusicTriviaPage() {
           </div>
         </section>
 
-        <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-purple-400">About Music Party Trivia</h2>
-          <div className="text-gray-300 space-y-3">
+          <div className="text-ink-2 space-y-3">
             <p>
               Music Party Trivia features over 170 songs spanning from the 1950s to the 2020s. From rock legends like Queen and Led Zeppelin to modern hits by Taylor Swift and Harry Styles, there is something for every music fan.
             </p>

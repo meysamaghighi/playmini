@@ -24,18 +24,18 @@ export default function SimonPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-white mb-3">Simon Says</h1>
-        <p className="text-gray-400">Watch the sequence, then repeat it</p>
+        <h1 className="text-4xl font-black text-ink mb-3">Simon Says</h1>
+        <p className="text-ink-2">Watch the sequence, then repeat it</p>
       </div>
 
       <SimonSays />
 
       {/* How to Play section */}
-      <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-blue-400">How to Play</h2>
-        <div className="space-y-4 text-gray-300">
+        <div className="space-y-4 text-ink-2">
           <div>
-            <h3 className="font-semibold text-white mb-2">Gameplay:</h3>
+            <h3 className="font-semibold text-ink mb-2">Gameplay:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Watch as the colored quadrants light up in sequence</li>
               <li>Memorize the pattern</li>
@@ -44,7 +44,7 @@ export default function SimonPage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Goal:</h3>
+            <h3 className="font-semibold text-ink mb-2">Goal:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Repeat the pattern correctly to advance</li>
               <li>The sequence gets longer each round</li>
@@ -53,7 +53,7 @@ export default function SimonPage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Tips:</h3>
+            <h3 className="font-semibold text-ink mb-2">Tips:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Focus on the pattern, not the individual colors</li>
               <li>Try saying the colors out loud to help remember</li>
@@ -64,9 +64,9 @@ export default function SimonPage() {
       </section>
 
       {/* About Simon Says */}
-      <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-blue-400">About Simon Says</h2>
-        <div className="text-gray-300 space-y-3">
+        <div className="text-ink-2 space-y-3">
           <p>
             Simon Says is a classic electronic memory game that was first released in 1978. It became one of the most popular handheld games of all time.
           </p>

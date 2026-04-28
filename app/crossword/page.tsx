@@ -22,14 +22,14 @@ export const metadata: Metadata = {
 
 export default function CrosswordPage() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-400 to-yellow-600 bg-clip-text text-transparent">
             Crossword Puzzle
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-ink-2 text-lg">
             Solve clues to fill in the grid. Test your vocabulary and knowledge across various topics!
           </p>
         </div>
@@ -38,11 +38,11 @@ export default function CrosswordPage() {
         <CrosswordGame />
 
         {/* How to Play */}
-        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-amber-400">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="font-semibold text-white mb-2">Desktop Controls:</h3>
+              <h3 className="font-semibold text-ink mb-2">Desktop Controls:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Click a cell to select it and see the clue</li>
                 <li>Type letters to fill in the selected cell</li>
@@ -52,7 +52,7 @@ export default function CrosswordPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Mobile Controls:</h3>
+              <h3 className="font-semibold text-ink mb-2">Mobile Controls:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Tap a cell to select it</li>
                 <li>Use your device keyboard to type letters</li>
@@ -61,7 +61,7 @@ export default function CrosswordPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Game Features:</h3>
+              <h3 className="font-semibold text-ink mb-2">Game Features:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Click "Check" to verify your answers (correct answers in green, wrong in red)</li>
                 <li>The puzzle is complete when all cells are filled correctly</li>
@@ -74,9 +74,9 @@ export default function CrosswordPage() {
         </section>
 
         {/* About Crosswords */}
-        <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-amber-400">About Crossword Puzzles</h2>
-          <div className="text-gray-300 space-y-3">
+          <div className="text-ink-2 space-y-3">
             <p>
               Crossword puzzles are one of the most popular word games in the world. They challenge your vocabulary,
               general knowledge, and problem-solving skills by asking you to fill in a grid based on clever clues.

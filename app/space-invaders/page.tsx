@@ -36,18 +36,18 @@ export default function SpaceInvadersPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-white mb-3">Space Invaders</h1>
-        <p className="text-gray-400">10 levels, 3 enemy types, power-ups -- defend Earth!</p>
+        <h1 className="text-4xl font-black text-ink mb-3">Space Invaders</h1>
+        <p className="text-ink-2">10 levels, 3 enemy types, power-ups -- defend Earth!</p>
       </div>
 
       <SpaceInvaders />
 
       {/* How to Play section */}
-      <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-red-400">How to Play</h2>
-        <div className="space-y-4 text-gray-300">
+        <div className="space-y-4 text-ink-2">
           <div>
-            <h3 className="font-semibold text-white mb-2">Controls:</h3>
+            <h3 className="font-semibold text-ink mb-2">Controls:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Arrow Keys or A/D - Move left and right</li>
               <li>Auto-shooting enabled (no need to press fire)</li>
@@ -55,7 +55,7 @@ export default function SpaceInvadersPage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Goal:</h3>
+            <h3 className="font-semibold text-ink mb-2">Goal:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Clear all aliens to advance to the next level (10 levels + endless)</li>
               <li>Avoid alien bullets -- you have 3 lives (+1 bonus every 5 levels)</li>
@@ -67,9 +67,9 @@ export default function SpaceInvadersPage() {
       </section>
 
       {/* About Space Invaders */}
-      <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-red-400">About Space Invaders</h2>
-        <div className="text-gray-300 space-y-3">
+        <div className="text-ink-2 space-y-3">
           <p>
             Space Invaders is a classic arcade game that defined the shooter genre. Originally released in 1978, it became one of the most influential video games of all time.
           </p>

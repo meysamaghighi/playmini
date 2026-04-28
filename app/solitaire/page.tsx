@@ -24,18 +24,18 @@ export default function SolitairePage() {
   return (
     <main className="max-w-6xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-white mb-3">Solitaire</h1>
-        <p className="text-gray-400">Classic Klondike patience card game</p>
+        <h1 className="text-4xl font-black text-ink mb-3">Solitaire</h1>
+        <p className="text-ink-2">Classic Klondike patience card game</p>
       </div>
 
       <Solitaire />
 
       {/* How to Play section */}
-      <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-blue-400">How to Play</h2>
-        <div className="space-y-4 text-gray-300">
+        <div className="space-y-4 text-ink-2">
           <div>
-            <h3 className="font-semibold text-white mb-2">Controls:</h3>
+            <h3 className="font-semibold text-ink mb-2">Controls:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Click a card to select it</li>
               <li>Click destination to move the selected card</li>
@@ -44,7 +44,7 @@ export default function SolitairePage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Goal:</h3>
+            <h3 className="font-semibold text-ink mb-2">Goal:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Build four foundation piles (top right) by suit from Ace to King</li>
               <li>Arrange tableau piles in descending order, alternating colors</li>
@@ -53,7 +53,7 @@ export default function SolitairePage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-white mb-2">Rules:</h3>
+            <h3 className="font-semibold text-ink mb-2">Rules:</h3>
             <ul className="list-disc list-inside space-y-1 ml-2">
               <li>Tableau: Build down in alternating colors (red on black, black on red)</li>
               <li>Foundations: Build up by suit (Ace, 2, 3... King)</li>
@@ -65,9 +65,9 @@ export default function SolitairePage() {
       </section>
 
       {/* About Solitaire */}
-      <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+      <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-blue-400">About Solitaire</h2>
-        <div className="text-gray-300 space-y-3">
+        <div className="text-ink-2 space-y-3">
           <p>
             Klondike Solitaire is the most popular version of the classic card game. Also known simply as "Solitaire," it became famous worldwide after being included in Windows in 1990.
           </p>

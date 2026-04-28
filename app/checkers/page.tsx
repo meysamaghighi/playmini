@@ -22,14 +22,14 @@ export const metadata: Metadata = {
 
 export default function CheckersPage() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-red-400 to-gray-500 bg-clip-text text-transparent">
             Checkers
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-ink-2 text-lg">
             Capture all opponent pieces or block their moves to win! Play classic checkers with kings and multi-jump chains.
           </p>
         </div>
@@ -38,11 +38,11 @@ export default function CheckersPage() {
         <CheckersGame />
 
         {/* How to Play */}
-        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-red-400">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="font-semibold text-white mb-2">Controls:</h3>
+              <h3 className="font-semibold text-ink mb-2">Controls:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Click on any red piece to select it</li>
                 <li>Valid moves will be highlighted in green</li>
@@ -51,7 +51,7 @@ export default function CheckersPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Rules:</h3>
+              <h3 className="font-semibold text-ink mb-2">Rules:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>You play as Red, the AI plays as Black</li>
                 <li>Regular pieces move diagonally forward one square</li>
@@ -62,7 +62,7 @@ export default function CheckersPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Strategy Tips:</h3>
+              <h3 className="font-semibold text-ink mb-2">Strategy Tips:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Control the center of the board for more mobility</li>
                 <li>Protect your back row to prevent opponent kings</li>
@@ -75,9 +75,9 @@ export default function CheckersPage() {
         </section>
 
         {/* About Checkers */}
-        <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-red-400">About Checkers</h2>
-          <div className="text-gray-300 space-y-3">
+          <div className="text-ink-2 space-y-3">
             <p>
               Checkers, also known as Draughts, is one of the oldest and most popular board games in the world. The game dates back thousands of years, with ancient variations found in Egypt and Mesopotamia. The modern version we play today evolved in France around the 12th century.
             </p>

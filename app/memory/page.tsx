@@ -22,14 +22,14 @@ export const metadata: Metadata = {
 
 export default function MemoryMatchPage() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
             Memory Match
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-ink-2 text-lg">
             Flip cards to find matching pairs. Test your memory and complete the puzzle in the fewest moves!
           </p>
         </div>
@@ -38,11 +38,11 @@ export default function MemoryMatchPage() {
         <MemoryMatch />
 
         {/* How to Play */}
-        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-purple-400">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="font-semibold text-white mb-2">Game Rules:</h3>
+              <h3 className="font-semibold text-ink mb-2">Game Rules:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>All cards start face down at the beginning of the game</li>
                 <li>Click or tap any card to flip it face up</li>
@@ -53,7 +53,7 @@ export default function MemoryMatchPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Difficulty Levels:</h3>
+              <h3 className="font-semibold text-ink mb-2">Difficulty Levels:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li><strong>Easy:</strong> 6 pairs (4 cols) - perfect for beginners</li>
                 <li><strong>Medium:</strong> 10 pairs (5 cols) - balanced challenge</li>
@@ -61,7 +61,7 @@ export default function MemoryMatchPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Scoring:</h3>
+              <h3 className="font-semibold text-ink mb-2">Scoring:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Your score is the number of moves (card flips) to clear the board</li>
                 <li>Personal best is saved for each difficulty level</li>
@@ -73,9 +73,9 @@ export default function MemoryMatchPage() {
         </section>
 
         {/* About Memory Match */}
-        <section className="mt-8 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-purple-400">About Memory Match</h2>
-          <div className="text-gray-300 space-y-3">
+          <div className="text-ink-2 space-y-3">
             <p>
               Memory Match, also known as Concentration or Pairs, is a classic card game that has been enjoyed for generations. The game challenges your short-term memory and concentration skills as you try to remember the location of matching cards.
             </p>

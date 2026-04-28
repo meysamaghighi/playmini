@@ -124,27 +124,27 @@ export default function MinesweeperPage() {
       {/* How to Play Section */}
       <section className="bg-slate-900 py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-8 text-white">
+          <h2 className="text-3xl font-bold text-center mb-8 text-ink">
             How to Play Minesweeper
           </h2>
           <div className="bg-slate-800 rounded-lg p-8 text-slate-300 space-y-4">
             <p>
-              <strong className="text-white">Objective:</strong> Reveal all cells that don't contain mines. If you click on a mine, you lose!
+              <strong className="text-ink">Objective:</strong> Reveal all cells that don't contain mines. If you click on a mine, you lose!
             </p>
             <p>
-              <strong className="text-white">Left Click / Tap:</strong> Reveal a cell. The first click is always safe - mines are generated after your first move.
+              <strong className="text-ink">Left Click / Tap:</strong> Reveal a cell. The first click is always safe - mines are generated after your first move.
             </p>
             <p>
-              <strong className="text-white">Right Click / Long Press:</strong> Place a flag to mark cells you think contain mines. This helps you keep track of dangerous spots.
+              <strong className="text-ink">Right Click / Long Press:</strong> Place a flag to mark cells you think contain mines. This helps you keep track of dangerous spots.
             </p>
             <p>
-              <strong className="text-white">Numbers:</strong> When you reveal a cell, you'll either see a number or an empty space. The number indicates how many mines are in the 8 surrounding cells. Empty cells have no adjacent mines and will automatically reveal their neighbors.
+              <strong className="text-ink">Numbers:</strong> When you reveal a cell, you'll either see a number or an empty space. The number indicates how many mines are in the 8 surrounding cells. Empty cells have no adjacent mines and will automatically reveal their neighbors.
             </p>
             <p>
-              <strong className="text-white">Strategy:</strong> Use logic to deduce mine locations. If a cell shows "1" and you've already flagged one adjacent cell, all other adjacent cells are safe. Start with corners and edges where you have fewer cells to consider.
+              <strong className="text-ink">Strategy:</strong> Use logic to deduce mine locations. If a cell shows "1" and you've already flagged one adjacent cell, all other adjacent cells are safe. Start with corners and edges where you have fewer cells to consider.
             </p>
             <p>
-              <strong className="text-white">Winning:</strong> You win when all non-mine cells are revealed. Your completion time is tracked, and your personal best is saved for each difficulty level!
+              <strong className="text-ink">Winning:</strong> You win when all non-mine cells are revealed. Your completion time is tracked, and your personal best is saved for each difficulty level!
             </p>
           </div>
         </div>
@@ -153,7 +153,7 @@ export default function MinesweeperPage() {
       {/* About Section */}
       <section className="bg-slate-800 py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6 text-white">
+          <h2 className="text-3xl font-bold mb-6 text-ink">
             About Minesweeper
           </h2>
           <p className="text-slate-300 text-lg leading-relaxed mb-6">

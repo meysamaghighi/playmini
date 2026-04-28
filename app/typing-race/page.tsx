@@ -117,9 +117,9 @@ export default function TypingRacePage() {
 
       {/* How to Play */}
       <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="bg-slate-800 rounded-lg p-6 mb-8 border border-gray-700">
-          <h2 className="text-2xl font-bold text-white mb-4">How to Play</h2>
-          <ul className="space-y-3 text-gray-300">
+        <div className="bg-slate-800 rounded-lg p-6 mb-8 border border-line">
+          <h2 className="text-2xl font-bold text-ink mb-4">How to Play</h2>
+          <ul className="space-y-3 text-ink-2">
             <li className="flex items-start">
               <span className="text-blue-400 mr-2">✓</span>
               <span>
@@ -168,16 +168,16 @@ export default function TypingRacePage() {
         </div>
 
         {/* FAQ */}
-        <div className="bg-slate-800 rounded-lg p-6 mb-8 border border-gray-700">
-          <h2 className="text-2xl font-bold text-white mb-4">
+        <div className="bg-slate-800 rounded-lg p-6 mb-8 border border-line">
+          <h2 className="text-2xl font-bold text-ink mb-4">
             Frequently Asked Questions
           </h2>
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-ink mb-2">
                 How is WPM (Words Per Minute) calculated?
               </h3>
-              <p className="text-gray-300">
+              <p className="text-ink-2">
                 WPM is calculated using the standard formula: total characters
                 typed divided by 5 (one word = 5 characters), then divided by
                 the time in minutes. For example, if you type 250 characters in
@@ -186,10 +186,10 @@ export default function TypingRacePage() {
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-ink mb-2">
                 What do the different difficulty levels mean?
               </h3>
-              <p className="text-gray-300">
+              <p className="text-ink-2">
                 Typing Race includes four difficulty levels: Easy (20-30 words
                 with simple vocabulary), Medium (35-50 words with everyday
                 language), Hard (55-70 words with complex sentences), and Expert
@@ -198,10 +198,10 @@ export default function TypingRacePage() {
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-ink mb-2">
                 How do I improve my typing speed?
               </h3>
-              <p className="text-gray-300">
+              <p className="text-ink-2">
                 Practice regularly with Typing Race to build muscle memory.
                 Focus on accuracy first—speed will follow naturally. Use proper
                 finger positioning on the home row keys, look at the screen
@@ -211,10 +211,10 @@ export default function TypingRacePage() {
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-ink mb-2">
                 Does accuracy affect my WPM score?
               </h3>
-              <p className="text-gray-300">
+              <p className="text-ink-2">
                 Your WPM reflects your raw typing speed, but accuracy is tracked
                 separately as a percentage. To set a new personal best, you must
                 complete the text with 100% accuracy. The game highlights
@@ -226,23 +226,23 @@ export default function TypingRacePage() {
         </div>
 
         {/* About */}
-        <div className="bg-slate-800 rounded-lg p-6 mb-8 border border-gray-700">
-          <h2 className="text-2xl font-bold text-white mb-4">
+        <div className="bg-slate-800 rounded-lg p-6 mb-8 border border-line">
+          <h2 className="text-2xl font-bold text-ink mb-4">
             About Typing Race
           </h2>
-          <p className="text-gray-300 mb-4">
+          <p className="text-ink-2 mb-4">
             Typing Race is a free online typing speed test that helps you
             measure and improve your typing skills. Type paragraphs of varying
             difficulty as fast and accurately as you can, with real-time
             feedback on every keystroke.
           </p>
-          <p className="text-gray-300 mb-4">
+          <p className="text-ink-2 mb-4">
             The game features 12+ carefully curated paragraphs across four
             difficulty levels: Easy, Medium, Hard, and Expert. Whether you're a
             beginner learning proper typing technique or an experienced typist
             pushing for higher WPM, Typing Race adapts to your skill level.
           </p>
-          <p className="text-gray-300">
+          <p className="text-ink-2">
             Track your progress with detailed statistics including WPM, accuracy
             percentage, and time taken. Your personal best WPM (with 100%
             accuracy) is saved locally, allowing you to compete against yourself

@@ -128,7 +128,7 @@ const webAppSchema = {
 
 export default function FlappyPage() {
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-paper-2 text-ink">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -142,21 +142,21 @@ export default function FlappyPage() {
         <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
           Flappy Bird
         </h1>
-        <p className="text-xl text-gray-300 text-center mb-8">
+        <p className="text-xl text-ink-2 text-center mb-8">
           Tap to flap and avoid the pipes!
         </p>
 
         <FlappyBird />
 
-        <section className="mt-12 bg-gray-800 rounded-lg p-8">
+        <section className="mt-12 bg-paper-2 rounded-lg p-8">
           <h2 className="text-3xl font-bold mb-6">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">Objective</h3>
+              <h3 className="text-xl font-semibold text-ink mb-2">Objective</h3>
               <p>Guide the bird through gaps between pipes without crashing. Score points by passing through each pipe gap.</p>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">Controls</h3>
+              <h3 className="text-xl font-semibold text-ink mb-2">Controls</h3>
               <ul className="list-disc list-inside space-y-1">
                 <li><strong>Desktop:</strong> Press the Spacebar to flap</li>
                 <li><strong>Mobile:</strong> Tap anywhere on the screen to flap</li>
@@ -164,7 +164,7 @@ export default function FlappyPage() {
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">Tips</h3>
+              <h3 className="text-xl font-semibold text-ink mb-2">Tips</h3>
               <ul className="list-disc list-inside space-y-1">
                 <li>Time your flaps carefully - the bird falls quickly!</li>
                 <li>Stay calm and focus on the rhythm</li>
@@ -175,31 +175,31 @@ export default function FlappyPage() {
           </div>
         </section>
 
-        <section className="mt-12 bg-gray-800 rounded-lg p-8">
+        <section className="mt-12 bg-paper-2 rounded-lg p-8">
           <h2 className="text-3xl font-bold mb-6">Frequently Asked Questions</h2>
           <div className="space-y-6">
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">How do I play Flappy Bird?</h3>
-              <p className="text-gray-300">Tap the screen or press the spacebar to make the bird flap its wings and fly upward. Avoid hitting the pipes or the ground. Your score increases each time you pass through a pipe gap.</p>
+              <h3 className="text-xl font-semibold text-ink mb-2">How do I play Flappy Bird?</h3>
+              <p className="text-ink-2">Tap the screen or press the spacebar to make the bird flap its wings and fly upward. Avoid hitting the pipes or the ground. Your score increases each time you pass through a pipe gap.</p>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">What happens when I hit a pipe?</h3>
-              <p className="text-gray-300">The game ends when the bird collides with a pipe, the ground, or the ceiling. Your final score is displayed and compared to your personal best.</p>
+              <h3 className="text-xl font-semibold text-ink mb-2">What happens when I hit a pipe?</h3>
+              <p className="text-ink-2">The game ends when the bird collides with a pipe, the ground, or the ceiling. Your final score is displayed and compared to your personal best.</p>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">Is my high score saved?</h3>
-              <p className="text-gray-300">Yes! Your personal best score is automatically saved in your browser and displayed on the game over screen.</p>
+              <h3 className="text-xl font-semibold text-ink mb-2">Is my high score saved?</h3>
+              <p className="text-ink-2">Yes! Your personal best score is automatically saved in your browser and displayed on the game over screen.</p>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-white mb-2">Can I play on mobile?</h3>
-              <p className="text-gray-300">Absolutely! The game is fully touch-enabled and works great on phones and tablets. Just tap the screen to flap.</p>
+              <h3 className="text-xl font-semibold text-ink mb-2">Can I play on mobile?</h3>
+              <p className="text-ink-2">Absolutely! The game is fully touch-enabled and works great on phones and tablets. Just tap the screen to flap.</p>
             </div>
           </div>
         </section>
 
-        <section className="mt-12 bg-gray-800 rounded-lg p-8">
+        <section className="mt-12 bg-paper-2 rounded-lg p-8">
           <h2 className="text-3xl font-bold mb-4">About Flappy Bird</h2>
-          <div className="text-gray-300 space-y-4">
+          <div className="text-ink-2 space-y-4">
             <p>
               Flappy Bird is a classic arcade-style game that became a global phenomenon. The simple yet challenging gameplay has captivated millions of players worldwide. Tap to make the bird flap through pipes - sounds easy, but mastering the timing is incredibly addictive!
             </p>

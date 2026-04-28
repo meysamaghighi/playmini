@@ -29,24 +29,24 @@ export const metadata: Metadata = {
 
 export default function ChessPage() {
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-300 to-yellow-500 bg-clip-text text-transparent">
             Chess
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-ink-2 text-lg">
             Play chess against the computer. You play White — click a piece, then click where to move.
           </p>
         </div>
 
         <ChessGame />
 
-        <section className="mt-12 bg-gray-900 rounded-lg p-6 border border-gray-800">
+        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-amber-400">How to Play</h2>
-          <div className="space-y-4 text-gray-300">
+          <div className="space-y-4 text-ink-2">
             <div>
-              <h3 className="font-semibold text-white mb-2">Controls</h3>
+              <h3 className="font-semibold text-ink mb-2">Controls</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>Click or tap a white piece to select it — legal moves appear as dots</li>
                 <li>Click or tap a highlighted square to move</li>
@@ -54,7 +54,7 @@ export default function ChessPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold text-white mb-2">Rules</h3>
+              <h3 className="font-semibold text-ink mb-2">Rules</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
                 <li>You play White, the AI plays Black</li>
                 <li>Castling, en passant, and promotion (auto-queens) are all supported</li>
