@@ -99,7 +99,7 @@ export default function TicTacToe() {
               reset();
             }}
             className={`px-4 py-2 rounded font-bold ${
-              mode === m ? "bg-indigo-600 text-white" : "bg-gray-700 text-gray-200"
+              mode === m ? "bg-indigo-600 text-ink" : "bg-paper-2 text-ink"
             }`}
           >
             {m === "vs-ai" ? "Vs AI" : "Two Player"}
@@ -107,19 +107,19 @@ export default function TicTacToe() {
         ))}
       </div>
 
-      <div className="flex items-center gap-6 text-white">
+      <div className="flex items-center gap-6 text-ink">
         <div>
           X: <span className="font-bold text-blue-400">{stats.x}</span>
         </div>
         <div>
-          Draws: <span className="font-bold text-gray-300">{stats.draws}</span>
+          Draws: <span className="font-bold text-ink-2">{stats.draws}</span>
         </div>
         <div>
           O: <span className="font-bold text-pink-400">{stats.o}</span>
         </div>
       </div>
 
-      <div className="text-white text-lg">
+      <div className="text-ink text-lg">
         {winner ? (
           <span className="font-bold text-yellow-400">
             {mode === "vs-ai"
@@ -129,7 +129,7 @@ export default function TicTacToe() {
               : `${winner} wins!`}
           </span>
         ) : full ? (
-          <span className="font-bold text-gray-300">Draw</span>
+          <span className="font-bold text-ink-2">Draw</span>
         ) : (
           <span>
             Turn:{" "}
@@ -140,7 +140,7 @@ export default function TicTacToe() {
         )}
       </div>
 
-      <div className="grid grid-cols-3 gap-2 bg-gray-800 p-2 rounded-lg">
+      <div className="grid grid-cols-3 gap-2 bg-paper-2 p-2 rounded-lg">
         {board.map((v, i) => {
           const isWin = line?.includes(i);
           return (
@@ -152,10 +152,10 @@ export default function TicTacToe() {
                 isWin
                   ? "bg-yellow-400 text-gray-900"
                   : v === "X"
-                  ? "bg-blue-500 text-white"
+                  ? "bg-blue-500 text-ink"
                   : v === "O"
-                  ? "bg-pink-500 text-white"
-                  : "bg-gray-700 hover:bg-gray-600 text-white"
+                  ? "bg-pink-500 text-ink"
+                  : "bg-paper-2 hover:bg-paper-2 text-ink"
               }`}
               aria-label={`Cell ${i + 1}`}
             >
@@ -167,7 +167,7 @@ export default function TicTacToe() {
 
       <button
         onClick={reset}
-        className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+        className="px-6 py-2 bg-indigo-600 text-ink font-bold rounded-lg hover:bg-indigo-700"
       >
         New Game
       </button>

@@ -214,7 +214,7 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center justify-between w-full max-w-md text-white">
+      <div className="flex items-center justify-between w-full max-w-md text-ink">
         <div className="text-lg">
           Score: <span className="font-bold">{score}</span>
         </div>
@@ -228,7 +228,7 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
           ref={canvasRef}
           width={CANVAS}
           height={CANVAS}
-          className="border-4 border-gray-700 rounded-lg max-w-full h-auto"
+          className="border-4 border-line rounded-lg max-w-full h-auto"
         />
 
         {gameState !== "playing" && !(onGameOver && gameState === "gameover") && (
@@ -237,7 +237,7 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
               {gameState === "ready" ? (
                 <>
                   <div className="text-2xl font-bold mb-2">Snake</div>
-                  <div className="text-sm text-gray-600 mb-4">Arrows / WASD / Swipe</div>
+                  <div className="text-sm text-ink-3 mb-4">Arrows / WASD / Swipe</div>
                 </>
               ) : (
                 <>
@@ -250,7 +250,7 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
               )}
               <button
                 onClick={start}
-                className="px-6 py-2 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600"
+                className="px-6 py-2 bg-green-500 text-ink font-bold rounded-lg hover:bg-green-600"
               >
                 {gameState === "ready" ? "Start" : "Play Again"}
               </button>
@@ -263,26 +263,26 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
         <div />
         <button
           onPointerDown={() => turn("up")}
-          className="p-3 bg-gray-700 text-white rounded font-bold"
+          className="p-3 bg-paper-2 text-ink rounded font-bold"
         >
           ↑
         </button>
         <div />
         <button
           onPointerDown={() => turn("left")}
-          className="p-3 bg-gray-700 text-white rounded font-bold"
+          className="p-3 bg-paper-2 text-ink rounded font-bold"
         >
           ←
         </button>
         <button
           onPointerDown={() => turn("down")}
-          className="p-3 bg-gray-700 text-white rounded font-bold"
+          className="p-3 bg-paper-2 text-ink rounded font-bold"
         >
           ↓
         </button>
         <button
           onPointerDown={() => turn("right")}
-          className="p-3 bg-gray-700 text-white rounded font-bold"
+          className="p-3 bg-paper-2 text-ink rounded font-bold"
         >
           →
         </button>

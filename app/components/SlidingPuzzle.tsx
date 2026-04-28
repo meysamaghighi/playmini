@@ -129,7 +129,7 @@ export default function SlidingPuzzle() {
             key={s}
             onClick={() => setSize(s)}
             className={`px-4 py-2 rounded font-bold ${
-              size === s ? "bg-indigo-600 text-white" : "bg-gray-700 text-gray-200"
+              size === s ? "bg-indigo-600 text-ink" : "bg-paper-2 text-ink"
             }`}
           >
             {s}×{s}
@@ -137,7 +137,7 @@ export default function SlidingPuzzle() {
         ))}
       </div>
 
-      <div className="flex items-center gap-6 text-white">
+      <div className="flex items-center gap-6 text-ink">
         <div>
           Moves: <span className="font-bold">{moves}</span>
         </div>
@@ -149,14 +149,14 @@ export default function SlidingPuzzle() {
         </div>
         <button
           onClick={() => newGame()}
-          className="px-3 py-1 bg-indigo-600 text-white rounded text-sm font-bold hover:bg-indigo-700"
+          className="px-3 py-1 bg-indigo-600 text-ink rounded text-sm font-bold hover:bg-indigo-700"
         >
           Shuffle
         </button>
       </div>
 
       <div
-        className="grid gap-2 bg-gray-800 p-2 rounded-lg"
+        className="grid gap-2 bg-paper-2 p-2 rounded-lg"
         style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}
       >
         {tiles.map((v, i) => (
@@ -166,8 +166,8 @@ export default function SlidingPuzzle() {
             disabled={v === 0}
             className={`w-16 h-16 md:w-20 md:h-20 rounded text-2xl md:text-3xl font-bold ${
               v === 0
-                ? "bg-gray-700/50"
-                : "bg-indigo-500 hover:bg-indigo-400 text-white shadow-md"
+                ? "bg-paper-2/50"
+                : "bg-indigo-500 hover:bg-indigo-400 text-ink shadow-md"
             }`}
           >
             {v !== 0 ? v : ""}
@@ -176,7 +176,7 @@ export default function SlidingPuzzle() {
       </div>
 
       {won && (
-        <div className="bg-gray-900 text-white px-6 py-4 rounded-lg text-center">
+        <div className="bg-paper-2 text-ink px-6 py-4 rounded-lg text-center">
           <div className="text-2xl font-bold mb-2">Solved!</div>
           <div className="mb-1">
             Moves: <span className="font-bold text-yellow-400">{moves}</span>
@@ -184,7 +184,7 @@ export default function SlidingPuzzle() {
           <div className="mb-3">Time: {time}s</div>
           <button
             onClick={() => newGame()}
-            className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+            className="px-6 py-2 bg-indigo-600 text-ink font-bold rounded-lg hover:bg-indigo-700"
           >
             Play Again
           </button>

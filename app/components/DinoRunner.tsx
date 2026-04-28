@@ -250,7 +250,7 @@ export default function DinoRunner() {
           <div className="absolute inset-0 flex items-center justify-center bg-black/10 rounded pointer-events-none">
             <div className="bg-white text-gray-900 px-6 py-4 rounded shadow text-center">
               <div className="font-bold text-xl mb-1">Press Space or Tap to Start</div>
-              <div className="text-sm text-gray-600">Jump over obstacles, duck for birds</div>
+              <div className="text-sm text-ink-3">Jump over obstacles, duck for birds</div>
             </div>
           </div>
         )}
@@ -263,7 +263,7 @@ export default function DinoRunner() {
               <div className="mb-3">
                 Best: <span className="text-yellow-600 font-bold">{best}</span>
               </div>
-              <div className="text-sm text-gray-600">Tap to play again</div>
+              <div className="text-sm text-ink-3">Tap to play again</div>
             </div>
           </div>
         )}
@@ -275,7 +275,7 @@ export default function DinoRunner() {
             e.preventDefault();
             jump();
           }}
-          className="px-6 py-3 bg-gray-700 text-white rounded font-bold"
+          className="px-6 py-3 bg-paper-2 text-ink rounded font-bold"
         >
           Jump
         </button>
@@ -286,7 +286,7 @@ export default function DinoRunner() {
           }}
           onPointerUp={() => setDuck(false)}
           onPointerLeave={() => setDuck(false)}
-          className="px-6 py-3 bg-gray-700 text-white rounded font-bold"
+          className="px-6 py-3 bg-paper-2 text-ink rounded font-bold"
         >
           Duck
         </button>

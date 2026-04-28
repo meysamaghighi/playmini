@@ -180,7 +180,7 @@ export default function CarRacer() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-6 text-white text-lg">
+      <div className="flex items-center gap-6 text-ink text-lg">
         <div>
           Score: <span className="font-bold">{score}</span>
         </div>
@@ -194,7 +194,7 @@ export default function CarRacer() {
           ref={canvasRef}
           width={CANVAS_W}
           height={CANVAS_H}
-          className="border-4 border-gray-700 rounded-lg max-w-full h-auto"
+          className="border-4 border-line rounded-lg max-w-full h-auto"
         />
 
         {gameState !== "playing" && (
@@ -203,7 +203,7 @@ export default function CarRacer() {
               {gameState === "ready" ? (
                 <>
                   <div className="text-2xl font-bold mb-2">Car Racer</div>
-                  <div className="text-sm text-gray-600 mb-4">Arrows / A / D to switch lanes</div>
+                  <div className="text-sm text-ink-3 mb-4">Arrows / A / D to switch lanes</div>
                 </>
               ) : (
                 <>
@@ -216,7 +216,7 @@ export default function CarRacer() {
               )}
               <button
                 onClick={start}
-                className="px-6 py-2 bg-cyan-600 text-white font-bold rounded-lg hover:bg-cyan-700"
+                className="px-6 py-2 bg-cyan-600 text-ink font-bold rounded-lg hover:bg-cyan-700"
               >
                 {gameState === "ready" ? "Start" : "Play Again"}
               </button>
@@ -228,13 +228,13 @@ export default function CarRacer() {
       <div className="flex gap-3 md:hidden">
         <button
           onPointerDown={() => move(-1)}
-          className="px-8 py-4 bg-gray-700 text-white text-2xl font-bold rounded"
+          className="px-8 py-4 bg-paper-2 text-ink text-2xl font-bold rounded"
         >
           ←
         </button>
         <button
           onPointerDown={() => move(1)}
-          className="px-8 py-4 bg-gray-700 text-white text-2xl font-bold rounded"
+          className="px-8 py-4 bg-paper-2 text-ink text-2xl font-bold rounded"
         >
           →
         </button>

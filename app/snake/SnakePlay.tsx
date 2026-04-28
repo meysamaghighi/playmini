@@ -73,7 +73,7 @@ export default function SnakePlay() {
       onRestart={handleRestart}
       onShare={finalScore !== null ? handleShare : undefined}
     >
-      <div className="flex justify-center py-6">
+      <div className="flex justify-center py-8 bg-gray-950">
         <SnakeGame ref={gameRef} onGameOver={handleGameOver} />
       </div>
     </GameShell>

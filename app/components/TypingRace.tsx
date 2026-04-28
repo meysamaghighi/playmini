@@ -443,8 +443,8 @@ export default function TypingRace() {
   const getCharClass = (index: number) => {
     if (index >= userInput.length) {
       return index === userInput.length
-        ? "bg-yellow-500/30 text-white"
-        : "text-gray-400";
+        ? "bg-yellow-500/30 text-ink"
+        : "text-ink-2";
     }
 
     if (userInput[index] === targetText[index]) {
@@ -480,31 +480,31 @@ export default function TypingRace() {
         <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
           Typing Race
         </h1>
-        <p className="text-gray-400">
+        <p className="text-ink-2">
           Type fast and accurately to advance through 10 levels + endless mode!
         </p>
       </div>
 
       {/* Stats Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
-        <div className="bg-slate-800 rounded-lg p-3 text-center border border-gray-700">
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Level</div>
+        <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+          <div className="text-xs text-ink-3 uppercase tracking-wider">Level</div>
           <div className="text-2xl font-black text-blue-400 tabular-nums">{level}</div>
         </div>
-        <div className="bg-slate-800 rounded-lg p-3 text-center border border-gray-700">
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Score</div>
+        <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+          <div className="text-xs text-ink-3 uppercase tracking-wider">Score</div>
           <div className="text-2xl font-black text-green-400 tabular-nums">{score}</div>
         </div>
-        <div className="bg-slate-800 rounded-lg p-3 text-center border border-gray-700">
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Best</div>
+        <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+          <div className="text-xs text-ink-3 uppercase tracking-wider">Best</div>
           <div className="text-2xl font-black text-yellow-400 tabular-nums">{highScore}</div>
         </div>
-        <div className="bg-slate-800 rounded-lg p-3 text-center border border-gray-700">
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Lives</div>
+        <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+          <div className="text-xs text-ink-3 uppercase tracking-wider">Lives</div>
           <div className="text-2xl font-black text-red-400 tabular-nums">{lives}</div>
         </div>
-        <div className="bg-slate-800 rounded-lg p-3 text-center border border-gray-700">
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Time</div>
+        <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+          <div className="text-xs text-ink-3 uppercase tracking-wider">Time</div>
           <div className={`text-2xl font-black tabular-nums ${timeRemaining <= 10 ? "text-red-400" : "text-purple-400"}`}>
             {formatTime(timeRemaining)}
           </div>
@@ -517,15 +517,15 @@ export default function TypingRace() {
       )}
 
       {gameState === "start" && (
-        <div className="bg-slate-800 rounded-lg p-8 mb-6 border border-gray-700 text-center">
+        <div className="bg-slate-800 rounded-lg p-8 mb-6 border border-line text-center">
           <div className="text-6xl mb-4">⌨️</div>
           <h2 className="text-3xl font-black text-purple-400 mb-2">Typing Race</h2>
-          <p className="text-gray-400 mb-4">
+          <p className="text-ink-2 mb-4">
             Complete 10 levels with increasing difficulty, then test your skills in endless mode!
           </p>
           <div className="mb-6 text-left max-w-md mx-auto">
-            <p className="text-gray-300 mb-2 font-bold">How to Play:</p>
-            <ul className="text-gray-400 text-sm space-y-1">
+            <p className="text-ink-2 mb-2 font-bold">How to Play:</p>
+            <ul className="text-ink-2 text-sm space-y-1">
               <li>• Type the text as fast and accurately as possible</li>
               <li>• Meet the WPM and accuracy targets before time runs out</li>
               <li>• Earn power-ups every 2 levels</li>
@@ -540,7 +540,7 @@ export default function TypingRace() {
           )}
           <button
             onClick={startGame}
-            className="px-10 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-2xl transition-all hover:scale-105 active:scale-95"
+            className="px-10 py-3 bg-purple-600 hover:bg-purple-500 text-ink font-bold rounded-2xl transition-all hover:scale-105 active:scale-95"
           >
             Start Game
           </button>
@@ -550,19 +550,19 @@ export default function TypingRace() {
       {gameState === "playing" && (
         <>
           {/* Level Info */}
-          <div className="bg-slate-800 rounded-lg p-4 mb-4 border border-gray-700">
+          <div className="bg-slate-800 rounded-lg p-4 mb-4 border border-line">
             <div className="flex flex-wrap justify-between items-center gap-4">
               <div>
-                <span className="text-gray-400 text-sm">Level {level}</span>
+                <span className="text-ink-2 text-sm">Level {level}</span>
                 {level > 10 && <span className="ml-2 text-purple-400 text-xs font-bold">(ENDLESS)</span>}
               </div>
               <div className="flex gap-4 text-sm">
                 <div>
-                  <span className="text-gray-500">Target: </span>
+                  <span className="text-ink-3">Target: </span>
                   <span className="text-blue-400 font-bold">{config.targetWPM} WPM</span>
                 </div>
                 <div>
-                  <span className="text-gray-500">Min Accuracy: </span>
+                  <span className="text-ink-3">Min Accuracy: </span>
                   <span className="text-green-400 font-bold">{config.minAccuracy}%</span>
                 </div>
               </div>
@@ -571,32 +571,32 @@ export default function TypingRace() {
 
           {/* Current Stats */}
           <div className="grid grid-cols-3 gap-3 mb-4">
-            <div className="bg-slate-800 rounded-lg p-3 text-center border border-gray-700">
+            <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
               <div className="text-2xl font-bold text-blue-400">{wpm}</div>
-              <div className="text-gray-400 text-xs">Current WPM</div>
+              <div className="text-ink-2 text-xs">Current WPM</div>
             </div>
-            <div className="bg-slate-800 rounded-lg p-3 text-center border border-gray-700">
+            <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
               <div className={`text-2xl font-bold ${accuracy >= config.minAccuracy ? "text-green-400" : "text-red-400"}`}>
                 {accuracy}%
               </div>
-              <div className="text-gray-400 text-xs">Accuracy</div>
+              <div className="text-ink-2 text-xs">Accuracy</div>
             </div>
-            <div className="bg-slate-800 rounded-lg p-3 text-center border border-gray-700">
+            <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
               <div className="text-2xl font-bold text-purple-400">{correctStreak}</div>
-              <div className="text-gray-400 text-xs">Streak</div>
+              <div className="text-ink-2 text-xs">Streak</div>
             </div>
           </div>
 
           {/* Power-Ups */}
           {powerUps.length > 0 && (
-            <div className="bg-slate-800 rounded-lg p-4 mb-4 border border-gray-700">
-              <div className="text-gray-400 text-xs mb-2">Power-Ups:</div>
+            <div className="bg-slate-800 rounded-lg p-4 mb-4 border border-line">
+              <div className="text-ink-2 text-xs mb-2">Power-Ups:</div>
               <div className="flex gap-2 flex-wrap">
                 {powerUps.map((powerUp) => (
                   <button
                     key={powerUp.type}
                     onClick={() => usePowerUp(powerUp.type)}
-                    className="px-3 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-bold rounded-lg transition-colors"
+                    className="px-3 py-2 bg-purple-600 hover:bg-purple-500 text-ink text-sm font-bold rounded-lg transition-colors"
                   >
                     {powerUp.type === "slow-time" && `⏱️ Slow Time (${powerUp.count})`}
                     {powerUp.type === "auto-correct" && `✨ Auto-Correct (${powerUp.count})`}
@@ -618,7 +618,7 @@ export default function TypingRace() {
           )}
 
           {/* Target Text Display */}
-          <div className="bg-slate-800 rounded-lg p-6 mb-4 border border-gray-700 max-h-64 overflow-y-auto">
+          <div className="bg-slate-800 rounded-lg p-6 mb-4 border border-line max-h-64 overflow-y-auto">
             <div className="font-mono text-base leading-relaxed whitespace-pre-wrap break-words">
               {targetText.split("").map((char, index) => (
                 <span key={index} className={getCharClass(index)}>
@@ -629,12 +629,12 @@ export default function TypingRace() {
           </div>
 
           {/* Input Area */}
-          <div className="bg-slate-800 rounded-lg p-6 mb-6 border border-gray-700">
+          <div className="bg-slate-800 rounded-lg p-6 mb-6 border border-line">
             <textarea
               ref={inputRef}
               value={userInput}
               onChange={handleInputChange}
-              className="w-full bg-slate-900 text-white font-mono text-base p-4 rounded-lg border-2 border-gray-600 focus:border-purple-500 outline-none resize-none leading-relaxed"
+              className="w-full bg-slate-900 text-ink font-mono text-base p-4 rounded-lg border-2 border-line focus:border-purple-500 outline-none resize-none leading-relaxed"
               rows={4}
               placeholder="Start typing here..."
               spellCheck={false}
@@ -643,27 +643,27 @@ export default function TypingRace() {
             />
           </div>
 
-          <div className="text-center text-gray-400 text-sm">
+          <div className="text-center text-ink-2 text-sm">
             <p>Type the text above to match it exactly. Timer started!</p>
           </div>
         </>
       )}
 
       {gameState === "gameover" && (
-        <div className="bg-slate-800 rounded-lg p-8 mb-6 border border-gray-700 text-center">
+        <div className="bg-slate-800 rounded-lg p-8 mb-6 border border-line text-center">
           <h2 className="text-3xl font-black text-red-400 mb-4">Game Over</h2>
           <div className="mb-6">
             <div className="text-center mb-2">
               <div className="text-5xl font-bold text-blue-400">{level}</div>
-              <div className="text-gray-400">Final Level</div>
+              <div className="text-ink-2">Final Level</div>
             </div>
             <div className="text-center mb-2">
               <div className="text-5xl font-bold text-green-400">{score}</div>
-              <div className="text-gray-400">Final Score</div>
+              <div className="text-ink-2">Final Score</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-yellow-400">{highScore}</div>
-              <div className="text-gray-400">High Score</div>
+              <div className="text-ink-2">High Score</div>
             </div>
             {score === highScore && score > 0 && (
               <p className="text-green-400 text-lg mt-4 font-bold">New High Score!</p>
@@ -673,13 +673,13 @@ export default function TypingRace() {
           <div className="flex gap-3 justify-center">
             <button
               onClick={startGame}
-              className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+              className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
             >
               Play Again
             </button>
             <button
               onClick={handleShare}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
             >
               Share
             </button>
@@ -689,7 +689,7 @@ export default function TypingRace() {
 
       {/* Instructions */}
       {gameState === "start" && (
-        <div className="text-center text-gray-500 text-sm">
+        <div className="text-center text-ink-3 text-sm">
           <p className="mb-1">Power-Ups: Slow Time ⏱️ • Auto-Correct ✨ • Skip Word ⏭️</p>
           <p>Earn power-ups every 2 levels!</p>
         </div>

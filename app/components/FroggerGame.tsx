@@ -446,20 +446,20 @@ export default function FroggerGame() {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex items-center justify-between w-full max-w-[468px] px-1">
-        <div className="text-sm text-gray-400">Level <span className="font-bold text-white">{display.level}</span></div>
+        <div className="text-sm text-ink-2">Level <span className="font-bold text-ink">{display.level}</span></div>
         <div className="flex gap-1">
           {Array.from({ length: Math.max(0, display.lives) }).map((_, i) => (
             <span key={i} className="text-green-400 text-lg">🐸</span>
           ))}
         </div>
-        <div className="text-sm text-gray-400">Score <span className="font-bold text-white">{display.score}</span></div>
+        <div className="text-sm text-ink-2">Score <span className="font-bold text-ink">{display.score}</span></div>
       </div>
 
       <canvas
         ref={canvasRef}
         width={W}
         height={H}
-        className="max-w-full h-auto rounded-lg border border-gray-800 cursor-pointer touch-none"
+        className="max-w-full h-auto rounded-lg border border-line cursor-pointer touch-none"
         onClick={() => {
           const g = gameRef.current;
           if (g.state === "start" || g.state === "gameover") startGame(true);
@@ -467,7 +467,7 @@ export default function FroggerGame() {
         }}
       />
 
-      <p className="text-xs text-gray-500">Arrow keys / WASD — Swipe or tap to hop up</p>
+      <p className="text-xs text-ink-3">Arrow keys / WASD — Swipe or tap to hop up</p>
     </div>
   );
 }

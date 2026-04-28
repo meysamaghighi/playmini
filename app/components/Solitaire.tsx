@@ -245,14 +245,14 @@ export default function Solitaire() {
   );
 
   return (
-    <div className="flex flex-col items-center gap-4 text-white">
+    <div className="flex flex-col items-center gap-4 text-ink">
       <div className="flex items-center gap-6">
         <div>
           Moves: <span className="font-bold">{moves}</span>
         </div>
         <button
           onClick={newGame}
-          className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-sm font-bold"
+          className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-ink rounded text-sm font-bold"
         >
           New Game
         </button>
@@ -261,7 +261,7 @@ export default function Solitaire() {
       <div className="flex gap-2">
         <button
           onClick={handleStockClick}
-          className="w-12 h-16 md:w-14 md:h-20 rounded shadow bg-blue-700 text-white font-bold flex items-center justify-center"
+          className="w-12 h-16 md:w-14 md:h-20 rounded shadow bg-blue-700 text-ink font-bold flex items-center justify-center"
         >
           {stock.length > 0 ? "↺" : "♻"}
         </button>
@@ -279,7 +279,7 @@ export default function Solitaire() {
               : (
                 <button
                   onClick={() => handleClick({ type: "foundation", index: i })}
-                  className="w-full h-full text-2xl text-white/40"
+                  className="w-full h-full text-2xl text-ink/40"
                 >
                   {SUITS[i]}
                 </button>
@@ -310,19 +310,19 @@ export default function Solitaire() {
       </div>
 
       {won && (
-        <div className="bg-gray-900 px-6 py-4 rounded-lg text-center">
+        <div className="bg-paper-2 px-6 py-4 rounded-lg text-center">
           <div className="text-2xl font-bold mb-2 text-yellow-400">You won!</div>
           <div className="mb-3">Moves: {moves}</div>
           <button
             onClick={newGame}
-            className="px-6 py-2 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700"
+            className="px-6 py-2 bg-emerald-600 text-ink font-bold rounded-lg hover:bg-emerald-700"
           >
             New Game
           </button>
         </div>
       )}
 
-      <p className="text-sm text-gray-400 text-center max-w-md">
+      <p className="text-sm text-ink-2 text-center max-w-md">
         Click a card, then click where to move it. Build foundations A→K by suit, tableau K→A
         alternating colors.
       </p>

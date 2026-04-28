@@ -174,7 +174,7 @@ export default function SudokuGame() {
             key={d}
             onClick={() => setDifficulty(d)}
             className={`px-4 py-2 rounded font-bold capitalize ${
-              difficulty === d ? "bg-indigo-600 text-white" : "bg-gray-700 text-gray-200"
+              difficulty === d ? "bg-indigo-600 text-ink" : "bg-paper-2 text-ink"
             }`}
           >
             {d}
@@ -182,19 +182,19 @@ export default function SudokuGame() {
         ))}
       </div>
 
-      <div className="flex items-center gap-6 text-white">
+      <div className="flex items-center gap-6 text-ink">
         <div>⏱️ <span className="font-bold">{formatTime(time)}</span></div>
         <div>Errors: <span className="font-bold text-red-400">{errors.size}</span></div>
         <button
           onClick={() => newGame()}
-          className="px-3 py-1 bg-indigo-600 text-white rounded text-sm font-bold hover:bg-indigo-700"
+          className="px-3 py-1 bg-indigo-600 text-ink rounded text-sm font-bold hover:bg-indigo-700"
         >
           New
         </button>
       </div>
 
-      <div className="bg-gray-800 p-2 rounded-lg shadow-xl">
-        <div className="grid grid-cols-9 gap-0 bg-gray-900 border-4 border-gray-900">
+      <div className="bg-paper-2 p-2 rounded-lg shadow-xl">
+        <div className="grid grid-cols-9 gap-0 bg-paper-2 border-4 border-line">
           {board.map((row, r) =>
             row.map((val, c) => {
               const isFixed = puzzle[r][c] !== 0;
@@ -214,7 +214,7 @@ export default function SudokuGame() {
                 <button
                   key={`${r}-${c}`}
                   onClick={() => setSelected([r, c])}
-                  className={`w-9 h-9 md:w-11 md:h-11 text-base md:text-lg font-bold border-gray-900 ${borderRight} ${borderBottom} ${
+                  className={`w-9 h-9 md:w-11 md:h-11 text-base md:text-lg font-bold border-line ${borderRight} ${borderBottom} ${
                     isSel
                       ? "bg-indigo-300 text-gray-900"
                       : sameVal
@@ -237,7 +237,7 @@ export default function SudokuGame() {
           <button
             key={n}
             onClick={() => setCell(n)}
-            className="w-9 h-9 md:w-11 md:h-11 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded"
+            className="w-9 h-9 md:w-11 md:h-11 bg-paper-2 hover:bg-paper-2 text-ink font-bold rounded"
           >
             {n}
           </button>
@@ -245,20 +245,20 @@ export default function SudokuGame() {
       </div>
       <button
         onClick={() => setCell(0)}
-        className="px-6 py-2 bg-gray-600 hover:bg-gray-500 text-white font-bold rounded"
+        className="px-6 py-2 bg-gray-600 hover:bg-gray-500 text-ink font-bold rounded"
       >
         Erase
       </button>
 
       {solved && (
-        <div className="bg-gray-900 text-white px-6 py-4 rounded-lg text-center">
+        <div className="bg-paper-2 text-ink px-6 py-4 rounded-lg text-center">
           <div className="text-2xl font-bold mb-2">Solved!</div>
           <div className="mb-3">
             Time: <span className="font-bold text-yellow-400">{formatTime(time)}</span>
           </div>
           <button
             onClick={() => newGame()}
-            className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+            className="px-6 py-2 bg-indigo-600 text-ink font-bold rounded-lg hover:bg-indigo-700"
           >
             Play Again
           </button>

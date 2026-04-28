@@ -536,8 +536,8 @@ export default function PacManGame() {
     <div className="flex flex-col items-center gap-4">
       {/* HUD */}
       <div className="flex items-center justify-between w-full max-w-[462px] px-1">
-        <div className="text-sm text-gray-400">
-          Level <span className="text-white font-bold">{display.level}</span>
+        <div className="text-sm text-ink-2">
+          Level <span className="text-ink font-bold">{display.level}</span>
         </div>
         <div className="flex gap-1">
           {livesArr.map((_, i) => (
@@ -546,8 +546,8 @@ export default function PacManGame() {
             </svg>
           ))}
         </div>
-        <div className="text-sm text-gray-400">
-          Score <span className="text-white font-bold">{display.score}</span>
+        <div className="text-sm text-ink-2">
+          Score <span className="text-ink font-bold">{display.score}</span>
         </div>
       </div>
 
@@ -556,7 +556,7 @@ export default function PacManGame() {
         ref={canvasRef}
         width={W}
         height={H}
-        className="max-w-full h-auto rounded-lg border border-gray-800 cursor-pointer touch-none"
+        className="max-w-full h-auto rounded-lg border border-line cursor-pointer touch-none"
         style={{ imageRendering: "pixelated" }}
         onClick={() => {
           const g = gameRef.current;
@@ -564,7 +564,7 @@ export default function PacManGame() {
         }}
       />
 
-      <p className="text-xs text-gray-500">Arrow keys / WASD — Swipe on mobile</p>
+      <p className="text-xs text-ink-3">Arrow keys / WASD — Swipe on mobile</p>
     </div>
   );
 }

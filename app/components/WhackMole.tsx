@@ -106,7 +106,7 @@ export default function WhackMole() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-6 text-white text-lg bg-gray-900 px-4 py-2 rounded">
+      <div className="flex items-center gap-6 text-ink text-lg bg-paper-2 px-4 py-2 rounded">
         <div>
           Score: <span className="font-bold">{score}</span>
         </div>
@@ -148,7 +148,7 @@ export default function WhackMole() {
       </div>
 
       {gameState !== "playing" && (
-        <div className="bg-gray-900 text-white px-6 py-4 rounded-lg text-center">
+        <div className="bg-paper-2 text-ink px-6 py-4 rounded-lg text-center">
           {gameState === "ready" ? (
             <div className="text-2xl font-bold mb-3">Whack-a-Mole</div>
           ) : (
@@ -162,14 +162,14 @@ export default function WhackMole() {
           )}
           <button
             onClick={start}
-            className="px-6 py-2 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700"
+            className="px-6 py-2 bg-emerald-600 text-ink font-bold rounded-lg hover:bg-emerald-700"
           >
             {gameState === "ready" ? "Start" : "Play Again"}
           </button>
         </div>
       )}
 
-      <p className="text-sm text-gray-400 text-center max-w-md">
+      <p className="text-sm text-ink-2 text-center max-w-md">
         Tap or click moles when they pop up. {ROUND_SECONDS} seconds — how many can you whack?
       </p>
     </div>

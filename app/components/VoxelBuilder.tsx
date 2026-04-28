@@ -561,7 +561,7 @@ export default function VoxelBuilder() {
             <button
               onClick={() => setEraseMode(false)}
               className={`px-3 sm:px-4 py-2 rounded font-bold text-xs sm:text-sm transition-colors ${
-                !eraseMode ? 'bg-blue-600 text-white' : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
+                !eraseMode ? 'bg-blue-600 text-ink' : 'bg-slate-700 text-ink-2 hover:bg-slate-600'
               }`}
             >
               Build
@@ -569,7 +569,7 @@ export default function VoxelBuilder() {
             <button
               onClick={() => setEraseMode(true)}
               className={`px-3 sm:px-4 py-2 rounded font-bold text-xs sm:text-sm transition-colors ${
-                eraseMode ? 'bg-red-600 text-white' : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
+                eraseMode ? 'bg-red-600 text-ink' : 'bg-slate-700 text-ink-2 hover:bg-slate-600'
               }`}
             >
               Erase

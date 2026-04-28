@@ -462,22 +462,22 @@ export default function WordBuilder() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800">
+      <div className="bg-paper-2 rounded-2xl p-6 border border-line">
         {!isPlaying && !gameOver && (
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-white mb-2">Word Builder</h2>
-            <p className="text-gray-300 mb-6">
+            <h2 className="text-2xl font-bold text-ink mb-2">Word Builder</h2>
+            <p className="text-ink-2 mb-6">
               Create words from the letters of one word. Find as many as you can!
             </p>
 
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-300 mb-4">Select Difficulty</h3>
+              <h3 className="text-lg font-semibold text-ink-2 mb-4">Select Difficulty</h3>
               <div className="flex flex-col gap-3 max-w-md mx-auto">
                 {(Object.keys(difficultyConfig) as Difficulty[]).map((diff) => (
                   <button
                     key={diff}
                     onClick={() => handleDifficultySelect(diff)}
-                    className={`px-6 py-4 bg-gradient-to-r ${difficultyConfig[diff].color} text-white font-bold rounded-xl hover:opacity-90 transition-all ${
+                    className={`px-6 py-4 bg-gradient-to-r ${difficultyConfig[diff].color} text-ink font-bold rounded-xl hover:opacity-90 transition-all ${
                       difficulty === diff ? "ring-4 ring-white/30 scale-105" : ""
                     }`}
                   >
@@ -492,12 +492,12 @@ export default function WordBuilder() {
 
             <button
               onClick={startGame}
-              className={`px-8 py-3 bg-gradient-to-r ${difficultyConfig[difficulty].color} text-white font-bold rounded-xl hover:opacity-90 transition-opacity`}
+              className={`px-8 py-3 bg-gradient-to-r ${difficultyConfig[difficulty].color} text-ink font-bold rounded-xl hover:opacity-90 transition-opacity`}
             >
               Start Game
             </button>
             {personalBest > 0 && (
-              <p className="text-gray-500 text-sm mt-4">Personal Best: {personalBest} points</p>
+              <p className="text-ink-3 text-sm mt-4">Personal Best: {personalBest} points</p>
             )}
           </div>
         )}
@@ -509,8 +509,8 @@ export default function WordBuilder() {
                 {Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, "0")}
               </div>
               <div className="text-right">
-                <div className="text-sm text-gray-400">Score: {currentScore}</div>
-                <div className="text-sm text-gray-400">
+                <div className="text-sm text-ink-2">Score: {currentScore}</div>
+                <div className="text-sm text-ink-2">
                   Found: {foundWords.length} / {possibleWords.length}
                 </div>
               </div>
@@ -521,13 +521,13 @@ export default function WordBuilder() {
                 {scrambledLetters.map((letter, i) => (
                   <div
                     key={i}
-                    className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-cyan-600 rounded-lg flex items-center justify-center text-white font-bold text-xl"
+                    className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-cyan-600 rounded-lg flex items-center justify-center text-ink font-bold text-xl"
                   >
                     {letter}
                   </div>
                 ))}
               </div>
-              <p className="text-center text-xs text-gray-500">Source: {sourceWord}</p>
+              <p className="text-center text-xs text-ink-3">Source: {sourceWord}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="mb-6">
@@ -537,12 +537,12 @@ export default function WordBuilder() {
                   type="text"
                   value={currentInput}
                   onChange={(e) => setCurrentInput(e.target.value)}
-                  className={`flex-1 px-4 py-3 bg-gray-800 border rounded-xl text-white focus:outline-none focus:ring-2 transition-all ${
+                  className={`flex-1 px-4 py-3 bg-paper-2 border rounded-xl text-ink focus:outline-none focus:ring-2 transition-all ${
                     feedback === "correct"
                       ? "border-green-500 ring-green-500"
                       : feedback === "wrong"
                       ? "border-red-500 ring-red-500 animate-shake"
-                      : "border-gray-700 focus:ring-cyan-500"
+                      : "border-line focus:ring-cyan-500"
                   }`}
                   placeholder="Type a word..."
                   autoComplete="off"
@@ -550,7 +550,7 @@ export default function WordBuilder() {
                 />
                 <button
                   type="submit"
-                  className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-cyan-600 text-white font-bold rounded-xl hover:opacity-90 transition-opacity"
+                  className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-cyan-600 text-ink font-bold rounded-xl hover:opacity-90 transition-opacity"
                 >
                   Submit
                 </button>
@@ -559,7 +559,7 @@ export default function WordBuilder() {
 
             {foundWords.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold text-gray-400 mb-2">Found Words:</h3>
+                <h3 className="text-sm font-semibold text-ink-2 mb-2">Found Words:</h3>
                 <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
                   {foundWords.map((word, i) => (
                     <div
@@ -577,7 +577,7 @@ export default function WordBuilder() {
 
         {gameOver && (
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-white mb-2">Time's Up!</h2>
+            <h2 className="text-3xl font-bold text-ink mb-2">Time's Up!</h2>
             {isNewBest && (
               <p className="text-xl text-yellow-400 mb-4">🎉 New Personal Best!</p>
             )}
@@ -586,11 +586,11 @@ export default function WordBuilder() {
                 {difficultyConfig[difficulty].name}
               </p>
               <p className="text-2xl text-cyan-400 font-bold mb-1">Score: {currentScore}</p>
-              <p className="text-gray-400">
+              <p className="text-ink-2">
                 Found {foundWords.length} of {possibleWords.length} words
               </p>
               {personalBest > 0 && !isNewBest && (
-                <p className="text-gray-500 text-sm mt-1">Personal Best: {personalBest}</p>
+                <p className="text-ink-3 text-sm mt-1">Personal Best: {personalBest}</p>
               )}
             </div>
 
@@ -612,14 +612,14 @@ export default function WordBuilder() {
 
             {missedWords.length > 0 && (
               <div className="mb-6 text-left">
-                <h3 className="text-lg font-semibold text-gray-400 mb-2">
+                <h3 className="text-lg font-semibold text-ink-2 mb-2">
                   Missed Words ({missedWords.length}):
                 </h3>
                 <div className="flex flex-wrap gap-2 max-h-60 overflow-y-auto">
                   {missedWords.map((word, i) => (
                     <div
                       key={i}
-                      className="px-3 py-1 bg-gray-800 border border-gray-700 rounded-lg text-gray-400 text-sm"
+                      className="px-3 py-1 bg-paper-2 border border-line rounded-lg text-ink-2 text-sm"
                     >
                       {word}
                     </div>
@@ -631,7 +631,7 @@ export default function WordBuilder() {
             <div className="flex gap-3 justify-center flex-wrap">
               <button
                 onClick={handleShare}
-                className="px-6 py-3 bg-gray-800 text-white font-bold rounded-xl hover:bg-gray-700 transition-colors"
+                className="px-6 py-3 bg-paper-2 text-ink font-bold rounded-xl hover:bg-paper-2 transition-colors"
               >
                 Share
               </button>
@@ -640,13 +640,13 @@ export default function WordBuilder() {
                   setGameOver(false);
                   setIsPlaying(false);
                 }}
-                className="px-6 py-3 bg-gray-700 text-white font-bold rounded-xl hover:bg-gray-600 transition-colors"
+                className="px-6 py-3 bg-paper-2 text-ink font-bold rounded-xl hover:bg-paper-2 transition-colors"
               >
                 Change Difficulty
               </button>
               <button
                 onClick={startGame}
-                className={`px-6 py-3 bg-gradient-to-r ${difficultyConfig[difficulty].color} text-white font-bold rounded-xl hover:opacity-90 transition-opacity`}
+                className={`px-6 py-3 bg-gradient-to-r ${difficultyConfig[difficulty].color} text-ink font-bold rounded-xl hover:opacity-90 transition-opacity`}
               >
                 Play Again
               </button>

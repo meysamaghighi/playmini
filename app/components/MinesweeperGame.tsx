@@ -29,7 +29,7 @@ const NUM_COLORS = [
   "text-amber-700",
   "text-teal-600",
   "text-black",
-  "text-gray-600",
+  "text-ink-3",
 ];
 
 function newBoard(rows: number, cols: number): Cell[][] {
@@ -230,7 +230,7 @@ export default function MinesweeperGame() {
             key={d}
             onClick={() => setDifficulty(d)}
             className={`px-4 py-2 rounded font-bold ${
-              difficulty === d ? "bg-indigo-600 text-white" : "bg-gray-700 text-gray-200 hover:bg-gray-600"
+              difficulty === d ? "bg-indigo-600 text-ink" : "bg-paper-2 text-ink hover:bg-paper-2"
             }`}
           >
             {d === "easy" ? "Easy 9×9" : d === "medium" ? "Medium 16×16" : "Hard 16×30"}
@@ -238,7 +238,7 @@ export default function MinesweeperGame() {
         ))}
       </div>
 
-      <div className="flex items-center gap-6 text-white text-lg bg-gray-900 px-4 py-2 rounded">
+      <div className="flex items-center gap-6 text-ink text-lg bg-paper-2 px-4 py-2 rounded">
         <div>
           💣 <span className="font-bold">{remaining}</span>
         </div>
@@ -257,7 +257,7 @@ export default function MinesweeperGame() {
       </div>
 
       <div
-        className="inline-block bg-gray-800 p-2 rounded overflow-auto max-w-full"
+        className="inline-block bg-paper-2 p-2 rounded overflow-auto max-w-full"
         onContextMenu={(e) => e.preventDefault()}
       >
         <div
@@ -275,7 +275,7 @@ export default function MinesweeperGame() {
               if (cell.revealed) {
                 if (cell.mine) {
                   return (
-                    <div key={key} className={`${base} bg-red-500 text-white`}>
+                    <div key={key} className={`${base} bg-red-500 text-ink`}>
                       💣
                     </div>
                   );
@@ -329,7 +329,7 @@ export default function MinesweeperGame() {
       </div>
 
       {(state === "won" || state === "lost") && (
-        <div className="bg-gray-900 text-white px-6 py-4 rounded-lg text-center">
+        <div className="bg-paper-2 text-ink px-6 py-4 rounded-lg text-center">
           <div className="text-2xl font-bold mb-2">
             {state === "won" ? "You won!" : "Game over"}
           </div>
@@ -340,14 +340,14 @@ export default function MinesweeperGame() {
           )}
           <button
             onClick={() => startNew()}
-            className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+            className="px-6 py-2 bg-indigo-600 text-ink font-bold rounded-lg hover:bg-indigo-700"
           >
             Play Again
           </button>
         </div>
       )}
 
-      <p className="text-sm text-gray-400 text-center max-w-md">
+      <p className="text-sm text-ink-2 text-center max-w-md">
         Left-click to reveal. Right-click (or long-press on mobile) to flag a mine.
       </p>
     </div>

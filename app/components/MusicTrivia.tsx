@@ -327,20 +327,20 @@ export default function MusicTrivia() {
 function MenuScreen({ onSelect }: { onSelect: (m: Mode) => void }) {
   return (
     <div className="text-center">
-      <h1 className="text-4xl font-bold text-white mb-2">Music Party Trivia</h1>
-      <p className="text-gray-400 mb-8">Test your music knowledge solo or with friends</p>
+      <h1 className="text-4xl font-bold text-ink mb-2">Music Party Trivia</h1>
+      <p className="text-ink-2 mb-8">Test your music knowledge solo or with friends</p>
 
       <div className="grid gap-4 max-w-sm mx-auto">
         <button
           onClick={() => onSelect("trivia")}
-          className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-5 px-6 rounded-2xl text-lg hover:scale-105 transition-transform"
+          className="bg-gradient-to-r from-purple-600 to-pink-600 text-ink font-bold py-5 px-6 rounded-2xl text-lg hover:scale-105 transition-transform"
         >
           <div className="text-2xl mb-1">Music Trivia</div>
           <div className="text-sm opacity-80">Answer questions about songs and artists</div>
         </button>
         <button
           onClick={() => onSelect("timeline")}
-          className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold py-5 px-6 rounded-2xl text-lg hover:scale-105 transition-transform"
+          className="bg-gradient-to-r from-blue-600 to-cyan-600 text-ink font-bold py-5 px-6 rounded-2xl text-lg hover:scale-105 transition-transform"
         >
           <div className="text-2xl mb-1">Timeline Challenge</div>
           <div className="text-sm opacity-80">Place songs in chronological order</div>
@@ -404,12 +404,12 @@ function TriviaGame({ onBack }: { onBack: () => void }) {
   if (gameOver) {
     return (
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-white mb-2">Game Over!</h2>
+        <h2 className="text-3xl font-bold text-ink mb-2">Game Over!</h2>
         <p className="text-5xl font-black text-purple-400 mb-2">{score}/30</p>
-        <p className="text-gray-400 mb-6">Best: {Math.max(score, best)}/30</p>
+        <p className="text-ink-2 mb-6">Best: {Math.max(score, best)}/30</p>
         <div className="flex gap-3 justify-center">
-          <button onClick={restart} className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl">Play Again</button>
-          <button onClick={onBack} className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded-xl">Menu</button>
+          <button onClick={restart} className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-ink font-bold rounded-xl">Play Again</button>
+          <button onClick={onBack} className="px-6 py-3 bg-paper-2 hover:bg-paper-2 text-ink font-bold rounded-xl">Menu</button>
         </div>
       </div>
     );
@@ -418,25 +418,25 @@ function TriviaGame({ onBack }: { onBack: () => void }) {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <button onClick={onBack} className="text-gray-400 hover:text-white text-sm">&larr; Back</button>
+        <button onClick={onBack} className="text-ink-2 hover:text-ink text-sm">&larr; Back</button>
         <div className="flex gap-4 text-sm">
-          <span className="text-gray-400">Round <span className="text-white font-bold">{round + 1}/10</span></span>
-          <span className="text-gray-400">Score <span className="text-purple-400 font-bold">{score}</span></span>
+          <span className="text-ink-2">Round <span className="text-ink font-bold">{round + 1}/10</span></span>
+          <span className="text-ink-2">Score <span className="text-purple-400 font-bold">{score}</span></span>
         </div>
       </div>
 
       {/* Song card */}
       <div className="bg-gradient-to-br from-purple-900/50 to-pink-900/30 rounded-2xl p-6 mb-6 border border-purple-800/50">
-        <p className="text-gray-400 text-sm mb-1">{song.year}</p>
-        <h3 className="text-2xl font-bold text-white">{song.title}</h3>
+        <p className="text-ink-2 text-sm mb-1">{song.year}</p>
+        <h3 className="text-2xl font-bold text-ink">{song.title}</h3>
         <p className="text-purple-300 text-lg">{song.artist}</p>
       </div>
 
       {/* Questions */}
       <div className="space-y-4">
         {trivia.map((q, idx) => (
-          <div key={idx} className="bg-gray-900 rounded-xl p-5 border border-gray-800">
-            <p className="text-white font-medium mb-3">{q.question}</p>
+          <div key={idx} className="bg-paper-2 rounded-xl p-5 border border-line">
+            <p className="text-ink font-medium mb-3">{q.question}</p>
 
             {!revealed[idx] ? (
               <button
@@ -448,28 +448,28 @@ function TriviaGame({ onBack }: { onBack: () => void }) {
             ) : (
               <div>
                 {q.answer ? (
-                  <p className="text-gray-300 text-sm bg-gray-800 rounded-lg p-3 mb-3">{q.answer}</p>
+                  <p className="text-ink-2 text-sm bg-paper-2 rounded-lg p-3 mb-3">{q.answer}</p>
                 ) : (
-                  <p className="text-gray-500 text-sm italic mb-3">Discuss with your group!</p>
+                  <p className="text-ink-3 text-sm italic mb-3">Discuss with your group!</p>
                 )}
                 {!answered[idx] && (
                   <div className="flex gap-2">
                     <button
                       onClick={() => markAnswer(idx, true)}
-                      className="px-4 py-1.5 bg-green-600 hover:bg-green-500 text-white text-sm font-bold rounded-lg"
+                      className="px-4 py-1.5 bg-green-600 hover:bg-green-500 text-ink text-sm font-bold rounded-lg"
                     >
                       Got it right
                     </button>
                     <button
                       onClick={() => markAnswer(idx, false)}
-                      className="px-4 py-1.5 bg-red-600/60 hover:bg-red-600 text-white text-sm font-bold rounded-lg"
+                      className="px-4 py-1.5 bg-red-600/60 hover:bg-red-600 text-ink text-sm font-bold rounded-lg"
                     >
                       Didn't know
                     </button>
                   </div>
                 )}
                 {answered[idx] && (
-                  <p className="text-gray-500 text-xs">Answered</p>
+                  <p className="text-ink-3 text-xs">Answered</p>
                 )}
               </div>
             )}
@@ -479,7 +479,7 @@ function TriviaGame({ onBack }: { onBack: () => void }) {
 
       <button
         onClick={nextRound}
-        className="w-full mt-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-lg transition-colors"
+        className="w-full mt-6 py-3 bg-purple-600 hover:bg-purple-500 text-ink font-bold rounded-xl text-lg transition-colors"
       >
         {round + 1 >= 10 ? "Finish" : "Next Song"}
       </button>
@@ -580,14 +580,14 @@ function TimelineGame({ onBack }: { onBack: () => void }) {
   if (gameOver) {
     return (
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-white mb-2">
+        <h2 className="text-3xl font-bold text-ink mb-2">
           {lives > 0 ? "All Songs Placed!" : "Out of Lives!"}
         </h2>
         <p className="text-5xl font-black text-blue-400 mb-2">{score} placed</p>
-        <p className="text-gray-400 mb-6">Best streak: {Math.max(score, best)}</p>
+        <p className="text-ink-2 mb-6">Best streak: {Math.max(score, best)}</p>
         <div className="flex gap-3 justify-center">
-          <button onClick={startNewGame} className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl">Play Again</button>
-          <button onClick={onBack} className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded-xl">Menu</button>
+          <button onClick={startNewGame} className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-ink font-bold rounded-xl">Play Again</button>
+          <button onClick={onBack} className="px-6 py-3 bg-paper-2 hover:bg-paper-2 text-ink font-bold rounded-xl">Menu</button>
         </div>
       </div>
     );
@@ -596,10 +596,10 @@ function TimelineGame({ onBack }: { onBack: () => void }) {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <button onClick={onBack} className="text-gray-400 hover:text-white text-sm">&larr; Back</button>
+        <button onClick={onBack} className="text-ink-2 hover:text-ink text-sm">&larr; Back</button>
         <div className="flex gap-4 text-sm">
-          <span className="text-gray-400">Placed <span className="text-blue-400 font-bold">{score}</span></span>
-          <span className="text-gray-400">Lives <span className="text-red-400 font-bold">{"*".repeat(lives)}</span></span>
+          <span className="text-ink-2">Placed <span className="text-blue-400 font-bold">{score}</span></span>
+          <span className="text-ink-2">Lives <span className="text-red-400 font-bold">{"*".repeat(lives)}</span></span>
         </div>
       </div>
 
@@ -610,10 +610,10 @@ function TimelineGame({ onBack }: { onBack: () => void }) {
           flash === "wrong" ? "bg-red-900/40 border-red-500" :
           "bg-gradient-to-br from-blue-900/50 to-cyan-900/30 border-blue-700/50"
         }`}>
-          <p className="text-gray-400 text-sm mb-1">
+          <p className="text-ink-2 text-sm mb-1">
             {flash && showYear ? `${showYear}` : "Where does this song go?"}
           </p>
-          <h3 className="text-xl font-bold text-white">{current.title}</h3>
+          <h3 className="text-xl font-bold text-ink">{current.title}</h3>
           <p className="text-blue-300">{current.artist}</p>
           {flash === "correct" && <p className="text-green-400 font-bold mt-1">Correct!</p>}
           {flash === "wrong" && <p className="text-red-400 font-bold mt-1">Wrong! It was {showYear}</p>}
@@ -625,7 +625,7 @@ function TimelineGame({ onBack }: { onBack: () => void }) {
         {/* Place before first */}
         <button
           onClick={() => placeSong(0)}
-          className="w-full py-2 border-2 border-dashed border-gray-700 hover:border-blue-500 hover:bg-blue-950/30 rounded-lg text-gray-500 hover:text-blue-400 text-sm transition-colors"
+          className="w-full py-2 border-2 border-dashed border-line hover:border-blue-500 hover:bg-blue-950/30 rounded-lg text-ink-3 hover:text-blue-400 text-sm transition-colors"
           disabled={!!flash}
         >
           Place here (before {placed[0]?.year})
@@ -634,18 +634,18 @@ function TimelineGame({ onBack }: { onBack: () => void }) {
         {placed.map((song, idx) => (
           <div key={`${song.artist}-${song.title}-${idx}`}>
             {/* Song in timeline */}
-            <div className="bg-gray-900 rounded-lg px-4 py-3 border border-gray-800 flex justify-between items-center">
+            <div className="bg-paper-2 rounded-lg px-4 py-3 border border-line flex justify-between items-center">
               <div>
-                <span className="text-white font-medium text-sm">{song.title}</span>
-                <span className="text-gray-500 text-sm ml-2">{song.artist}</span>
+                <span className="text-ink font-medium text-sm">{song.title}</span>
+                <span className="text-ink-3 text-sm ml-2">{song.artist}</span>
               </div>
-              <span className="text-gray-400 font-mono text-sm font-bold">{song.year}</span>
+              <span className="text-ink-2 font-mono text-sm font-bold">{song.year}</span>
             </div>
 
             {/* Place after this song */}
             <button
               onClick={() => placeSong(idx + 1)}
-              className="w-full py-2 border-2 border-dashed border-gray-700 hover:border-blue-500 hover:bg-blue-950/30 rounded-lg text-gray-500 hover:text-blue-400 text-sm transition-colors"
+              className="w-full py-2 border-2 border-dashed border-line hover:border-blue-500 hover:bg-blue-950/30 rounded-lg text-ink-3 hover:text-blue-400 text-sm transition-colors"
               disabled={!!flash}
             >
               Place here {idx < placed.length - 1 ? `(${placed[idx].year}-${placed[idx + 1].year})` : `(after ${song.year})`}

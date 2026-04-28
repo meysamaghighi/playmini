@@ -199,17 +199,17 @@ export default function HangmanGame() {
       {/* Stats */}
       <div className="flex gap-8 text-center">
         <div>
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Win Streak</div>
+          <div className="text-xs text-ink-3 uppercase tracking-wider">Win Streak</div>
           <div className="text-3xl font-black text-orange-400 tabular-nums">{currentStreak}</div>
         </div>
         <div>
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Best Streak</div>
+          <div className="text-xs text-ink-3 uppercase tracking-wider">Best Streak</div>
           <div className="text-3xl font-black text-red-500 tabular-nums">{bestStreak}</div>
         </div>
       </div>
 
       {/* Game Area */}
-      <div className="bg-gray-900 rounded-2xl p-8 border border-gray-800 w-full max-w-xl">
+      <div className="bg-paper-2 rounded-2xl p-8 border border-line w-full max-w-xl">
         {/* Hangman SVG */}
         <div className="flex justify-center mb-6">
           <svg width="200" height="250" className="mx-auto">
@@ -284,7 +284,7 @@ export default function HangmanGame() {
         {/* Difficulty Badge */}
         {gameState !== "SELECT" && difficulty && (
           <div className="text-center mb-2">
-            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-gray-800 text-gray-300">
+            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-paper-2 text-ink-2">
               {difficulty}
             </span>
           </div>
@@ -293,7 +293,7 @@ export default function HangmanGame() {
         {/* Category Hint */}
         {gameState !== "SELECT" && (
           <div className="text-center mb-4">
-            <span className="text-sm text-gray-400">Category: </span>
+            <span className="text-sm text-ink-2">Category: </span>
             <span className="text-sm font-bold text-orange-400">{category}</span>
           </div>
         )}
@@ -301,7 +301,7 @@ export default function HangmanGame() {
         {/* Word Display */}
         {gameState !== "SELECT" && (
           <div className="text-center mb-6">
-            <div className="text-3xl md:text-4xl font-mono font-bold tracking-wider text-white">
+            <div className="text-3xl md:text-4xl font-mono font-bold tracking-wider text-ink">
               {displayWord}
             </div>
           </div>
@@ -309,7 +309,7 @@ export default function HangmanGame() {
 
         {/* Wrong Guesses Counter */}
         {gameState === "PLAYING" && (
-          <div className="text-center mb-4 text-gray-400 text-sm">
+          <div className="text-center mb-4 text-ink-2 text-sm">
             Wrong guesses: {wrongGuesses} / {maxWrong}
           </div>
         )}
@@ -319,34 +319,34 @@ export default function HangmanGame() {
           <div className="text-center py-8">
             <div className="text-6xl mb-4">🎯</div>
             <h2 className="text-2xl font-bold text-orange-400 mb-4">Hangman</h2>
-            <p className="text-gray-400 mb-8">Choose your difficulty</p>
+            <p className="text-ink-2 mb-8">Choose your difficulty</p>
 
             <div className="space-y-4 max-w-md mx-auto">
               <button
                 onClick={() => selectDifficulty("easy")}
-                className="w-full px-6 py-4 bg-gray-900 hover:bg-gray-800 border-2 border-green-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
+                className="w-full px-6 py-4 bg-paper-2 hover:bg-paper-2 border-2 border-green-600 text-ink rounded-xl transition-all hover:scale-105 active:scale-95"
               >
                 <div className="font-bold text-lg text-green-400 mb-1">Easy</div>
-                <div className="text-sm text-gray-400">3-4 letter words • 12 wrong guesses allowed</div>
-                <div className="text-xs text-gray-500 mt-1">Perfect for kids learning English</div>
+                <div className="text-sm text-ink-2">3-4 letter words • 12 wrong guesses allowed</div>
+                <div className="text-xs text-ink-3 mt-1">Perfect for kids learning English</div>
               </button>
 
               <button
                 onClick={() => selectDifficulty("medium")}
-                className="w-full px-6 py-4 bg-gray-900 hover:bg-gray-800 border-2 border-orange-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
+                className="w-full px-6 py-4 bg-paper-2 hover:bg-paper-2 border-2 border-orange-600 text-ink rounded-xl transition-all hover:scale-105 active:scale-95"
               >
                 <div className="font-bold text-lg text-orange-400 mb-1">Medium</div>
-                <div className="text-sm text-gray-400">5-10 letter words • 6 wrong guesses allowed</div>
-                <div className="text-xs text-gray-500 mt-1">Standard difficulty</div>
+                <div className="text-sm text-ink-2">5-10 letter words • 6 wrong guesses allowed</div>
+                <div className="text-xs text-ink-3 mt-1">Standard difficulty</div>
               </button>
 
               <button
                 onClick={() => selectDifficulty("hard")}
-                className="w-full px-6 py-4 bg-gray-900 hover:bg-gray-800 border-2 border-red-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
+                className="w-full px-6 py-4 bg-paper-2 hover:bg-paper-2 border-2 border-red-600 text-ink rounded-xl transition-all hover:scale-105 active:scale-95"
               >
                 <div className="font-bold text-lg text-red-400 mb-1">Hard</div>
-                <div className="text-sm text-gray-400">8+ letter words • 5 wrong guesses allowed</div>
-                <div className="text-xs text-gray-500 mt-1">Challenging vocabulary</div>
+                <div className="text-sm text-ink-2">8+ letter words • 5 wrong guesses allowed</div>
+                <div className="text-xs text-ink-3 mt-1">Challenging vocabulary</div>
               </button>
             </div>
           </div>
@@ -367,9 +367,9 @@ export default function HangmanGame() {
                   disabled={guessed}
                   className={`
                     aspect-square text-lg font-bold rounded-lg transition-all
-                    ${!guessed && "bg-gray-800 hover:bg-gray-700 text-white active:scale-95"}
-                    ${correct && "bg-green-600 text-white cursor-not-allowed"}
-                    ${wrong && "bg-red-600 text-white cursor-not-allowed"}
+                    ${!guessed && "bg-paper-2 hover:bg-paper-2 text-ink active:scale-95"}
+                    ${correct && "bg-green-600 text-ink cursor-not-allowed"}
+                    ${wrong && "bg-red-600 text-ink cursor-not-allowed"}
                   `}
                 >
                   {letter}
@@ -384,7 +384,7 @@ export default function HangmanGame() {
           <div className="text-center py-4">
             <div className="text-5xl mb-3">🎉</div>
             <h2 className="text-2xl font-bold text-green-400 mb-2">You Won!</h2>
-            <p className="text-xl text-white mb-1">The word was:</p>
+            <p className="text-xl text-ink mb-1">The word was:</p>
             <p className="text-2xl font-bold text-orange-400 mb-4">{word}</p>
             <p className="text-green-400 text-lg font-bold mb-6">
               Win Streak: {currentStreak}
@@ -392,14 +392,14 @@ export default function HangmanGame() {
             <div className="flex gap-3 justify-center">
               <button
                 onClick={startGame}
-                className="px-6 py-3 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+                className="px-6 py-3 bg-orange-600 hover:bg-orange-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
               >
                 Next Word
               </button>
               {currentStreak > 0 && (
                 <button
                   onClick={handleShare}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
                 >
                   Share
                 </button>
@@ -413,11 +413,11 @@ export default function HangmanGame() {
           <div className="text-center py-4">
             <div className="text-5xl mb-3">💀</div>
             <h2 className="text-2xl font-bold text-red-400 mb-2">Game Over</h2>
-            <p className="text-xl text-white mb-1">The word was:</p>
+            <p className="text-xl text-ink mb-1">The word was:</p>
             <p className="text-2xl font-bold text-orange-400 mb-6">{word}</p>
             <button
               onClick={startGame}
-              className="px-8 py-3 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+              className="px-8 py-3 bg-orange-600 hover:bg-orange-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
             >
               Try Again
             </button>
@@ -427,7 +427,7 @@ export default function HangmanGame() {
 
       {/* Hint */}
       {gameState === "PLAYING" && (
-        <div className="text-center text-xs text-gray-600">
+        <div className="text-center text-xs text-ink-3">
           Click letters or use your keyboard to guess
         </div>
       )}

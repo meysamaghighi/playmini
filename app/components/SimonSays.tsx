@@ -129,7 +129,7 @@ export default function SimonSays() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-6 text-white text-lg">
+      <div className="flex items-center gap-6 text-ink text-lg">
         <div>
           Round: <span className="font-bold">{sequence.length}</span>
         </div>
@@ -138,7 +138,7 @@ export default function SimonSays() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 bg-gray-800 p-2 rounded-full">
+      <div className="grid grid-cols-2 gap-2 bg-paper-2 p-2 rounded-full">
         {([0, 1, 2, 3] as Pad[]).map((p) => (
           <button
             key={p}
@@ -162,14 +162,14 @@ export default function SimonSays() {
       {phase === "ready" && (
         <button
           onClick={start}
-          className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 text-lg"
+          className="px-6 py-3 bg-indigo-600 text-ink font-bold rounded-lg hover:bg-indigo-700 text-lg"
         >
           Start
         </button>
       )}
 
       {phase === "gameover" && (
-        <div className="bg-gray-900 text-white px-6 py-4 rounded-lg text-center">
+        <div className="bg-paper-2 text-ink px-6 py-4 rounded-lg text-center">
           <div className="text-2xl font-bold mb-2">Game Over</div>
           <div className="mb-3">
             Rounds: <span className="font-bold">{Math.max(0, sequence.length - 1)}</span>
@@ -181,14 +181,14 @@ export default function SimonSays() {
               phaseRef.current = "ready";
               setPhase("ready");
             }}
-            className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+            className="px-6 py-2 bg-indigo-600 text-ink font-bold rounded-lg hover:bg-indigo-700"
           >
             Play Again
           </button>
         </div>
       )}
 
-      <p className="text-sm text-gray-400 text-center max-w-md">
+      <p className="text-sm text-ink-2 text-center max-w-md">
         Watch the pattern, then tap the pads in the same order. Each round adds one more step.
       </p>
     </div>

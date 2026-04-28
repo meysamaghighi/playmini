@@ -249,7 +249,7 @@ export default function BreakoutGame() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex flex-wrap items-center justify-center gap-6 text-white">
+      <div className="flex flex-wrap items-center justify-center gap-6 text-ink">
         <div>
           Score: <span className="font-bold">{score}</span>
         </div>
@@ -270,7 +270,7 @@ export default function BreakoutGame() {
           width={CANVAS_W}
           height={CANVAS_H}
           onPointerMove={onPointerMove}
-          className="border-4 border-gray-700 rounded-lg max-w-full h-auto touch-none"
+          className="border-4 border-line rounded-lg max-w-full h-auto touch-none"
         />
 
         {gameState !== "playing" && (
@@ -279,7 +279,7 @@ export default function BreakoutGame() {
               {gameState === "ready" ? (
                 <>
                   <div className="text-2xl font-bold mb-2">Breakout</div>
-                  <div className="text-sm text-gray-600 mb-4">Move with mouse or arrow keys</div>
+                  <div className="text-sm text-ink-3 mb-4">Move with mouse or arrow keys</div>
                 </>
               ) : (
                 <>
@@ -292,7 +292,7 @@ export default function BreakoutGame() {
               )}
               <button
                 onClick={start}
-                className="px-6 py-2 bg-amber-500 text-white font-bold rounded-lg hover:bg-amber-600"
+                className="px-6 py-2 bg-amber-500 text-ink font-bold rounded-lg hover:bg-amber-600"
               >
                 {gameState === "ready" ? "Start" : "Play Again"}
               </button>

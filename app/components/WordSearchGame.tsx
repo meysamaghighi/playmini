@@ -250,8 +250,8 @@ export default function WordSearchGame() {
             onClick={() => setDifficulty(diff)}
             className={`px-6 py-2 rounded-lg font-semibold transition-all ${
               difficulty === diff
-                ? "bg-green-600 text-white"
-                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                ? "bg-green-600 text-ink"
+                : "bg-paper-2 text-ink-2 hover:bg-paper-2"
             }`}
           >
             {diff.charAt(0).toUpperCase() + diff.slice(1)}
@@ -261,19 +261,19 @@ export default function WordSearchGame() {
 
       {/* Timer and Controls */}
       <div className="flex items-center gap-6">
-        <div className="bg-gray-900 px-6 py-3 rounded-lg text-center">
-          <div className="text-xs text-gray-500 uppercase">Time</div>
+        <div className="bg-paper-2 px-6 py-3 rounded-lg text-center">
+          <div className="text-xs text-ink-3 uppercase">Time</div>
           <div className="text-2xl font-bold text-green-400">{timer}s</div>
         </div>
         <button
           onClick={generateGrid}
-          className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-all hover:scale-105 active:scale-95"
+          className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-ink font-bold rounded-lg transition-all hover:scale-105 active:scale-95"
         >
           New Game
         </button>
         {personalBest !== null && (
-          <div className="bg-gray-900 px-6 py-3 rounded-lg text-center">
-            <div className="text-xs text-gray-500 uppercase">Best</div>
+          <div className="bg-paper-2 px-6 py-3 rounded-lg text-center">
+            <div className="text-xs text-ink-3 uppercase">Best</div>
             <div className="text-2xl font-bold text-amber-400">{personalBest}s</div>
           </div>
         )}
@@ -283,13 +283,13 @@ export default function WordSearchGame() {
       {gameState === "won" && (
         <div className="bg-green-900/50 border border-green-500 rounded-lg p-6 text-center max-w-md">
           <h2 className="text-2xl font-bold text-green-400 mb-2">🎉 All Words Found!</h2>
-          <p className="text-gray-300 mb-4">
+          <p className="text-ink-2 mb-4">
             Completed in {timer} seconds
             {personalBest === timer && " - New Personal Best! 🏆"}
           </p>
           <button
             onClick={handleShare}
-            className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            className="bg-green-500 hover:bg-green-600 text-ink px-6 py-3 rounded-lg font-semibold transition-colors"
           >
             Share Score
           </button>
@@ -299,7 +299,7 @@ export default function WordSearchGame() {
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         {/* Grid */}
         <div
-          className="bg-gray-900 p-4 rounded-2xl border-2 border-gray-800"
+          className="bg-paper-2 p-4 rounded-2xl border-2 border-line"
           onMouseLeave={handleCellUp}
           onMouseUp={handleCellUp}
         >
@@ -338,10 +338,10 @@ export default function WordSearchGame() {
                     rounded transition-all
                     ${
                       isFound(rowIndex, colIndex)
-                        ? "bg-green-600 text-white"
+                        ? "bg-green-600 text-ink"
                         : isSelected(rowIndex, colIndex)
                         ? "bg-yellow-500 text-black"
-                        : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                        : "bg-paper-2 text-ink-2 hover:bg-paper-2"
                     }
                   `}
                 >
@@ -353,7 +353,7 @@ export default function WordSearchGame() {
         </div>
 
         {/* Word List */}
-        <div className="bg-gray-900 rounded-2xl p-6 border-2 border-gray-800 min-w-[200px]">
+        <div className="bg-paper-2 rounded-2xl p-6 border-2 border-line min-w-[200px]">
           <h3 className="text-xl font-bold text-green-400 mb-4">Find These Words</h3>
           <div className="space-y-2">
             {words.map((wordConfig) => (
@@ -361,21 +361,21 @@ export default function WordSearchGame() {
                 key={wordConfig.word}
                 className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                   wordConfig.found
-                    ? "bg-green-600 text-white line-through"
-                    : "bg-gray-800 text-gray-300"
+                    ? "bg-green-600 text-ink line-through"
+                    : "bg-paper-2 text-ink-2"
                 }`}
               >
                 {wordConfig.word}
               </div>
             ))}
           </div>
-          <div className="mt-4 text-center text-sm text-gray-500">
+          <div className="mt-4 text-center text-sm text-ink-3">
             {words.filter(w => w.found).length} / {words.length} found
           </div>
         </div>
       </div>
 
-      <div className="text-center text-xs text-gray-600 max-w-md">
+      <div className="text-center text-xs text-ink-3 max-w-md">
         <p>Drag to select letters. Words can be horizontal, vertical, or diagonal.</p>
       </div>
     </div>

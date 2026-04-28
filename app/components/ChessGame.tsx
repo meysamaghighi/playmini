@@ -470,7 +470,7 @@ export default function ChessGame() {
     <div className="flex flex-col items-center gap-3">
       {/* Captured by white (black pieces) */}
       <div className="flex gap-1 items-center min-h-[24px] w-full max-w-[512px] px-1">
-        <span className="text-xs text-gray-500 mr-1">Captured:</span>
+        <span className="text-xs text-ink-3 mr-1">Captured:</span>
         {renderCaptured(capturedB)}
       </div>
 
@@ -479,14 +479,14 @@ export default function ChessGame() {
         ref={canvasRef}
         width={W}
         height={H}
-        className="max-w-full h-auto rounded border-2 border-gray-700 cursor-pointer touch-none"
+        className="max-w-full h-auto rounded border-2 border-line cursor-pointer touch-none"
         onClick={handleCanvasClick}
         onTouchEnd={handleTouchEnd}
       />
 
       {/* Captured by black (white pieces) */}
       <div className="flex gap-1 items-center min-h-[24px] w-full max-w-[512px] px-1">
-        <span className="text-xs text-gray-500 mr-1">Captured:</span>
+        <span className="text-xs text-ink-3 mr-1">Captured:</span>
         {renderCaptured(capturedW)}
       </div>
 
@@ -494,9 +494,9 @@ export default function ChessGame() {
       <div className={`text-sm font-semibold px-3 py-1 rounded-full ${
         status === "checkmate" ? "bg-red-900/50 text-red-300"
         : status === "check" ? "bg-yellow-900/50 text-yellow-300"
-        : status === "stalemate" ? "bg-gray-700 text-gray-300"
+        : status === "stalemate" ? "bg-paper-2 text-ink-2"
         : aiThinking ? "bg-blue-900/50 text-blue-300 animate-pulse"
-        : "bg-gray-800 text-gray-300"
+        : "bg-paper-2 text-ink-2"
       }`}>
         {statusMsg}
       </div>
@@ -504,7 +504,7 @@ export default function ChessGame() {
       {(status === "checkmate" || status === "stalemate") && (
         <button
           onClick={restart}
-          className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-colors"
+          className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-ink rounded-lg font-semibold transition-colors"
         >
           Play Again
         </button>
@@ -513,7 +513,7 @@ export default function ChessGame() {
       {status === "playing" && !aiThinking && (
         <button
           onClick={restart}
-          className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
+          className="text-xs text-ink-3 hover:text-ink-2 transition-colors"
         >
           New game
         </button>

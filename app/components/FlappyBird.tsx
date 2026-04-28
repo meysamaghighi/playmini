@@ -202,7 +202,7 @@ export default function FlappyBird() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center justify-between w-full max-w-md text-white">
+      <div className="flex items-center justify-between w-full max-w-md text-ink">
         <div className="text-lg">
           Score: <span className="font-bold">{score}</span>
         </div>
@@ -222,7 +222,7 @@ export default function FlappyBird() {
           ref={canvasRef}
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
-          className="border-4 border-gray-700 rounded-lg bg-sky-300 max-w-full h-auto"
+          className="border-4 border-line rounded-lg bg-sky-300 max-w-full h-auto"
         />
 
         {gameState === "ready" && (
@@ -242,7 +242,7 @@ export default function FlappyBird() {
               <div className="mb-3">
                 Best: <span className="text-yellow-600 font-bold">{best}</span>
               </div>
-              <div className="text-sm text-gray-600">Tap to play again</div>
+              <div className="text-sm text-ink-3">Tap to play again</div>
             </div>
           </div>
         )}

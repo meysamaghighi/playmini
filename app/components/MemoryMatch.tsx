@@ -128,7 +128,7 @@ export default function MemoryMatch() {
             key={d}
             onClick={() => setDifficulty(d)}
             className={`px-4 py-2 rounded font-bold capitalize ${
-              difficulty === d ? "bg-indigo-600 text-white" : "bg-gray-700 text-gray-200"
+              difficulty === d ? "bg-indigo-600 text-ink" : "bg-paper-2 text-ink"
             }`}
           >
             {d} ({CONFIGS[d].pairs} pairs)
@@ -136,7 +136,7 @@ export default function MemoryMatch() {
         ))}
       </div>
 
-      <div className="flex items-center gap-6 text-white">
+      <div className="flex items-center gap-6 text-ink">
         <div>
           Moves: <span className="font-bold">{moves}</span>
         </div>
@@ -148,7 +148,7 @@ export default function MemoryMatch() {
         </div>
         <button
           onClick={() => newGame()}
-          className="px-3 py-1 bg-indigo-600 text-white rounded text-sm font-bold hover:bg-indigo-700"
+          className="px-3 py-1 bg-indigo-600 text-ink rounded text-sm font-bold hover:bg-indigo-700"
         >
           New
         </button>
@@ -167,7 +167,7 @@ export default function MemoryMatch() {
                 ? "bg-emerald-500 scale-95"
                 : card.revealed
                 ? "bg-indigo-400"
-                : "bg-gray-700 hover:bg-gray-600"
+                : "bg-paper-2 hover:bg-paper-2"
             }`}
             disabled={card.revealed || card.matched}
           >
@@ -177,7 +177,7 @@ export default function MemoryMatch() {
       </div>
 
       {won && (
-        <div className="bg-gray-900 text-white px-6 py-4 rounded-lg text-center">
+        <div className="bg-paper-2 text-ink px-6 py-4 rounded-lg text-center">
           <div className="text-2xl font-bold mb-2">You won!</div>
           <div className="mb-1">
             Moves: <span className="text-yellow-400 font-bold">{moves}</span>
@@ -185,7 +185,7 @@ export default function MemoryMatch() {
           <div className="mb-3">Time: {time}s</div>
           <button
             onClick={() => newGame()}
-            className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+            className="px-6 py-2 bg-indigo-600 text-ink font-bold rounded-lg hover:bg-indigo-700"
           >
             Play Again
           </button>

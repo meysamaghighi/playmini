@@ -357,12 +357,12 @@ export default function TowerBuilder() {
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
             <div className="text-5xl mb-3">🏗️</div>
             <h2 className="text-3xl font-black text-pink-400 mb-2">Tower Builder</h2>
-            <p className="text-gray-400 mb-6 text-sm text-center px-6">
+            <p className="text-ink-2 mb-6 text-sm text-center px-6">
               Tap to drop blocks. Align them to build higher!
             </p>
             <button
               onClick={startGame}
-              className="px-10 py-3 bg-pink-600 hover:bg-pink-500 text-white font-bold rounded-2xl transition-all hover:scale-105 active:scale-95"
+              className="px-10 py-3 bg-pink-600 hover:bg-pink-500 text-ink font-bold rounded-2xl transition-all hover:scale-105 active:scale-95"
             >
               Play
             </button>
@@ -373,8 +373,8 @@ export default function TowerBuilder() {
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
             <h2 className="text-3xl font-black text-red-400 mb-4">Game Over</h2>
             <div className="bg-slate-900/80 rounded-xl px-6 py-3 mb-6 text-center">
-              <p className="text-white text-xl font-bold">Score: {scoreRef.current}</p>
-              <p className="text-gray-400 text-sm mt-1">Best: {bestRef.current}</p>
+              <p className="text-ink text-xl font-bold">Score: {scoreRef.current}</p>
+              <p className="text-ink-2 text-sm mt-1">Best: {bestRef.current}</p>
               {scoreRef.current >= bestRef.current && scoreRef.current > 0 && (
                 <p className="text-yellow-400 text-sm font-bold mt-1">New Best!</p>
               )}
@@ -382,13 +382,13 @@ export default function TowerBuilder() {
             <div className="flex gap-3">
               <button
                 onClick={startGame}
-                className="px-6 py-3 bg-pink-600 hover:bg-pink-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+                className="px-6 py-3 bg-pink-600 hover:bg-pink-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
               >
                 Play Again
               </button>
               <button
                 onClick={handleShare}
-                className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+                className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
               >
                 Share
               </button>
@@ -399,7 +399,7 @@ export default function TowerBuilder() {
       </div>
 
       {stateRef.current === "playing" && (
-        <p className="text-gray-500 text-xs text-center">Tap or press Space to drop the block</p>
+        <p className="text-ink-3 text-xs text-center">Tap or press Space to drop the block</p>
       )}
     </div>
   );

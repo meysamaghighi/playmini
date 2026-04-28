@@ -748,19 +748,19 @@ export default function SpaceInvaders() {
     <div ref={containerRef} className="flex flex-col items-center gap-4">
       <div className="flex gap-6 text-center">
         <div>
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Level</div>
+          <div className="text-xs text-ink-3 uppercase tracking-wider">Level</div>
           <div className="text-2xl font-black text-blue-400 tabular-nums">{level}</div>
         </div>
         <div>
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Score</div>
+          <div className="text-xs text-ink-3 uppercase tracking-wider">Score</div>
           <div className="text-2xl font-black text-green-400 tabular-nums">{score}</div>
         </div>
         <div>
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Best</div>
+          <div className="text-xs text-ink-3 uppercase tracking-wider">Best</div>
           <div className="text-2xl font-black text-yellow-400 tabular-nums">{highScore}</div>
         </div>
         <div>
-          <div className="text-xs text-gray-500 uppercase tracking-wider">Lives</div>
+          <div className="text-xs text-ink-3 uppercase tracking-wider">Lives</div>
           <div className="text-2xl font-black text-red-400 tabular-nums">{lives}</div>
         </div>
       </div>
@@ -770,7 +770,7 @@ export default function SpaceInvaders() {
           ref={canvasRef}
           width={CANVAS_WIDTH}
           height={CANVAS_HEIGHT}
-          className="rounded-2xl max-w-full h-auto border border-gray-800"
+          className="rounded-2xl max-w-full h-auto border border-line"
           style={{ touchAction: "none" }}
         />
 
@@ -778,14 +778,14 @@ export default function SpaceInvaders() {
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
             <div className="text-6xl mb-3">👾</div>
             <h2 className="text-3xl font-black text-red-400 mb-2">Space Invaders</h2>
-            <p className="text-gray-400 mb-2 text-sm">Arrow keys to move, auto-shooting enabled</p>
-            <p className="text-gray-500 mb-6 text-xs">10 levels + endless mode</p>
+            <p className="text-ink-2 mb-2 text-sm">Arrow keys to move, auto-shooting enabled</p>
+            <p className="text-ink-3 mb-6 text-xs">10 levels + endless mode</p>
             {highScore > 0 && (
               <p className="text-yellow-400 mb-4 text-sm font-bold">High Score: {highScore}</p>
             )}
             <button
               onClick={startGame}
-              className="px-10 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-2xl transition-all hover:scale-105 active:scale-95"
+              className="px-10 py-3 bg-red-600 hover:bg-red-500 text-ink font-bold rounded-2xl transition-all hover:scale-105 active:scale-95"
             >
               Play
             </button>
@@ -796,8 +796,8 @@ export default function SpaceInvaders() {
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
             <h2 className="text-3xl font-black text-red-400 mb-4">Game Over</h2>
             <div className="bg-slate-900/80 rounded-xl px-6 py-3 mb-6">
-              <p className="text-white text-lg font-bold">Score: {score}</p>
-              <p className="text-white text-md">Level Reached: {level}</p>
+              <p className="text-ink text-lg font-bold">Score: {score}</p>
+              <p className="text-ink text-md">Level Reached: {level}</p>
               <p className="text-yellow-400 text-md font-bold">Best: {highScore}</p>
               {score === highScore && score > 0 && (
                 <p className="text-green-400 text-sm mt-2">New High Score!</p>
@@ -806,13 +806,13 @@ export default function SpaceInvaders() {
             <div className="flex gap-3">
               <button
                 onClick={startGame}
-                className="px-6 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+                className="px-6 py-3 bg-red-600 hover:bg-red-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
               >
                 Play Again
               </button>
               <button
                 onClick={handleShare}
-                className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
+                className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
               >
                 Share
               </button>
@@ -827,7 +827,7 @@ export default function SpaceInvaders() {
         <button
           onPointerDown={handleTouchStart("left")}
           onPointerUp={handleTouchEnd("left")}
-          className="flex-1 h-16 bg-gray-800/50 hover:bg-gray-700/50 active:bg-gray-600/50 text-white font-bold rounded-xl transition-colors select-none flex items-center justify-center text-2xl border border-gray-700"
+          className="flex-1 h-16 bg-paper-2/50 hover:bg-paper-2/50 active:bg-gray-600/50 text-ink font-bold rounded-xl transition-colors select-none flex items-center justify-center text-2xl border border-line"
           style={{ touchAction: "none" }}
         >
           ←
@@ -835,17 +835,17 @@ export default function SpaceInvaders() {
         <button
           onPointerDown={handleTouchStart("right")}
           onPointerUp={handleTouchEnd("right")}
-          className="flex-1 h-16 bg-gray-800/50 hover:bg-gray-700/50 active:bg-gray-600/50 text-white font-bold rounded-xl transition-colors select-none flex items-center justify-center text-2xl border border-gray-700"
+          className="flex-1 h-16 bg-paper-2/50 hover:bg-paper-2/50 active:bg-gray-600/50 text-ink font-bold rounded-xl transition-colors select-none flex items-center justify-center text-2xl border border-line"
           style={{ touchAction: "none" }}
         >
           →
         </button>
       </div>
 
-      <div className="text-center text-xs text-gray-600">
+      <div className="text-center text-xs text-ink-3">
         <p>Arrow keys or A/D to move • Auto-shooting enabled</p>
         <p className="mt-1">Use touch controls on mobile</p>
-        <p className="mt-1 text-gray-500">Collect power-ups: Shield (S), Rapid Fire (R), Spread Shot (F)</p>
+        <p className="mt-1 text-ink-3">Collect power-ups: Shield (S), Rapid Fire (R), Spread Shot (F)</p>
       </div>
     </div>
   );

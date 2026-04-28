@@ -223,7 +223,7 @@ export default function Connect4Game() {
               reset();
             }}
             className={`px-4 py-2 rounded font-bold ${
-              mode === m ? "bg-indigo-600 text-white" : "bg-gray-700 text-gray-200"
+              mode === m ? "bg-indigo-600 text-ink" : "bg-paper-2 text-ink"
             }`}
           >
             {m === "vs-ai" ? "Vs AI" : "Two Player"}
@@ -231,13 +231,13 @@ export default function Connect4Game() {
         ))}
       </div>
 
-      <div className="text-white text-lg">
+      <div className="text-ink text-lg">
         {result ? (
           <span className="font-bold text-yellow-400">
             {result.winner === 1 ? "Red wins!" : mode === "vs-ai" ? "AI wins!" : "Yellow wins!"}
           </span>
         ) : draw ? (
-          <span className="font-bold text-gray-300">Draw</span>
+          <span className="font-bold text-ink-2">Draw</span>
         ) : (
           <span>
             Turn:{" "}
@@ -256,7 +256,7 @@ export default function Connect4Game() {
               key={c}
               onClick={() => onColumnClick(c)}
               disabled={!!result || draw || aiThinking || (mode === "vs-ai" && turn !== 1)}
-              className="text-blue-200 hover:text-white text-2xl font-bold pb-1"
+              className="text-blue-200 hover:text-ink text-2xl font-bold pb-1"
               aria-label={`Drop in column ${c + 1}`}
             >
               ↓
@@ -289,7 +289,7 @@ export default function Connect4Game() {
 
       <button
         onClick={reset}
-        className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+        className="px-6 py-2 bg-indigo-600 text-ink font-bold rounded-lg hover:bg-indigo-700"
       >
         New Game
       </button>

@@ -212,17 +212,17 @@ export default function WordleGame() {
 
   const tileColor = (s: LetterState): string =>
     s === "correct"
-      ? "bg-green-600 text-white border-green-600"
+      ? "bg-green-600 text-ink border-green-600"
       : s === "present"
-      ? "bg-yellow-500 text-white border-yellow-500"
-      : "bg-gray-600 text-white border-gray-600";
+      ? "bg-yellow-500 text-ink border-yellow-500"
+      : "bg-gray-600 text-ink border-line";
 
   const keyColor = (k: string): string => {
     const s = keyStates.get(k);
     if (!s) return "bg-gray-400 hover:bg-gray-300 text-gray-900";
-    if (s === "correct") return "bg-green-600 text-white";
-    if (s === "present") return "bg-yellow-500 text-white";
-    return "bg-gray-700 text-gray-400";
+    if (s === "correct") return "bg-green-600 text-ink";
+    if (s === "present") return "bg-yellow-500 text-ink";
+    return "bg-paper-2 text-ink-2";
   };
 
   const rows: { word: string; states?: LetterState[]; isCurrent?: boolean }[] = [];
@@ -232,7 +232,7 @@ export default function WordleGame() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-6 text-white text-sm">
+      <div className="flex items-center gap-6 text-ink text-sm">
         <div>
           Played: <span className="font-bold">{stats.played}</span>
         </div>
@@ -244,7 +244,7 @@ export default function WordleGame() {
         </div>
       </div>
 
-      {flash && <div className="bg-gray-800 text-white px-4 py-2 rounded text-sm">{flash}</div>}
+      {flash && <div className="bg-paper-2 text-ink px-4 py-2 rounded text-sm">{flash}</div>}
 
       <div className="flex flex-col gap-1.5">
         {rows.map((row, i) => (
@@ -257,8 +257,8 @@ export default function WordleGame() {
               const cls = s
                 ? tileColor(s)
                 : letter.trim()
-                ? "bg-gray-800 border-gray-400 text-white"
-                : "bg-gray-900 border-gray-700 text-white";
+                ? "bg-paper-2 border-gray-400 text-ink"
+                : "bg-paper-2 border-line text-ink";
               return (
                 <div key={j} className={`${baseCls} ${cls}`}>
                   {letter.trim()}
@@ -270,7 +270,7 @@ export default function WordleGame() {
       </div>
 
       {state !== "playing" && (
-        <div className="bg-gray-900 text-white px-6 py-4 rounded-lg text-center">
+        <div className="bg-paper-2 text-ink px-6 py-4 rounded-lg text-center">
           <div className="text-2xl font-bold mb-2">
             {state === "won" ? "You got it!" : "Game Over"}
           </div>
@@ -279,7 +279,7 @@ export default function WordleGame() {
           </div>
           <button
             onClick={newGame}
-            className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700"
+            className="px-6 py-2 bg-green-600 text-ink font-bold rounded-lg hover:bg-green-700"
           >
             New Word
           </button>

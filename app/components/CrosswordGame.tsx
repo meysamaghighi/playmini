@@ -1236,36 +1236,36 @@ export default function CrosswordGame() {
       <div className="flex flex-col items-center gap-6 p-8">
         <div className="text-center">
           <div className="text-6xl mb-4">📝</div>
-          <h2 className="text-3xl font-bold text-white mb-4">Crossword Puzzle</h2>
+          <h2 className="text-3xl font-bold text-ink mb-4">Crossword Puzzle</h2>
           <p className="text-slate-400 mb-8">Choose your difficulty level</p>
         </div>
 
         <div className="space-y-4 max-w-md w-full">
           <button
             onClick={() => selectDifficulty("easy")}
-            className="w-full px-6 py-5 bg-gray-900 hover:bg-gray-800 border-2 border-green-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
+            className="w-full px-6 py-5 bg-paper-2 hover:bg-paper-2 border-2 border-green-600 text-ink rounded-xl transition-all hover:scale-105 active:scale-95"
           >
             <div className="font-bold text-xl text-green-400 mb-2">Easy</div>
-            <div className="text-sm text-gray-300 mb-1">7x7 grid • Simple 3-5 letter words</div>
-            <div className="text-xs text-gray-500">Perfect for beginners</div>
+            <div className="text-sm text-ink-2 mb-1">7x7 grid • Simple 3-5 letter words</div>
+            <div className="text-xs text-ink-3">Perfect for beginners</div>
           </button>
 
           <button
             onClick={() => selectDifficulty("medium")}
-            className="w-full px-6 py-5 bg-gray-900 hover:bg-gray-800 border-2 border-orange-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
+            className="w-full px-6 py-5 bg-paper-2 hover:bg-paper-2 border-2 border-orange-600 text-ink rounded-xl transition-all hover:scale-105 active:scale-95"
           >
             <div className="font-bold text-xl text-orange-400 mb-2">Medium</div>
-            <div className="text-sm text-gray-300 mb-1">10x10 grid • 5-10 letter words</div>
-            <div className="text-xs text-gray-500">Standard crossword difficulty</div>
+            <div className="text-sm text-ink-2 mb-1">10x10 grid • 5-10 letter words</div>
+            <div className="text-xs text-ink-3">Standard crossword difficulty</div>
           </button>
 
           <button
             onClick={() => selectDifficulty("hard")}
-            className="w-full px-6 py-5 bg-gray-900 hover:bg-gray-800 border-2 border-red-600 text-white rounded-xl transition-all hover:scale-105 active:scale-95"
+            className="w-full px-6 py-5 bg-paper-2 hover:bg-paper-2 border-2 border-red-600 text-ink rounded-xl transition-all hover:scale-105 active:scale-95"
           >
             <div className="font-bold text-xl text-red-400 mb-2">Hard</div>
-            <div className="text-sm text-gray-300 mb-1">10x10 grid • 8+ letter words</div>
-            <div className="text-xs text-gray-500">Challenging vocabulary & clues</div>
+            <div className="text-sm text-ink-2 mb-1">10x10 grid • 8+ letter words</div>
+            <div className="text-xs text-ink-3">Challenging vocabulary & clues</div>
           </button>
         </div>
       </div>
@@ -1277,9 +1277,9 @@ export default function CrosswordGame() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-4xl">
         <div className="flex items-center gap-3">
-          <div className="text-2xl font-mono font-bold text-white">{formatTime(timer)}</div>
+          <div className="text-2xl font-mono font-bold text-ink">{formatTime(timer)}</div>
           {difficulty && (
-            <span className="px-2 py-1 rounded text-xs font-bold uppercase bg-gray-800 text-gray-300">
+            <span className="px-2 py-1 rounded text-xs font-bold uppercase bg-paper-2 text-ink-2">
               {difficulty}
             </span>
           )}
@@ -1293,13 +1293,13 @@ export default function CrosswordGame() {
           <button
             onClick={handleCheck}
             disabled={won}
-            className="px-4 py-2 rounded font-medium bg-blue-700 hover:bg-blue-600 text-white disabled:opacity-50 disabled:cursor-not-allowed transition"
+            className="px-4 py-2 rounded font-medium bg-blue-700 hover:bg-blue-600 text-ink disabled:opacity-50 disabled:cursor-not-allowed transition"
           >
             Check
           </button>
           <button
             onClick={newGame}
-            className="px-4 py-2 rounded font-medium bg-green-700 hover:bg-green-600 text-white transition"
+            className="px-4 py-2 rounded font-medium bg-green-700 hover:bg-green-600 text-ink transition"
           >
             New Puzzle
           </button>
@@ -1312,7 +1312,7 @@ export default function CrosswordGame() {
           <div className="text-slate-400 text-sm font-medium mb-1">
             {currentClue.number} {direction === "across" ? "Across" : "Down"}
           </div>
-          <div className="text-white text-lg">{currentClue.text}</div>
+          <div className="text-ink text-lg">{currentClue.text}</div>
         </div>
       )}
 
@@ -1326,7 +1326,7 @@ export default function CrosswordGame() {
           </div>
           <button
             onClick={handleShare}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition text-lg"
+            className="bg-blue-600 hover:bg-blue-700 text-ink px-8 py-3 rounded-lg font-medium transition text-lg"
           >
             Share Result
           </button>
@@ -1381,12 +1381,12 @@ export default function CrosswordGame() {
                         aspect-square flex items-center justify-center text-lg sm:text-xl font-bold
                         border border-slate-600 relative transition
                         ${cell.isBlack ? "bg-slate-950" : ""}
-                        ${!cell.isBlack && isSelected ? "bg-blue-600 text-white" : ""}
+                        ${!cell.isBlack && isSelected ? "bg-blue-600 text-ink" : ""}
                         ${!cell.isBlack && isHighlighted && !isSelected ? "bg-slate-700" : ""}
                         ${!cell.isBlack && !isHighlighted && !isSelected ? "bg-white text-slate-900" : ""}
                         ${!cell.isBlack && !isSelected && !isHighlighted && cell.userLetter ? "text-slate-900" : ""}
-                        ${isError ? "bg-red-500/70 text-white" : ""}
-                        ${isCorrect ? "bg-green-500/70 text-white" : ""}
+                        ${isError ? "bg-red-500/70 text-ink" : ""}
+                        ${isCorrect ? "bg-green-500/70 text-ink" : ""}
                         ${!cell.isBlack ? "hover:bg-slate-300" : ""}
                       `}
                     >
@@ -1412,7 +1412,7 @@ export default function CrosswordGame() {
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Across */}
           <div className="bg-slate-800 rounded-lg p-4 border border-slate-700 h-fit max-h-[500px] overflow-y-auto">
-            <h3 className="text-white font-bold text-lg mb-3">Across</h3>
+            <h3 className="text-ink font-bold text-lg mb-3">Across</h3>
             <div className="space-y-2">
               {acrossClues.map((clue) => {
                 const isActive = currentClue?.number === clue.number && direction === "across";
@@ -1432,7 +1432,7 @@ export default function CrosswordGame() {
 
           {/* Down */}
           <div className="bg-slate-800 rounded-lg p-4 border border-slate-700 h-fit max-h-[500px] overflow-y-auto">
-            <h3 className="text-white font-bold text-lg mb-3">Down</h3>
+            <h3 className="text-ink font-bold text-lg mb-3">Down</h3>
             <div className="space-y-2">
               {downClues.map((clue) => {
                 const isActive = currentClue?.number === clue.number && direction === "down";

@@ -226,8 +226,8 @@ export default function MazeRunner() {
             onClick={() => setDifficulty(diff)}
             className={`px-6 py-2 rounded-lg font-semibold transition-all ${
               difficulty === diff
-                ? "bg-purple-600 text-white"
-                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                ? "bg-purple-600 text-ink"
+                : "bg-paper-2 text-ink-2 hover:bg-paper-2"
             }`}
           >
             {diff.charAt(0).toUpperCase() + diff.slice(1)}
@@ -237,23 +237,23 @@ export default function MazeRunner() {
 
       {/* Stats */}
       <div className="flex items-center gap-6 flex-wrap justify-center">
-        <div className="bg-gray-900 px-6 py-3 rounded-lg text-center">
-          <div className="text-xs text-gray-500 uppercase">Time</div>
+        <div className="bg-paper-2 px-6 py-3 rounded-lg text-center">
+          <div className="text-xs text-ink-3 uppercase">Time</div>
           <div className="text-2xl font-bold text-purple-400">{timer}s</div>
         </div>
-        <div className="bg-gray-900 px-6 py-3 rounded-lg text-center">
-          <div className="text-xs text-gray-500 uppercase">Moves</div>
+        <div className="bg-paper-2 px-6 py-3 rounded-lg text-center">
+          <div className="text-xs text-ink-3 uppercase">Moves</div>
           <div className="text-2xl font-bold text-blue-400">{moves}</div>
         </div>
         <button
           onClick={generateMaze}
-          className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition-all hover:scale-105 active:scale-95"
+          className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-ink font-bold rounded-lg transition-all hover:scale-105 active:scale-95"
         >
           New Maze
         </button>
         {personalBest !== null && (
-          <div className="bg-gray-900 px-6 py-3 rounded-lg text-center">
-            <div className="text-xs text-gray-500 uppercase">Best</div>
+          <div className="bg-paper-2 px-6 py-3 rounded-lg text-center">
+            <div className="text-xs text-ink-3 uppercase">Best</div>
             <div className="text-2xl font-bold text-amber-400">{personalBest}s</div>
           </div>
         )}
@@ -263,7 +263,7 @@ export default function MazeRunner() {
       {gameState === "won" && (
         <div className="bg-purple-900/50 border border-purple-500 rounded-lg p-6 text-center max-w-md">
           <h2 className="text-2xl font-bold text-purple-400 mb-2">🎉 Maze Completed!</h2>
-          <p className="text-gray-300 mb-4">
+          <p className="text-ink-2 mb-4">
             Time: {timer}s | Moves: {moves}
             {personalBest === timer && (
               <span className="block text-yellow-400 font-bold mt-1">New Personal Best! 🏆</span>
@@ -271,7 +271,7 @@ export default function MazeRunner() {
           </p>
           <button
             onClick={handleShare}
-            className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            className="bg-purple-500 hover:bg-purple-600 text-ink px-6 py-3 rounded-lg font-semibold transition-colors"
           >
             Share Score
           </button>
@@ -279,7 +279,7 @@ export default function MazeRunner() {
       )}
 
       {/* Maze */}
-      <div className="bg-gray-900 p-4 rounded-2xl border-2 border-gray-800 overflow-auto max-w-full">
+      <div className="bg-paper-2 p-4 rounded-2xl border-2 border-line overflow-auto max-w-full">
         <div
           className="grid gap-0"
           style={{
@@ -296,7 +296,7 @@ export default function MazeRunner() {
                   key={`${rowIndex}-${colIndex}`}
                   className={`
                     w-5 h-5 sm:w-6 sm:h-6 transition-colors
-                    ${isWall ? "bg-gray-800" : "bg-gray-950"}
+                    ${isWall ? "bg-paper-2" : "bg-paper"}
                     ${isPlayer ? "bg-blue-500" : ""}
                     ${isEnd ? "bg-green-500" : ""}
                   `}
@@ -323,7 +323,7 @@ export default function MazeRunner() {
         <div></div>
         <button
           onClick={() => movePlayer("UP")}
-          className="bg-gray-800 hover:bg-gray-700 text-white p-4 rounded-lg active:bg-gray-600"
+          className="bg-paper-2 hover:bg-paper-2 text-ink p-4 rounded-lg active:bg-gray-600"
           disabled={gameState !== "playing"}
         >
           ▲
@@ -331,7 +331,7 @@ export default function MazeRunner() {
         <div></div>
         <button
           onClick={() => movePlayer("LEFT")}
-          className="bg-gray-800 hover:bg-gray-700 text-white p-4 rounded-lg active:bg-gray-600"
+          className="bg-paper-2 hover:bg-paper-2 text-ink p-4 rounded-lg active:bg-gray-600"
           disabled={gameState !== "playing"}
         >
           ◀
@@ -339,7 +339,7 @@ export default function MazeRunner() {
         <div></div>
         <button
           onClick={() => movePlayer("RIGHT")}
-          className="bg-gray-800 hover:bg-gray-700 text-white p-4 rounded-lg active:bg-gray-600"
+          className="bg-paper-2 hover:bg-paper-2 text-ink p-4 rounded-lg active:bg-gray-600"
           disabled={gameState !== "playing"}
         >
           ▶
@@ -347,7 +347,7 @@ export default function MazeRunner() {
         <div></div>
         <button
           onClick={() => movePlayer("DOWN")}
-          className="bg-gray-800 hover:bg-gray-700 text-white p-4 rounded-lg active:bg-gray-600"
+          className="bg-paper-2 hover:bg-paper-2 text-ink p-4 rounded-lg active:bg-gray-600"
           disabled={gameState !== "playing"}
         >
           ▼
@@ -355,7 +355,7 @@ export default function MazeRunner() {
         <div></div>
       </div>
 
-      <div className="text-center text-xs text-gray-600 max-w-md">
+      <div className="text-center text-xs text-ink-3 max-w-md">
         <p>Navigate from 🔵 to 🎯 using arrow keys or swipe gestures.</p>
         <p className="mt-1">Desktop: Arrow keys or WASD</p>
       </div>

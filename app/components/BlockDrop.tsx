@@ -365,7 +365,7 @@ export default function BlockDrop() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex flex-wrap items-center justify-center gap-6 text-white">
+      <div className="flex flex-wrap items-center justify-center gap-6 text-ink">
         <div>
           Score: <span className="font-bold">{score}</span>
         </div>
@@ -388,7 +388,7 @@ export default function BlockDrop() {
           ref={canvasRef}
           width={CANVAS_W}
           height={CANVAS_H}
-          className="border-4 border-gray-700 rounded-lg max-w-full h-auto"
+          className="border-4 border-line rounded-lg max-w-full h-auto"
         />
 
         {gameState !== "playing" && (
@@ -407,7 +407,7 @@ export default function BlockDrop() {
               )}
               <button
                 onClick={gameState === "paused" ? togglePause : start}
-                className="px-6 py-2 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700"
+                className="px-6 py-2 bg-purple-600 text-ink font-bold rounded-lg hover:bg-purple-700"
               >
                 {gameState === "ready" ? "Start" : gameState === "paused" ? "Resume" : "Play Again"}
               </button>
@@ -419,31 +419,31 @@ export default function BlockDrop() {
       <div className="flex flex-wrap justify-center gap-2 md:hidden">
         <button
           onPointerDown={() => move(-1, 0)}
-          className="px-4 py-3 bg-gray-700 text-white rounded font-bold"
+          className="px-4 py-3 bg-paper-2 text-ink rounded font-bold"
         >
           ←
         </button>
         <button
           onPointerDown={() => rotatePiece()}
-          className="px-4 py-3 bg-gray-700 text-white rounded font-bold"
+          className="px-4 py-3 bg-paper-2 text-ink rounded font-bold"
         >
           ⟳
         </button>
         <button
           onPointerDown={() => move(1, 0)}
-          className="px-4 py-3 bg-gray-700 text-white rounded font-bold"
+          className="px-4 py-3 bg-paper-2 text-ink rounded font-bold"
         >
           →
         </button>
         <button
           onPointerDown={() => softDrop()}
-          className="px-4 py-3 bg-gray-700 text-white rounded font-bold"
+          className="px-4 py-3 bg-paper-2 text-ink rounded font-bold"
         >
           ↓
         </button>
         <button
           onPointerDown={() => hardDrop()}
-          className="px-4 py-3 bg-purple-700 text-white rounded font-bold"
+          className="px-4 py-3 bg-purple-700 text-ink rounded font-bold"
         >
           Drop
         </button>

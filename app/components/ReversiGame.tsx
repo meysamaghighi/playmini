@@ -194,18 +194,18 @@ export default function ReversiGame() {
       {/* Score */}
       <div className="flex items-center gap-6 text-sm">
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-full bg-gray-900 border-2 border-gray-400" />
-          <span className="text-gray-300">You (Black) <span className="font-bold text-white text-base">{score.B}</span></span>
+          <div className="w-5 h-5 rounded-full bg-paper-2 border-2 border-gray-400" />
+          <span className="text-ink-2">You (Black) <span className="font-bold text-ink text-base">{score.B}</span></span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-full bg-white border-2 border-gray-600" />
-          <span className="text-gray-300">AI (White) <span className="font-bold text-white text-base">{score.W}</span></span>
+          <div className="w-5 h-5 rounded-full bg-white border-2 border-line" />
+          <span className="text-ink-2">AI (White) <span className="font-bold text-ink text-base">{score.W}</span></span>
         </div>
       </div>
 
       {/* Board */}
       <div
-        className="relative rounded-lg overflow-hidden border-2 border-gray-700"
+        className="relative rounded-lg overflow-hidden border-2 border-line"
         style={{ width: SIZE * CELL, maxWidth: "100%" }}
       >
         <div
@@ -255,24 +255,24 @@ export default function ReversiGame() {
       <div className="flex flex-col items-center gap-2">
         {winner ? (
           <>
-            <p className="text-lg font-bold text-white">{winner}</p>
-            <p className="text-sm text-gray-400">Black {score.B} — {score.W} White</p>
-            <button onClick={restart} className="mt-1 px-6 py-2 bg-green-700 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors">
+            <p className="text-lg font-bold text-ink">{winner}</p>
+            <p className="text-sm text-ink-2">Black {score.B} — {score.W} White</p>
+            <button onClick={restart} className="mt-1 px-6 py-2 bg-green-700 hover:bg-green-600 text-ink rounded-lg font-semibold transition-colors">
               Play Again
             </button>
           </>
         ) : (
           <div className="flex items-center gap-3">
-            <p className={`text-sm font-semibold ${aiThinking ? "text-blue-400 animate-pulse" : "text-gray-300"}`}>
+            <p className={`text-sm font-semibold ${aiThinking ? "text-blue-400 animate-pulse" : "text-ink-2"}`}>
               {aiThinking ? "AI thinking…" : turn === playerColor
                 ? playerMoves.length ? "Your turn" : "No moves — skipping"
                 : "AI's turn"}
             </p>
-            <label className="flex items-center gap-1.5 text-xs text-gray-500 cursor-pointer">
+            <label className="flex items-center gap-1.5 text-xs text-ink-3 cursor-pointer">
               <input type="checkbox" checked={hints} onChange={e => setHints(e.target.checked)} className="accent-green-500" />
               Show hints
             </label>
-            <button onClick={restart} className="text-xs text-gray-600 hover:text-gray-400 transition-colors">
+            <button onClick={restart} className="text-xs text-ink-3 hover:text-ink-2 transition-colors">
               Restart
             </button>
           </div>

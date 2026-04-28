@@ -333,7 +333,7 @@ export default function AsteroidsGame() {
   return (
     <div className="flex flex-col items-center gap-3">
       <div className="flex items-center justify-between w-full max-w-[480px] px-1">
-        <div className="text-sm text-gray-400">Level <span className="font-bold text-white">{display.level}</span></div>
+        <div className="text-sm text-ink-2">Level <span className="font-bold text-ink">{display.level}</span></div>
         <div className="flex gap-1">
           {Array.from({ length: Math.max(0, display.lives) }).map((_, i) => (
             <svg key={i} width="18" height="18" viewBox="0 0 18 18">
@@ -341,29 +341,29 @@ export default function AsteroidsGame() {
             </svg>
           ))}
         </div>
-        <div className="text-sm text-gray-400">Score <span className="font-bold text-white">{display.score}</span></div>
+        <div className="text-sm text-ink-2">Score <span className="font-bold text-ink">{display.score}</span></div>
       </div>
 
       <canvas
         ref={canvasRef}
         width={W}
         height={H}
-        className="max-w-full h-auto rounded-lg border border-gray-800 touch-none"
+        className="max-w-full h-auto rounded-lg border border-line touch-none"
         onClick={() => { if (g.current.state === "start" || g.current.state === "gameover") startGame(); }}
       />
 
       {/* Mobile controls */}
       <div className="flex gap-3 sm:hidden select-none">
         <button
-          className="w-14 h-14 rounded-xl bg-gray-800 active:bg-gray-600 text-white text-xl flex items-center justify-center"
+          className="w-14 h-14 rounded-xl bg-paper-2 active:bg-gray-600 text-ink text-xl flex items-center justify-center"
           onTouchStart={() => touchBtn("ArrowLeft", true)} onTouchEnd={() => touchBtn("ArrowLeft", false)}
         >↺</button>
         <button
-          className="w-14 h-14 rounded-xl bg-gray-800 active:bg-gray-600 text-white text-lg flex items-center justify-center"
+          className="w-14 h-14 rounded-xl bg-paper-2 active:bg-gray-600 text-ink text-lg flex items-center justify-center"
           onTouchStart={() => touchBtn("ArrowUp", true)} onTouchEnd={() => touchBtn("ArrowUp", false)}
         >▲</button>
         <button
-          className="w-14 h-14 rounded-xl bg-gray-800 active:bg-gray-600 text-white text-xl flex items-center justify-center"
+          className="w-14 h-14 rounded-xl bg-paper-2 active:bg-gray-600 text-ink text-xl flex items-center justify-center"
           onTouchStart={() => touchBtn("ArrowRight", true)} onTouchEnd={() => touchBtn("ArrowRight", false)}
         >↻</button>
         <button
@@ -372,7 +372,7 @@ export default function AsteroidsGame() {
         >FIRE</button>
       </div>
 
-      <p className="text-xs text-gray-500 hidden sm:block">Arrow / WASD — rotate &amp; thrust &nbsp;|&nbsp; Space / X — fire</p>
+      <p className="text-xs text-ink-3 hidden sm:block">Arrow / WASD — rotate &amp; thrust &nbsp;|&nbsp; Space / X — fire</p>
     </div>
   );
 }

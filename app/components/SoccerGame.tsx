@@ -235,7 +235,7 @@ export default function SoccerGame() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-6 text-white text-lg bg-gray-900 px-4 py-2 rounded">
+      <div className="flex items-center gap-6 text-ink text-lg bg-paper-2 px-4 py-2 rounded">
         <div>
           Score: <span className="font-bold">{score}</span>
         </div>
@@ -252,11 +252,11 @@ export default function SoccerGame() {
           ref={canvasRef}
           width={CANVAS_W}
           height={CANVAS_H}
-          className="border-4 border-gray-700 rounded-lg max-w-full h-auto"
+          className="border-4 border-line rounded-lg max-w-full h-auto"
         />
         {msg && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="text-5xl font-extrabold text-white drop-shadow-lg">{msg}</div>
+            <div className="text-5xl font-extrabold text-ink drop-shadow-lg">{msg}</div>
           </div>
         )}
         {phase === "gameover" && (
@@ -269,7 +269,7 @@ export default function SoccerGame() {
               </div>
               <button
                 onClick={newGame}
-                className="px-6 py-2 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700"
+                className="px-6 py-2 bg-emerald-600 text-ink font-bold rounded-lg hover:bg-emerald-700"
               >
                 Play Again
               </button>
@@ -281,7 +281,7 @@ export default function SoccerGame() {
       {phase === "aim" && (
         <div className="flex flex-col items-center gap-3 w-full max-w-md">
           <div className="w-full">
-            <label className="text-white text-sm">Aim</label>
+            <label className="text-ink text-sm">Aim</label>
             <input
               type="range"
               min={-100}
@@ -292,7 +292,7 @@ export default function SoccerGame() {
             />
           </div>
           <div className="w-full">
-            <label className="text-white text-sm">Power</label>
+            <label className="text-ink text-sm">Power</label>
             <input
               type="range"
               min={0}
@@ -304,7 +304,7 @@ export default function SoccerGame() {
           </div>
           <button
             onClick={startShoot}
-            className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg text-lg"
+            className="px-8 py-3 bg-green-600 hover:bg-green-700 text-ink font-bold rounded-lg text-lg"
           >
             SHOOT!
           </button>

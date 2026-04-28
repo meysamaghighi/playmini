@@ -7,18 +7,18 @@ type Board = number[][];
 type Dir = "up" | "down" | "left" | "right";
 
 const TILE_COLORS: Record<number, string> = {
-  0: "bg-gray-700/40",
+  0: "bg-paper-2/40",
   2: "bg-gray-200 text-gray-800",
   4: "bg-yellow-100 text-gray-800",
-  8: "bg-orange-300 text-white",
-  16: "bg-orange-400 text-white",
-  32: "bg-orange-500 text-white",
-  64: "bg-red-500 text-white",
-  128: "bg-yellow-400 text-white",
-  256: "bg-yellow-500 text-white",
-  512: "bg-yellow-600 text-white",
-  1024: "bg-amber-600 text-white",
-  2048: "bg-amber-500 text-white ring-4 ring-yellow-300",
+  8: "bg-orange-300 text-ink",
+  16: "bg-orange-400 text-ink",
+  32: "bg-orange-500 text-ink",
+  64: "bg-red-500 text-ink",
+  128: "bg-yellow-400 text-ink",
+  256: "bg-yellow-500 text-ink",
+  512: "bg-yellow-600 text-ink",
+  1024: "bg-amber-600 text-ink",
+  2048: "bg-amber-500 text-ink ring-4 ring-yellow-300",
 };
 
 function emptyBoard(): Board {
@@ -201,7 +201,7 @@ export default function Game2048() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex flex-wrap items-center justify-center gap-6 text-white">
+      <div className="flex flex-wrap items-center justify-center gap-6 text-ink">
         <div>
           Score: <span className="font-bold">{score}</span>
         </div>
@@ -211,20 +211,20 @@ export default function Game2048() {
         <button
           onClick={undo}
           disabled={!prevRef.current}
-          className="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm font-bold disabled:opacity-40"
+          className="px-3 py-1 bg-paper-2 hover:bg-paper-2 text-ink rounded text-sm font-bold disabled:opacity-40"
         >
           Undo
         </button>
         <button
           onClick={newGame}
-          className="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-sm font-bold"
+          className="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-ink rounded text-sm font-bold"
         >
           New
         </button>
       </div>
 
       <div
-        className="bg-gray-800 p-3 rounded-lg select-none touch-none"
+        className="bg-paper-2 p-3 rounded-lg select-none touch-none"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
@@ -234,7 +234,7 @@ export default function Game2048() {
               <div
                 key={`${r}-${c}`}
                 className={`w-16 h-16 md:w-20 md:h-20 rounded flex items-center justify-center font-bold text-xl md:text-2xl ${
-                  TILE_COLORS[v] ?? "bg-gray-900 text-white"
+                  TILE_COLORS[v] ?? "bg-paper-2 text-ink"
                 }`}
               >
                 {v !== 0 ? v : ""}
@@ -249,7 +249,7 @@ export default function Game2048() {
       )}
 
       {gameOver && (
-        <div className="bg-gray-900 text-white px-6 py-4 rounded-lg text-center">
+        <div className="bg-paper-2 text-ink px-6 py-4 rounded-lg text-center">
           <div className="text-2xl font-bold mb-2">Game Over</div>
           <div className="mb-1">Score: {score}</div>
           <div className="mb-3">
@@ -257,14 +257,14 @@ export default function Game2048() {
           </div>
           <button
             onClick={newGame}
-            className="px-6 py-2 bg-amber-600 text-white font-bold rounded-lg hover:bg-amber-700"
+            className="px-6 py-2 bg-amber-600 text-ink font-bold rounded-lg hover:bg-amber-700"
           >
             Play Again
           </button>
         </div>
       )}
 
-      <p className="text-sm text-gray-400 text-center max-w-md">
+      <p className="text-sm text-ink-2 text-center max-w-md">
         Arrow keys / WASD / swipe to move tiles. Combine matching tiles to reach 2048.
       </p>
     </div>

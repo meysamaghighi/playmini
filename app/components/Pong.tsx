@@ -206,14 +206,14 @@ export default function Pong() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-6 text-white text-lg">
+      <div className="flex items-center gap-6 text-ink text-lg">
         <div>
           You: <span className="font-bold text-green-400">{playerScore}</span>
         </div>
         <div>
           AI: <span className="font-bold text-red-400">{aiScore}</span>
         </div>
-        <div className="text-sm text-gray-400">First to {WIN_SCORE}</div>
+        <div className="text-sm text-ink-2">First to {WIN_SCORE}</div>
       </div>
 
       <div className="relative">
@@ -222,7 +222,7 @@ export default function Pong() {
           width={CANVAS_W}
           height={CANVAS_H}
           onPointerMove={onPointerMove}
-          className="border-4 border-gray-700 rounded-lg max-w-full h-auto touch-none"
+          className="border-4 border-line rounded-lg max-w-full h-auto touch-none"
         />
 
         {gameState !== "playing" && (
@@ -231,7 +231,7 @@ export default function Pong() {
               {gameState === "ready" ? (
                 <>
                   <div className="text-2xl font-bold mb-2">Pong</div>
-                  <div className="text-sm text-gray-600 mb-4">W/S, arrows or mouse</div>
+                  <div className="text-sm text-ink-3 mb-4">W/S, arrows or mouse</div>
                 </>
               ) : (
                 <>
@@ -245,7 +245,7 @@ export default function Pong() {
               )}
               <button
                 onClick={start}
-                className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+                className="px-6 py-2 bg-indigo-600 text-ink font-bold rounded-lg hover:bg-indigo-700"
               >
                 {gameState === "ready" ? "Start" : "Play Again"}
               </button>

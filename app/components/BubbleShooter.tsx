@@ -344,7 +344,7 @@ export default function BubbleShooter() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-6 text-white text-lg">
+      <div className="flex items-center gap-6 text-ink text-lg">
         <div>
           Score: <span className="font-bold">{score}</span>
         </div>
@@ -353,7 +353,7 @@ export default function BubbleShooter() {
         </div>
         <button
           onClick={newGame}
-          className="px-3 py-1 bg-indigo-600 text-white rounded text-sm font-bold hover:bg-indigo-700"
+          className="px-3 py-1 bg-indigo-600 text-ink rounded text-sm font-bold hover:bg-indigo-700"
         >
           New
         </button>
@@ -366,7 +366,7 @@ export default function BubbleShooter() {
           height={CANVAS_H}
           onPointerMove={onMouseMove}
           onClick={onClick}
-          className="border-4 border-gray-700 rounded-lg max-w-full h-auto touch-none cursor-crosshair"
+          className="border-4 border-line rounded-lg max-w-full h-auto touch-none cursor-crosshair"
         />
 
         {gameState !== "playing" && (
@@ -381,7 +381,7 @@ export default function BubbleShooter() {
               </div>
               <button
                 onClick={newGame}
-                className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+                className="px-6 py-2 bg-indigo-600 text-ink font-bold rounded-lg hover:bg-indigo-700"
               >
                 Play Again
               </button>

@@ -230,7 +230,7 @@ export default function CheckersGame() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="text-white text-lg">
+      <div className="text-ink text-lg">
         {winner ? (
           <span className="font-bold text-yellow-400">
             {winner === "r" ? "You win!" : "AI wins"}
@@ -238,7 +238,7 @@ export default function CheckersGame() {
         ) : (
           <span>
             Turn:{" "}
-            <span className={turn === "r" ? "text-red-400 font-bold" : "text-gray-300 font-bold"}>
+            <span className={turn === "r" ? "text-red-400 font-bold" : "text-ink-2 font-bold"}>
               {turn === "r" ? "You (Red)" : "AI (Black)"}
             </span>
             {aiThinking && " (thinking…)"}
@@ -266,8 +266,8 @@ export default function CheckersGame() {
                     <div
                       className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-lg ${
                         piece.side === "r"
-                          ? "bg-red-600 text-white"
-                          : "bg-gray-900 text-white"
+                          ? "bg-red-600 text-ink"
+                          : "bg-paper-2 text-ink"
                       } shadow-md`}
                     >
                       {piece.king ? "♚" : ""}
@@ -287,12 +287,12 @@ export default function CheckersGame() {
 
       <button
         onClick={newGame}
-        className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700"
+        className="px-6 py-2 bg-indigo-600 text-ink font-bold rounded-lg hover:bg-indigo-700"
       >
         New Game
       </button>
 
-      <p className="text-sm text-gray-400 text-center max-w-md">
+      <p className="text-sm text-ink-2 text-center max-w-md">
         Captures are mandatory. Pieces reaching the far row become kings and can move backward.
       </p>
     </div>
