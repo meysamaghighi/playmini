@@ -1,5 +1,6 @@
 import Link from "next/link";
 import MobileNav from "./MobileNav";
+import CommandPalette from "./CommandPalette";
 
 const navLinks = [
   { href: "/daily", label: "🔥 Daily" },
@@ -24,25 +25,28 @@ export default function SiteHeader() {
         >
           PlayMini
         </Link>
-        <div className="hidden sm:flex items-center gap-4">
-          {navLinks.map((link) => (
+        <div className="flex items-center gap-2">
+          <div className="hidden sm:flex items-center gap-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm text-ink-2 hover:text-ink transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
             <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm text-ink-2 hover:text-ink transition-colors"
+              href="/"
+              className="text-sm font-medium transition-colors"
+              style={{ color: "var(--accent)" }}
             >
-              {link.label}
+              All Games
             </Link>
-          ))}
-          <Link
-            href="/"
-            className="text-sm font-medium transition-colors"
-            style={{ color: "var(--accent)" }}
-          >
-            All Games
-          </Link>
+          </div>
+          <CommandPalette />
+          <MobileNav links={navLinks} />
         </div>
-        <MobileNav links={navLinks} />
       </div>
     </nav>
   );
