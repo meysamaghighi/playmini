@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import HangmanGame from "../components/HangmanGame";
+import HangmanPlay from "./HangmanPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -35,16 +35,13 @@ export default function HangmanPage() {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-red-600 bg-clip-text text-transparent">
-            Hangman
-          </h1>
           <p className="text-ink-2 text-lg">
             Guess the word one letter at a time. 200+ words, 10 categories, 6 lives!
           </p>
         </div>
 
         {/* Game */}
-        <HangmanGame />
+        <HangmanPlay />
 
         {/* How to Play */}
         <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">

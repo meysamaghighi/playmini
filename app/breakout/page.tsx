@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import BreakoutGame from "../components/BreakoutGame";
+import BreakoutPlay from "./BreakoutPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -25,15 +25,11 @@ export default function BreakoutPage() {
     <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-red-400 via-yellow-400 to-purple-600 bg-clip-text text-transparent">
-            Breakout
-          </h1>
           <p className="text-ink-2 text-lg">
             Bounce the ball, clear the bricks, don&apos;t let it fall.
           </p>
         </div>
-
-        <BreakoutGame />
+        <BreakoutPlay />
 
         <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-purple-400">How to Play</h2>

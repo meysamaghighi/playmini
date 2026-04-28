@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import WhackMole from '../components/WhackMole';
+import WhackAMolePlay from "./WhackAMolePlay";
 import MoreGames from '../components/MoreGames';
 
 export const metadata: Metadata = {
@@ -87,11 +87,7 @@ export default function WhackMolePage() {
 
       <main className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 py-8 px-4">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-8 text-ink">
-            Whack-a-Mole
-          </h1>
-
-          <WhackMole />
+        <WhackAMolePlay />
 
           {/* How to Play */}
           <section className="mt-16 max-w-3xl mx-auto bg-paper-2/50 rounded-xl p-8 backdrop-blur-sm">

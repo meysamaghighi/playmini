@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import SpaceInvaders from "../components/SpaceInvaders";
+import SpaceInvadersPlay from "./SpaceInvadersPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -36,11 +36,9 @@ export default function SpaceInvadersPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-ink mb-3">Space Invaders</h1>
         <p className="text-ink-2">10 levels, 3 enemy types, power-ups -- defend Earth!</p>
       </div>
-
-      <SpaceInvaders />
+        <SpaceInvadersPlay />
 
       {/* How to Play section */}
       <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">

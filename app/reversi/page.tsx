@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ReversiGame from "../components/ReversiGame";
+import ReversiPlay from "./ReversiPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -32,15 +32,11 @@ export default function ReversiPage() {
     <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-400 to-teal-500 bg-clip-text text-transparent">
-            Reversi
-          </h1>
           <p className="text-ink-2 text-lg">
             Outflank your opponent and flip their pieces. Most discs at the end wins.
           </p>
         </div>
-
-        <ReversiGame />
+        <ReversiPlay />
 
         <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-green-400">How to Play</h2>

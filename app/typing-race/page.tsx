@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import TypingRace from "../components/TypingRace";
+import TypingRacePlay from "./TypingRacePlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -112,8 +112,7 @@ export default function TypingRacePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
       />
-
-      <TypingRace />
+        <TypingRacePlay />
 
       {/* How to Play */}
       <div className="max-w-2xl mx-auto px-4 py-8">

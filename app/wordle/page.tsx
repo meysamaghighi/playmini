@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import WordleGame from "../components/WordleGame";
+import WordlePlay from "./WordlePlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -104,8 +104,7 @@ export default function WordlePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
       />
-
-      <WordleGame />
+        <WordlePlay />
 
       {/* How to Play */}
       <div className="max-w-2xl mx-auto px-4 py-8">

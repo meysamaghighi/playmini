@@ -214,7 +214,7 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center justify-between w-full max-w-md text-ink">
+      <div className="flex items-center justify-between w-full max-w-md text-white">
         <div className="text-lg">
           Score: <span className="font-bold">{score}</span>
         </div>
@@ -263,26 +263,26 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
         <div />
         <button
           onPointerDown={() => turn("up")}
-          className="p-3 bg-paper-2 text-ink rounded font-bold"
+          className="p-3 bg-gray-700 text-white rounded font-bold"
         >
           ↑
         </button>
         <div />
         <button
           onPointerDown={() => turn("left")}
-          className="p-3 bg-paper-2 text-ink rounded font-bold"
+          className="p-3 bg-gray-700 text-white rounded font-bold"
         >
           ←
         </button>
         <button
           onPointerDown={() => turn("down")}
-          className="p-3 bg-paper-2 text-ink rounded font-bold"
+          className="p-3 bg-gray-700 text-white rounded font-bold"
         >
           ↓
         </button>
         <button
           onPointerDown={() => turn("right")}
-          className="p-3 bg-paper-2 text-ink rounded font-bold"
+          className="p-3 bg-gray-700 text-white rounded font-bold"
         >
           →
         </button>

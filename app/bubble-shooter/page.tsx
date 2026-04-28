@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import BubbleShooter from "../components/BubbleShooter";
+import BubbleShooterPlay from "./BubbleShooterPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -32,11 +32,9 @@ export default function BubbleShooterPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-ink mb-3">Bubble Shooter</h1>
         <p className="text-ink-2">Aim, shoot, match 3+ of the same color</p>
       </div>
-
-      <BubbleShooter />
+        <BubbleShooterPlay />
 
       <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
         <h2 className="text-2xl font-bold mb-4 text-purple-400">How to Play</h2>

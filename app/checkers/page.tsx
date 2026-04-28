@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import CheckersGame from "../components/CheckersGame";
+import CheckersPlay from "./CheckersPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -26,16 +26,13 @@ export default function CheckersPage() {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-red-400 to-gray-500 bg-clip-text text-transparent">
-            Checkers
-          </h1>
           <p className="text-ink-2 text-lg">
             Capture all opponent pieces or block their moves to win! Play classic checkers with kings and multi-jump chains.
           </p>
         </div>
 
         {/* Game */}
-        <CheckersGame />
+        <CheckersPlay />
 
         {/* How to Play */}
         <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">

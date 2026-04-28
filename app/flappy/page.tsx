@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import FlappyBird from '../components/FlappyBird';
+import FlappyPlay from "./FlappyPlay";
 import MoreGames from '../components/MoreGames';
 
 export const metadata: Metadata = {
@@ -139,14 +139,7 @@ export default function FlappyPage() {
       />
 
       <main className="container mx-auto px-4 py-8 max-w-5xl">
-        <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
-          Flappy Bird
-        </h1>
-        <p className="text-xl text-ink-2 text-center mb-8">
-          Tap to flap and avoid the pipes!
-        </p>
-
-        <FlappyBird />
+        <FlappyPlay />
 
         <section className="mt-12 bg-paper-2 rounded-lg p-8">
           <h2 className="text-3xl font-bold mb-6">How to Play</h2>

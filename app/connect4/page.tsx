@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Connect4Game from "../components/Connect4Game";
+import Connect4Play from "./Connect4Play";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -26,16 +26,13 @@ export default function Connect4Page() {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-red-400 to-yellow-500 bg-clip-text text-transparent">
-            Connect 4
-          </h1>
           <p className="text-ink-2 text-lg">
             Drop your pieces and connect four in a row to win. Play a challenging minimax AI or two-player.
           </p>
         </div>
 
         {/* Game */}
-        <Connect4Game />
+        <Connect4Play />
 
         {/* How to Play */}
         <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">

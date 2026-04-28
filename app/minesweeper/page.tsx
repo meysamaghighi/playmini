@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import MinesweeperGame from "../components/MinesweeperGame";
+import MinesweeperPlay from "./MinesweeperPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -118,8 +118,7 @@ export default function MinesweeperPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
       />
-
-      <MinesweeperGame />
+        <MinesweeperPlay />
 
       {/* How to Play Section */}
       <section className="bg-slate-900 py-16 px-4">
@@ -156,9 +155,6 @@ export default function MinesweeperPage() {
           <h2 className="text-3xl font-bold mb-6 text-ink">
             About Minesweeper
           </h2>
-          <p className="text-slate-300 text-lg leading-relaxed mb-6">
-            Minesweeper is a classic logic puzzle game that has been a favorite since the 1990s. This online version brings the timeless gameplay to your browser with three difficulty levels, personal best tracking, and mobile support. Challenge yourself to improve your solving speed and master the art of logical deduction!
-          </p>
           <p className="text-slate-300 text-lg leading-relaxed">
             Whether you're a beginner starting with Easy mode or a veteran tackling the challenging Hard difficulty, Minesweeper offers endless hours of engaging puzzle-solving. No downloads required - just click and play!
           </p>

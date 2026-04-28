@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import BlockDrop from "../components/BlockDrop";
+import BlockDropPlay from "./BlockDropPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -26,16 +26,13 @@ export default function BlockDropPage() {
       <div className="container mx-auto px-4 py-12 max-w-5xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-            Block Drop
-          </h1>
           <p className="text-ink-2 text-lg">
             Stack the falling blocks, clear lines, and climb the levels in this addictive puzzle game!
           </p>
         </div>
 
         {/* Game */}
-        <BlockDrop />
+        <BlockDropPlay />
 
         {/* How to Play */}
         <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">

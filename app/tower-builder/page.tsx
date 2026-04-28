@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import TowerBuilder from "../components/TowerBuilder";
+import TowerBuilderPlay from "./TowerBuilderPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -93,15 +93,8 @@ export default function TowerBuilderPage() {
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-ink">
         <div className="container mx-auto px-4 py-8">
           <header className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Tower Builder
-            </h1>
-            <p className="text-xl text-ink-2">
-              Stack blocks perfectly to build the tallest tower!
-            </p>
           </header>
-
-          <TowerBuilder />
+        <TowerBuilderPlay />
 
           <section className="max-w-3xl mx-auto mt-12 space-y-8">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">

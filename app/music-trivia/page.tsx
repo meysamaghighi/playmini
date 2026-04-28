@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import MusicTrivia from "../components/MusicTrivia";
+import MusicTriviaPlay from "./MusicTriviaPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export default function MusicTriviaPage() {
   return (
     <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <MusicTrivia />
+        <MusicTriviaPlay />
 
         <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-purple-400">How to Play</h2>

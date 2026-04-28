@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ChessGame from "../components/ChessGame";
+import ChessPlay from "./ChessPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -32,15 +32,11 @@ export default function ChessPage() {
     <main className="min-h-screen bg-paper text-ink">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-300 to-yellow-500 bg-clip-text text-transparent">
-            Chess
-          </h1>
           <p className="text-ink-2 text-lg">
             Play chess against the computer. You play White — click a piece, then click where to move.
           </p>
         </div>
-
-        <ChessGame />
+        <ChessPlay />
 
         <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
           <h2 className="text-2xl font-bold mb-4 text-amber-400">How to Play</h2>

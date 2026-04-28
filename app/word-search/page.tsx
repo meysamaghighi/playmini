@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import WordSearchGame from "../components/WordSearchGame";
+import WordSearchPlay from "./WordSearchPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -24,11 +24,9 @@ export default function WordSearchPage() {
   return (
     <main className="max-w-6xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-ink mb-3">Word Search</h1>
         <p className="text-ink-2">Find all the hidden words in the grid</p>
       </div>
-
-      <WordSearchGame />
+        <WordSearchPlay />
 
       {/* How to Play */}
       <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line max-w-2xl mx-auto">

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import CrosswordGame from "../components/CrosswordGame";
+import CrosswordPlay from "./CrosswordPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -26,16 +26,13 @@ export default function CrosswordPage() {
       <div className="container mx-auto px-4 py-12 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-400 to-yellow-600 bg-clip-text text-transparent">
-            Crossword Puzzle
-          </h1>
           <p className="text-ink-2 text-lg">
             Solve clues to fill in the grid. Test your vocabulary and knowledge across various topics!
           </p>
         </div>
 
         {/* Game */}
-        <CrosswordGame />
+        <CrosswordPlay />
 
         {/* How to Play */}
         <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">

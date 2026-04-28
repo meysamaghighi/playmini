@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import VoxelBuilder from '../components/VoxelBuilder';
+import VoxelPlay from "./VoxelPlay";
 import MoreGames from '../components/MoreGames';
 
 export const metadata: Metadata = {
@@ -90,15 +90,8 @@ export default function VoxelPage() {
       <div className="min-h-screen bg-slate-900 text-ink py-8 px-4">
         <div className="max-w-4xl mx-auto">
           <header className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-              Voxel Builder
-            </h1>
-            <p className="text-xl text-slate-300">
-              Build your own 3D world with colorful blocks
-            </p>
           </header>
-
-          <VoxelBuilder />
+        <VoxelPlay />
 
           {/* How to Play */}
           <section className="mt-12 bg-slate-800 rounded-lg p-6">

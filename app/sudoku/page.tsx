@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import SudokuGame from "../components/SudokuGame";
+import SudokuPlay from "./SudokuPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -98,12 +98,7 @@ export default function SudokuPage() {
 
       <div className="min-h-screen bg-slate-900 text-ink">
         <div className="max-w-6xl mx-auto px-4 py-8">
-          <h1 className="text-4xl sm:text-5xl font-bold text-center mb-2">Sudoku</h1>
-          <p className="text-slate-400 text-center mb-8 text-lg">
-            Classic logic puzzle - Fill the grid with 1-9
-          </p>
-
-          <SudokuGame />
+        <SudokuPlay />
 
           {/* How to Play */}
           <section className="mt-16 max-w-3xl mx-auto">

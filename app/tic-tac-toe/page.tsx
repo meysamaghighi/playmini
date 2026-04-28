@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import TicTacToe from '../components/TicTacToe';
+import TicTacToePlay from "./TicTacToePlay";
 import MoreGames from '../components/MoreGames';
 
 export const metadata: Metadata = {
@@ -101,16 +101,13 @@ export default function TicTacToePage() {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-rose-400 bg-clip-text text-transparent">
-            Tic-Tac-Toe
-          </h1>
           <p className="text-lg text-slate-300 max-w-2xl mx-auto">
             The classic game of strategy! Challenge an unbeatable AI or play with a friend. Can you win?
           </p>
         </div>
 
         {/* Game */}
-        <TicTacToe />
+        <TicTacToePlay />
 
         {/* How to Play */}
         <div className="mt-16 bg-slate-800 p-8 rounded-xl">

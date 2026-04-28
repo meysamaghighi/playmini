@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Game2048 from "../components/Game2048";
+import Game2048Play from "./2048Play";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -135,14 +135,7 @@ export default function Page2048() {
 
       <div className="min-h-screen bg-paper text-ink py-8 px-4">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-2">
-            2048 Game
-          </h1>
-          <p className="text-ink-2 text-center mb-8">
-            Combine tiles to reach 2048!
-          </p>
-
-          <Game2048 />
+        <Game2048Play />
 
           {/* How to Play */}
           <section className="mt-12 max-w-2xl mx-auto">

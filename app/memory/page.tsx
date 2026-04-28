@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import MemoryMatch from "../components/MemoryMatch";
+import MemoryPlay from "./MemoryPlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -26,16 +26,13 @@ export default function MemoryMatchPage() {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-            Memory Match
-          </h1>
           <p className="text-ink-2 text-lg">
             Flip cards to find matching pairs. Test your memory and complete the puzzle in the fewest moves!
           </p>
         </div>
 
         {/* Game */}
-        <MemoryMatch />
+        <MemoryPlay />
 
         {/* How to Play */}
         <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">

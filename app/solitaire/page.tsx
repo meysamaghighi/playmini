@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Solitaire from "../components/Solitaire";
+import SolitairePlay from "./SolitairePlay";
 import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
@@ -24,11 +24,9 @@ export default function SolitairePage() {
   return (
     <main className="max-w-6xl mx-auto px-4 pt-12 pb-12">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-black text-ink mb-3">Solitaire</h1>
         <p className="text-ink-2">Classic Klondike patience card game</p>
       </div>
-
-      <Solitaire />
+        <SolitairePlay />
 
       {/* How to Play section */}
       <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
