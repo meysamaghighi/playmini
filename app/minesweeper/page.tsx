@@ -121,12 +121,12 @@ export default function MinesweeperPage() {
         <MinesweeperPlay />
 
       {/* How to Play Section */}
-      <section className="bg-slate-900 py-16 px-4">
+      <section className="py-12 px-4">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-8 text-ink">
+          <h2 className="text-2xl font-bold text-center mb-6 text-ink">
             How to Play Minesweeper
           </h2>
-          <div className="bg-slate-800 rounded-lg p-8 text-slate-300 space-y-4">
+          <div className="bg-paper-2 rounded-lg p-6 border border-line text-ink-2 space-y-4">
             <p>
               <strong className="text-ink">Objective:</strong> Reveal all cells that don't contain mines. If you click on a mine, you lose!
             </p>
@@ -149,17 +149,6 @@ export default function MinesweeperPage() {
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="bg-slate-800 py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6 text-ink">
-            About Minesweeper
-          </h2>
-          <p className="text-slate-300 text-lg leading-relaxed">
-            Whether you're a beginner starting with Easy mode or a veteran tackling the challenging Hard difficulty, Minesweeper offers endless hours of engaging puzzle-solving. No downloads required - just click and play!
-          </p>
-        </div>
-      </section>
 
       <MoreGames />
     </>

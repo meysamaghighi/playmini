@@ -70,21 +70,6 @@ export default function DinoRunnerPage() {
           </div>
         </section>
 
-        <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
-          <h2 className="text-2xl font-bold mb-4 text-green-400">About Dino Runner</h2>
-          <div className="text-ink-2 space-y-3">
-            <p>
-              Dino Runner is a minimal browser take on the classic Chrome dinosaur endless runner.
-              Jump and duck past obstacles; the game speeds up as you score, and the only goal is to
-              beat your personal best.
-            </p>
-            <p>
-              Controls are responsive on both desktop (Space / arrows) and mobile (tap / duck
-              button). Your best score persists in your browser so you can chase it across sessions.
-            </p>
-          </div>
-        </section>
-
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

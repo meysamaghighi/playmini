@@ -72,30 +72,6 @@ export default function BlockDropPage() {
           </div>
         </section>
 
-        {/* About */}
-        <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
-          <h2 className="text-2xl font-bold mb-4 text-purple-400">About Block Drop</h2>
-          <div className="text-ink-2 space-y-3">
-            <p>
-              Block Drop is a classic falling-block puzzle game that challenges your spatial awareness and quick thinking.
-              Arrange the seven different block shapes (I, O, T, S, Z, J, and L pieces) to create complete horizontal lines.
-            </p>
-            <p>
-              The game starts slow but speeds up as you clear more lines and level up. Strategic placement is key—
-              use the ghost piece to preview where blocks will land, and master the hard drop to quickly place pieces
-              exactly where you want them.
-            </p>
-            <p>
-              Clear multiple lines at once for massive point bonuses. A single line clear gives you 100 points,
-              but clearing four lines at once (a "Tetris") awards a whopping 800 points!
-            </p>
-            <p>
-              This browser version features smooth controls, responsive gameplay, and saves your best score locally
-              so you can always try to beat your personal record. Perfect for quick breaks or extended puzzle sessions!
-            </p>
-          </div>
-        </section>
-
         {/* FAQ Schema */}
         <script
           type="application/ld+json"

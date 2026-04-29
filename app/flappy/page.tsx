@@ -48,15 +48,7 @@ const faqSchema = {
       name: 'How do I play Flappy Bird online?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Tap the screen on mobile or press the spacebar on desktop to make the bird flap its wings and fly upward. Navigate through gaps between pipes without crashing. Your score increases each time you successfully pass through a pipe gap. Timing and rhythm are key to getting high scores.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Is Flappy Bird free to play?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes! Flappy Bird is completely free to play online with no download or registration required. Just open your browser and start playing instantly. Your high score is automatically saved in your browser so you can keep trying to beat it.',
+        text: 'Tap the screen on mobile or press the spacebar on desktop to flap. Navigate through gaps between pipes without crashing. Score 1 point per pipe passed. Your high score is saved automatically.',
       },
     },
     {
@@ -64,7 +56,7 @@ const faqSchema = {
       name: 'Can I play Flappy Bird on my phone?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Absolutely! Flappy Bird is fully optimized for mobile devices. Simply tap anywhere on the screen to make the bird flap and fly upward. The game works smoothly on both phones and tablets with intuitive touch controls.',
+        text: 'Yes. Tap anywhere on the screen to flap. Works on phones and tablets.',
       },
     },
     {
@@ -72,39 +64,15 @@ const faqSchema = {
       name: 'What happens when I hit a pipe?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'The game ends immediately when the bird collides with a pipe, the ground, or the ceiling. Your final score is displayed and compared to your personal best. You can restart instantly to try again and beat your high score.',
+        text: 'The game ends immediately. Your final score is shown and compared to your personal best. Restart instantly to try again.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Is my high score saved in Flappy Bird?',
+      name: 'Is Flappy Bird free to play?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes! Your personal best score is automatically saved in your browser using local storage. Every time you play, your current score is compared to your high score, which is displayed on the game over screen.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can you play Flappy Bird without downloading?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes! Flappy Bird runs entirely in your web browser with zero downloads or installations needed. It works on any device with a modern browser - desktop, laptop, smartphone, or tablet. Just visit the page and start playing instantly.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What is the best strategy for Flappy Bird?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Focus on finding a consistent rhythm rather than panicking. Tap gently and regularly to maintain steady altitude. Aim to fly through the center of each pipe gap. Stay calm, be patient, and with practice you will develop the muscle memory needed for higher scores.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'How do you get a high score in Flappy Bird?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Practice is essential! Master the timing between taps to maintain smooth flight. Avoid overreacting - small, consistent taps work better than frantic mashing. Focus on the next pipe gap ahead rather than watching the bird itself. With repetition, you will improve your reflexes and achieve higher scores.',
+        text: 'Yes. No download or sign-up needed. Runs in any modern browser.',
       },
     },
   ],
@@ -165,43 +133,6 @@ export default function FlappyPage() {
                 <li>Practice makes perfect - don't give up!</li>
               </ul>
             </div>
-          </div>
-        </section>
-
-        <section className="mt-12 bg-paper-2 rounded-lg p-8">
-          <h2 className="text-3xl font-bold mb-6">Frequently Asked Questions</h2>
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-xl font-semibold text-ink mb-2">How do I play Flappy Bird?</h3>
-              <p className="text-ink-2">Tap the screen or press the spacebar to make the bird flap its wings and fly upward. Avoid hitting the pipes or the ground. Your score increases each time you pass through a pipe gap.</p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold text-ink mb-2">What happens when I hit a pipe?</h3>
-              <p className="text-ink-2">The game ends when the bird collides with a pipe, the ground, or the ceiling. Your final score is displayed and compared to your personal best.</p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold text-ink mb-2">Is my high score saved?</h3>
-              <p className="text-ink-2">Yes! Your personal best score is automatically saved in your browser and displayed on the game over screen.</p>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold text-ink mb-2">Can I play on mobile?</h3>
-              <p className="text-ink-2">Absolutely! The game is fully touch-enabled and works great on phones and tablets. Just tap the screen to flap.</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-12 bg-paper-2 rounded-lg p-8">
-          <h2 className="text-3xl font-bold mb-4">About Flappy Bird</h2>
-          <div className="text-ink-2 space-y-4">
-            <p>
-              Flappy Bird is a classic arcade-style game that became a global phenomenon. The simple yet challenging gameplay has captivated millions of players worldwide. Tap to make the bird flap through pipes - sounds easy, but mastering the timing is incredibly addictive!
-            </p>
-            <p>
-              This browser-based version captures the essence of the original game with smooth controls, responsive gameplay, and automatic score tracking. No download required - just open your browser and start flapping!
-            </p>
-            <p>
-              Challenge yourself to beat your personal best, share your high scores with friends, and see how far you can go. Every game is a new opportunity to improve your skills and climb the leaderboard.
-            </p>
           </div>
         </section>
 
