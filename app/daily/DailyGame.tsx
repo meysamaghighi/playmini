@@ -4,64 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useProgress } from "../hooks/useProgress";
 import { generateShareCard, shareCard } from "../lib/shareCard";
-
-type DailyEntry = {
-  slug: string;
-  title: string;
-  tagline: string;
-};
-
-const POOL: DailyEntry[] = [
-  { slug: "snake",          title: "Snake",            tagline: "one bite at a time." },
-  { slug: "2048",           title: "2048",             tagline: "merge until it hurts." },
-  { slug: "wordle",         title: "Word Guess",       tagline: "in six tries." },
-  { slug: "minesweeper",    title: "Minesweeper",      tagline: "trust nothing." },
-  { slug: "sudoku",         title: "Sudoku",           tagline: "fill the grid." },
-  { slug: "tic-tac-toe",    title: "Tic-Tac-Toe",      tagline: "three in a row." },
-  { slug: "memory",         title: "Memory Match",     tagline: "remember the cards." },
-  { slug: "flappy",         title: "Flappy Bird",      tagline: "tap to flap." },
-  { slug: "breakout",       title: "Breakout",         tagline: "smash every brick." },
-  { slug: "block-drop",     title: "Block Drop",       tagline: "stack the lines." },
-  { slug: "simon",          title: "Simon Says",       tagline: "repeat the colors." },
-  { slug: "connect4",       title: "Connect 4",        tagline: "four in a line." },
-  { slug: "hangman",        title: "Hangman",          tagline: "guess the word." },
-  { slug: "word-search",    title: "Word Search",      tagline: "find them all." },
-  { slug: "word-builder",   title: "Word Builder",     tagline: "from one word, many." },
-  { slug: "crossword",      title: "Crossword",        tagline: "fill in the clues." },
-  { slug: "sliding-puzzle", title: "Sliding Puzzle",   tagline: "from chaos to order." },
-  { slug: "maze",           title: "Maze Runner",      tagline: "find the way out." },
-  { slug: "snake",          title: "Snake",            tagline: "don't bite yourself." },
-  { slug: "pong",           title: "Pong",             tagline: "classic paddles." },
-  { slug: "asteroids",      title: "Asteroids",        tagline: "shoot before they hit." },
-  { slug: "space-invaders", title: "Space Invaders",   tagline: "defend the line." },
-  { slug: "pac-man",        title: "Pac-Man",          tagline: "eat all the dots." },
-  { slug: "frogger",        title: "Frogger",          tagline: "cross safely." },
-  { slug: "bubble-shooter", title: "Bubble Shooter",   tagline: "match three or more." },
-];
-
-function todayKey(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-}
-
-function daySeed(dateKey: string): number {
-  let hash = 0;
-  for (let i = 0; i < dateKey.length; i++) {
-    hash = ((hash << 5) - hash + dateKey.charCodeAt(i)) | 0;
-  }
-  return Math.abs(hash);
-}
-
-function todayPick(dateKey: string): DailyEntry {
-  const seed = daySeed(dateKey);
-  return POOL[seed % POOL.length];
-}
-
-function formatToday(): string {
-  const d = new Date();
-  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-  return `${d.getDate()} ${months[d.getMonth()]}`;
-}
+import { todayKey, todayPick, formatDate } from "../lib/dailyGame";
 
 export default function DailyGame() {
   const { state, bumpStreak } = useProgress();
@@ -69,17 +12,12 @@ export default function DailyGame() {
   const dateKey = todayKey();
   const pick = todayPick(dateKey);
 
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
+  useEffect(() => { setHydrated(true); }, []);
 
   const playedToday = hydrated && state.streak.lastDate === dateKey;
   const streakCount = hydrated ? state.streak.count : 0;
 
   const handlePlay = () => {
-    // Bump the streak as soon as the user commits to today's daily.
-    // The recordPlay in the actual game will write per-game history;
-    // streak is independent and tracks consecutive-day engagement.
     bumpStreak();
   };
 
@@ -97,12 +35,11 @@ export default function DailyGame() {
       <section
         className="relative overflow-hidden rounded-3xl border border-line p-8 sm:p-12"
         style={{
-          background:
-            "linear-gradient(135deg, oklch(0.94 0.06 35) 0%, oklch(0.96 0.04 85) 100%)",
+          background: "linear-gradient(135deg, oklch(0.94 0.06 35) 0%, oklch(0.96 0.04 85) 100%)",
         }}
       >
         <p className="font-mono text-xs uppercase tracking-wider text-ink-2">
-          Today&apos;s Daily · {formatToday()}
+          Today&apos;s Daily · {formatDate(dateKey)}
         </p>
 
         <h1
@@ -147,7 +84,6 @@ export default function DailyGame() {
           )}
         </div>
 
-        {/* decorative grid bottom-right per the canvas */}
         <div
           aria-hidden
           className="hidden sm:block absolute pointer-events-none"
@@ -157,14 +93,7 @@ export default function DailyGame() {
             <g fill="none" stroke="var(--ink)" strokeWidth="1.5">
               {Array.from({ length: 5 }).flatMap((_, r) =>
                 Array.from({ length: 5 }).map((__, c) => (
-                  <rect
-                    key={`${r}-${c}`}
-                    x={c * 18 + 5}
-                    y={r * 18 + 5}
-                    width="14"
-                    height="14"
-                    rx="2"
-                  />
+                  <rect key={`${r}-${c}`} x={c * 18 + 5} y={r * 18 + 5} width="14" height="14" rx="2" />
                 ))
               )}
             </g>
@@ -176,10 +105,7 @@ export default function DailyGame() {
         <p className="text-sm text-ink-3">
           Daily pick is the same for everyone, every day.
         </p>
-        <Link
-          href="/"
-          className="inline-block mt-3 text-sm text-ink-2 hover:text-ink underline"
-        >
+        <Link href="/" className="inline-block mt-3 text-sm text-ink-2 hover:text-ink underline">
           Browse all games
         </Link>
       </section>

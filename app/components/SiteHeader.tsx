@@ -3,12 +3,9 @@ import MobileNav from "./MobileNav";
 import CommandPalette from "./CommandPalette";
 
 const navLinks = [
-  { href: "/daily", label: "🔥 Daily" },
-  { href: "/snake", label: "Snake" },
-  { href: "/2048", label: "2048" },
-  { href: "/chess", label: "Chess" },
-  { href: "/minesweeper", label: "Minesweeper" },
-  { href: "/wordle", label: "Word Guess" },
+  { href: "/daily", label: "Daily" },
+  { href: "/", label: "Browse" },
+  { href: "/random-game", label: "Random" },
 ];
 
 export default function SiteHeader() {
@@ -17,33 +14,28 @@ export default function SiteHeader() {
       className="border-b border-line sticky top-0 z-50 backdrop-blur"
       style={{ background: "color-mix(in oklab, var(--paper) 88%, transparent)" }}
     >
-      <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
         <Link
           href="/"
-          className="font-display text-xl text-ink"
+          className="font-display text-xl text-ink flex-shrink-0"
           style={{ fontWeight: 700, letterSpacing: "-0.01em" }}
         >
-          PlayMini
+          playmini
         </Link>
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center gap-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm text-ink-2 hover:text-ink transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
+
+        <div className="hidden sm:flex items-center gap-5">
+          {navLinks.map((link) => (
             <Link
-              href="/"
-              className="text-sm font-medium transition-colors"
-              style={{ color: "var(--accent)" }}
+              key={link.href}
+              href={link.href}
+              className="text-sm text-ink-2 hover:text-ink transition-colors font-medium"
             >
-              All Games
+              {link.label}
             </Link>
-          </div>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2 ml-auto sm:ml-0">
           <CommandPalette />
           <MobileNav links={navLinks} />
         </div>

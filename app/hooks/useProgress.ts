@@ -9,11 +9,13 @@ export type ProgressEntry = {
   plays: number;
   lastScore: number;
   mode: ProgressMode;
+  lastPlayedAt?: number; // Date.now() timestamp; absent on legacy entries
 };
 
 export type ProgressV1 = {
   v: 1;
   lastPlayed: string | null;
+  lastPlayedGame: string | null; // slug of most recently played game
   streak: { count: number; lastDate: string | null };
   history: Record<string, ProgressEntry>;
 };
@@ -24,6 +26,7 @@ const STORAGE_KEY = `${SITE_ID}_progress`;
 const EMPTY: ProgressV1 = {
   v: 1,
   lastPlayed: null,
+  lastPlayedGame: null,
   streak: { count: 0, lastDate: null },
   history: {},
 };
@@ -96,6 +99,7 @@ export function useProgress() {
         const next: ProgressV1 = {
           ...prev,
           lastPlayed: todayISO(),
+          lastPlayedGame: gameId,
           history: {
             ...prev.history,
             [gameId]: {
@@ -103,6 +107,7 @@ export function useProgress() {
               plays: (existing?.plays ?? 0) + 1,
               lastScore: score,
               mode,
+              lastPlayedAt: Date.now(),
             },
           },
         };
