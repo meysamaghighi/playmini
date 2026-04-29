@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { GAMES, FILTER_TAGS, CURATED_ROWS, type FilterTag, type Game } from "../lib/games";
 
+const ALL_GAMES_PREVIEW = 12;
+
 function GameCard({ game }: { game: Game }) {
   return (
     <Link
@@ -43,6 +45,7 @@ function CuratedRow({ id, label }: { id: string; label: string }) {
 
 export default function HomeGrid() {
   const [active, setActive] = useState<FilterTag | null>(null);
+  const [showAll, setShowAll] = useState(false);
 
   const filtered = active ? GAMES.filter((g) => g.tags.includes(active)) : GAMES;
 
@@ -92,10 +95,19 @@ export default function HomeGrid() {
             <span className="text-xs text-ink-3">{GAMES.length} games</span>
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-            {GAMES.map((game) => (
+            {(showAll ? GAMES : GAMES.slice(0, ALL_GAMES_PREVIEW)).map((game) => (
               <GameCard key={game.slug} game={game} />
             ))}
           </div>
+          {!showAll && GAMES.length > ALL_GAMES_PREVIEW && (
+            <button
+              onClick={() => setShowAll(true)}
+              className="mt-4 w-full py-2.5 rounded-xl text-sm font-medium border border-line hover:border-ink-3 transition-colors"
+              style={{ background: "var(--paper-2)", color: "var(--ink-2)" }}
+            >
+              Show all {GAMES.length} games →
+            </button>
+          )}
         </section>
       ) : (
         <section>
