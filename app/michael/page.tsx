@@ -11,6 +11,14 @@ const games = [
     rotate: "-3deg",
     color: "#22c55e",
   },
+  {
+    href: "/michael/army-vs-army",
+    title: "Army vs Army",
+    description: "Launch airplanes, sink the enemy warship!",
+    sketchPlaceholder: true,
+    rotate: "2deg",
+    color: "#1e40af",
+  },
 ];
 
 export default function MichaelHome() {

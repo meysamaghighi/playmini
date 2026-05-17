@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import HomeHero from "./components/HomeHero";
 import HomeGrid from "./components/HomeGrid";
 
@@ -40,7 +41,10 @@ export default function Home() {
       <HomeHero />
       <HomeGrid />
       <div className="mt-8 text-center text-xs text-ink-3">
-        <p>More games coming soon!</p>
+        <p>
+          More games coming soon
+          <Link href="/michael" aria-label="" className="text-ink-3 hover:text-ink-3 no-underline">!</Link>
+        </p>
       </div>
       <script
         type="application/ld+json"
