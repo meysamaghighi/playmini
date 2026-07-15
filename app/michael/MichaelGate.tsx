@@ -109,7 +109,7 @@ export default function MichaelGate({ children }: { children: React.ReactNode })
       <button
         onClick={lock}
         aria-label="Lock section"
-        className="fixed bottom-4 right-4 z-50 w-12 h-12 rounded-full bg-amber-700 text-white shadow-lg hover:bg-amber-600 flex items-center justify-center text-2xl"
+        className="fixed bottom-4 right-4 z-[70] w-12 h-12 rounded-full bg-amber-700 text-white shadow-lg hover:bg-amber-600 flex items-center justify-center text-2xl"
         title="Lock"
       >
         🔒

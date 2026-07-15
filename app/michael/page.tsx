@@ -2,7 +2,17 @@ import Link from "next/link";
 
 const FONT = "'Caveat', 'Comic Sans MS', cursive";
 
-const games = [
+type MichaelGame = {
+  href: string;
+  title: string;
+  description: string;
+  rotate: string;
+  color: string;
+  sketchPlaceholder?: boolean;
+  emoji?: string;
+};
+
+const games: MichaelGame[] = [
   {
     href: "/michael/stick-wars",
     title: "Stick Wars",
@@ -18,6 +28,14 @@ const games = [
     sketchPlaceholder: true,
     rotate: "2deg",
     color: "#1e40af",
+  },
+  {
+    href: "/michael/table-tennis",
+    title: "Table Tennis",
+    description: "3D ping pong — swipe to smash and spin!",
+    emoji: "🏓",
+    rotate: "-2deg",
+    color: "#ea580c",
   },
 ];
 
@@ -66,7 +84,9 @@ export default function MichaelHome() {
                 className="aspect-square rounded-xl mb-4 flex items-center justify-center border-2 border-dashed border-amber-400 bg-amber-50"
                 style={{ color: game.color }}
               >
-                {game.sketchPlaceholder ? (
+                {game.emoji ? (
+                  <div className="text-8xl">{game.emoji}</div>
+                ) : game.sketchPlaceholder ? (
                   <div className="text-center px-4">
                     <div className="text-6xl mb-2">📷</div>
                     <p
