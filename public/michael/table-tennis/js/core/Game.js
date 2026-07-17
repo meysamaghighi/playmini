@@ -20,14 +20,20 @@ const SERVE_CHANGE_INTERVAL = 2;
 // and the finger is sweeping through it faster than SWIPE_HIT_THRESHOLD.
 const HIT_REACH = 0.45;
 
-// Serve envelope — TUNABLE (validated/tuned via playtest). Serve must bounce
-// own side, clear the net, then land in the receiver's court.
+// Serve envelope — validated against the real PhysicsEngine (grid sweep of
+// depthT × aim × jitter × spin: ~98% land legally; the rest are extreme
+// wide/heavy-spin serves that fairly fault). Serve must bounce own side,
+// clear the net, then land in the receiver's court. A legal two-bounce serve
+// from this contact geometry can only reach ~mid-court, so short↔long is a
+// relative range: soft flick = gentle high DROP just past the net (lands z≈
+// -0.22); fast swipe = flat downward DRIVE to mid-court (lands z≈-0.5, and
+// noticeably faster). depthT (0=short..1=long) lerps vy/vz between these.
 const SERVE = {
-    VZ_SHORT: -2.5,   // depthT=0: gentle, lands short near the net
-    VZ_LONG:  -3.7,   // depthT=1: drives deep toward the end line
-    VY_SHORT: 1.6,    // higher arc for the short serve
-    VY_LONG:  1.35,   // flatter for the deep serve
-    VX_MAX:   1.1,    // lateral velocity at full left/right aim
+    VZ_SHORT: -2.4,   // depthT=0: gentle, drops short just over the net
+    VZ_LONG:  -4.6,   // depthT=1: fast, drives to mid-court
+    VY_SHORT:  1.5,   // high arc for the short drop serve
+    VY_LONG:  -0.5,   // downward flat drive for the long serve
+    VX_MAX:    1.1,   // lateral velocity at full left/right aim
 };
 
 const lerp = (a, b, t) => a + (b - a) * t;
