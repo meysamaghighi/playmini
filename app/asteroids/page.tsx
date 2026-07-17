@@ -38,30 +38,6 @@ export default function AsteroidsPage() {
         </div>
         <AsteroidsPlay />
 
-        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
-          <h2 className="text-2xl font-bold mb-4 text-cyan-400">How to Play</h2>
-          <div className="space-y-4 text-ink-2">
-            <div>
-              <h3 className="font-semibold text-ink mb-2">Controls</h3>
-              <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>Left / Right arrows (or A/D) — rotate ship</li>
-                <li>Up arrow (or W) — thrust forward</li>
-                <li>Space or X — fire</li>
-                <li>Mobile: use the on-screen buttons</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-ink mb-2">Scoring</h3>
-              <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>Large asteroid — 20 pts</li>
-                <li>Medium asteroid — 50 pts</li>
-                <li>Small asteroid — 100 pts</li>
-                <li>Clear all asteroids to advance to the next level</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
         <MoreGames />
       </div>
     </main>
