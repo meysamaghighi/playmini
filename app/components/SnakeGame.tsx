@@ -249,12 +249,6 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
     };
   }, []);
 
-  const turn = (dir: Dir) => {
-    if (stateRef.current !== "playing") return;
-    if (dir === OPPOSITE[dirRef.current]) return;
-    nextDirRef.current = dir;
-  };
-
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex items-center justify-between w-full max-w-md text-white">
@@ -300,35 +294,6 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
             </div>
           </div>
         )}
-      </div>
-
-      <div className="grid grid-cols-3 gap-2 w-48 md:hidden">
-        <div />
-        <button
-          onPointerDown={() => turn("up")}
-          className="p-3 bg-gray-700 text-white rounded font-bold"
-        >
-          ↑
-        </button>
-        <div />
-        <button
-          onPointerDown={() => turn("left")}
-          className="p-3 bg-gray-700 text-white rounded font-bold"
-        >
-          ←
-        </button>
-        <button
-          onPointerDown={() => turn("down")}
-          className="p-3 bg-gray-700 text-white rounded font-bold"
-        >
-          ↓
-        </button>
-        <button
-          onPointerDown={() => turn("right")}
-          className="p-3 bg-gray-700 text-white rounded font-bold"
-        >
-          →
-        </button>
       </div>
     </div>
   );
