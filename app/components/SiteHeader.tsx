@@ -3,7 +3,6 @@ import MobileNav from "./MobileNav";
 import CommandPalette from "./CommandPalette";
 
 const navLinks = [
-  { href: "/daily", label: "Daily" },
   { href: "/", label: "Browse" },
   { href: "/random-game", label: "Random" },
 ];

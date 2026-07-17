@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import HomeHero from "./components/HomeHero";
 import HomeGrid from "./components/HomeGrid";
 
 export const metadata: Metadata = {
@@ -38,7 +37,6 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main className="max-w-4xl mx-auto px-4 pt-5 pb-12">
-      <HomeHero />
       <HomeGrid />
       <div className="mt-8 text-center text-xs text-ink-3">
         <p>
