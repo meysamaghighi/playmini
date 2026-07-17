@@ -38,28 +38,6 @@ export default function ChessPage() {
         </div>
         <ChessPlay />
 
-        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
-          <h2 className="text-2xl font-bold mb-4 text-amber-400">How to Play</h2>
-          <div className="space-y-4 text-ink-2">
-            <div>
-              <h3 className="font-semibold text-ink mb-2">Controls</h3>
-              <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>Click or tap a white piece to select it — legal moves appear as dots</li>
-                <li>Click or tap a highlighted square to move</li>
-                <li>Click another white piece to change your selection</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-ink mb-2">Rules</h3>
-              <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>You play White, the AI plays Black</li>
-                <li>Castling, en passant, and promotion (auto-queens) are all supported</li>
-                <li>Checkmate or stalemate ends the game</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
         <MoreGames />
       </div>
     </main>
