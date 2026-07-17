@@ -439,18 +439,6 @@ export default function WordBuilder() {
     }
   };
 
-  const handleShare = () => {
-    const score = calculateScore(foundWords);
-    const text = `Word Builder 🔤\nFound: ${foundWords.length}/${possibleWords.length} words\nScore: ${score}\n\nPlay at playmini.fun/word-builder`;
-
-    if (navigator.share) {
-      navigator.share({ text });
-    } else {
-      navigator.clipboard.writeText(text);
-      alert("Score copied to clipboard!");
-    }
-  };
-
   const handleDifficultySelect = (diff: Difficulty) => {
     setDifficulty(diff);
     localStorage.setItem("wb-difficulty", diff);
@@ -629,12 +617,6 @@ export default function WordBuilder() {
             )}
 
             <div className="flex gap-3 justify-center flex-wrap">
-              <button
-                onClick={handleShare}
-                className="px-6 py-3 bg-paper-2 text-ink font-bold rounded-xl hover:bg-paper-2 transition-colors"
-              >
-                Share
-              </button>
               <button
                 onClick={() => {
                   setGameOver(false);

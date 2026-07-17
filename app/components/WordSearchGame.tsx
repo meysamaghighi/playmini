@@ -223,15 +223,6 @@ export default function WordSearchGame() {
     }
   };
 
-  const handleShare = async () => {
-    const text = `I found all words in ${timer} seconds on ${difficulty} Word Search! Can you beat me? https://playmini.fun/word-search`;
-    if (navigator.share) {
-      try { await navigator.share({ text }); } catch {}
-    } else {
-      try { await navigator.clipboard.writeText(text); alert("Copied!"); } catch {}
-    }
-  };
-
   const isSelected = (row: number, col: number) => {
     return selection.some(s => s.row === row && s.col === col);
   };
@@ -287,12 +278,6 @@ export default function WordSearchGame() {
             Completed in {timer} seconds
             {personalBest === timer && " - New Personal Best! 🏆"}
           </p>
-          <button
-            onClick={handleShare}
-            className="bg-green-500 hover:bg-green-600 text-ink px-6 py-3 rounded-lg font-semibold transition-colors"
-          >
-            Share Score
-          </button>
         </div>
       )}
 

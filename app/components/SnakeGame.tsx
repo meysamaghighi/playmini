@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback, useImperativeHandle, forwardRef } from "react";
-import DownloadButton from "./DownloadButton";
 import { useGameLoop } from "./useGameLoop";
 
 const GRID = 20;
@@ -287,8 +286,6 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
           →
         </button>
       </div>
-
-      <DownloadButton canvasRef={canvasRef} filename="snake" />
     </div>
   );
 });

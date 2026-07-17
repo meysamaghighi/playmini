@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import WordlePlay from "./WordlePlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Word Guess Online Free - Wordle Game | PlayMini",
@@ -70,8 +69,6 @@ export default function WordlePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
       />
         <WordlePlay />
-
-      <MoreGames />
     </div>
   );
 }

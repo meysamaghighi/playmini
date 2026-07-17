@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import Game2048Play from "./2048Play";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "2048 Game Online Free - Classic Puzzle Game | PlayMini",
@@ -60,8 +59,6 @@ export default function Page2048() {
       <div className="min-h-screen bg-paper text-ink py-8 px-4">
         <div className="max-w-4xl mx-auto">
         <Game2048Play />
-
-          <MoreGames />
         </div>
       </div>
     </>

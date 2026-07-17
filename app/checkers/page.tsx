@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import CheckersPlay from "./CheckersPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Checkers Online Free - vs AI Board Game | PlayMini",
@@ -56,8 +55,6 @@ export default function CheckersPage() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

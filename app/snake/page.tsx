@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import SnakePlay from "./SnakePlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Snake Game Online Free - Snake Game Browser | PlayMini",
@@ -105,8 +104,6 @@ export default function SnakePage() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

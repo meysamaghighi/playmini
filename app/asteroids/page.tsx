@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import AsteroidsPlay from "./AsteroidsPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Asteroids Online Free - Classic Arcade Browser Game | PlayMini",
@@ -37,8 +36,6 @@ export default function AsteroidsPage() {
           </p>
         </div>
         <AsteroidsPlay />
-
-        <MoreGames />
       </div>
     </main>
   );

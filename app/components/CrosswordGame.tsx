@@ -1181,22 +1181,6 @@ export default function CrosswordGame() {
     setTimeout(() => setShowErrors(false), 2000);
   };
 
-  const handleShare = async () => {
-    const timeStr = formatTime(timer);
-    const text = `I completed a crossword puzzle in ${timeStr}! Can you beat my time? Play at playmini.fun/crossword`;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ text });
-      } catch (err) {
-        // User cancelled
-      }
-    } else {
-      await navigator.clipboard.writeText(text);
-      alert("Copied to clipboard!");
-    }
-  };
-
   const newGame = () => {
     window.location.reload();
   };
@@ -1324,12 +1308,6 @@ export default function CrosswordGame() {
             Time: {formatTime(timer)}
             {personalBest === timer && <span className="ml-2 text-yellow-400 font-bold">New Best!</span>}
           </div>
-          <button
-            onClick={handleShare}
-            className="bg-blue-600 hover:bg-blue-700 text-ink px-8 py-3 rounded-lg font-medium transition text-lg"
-          >
-            Share Result
-          </button>
         </div>
       )}
 

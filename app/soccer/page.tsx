@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import SoccerPlay from "./SoccerPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Penalty Kicks Online Free - Soccer Game | PlayMini",
@@ -115,8 +114,6 @@ export default function SoccerPage() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

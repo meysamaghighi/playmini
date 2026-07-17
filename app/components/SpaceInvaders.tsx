@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import DownloadButton from "./DownloadButton";
 
 type AlienType = "normal" | "tough" | "elite";
 
@@ -718,20 +717,6 @@ export default function SpaceInvaders() {
     draw();
   }, [draw]);
 
-  const handleShare = async () => {
-    const text = `I reached Level ${levelRef.current} with ${scoreRef.current} points in Space Invaders! https://playmini.fun/space-invaders`;
-    if (navigator.share) {
-      try {
-        await navigator.share({ text });
-      } catch {}
-    } else {
-      try {
-        await navigator.clipboard.writeText(text);
-        alert("Copied!");
-      } catch {}
-    }
-  };
-
   const handleTouchStart = (direction: "left" | "right") => (e: React.PointerEvent) => {
     e.preventDefault();
     if (direction === "left") touchLeftRef.current = true;
@@ -810,13 +795,6 @@ export default function SpaceInvaders() {
               >
                 Play Again
               </button>
-              <button
-                onClick={handleShare}
-                className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
-              >
-                Share
-              </button>
-              <DownloadButton canvasRef={canvasRef} filename="space-invaders-score" label="Save" />
             </div>
           </div>
         )}

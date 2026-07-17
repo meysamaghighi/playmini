@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import DownloadButton from './DownloadButton';
 
 type BlockType = 'grass' | 'stone' | 'wood' | 'water' | 'sand' | 'brick';
 interface Block { x: number; y: number; z: number; type: BlockType }
@@ -577,7 +576,6 @@ export default function VoxelBuilder() {
           </div>
           <div className="flex gap-1.5 sm:gap-2 items-center">
             <span className="text-xs sm:text-sm text-slate-400">{blockCount} blocks</span>
-            <DownloadButton canvasRef={canvasRef} filename="voxel-creation" label="Save" />
             <button onClick={clearAll} className="px-2 sm:px-3 py-2 bg-red-700 hover:bg-red-600 rounded text-xs sm:text-sm font-bold transition-colors">
               Clear
             </button>

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import SudokuPlay from "./SudokuPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Sudoku Online Free - 9x9 Puzzle Game | PlayMini",
@@ -64,12 +63,6 @@ export default function SudokuPage() {
       <div className="min-h-screen bg-slate-900 text-ink">
         <div className="max-w-6xl mx-auto px-4 py-8">
         <SudokuPlay />
-
-          {/* More Games */}
-          <section className="mt-12">
-            <h2 className="text-3xl font-bold mb-6 text-center">More Games</h2>
-            <MoreGames />
-          </section>
         </div>
       </div>
     </>

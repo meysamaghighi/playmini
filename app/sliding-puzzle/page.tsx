@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import SlidingPuzzlePlay from "./SlidingPuzzlePlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Sliding Puzzle Online Free - 15 Puzzle Game | PlayMini",
@@ -135,8 +134,6 @@ export default function SlidingPuzzlePage() {
           }),
         }}
       />
-
-      <MoreGames />
     </main>
   );
 }

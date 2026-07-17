@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import DownloadButton from "./DownloadButton";
 import { useGameLoop } from "./useGameLoop";
 
 const CANVAS_W = 420;
@@ -389,8 +388,6 @@ export default function BubbleShooter() {
           </div>
         )}
       </div>
-
-      <DownloadButton canvasRef={canvasRef} filename="bubble-shooter" />
     </div>
   );
 }

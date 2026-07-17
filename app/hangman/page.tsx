@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import HangmanPlay from "./HangmanPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Hangman Game Online Free - Classic Word Puzzle | PlayMini",
@@ -171,8 +170,6 @@ export default function HangmanPage() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

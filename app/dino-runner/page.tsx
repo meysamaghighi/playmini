@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import DinoRunnerPlay from "./DinoRunnerPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Dino Run Game Online Free - Chrome Dino | PlayMini",
@@ -143,8 +142,6 @@ export default function DinoRunnerPage() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import PongPlay from "./PongPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Pong Online Free - Classic Paddle Game | PlayMini",
@@ -120,8 +119,6 @@ export default function PongPage() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

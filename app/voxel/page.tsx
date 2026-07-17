@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import VoxelPlay from "./VoxelPlay";
-import MoreGames from '../components/MoreGames';
 
 export const metadata: Metadata = {
   title: 'Play Voxel Builder Online Free - 3D Building Game | PlayMini',
@@ -133,8 +132,6 @@ export default function VoxelPage() {
               </p>
             </div>
           </section>
-
-          <MoreGames />
         </div>
       </div>
     </>

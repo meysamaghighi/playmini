@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Connect4Play from "./Connect4Play";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Connect 4 Online Free - Four in a Row | PlayMini",
@@ -56,8 +55,6 @@ export default function Connect4Page() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

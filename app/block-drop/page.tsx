@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import BlockDropPlay from "./BlockDropPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Block Drop Online Free - Tetris-style Game | PlayMini",
@@ -131,8 +130,6 @@ export default function BlockDropPage() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

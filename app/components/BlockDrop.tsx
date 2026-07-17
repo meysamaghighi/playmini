@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import DownloadButton from "./DownloadButton";
 import { useGameLoop } from "./useGameLoop";
 
 const COLS = 10;
@@ -448,8 +447,6 @@ export default function BlockDrop() {
           Drop
         </button>
       </div>
-
-      <DownloadButton canvasRef={canvasRef} filename="block-drop" />
     </div>
   );
 }

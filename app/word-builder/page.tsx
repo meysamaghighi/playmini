@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import WordBuilderPlay from "./WordBuilderPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Word Builder Online Free - Make Words Game | PlayMini",
@@ -158,8 +157,6 @@ export default function WordBuilderPage() {
           }),
         }}
       />
-
-      <MoreGames />
     </main>
   );
 }
