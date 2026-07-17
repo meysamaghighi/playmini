@@ -38,29 +38,6 @@ export default function ReversiPage() {
         </div>
         <ReversiPlay />
 
-        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
-          <h2 className="text-2xl font-bold mb-4 text-green-400">How to Play</h2>
-          <div className="space-y-4 text-ink-2">
-            <div>
-              <h3 className="font-semibold text-ink mb-2">Rules</h3>
-              <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>You play Black — you go first</li>
-                <li>Place a disc to sandwich one or more of the opponent&apos;s discs — they flip to your colour</li>
-                <li>You must make a move that flips at least one disc; if you can&apos;t, your turn is skipped</li>
-                <li>Game ends when neither player can move — most discs wins</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-ink mb-2">Strategy</h3>
-              <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>Corners are the most valuable squares — they can never be flipped</li>
-                <li>Avoid squares adjacent to empty corners — they let your opponent grab the corner</li>
-                <li>Control edges early; minimise your opponent&apos;s moves</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
         <MoreGames />
       </div>
     </main>
