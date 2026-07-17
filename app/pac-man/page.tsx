@@ -38,30 +38,6 @@ export default function PacManPage() {
         </div>
         <PacManPlay />
 
-        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
-          <h2 className="text-2xl font-bold mb-4 text-yellow-400">How to Play</h2>
-          <div className="space-y-4 text-ink-2">
-            <div>
-              <h3 className="font-semibold text-ink mb-2">Controls</h3>
-              <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>Arrow keys or WASD to move</li>
-                <li>Swipe in any direction on mobile</li>
-                <li>Space or tap to start / restart</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-ink mb-2">Rules</h3>
-              <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>Eat all yellow dots to clear the level</li>
-                <li>Avoid the 4 coloured ghosts — one hit costs a life</li>
-                <li>Eat a flashing power pellet to frighten ghosts</li>
-                <li>Eat frightened ghosts for 200, 400, 800, 1600 points</li>
-                <li>3 lives total — game over when all are gone</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
         <MoreGames />
       </div>
     </main>
