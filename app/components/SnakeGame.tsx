@@ -205,6 +205,50 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // Swipe controls (primary on touch devices)
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    let sx = 0;
+    let sy = 0;
+    let tracking = false;
+    const THRESH = 24;
+    const apply = (dir: Dir) => {
+      if (stateRef.current !== "playing") return;
+      if (dir === OPPOSITE[dirRef.current]) return;
+      nextDirRef.current = dir;
+    };
+    const onStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      sx = t.clientX;
+      sy = t.clientY;
+      tracking = true;
+    };
+    const onMove = (e: TouchEvent) => {
+      if (!tracking) return;
+      e.preventDefault(); // stop the page scrolling while steering
+      const t = e.touches[0];
+      const dx = t.clientX - sx;
+      const dy = t.clientY - sy;
+      if (Math.abs(dx) < THRESH && Math.abs(dy) < THRESH) return;
+      if (Math.abs(dx) > Math.abs(dy)) apply(dx > 0 ? "right" : "left");
+      else apply(dy > 0 ? "down" : "up");
+      sx = t.clientX; // reset origin so a continued drag can turn again
+      sy = t.clientY;
+    };
+    const onEnd = () => {
+      tracking = false;
+    };
+    canvas.addEventListener("touchstart", onStart, { passive: false });
+    canvas.addEventListener("touchmove", onMove, { passive: false });
+    canvas.addEventListener("touchend", onEnd);
+    return () => {
+      canvas.removeEventListener("touchstart", onStart);
+      canvas.removeEventListener("touchmove", onMove);
+      canvas.removeEventListener("touchend", onEnd);
+    };
+  }, []);
+
   const turn = (dir: Dir) => {
     if (stateRef.current !== "playing") return;
     if (dir === OPPOSITE[dirRef.current]) return;
