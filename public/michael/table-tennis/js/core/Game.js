@@ -45,6 +45,7 @@ export class Game {
         this.debugger = new GameDebugger();
         this.autoTune = new AutoTune();
         this._lastEndReason = null;
+        this.debug = new URLSearchParams(location.search).has('debug');
         
         this.state = GameState.MENU;
         this.score = { player: 0, opponent: 0 };
@@ -245,6 +246,8 @@ export class Game {
     }
     
     updateDebugUI(ballState, paddlePos, distToBall, input) {
+        if (!this.debug) return;
+
         // Real-time status
         const status = this.debugger.getRealTimeStatus(ballState, paddlePos, this.paddle.swingState, distToBall);
         const debugInfo = document.getElementById('debug-info');
@@ -656,7 +659,7 @@ Top Miss Reason: ${s.topMissReason}
                 this.setState(GameState.SERVING);
                 this.debugger.startPoint();
             }
-        }, 1500);
+        }, 700);
     }
     
     endPoint(reason) {

@@ -602,94 +602,6 @@ kbd {
     max-width: 90%;
 }
 
-/* Crosshair */
-#crosshair {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 20px;
-    height: 20px;
-    pointer-events: none;
-}
-
-#crosshair::before, #crosshair::after {
-    content: '';
-    position: absolute;
-    background: rgba(255,255,255,0.5);
-}
-
-#crosshair::before {
-    width: 2px;
-    height: 20px;
-    left: 9px;
-    top: 0;
-}
-
-#crosshair::after {
-    width: 20px;
-    height: 2px;
-    top: 9px;
-    left: 0;
-}
-
-/* Meters */
-#power-meter, #spin-meter {
-    position: absolute;
-    right: 30px;
-    width: 150px;
-}
-
-#power-meter { bottom: 100px; }
-#spin-meter { bottom: 60px; }
-
-.meter-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #888;
-    margin-bottom: 4px;
-}
-
-.meter-bar {
-    width: 100%;
-    height: 6px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 3px;
-    overflow: hidden;
-}
-
-#power-fill, #spin-fill {
-    height: 100%;
-    width: 0%;
-    border-radius: 3px;
-    transition: width 0.1s ease;
-}
-
-#power-fill { background: linear-gradient(90deg, #4caf50, #ff9800, #f44336); }
-#spin-fill { background: linear-gradient(90deg, #2196f3, #9c27b0); }
-
-/* Click prompt */
-#click-prompt {
-    position: absolute;
-    top: 65%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.8);
-    background: rgba(255, 107, 53, 0.9);
-    color: white;
-    font-size: 1.8rem;
-    font-weight: 900;
-    padding: 12px 36px;
-    border-radius: 50px;
-    pointer-events: none;
-    opacity: 0;
-    transition: all 0.15s ease;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    box-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
-    z-index: 6;
-    letter-spacing: 2px;
-}
-
 /* Debug info - hidden by default, minimal when shown */
 #debug-info {
     position: absolute;
@@ -772,16 +684,7 @@ body.debug-mode #debug-info {
 body.touch-device #mobile-controls {
     display: flex;
     align-items: flex-end;
-    justify-content: space-between;
-}
-
-/* On touch layouts the pause button lives bottom-right where the meters sit —
-   lift the meters above the button row and slim them down. */
-body.touch-device #power-meter { bottom: 150px; }
-body.touch-device #spin-meter { bottom: 116px; }
-body.touch-device #power-meter, body.touch-device #spin-meter {
-    right: 20px;
-    width: 110px;
+    justify-content: flex-end;
 }
 
 .mobile-btn {
@@ -810,25 +713,11 @@ body.touch-device #power-meter, body.touch-device #spin-meter {
     background: rgba(255, 140, 80, 0.95);
 }
 
-.mobile-btn-large {
-    width: 90px;
-    height: 90px;
-    font-size: 1.1rem;
-    background: rgba(255, 107, 53, 0.9);
-}
-
 .mobile-btn-small {
     width: 50px;
     height: 50px;
     font-size: 1.2rem;
     background: rgba(60, 60, 80, 0.85);
-}
-
-.mobile-angle-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    pointer-events: auto;
 }
 
 #btn-mobile-toss {
@@ -856,12 +745,6 @@ body.touch-device #power-meter, body.touch-device #spin-meter {
         width: 56px;
         height: 56px;
         font-size: 0.8rem;
-    }
-    
-    .mobile-btn-large {
-        width: 76px;
-        height: 76px;
-        font-size: 1rem;
     }
     
     .mobile-btn-small {

@@ -74,13 +74,10 @@
             <div class="tutorial-section">
                 <h3>Controls</h3>
                 <div class="key-grid">
-                    <div class="key-item"><kbd>Mouse</kbd><span>Move paddle</span></div>
-                    <div class="key-item"><kbd>L-Click</kbd><span>Swing / Hit ball</span></div>
-                    <div class="key-item"><kbd>W / S</kbd><span>Move closer / back</span></div>
-                    <div class="key-item"><kbd>A / D</kbd><span>Move left / right</span></div>
-                    <div class="key-item"><kbd>Space</kbd><span>Toss ball (serve)</span></div>
-                    <div class="key-item"><kbd>R</kbd><span>Reset ball</span></div>
-                    <div class="key-item"><kbd>P</kbd><span>Pause</span></div>
+                    <div class="key-item"><kbd>Drag</kbd><span>Move your paddle (finger = paddle)</span></div>
+                    <div class="key-item"><kbd>Swipe through ball</kbd><span>Hit — swipe direction aims, speed = power/spin</span></div>
+                    <div class="key-item"><kbd>Swipe up</kbd><span>Serve — angle picks left/right, power picks short/long</span></div>
+                    <div class="key-item"><kbd>Tap ⏸ / P</kbd><span>Pause</span></div>
                 </div>
             </div>
             <div class="tutorial-section">
@@ -107,8 +104,7 @@
             <div class="tutorial-section">
                 <h3>Tips</h3>
                 <ul>
-                    <li>Time your swing as the ball approaches for clean contact</li>
-                    <li>Angle the paddle up for topspin, down for backspin</li>
+                    <li>Time your swipe as the ball approaches for clean contact</li>
                     <li>Different rubbers react completely differently to spin</li>
                     <li>Carbon blades are fast but harder to control</li>
                     <li>Watch the ball's rotation to read incoming spin</li>
@@ -137,28 +133,12 @@
             </div>
             <div id="message-area"></div>
         </div>
-        <div id="crosshair"></div>
-        <div id="power-meter">
-            <div class="meter-label">Power</div>
-            <div class="meter-bar"><div id="power-fill"></div></div>
-        </div>
-        <div id="spin-meter">
-            <div class="meter-label">Spin</div>
-            <div class="meter-bar"><div id="spin-fill"></div></div>
-        </div>
-        
-        <div id="click-prompt">CLICK!</div>
         <div id="debug-info"></div>
         <div id="debug-diagnosis"></div>
         <div id="debug-summary"></div>
-        
+
         <!-- Mobile Controls -->
         <div id="mobile-controls">
-            <button id="btn-mobile-swing" class="mobile-btn mobile-btn-large">SWING</button>
-            <div class="mobile-angle-controls">
-                <button id="btn-angle-up" class="mobile-btn mobile-btn-small">▲</button>
-                <button id="btn-angle-down" class="mobile-btn mobile-btn-small">▼</button>
-            </div>
             <button id="btn-mobile-pause" class="mobile-btn mobile-btn-small">⏸</button>
         </div>
     </div>
