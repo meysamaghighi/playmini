@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import MazePlay from "./MazePlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Maze Runner Online Free - Puzzle Game | PlayMini",
@@ -134,8 +133,6 @@ export default function MazePage() {
           }),
         }}
       />
-
-      <MoreGames />
     </main>
   );
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import FroggerPlay from "./FroggerPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Frogger Online Free - Classic Frogger Browser Game | PlayMini",
@@ -36,8 +35,6 @@ export default function FroggerPage() {
           </p>
         </div>
         <FroggerPlay />
-
-        <MoreGames />
       </div>
     </main>
   );

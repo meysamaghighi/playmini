@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ChessPlay from "./ChessPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Chess Online Free vs Computer | PlayMini",
@@ -37,8 +36,6 @@ export default function ChessPage() {
           </p>
         </div>
         <ChessPlay />
-
-        <MoreGames />
       </div>
     </main>
   );

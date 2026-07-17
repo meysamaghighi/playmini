@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
-import DownloadButton from "./DownloadButton";
 import { useGameLoop } from "./useGameLoop";
 
 const CANVAS_W = 600;
@@ -310,8 +309,6 @@ export default function SoccerGame() {
           </button>
         </div>
       )}
-
-      <DownloadButton canvasRef={canvasRef} filename="penalty-kick" />
     </div>
   );
 }

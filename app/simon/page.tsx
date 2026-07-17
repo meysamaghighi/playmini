@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import SimonPlay from "./SimonPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Simon Says Online Free - Memory Game | PlayMini",
@@ -136,8 +135,6 @@ export default function SimonPage() {
           }),
         }}
       />
-
-      <MoreGames />
     </main>
   );
 }

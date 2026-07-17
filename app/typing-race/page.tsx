@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import TypingRacePlay from "./TypingRacePlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Typing Race Online Free - WPM Speed Test | PlayMini",
@@ -250,8 +249,6 @@ export default function TypingRacePage() {
           </p>
         </div>
       </div>
-
-      <MoreGames />
     </div>
   );
 }

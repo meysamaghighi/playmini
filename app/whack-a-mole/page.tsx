@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import WhackAMolePlay from "./WhackAMolePlay";
-import MoreGames from '../components/MoreGames';
 
 export const metadata: Metadata = {
   title: 'Play Whack-a-Mole Online Free - Arcade Game | PlayMini',
@@ -181,8 +180,6 @@ export default function WhackMolePage() {
               </p>
             </div>
           </section>
-
-          <MoreGames />
         </div>
       </main>
     </>

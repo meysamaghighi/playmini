@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import TowerBuilderPlay from "./TowerBuilderPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Tower Builder Online Free - Stacking Game | PlayMini",
@@ -186,8 +185,6 @@ export default function TowerBuilderPage() {
               </p>
             </div>
           </section>
-
-          <MoreGames />
         </div>
       </div>
     </>

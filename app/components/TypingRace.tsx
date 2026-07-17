@@ -454,20 +454,6 @@ export default function TypingRace() {
     }
   };
 
-  const handleShare = async () => {
-    const text = `I reached Level ${level} with ${score} points in Typing Race! https://playmini.fun/typing-race`;
-    if (navigator.share) {
-      try {
-        await navigator.share({ text });
-      } catch {}
-    } else {
-      try {
-        await navigator.clipboard.writeText(text);
-        alert("Copied!");
-      } catch {}
-    }
-  };
-
   const formatTime = (seconds: number) => {
     return `${seconds}s`;
   };
@@ -676,12 +662,6 @@ export default function TypingRace() {
               className="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
             >
               Play Again
-            </button>
-            <button
-              onClick={handleShare}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
-            >
-              Share
             </button>
           </div>
         </div>

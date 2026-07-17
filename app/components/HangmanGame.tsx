@@ -180,20 +180,6 @@ export default function HangmanGame() {
 
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
-  const handleShare = async () => {
-    const text = `I won ${currentStreak} game${currentStreak !== 1 ? "s" : ""} in a row in Hangman! Can you beat me? https://playmini.fun/hangman`;
-    if (navigator.share) {
-      try {
-        await navigator.share({ text });
-      } catch {}
-    } else {
-      try {
-        await navigator.clipboard.writeText(text);
-        alert("Copied to clipboard!");
-      } catch {}
-    }
-  };
-
   return (
     <div className="flex flex-col items-center gap-6">
       {/* Stats */}
@@ -396,14 +382,6 @@ export default function HangmanGame() {
               >
                 Next Word
               </button>
-              {currentStreak > 0 && (
-                <button
-                  onClick={handleShare}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
-                >
-                  Share
-                </button>
-              )}
             </div>
           </div>
         )}

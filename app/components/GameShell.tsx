@@ -19,7 +19,6 @@ export type GameShellProps = {
   status: ActivityStatus;
   result?: ActivityResult;
   onRestart?: () => void;
-  onShare?: () => void;
   fullscreen?: boolean;
   children: ReactNode;
 };
@@ -31,7 +30,6 @@ export default function GameShell({
   status,
   result,
   onRestart,
-  onShare,
   fullscreen = true,
   children,
 }: GameShellProps) {
@@ -170,15 +168,6 @@ export default function GameShell({
                 style={{ background: "var(--accent)" }}
               >
                 Play again
-              </button>
-            )}
-            {onShare && (
-              <button
-                type="button"
-                onClick={onShare}
-                className="px-4 py-2 rounded-full text-sm font-medium border border-line text-ink hover:bg-paper"
-              >
-                Share
               </button>
             )}
           </div>

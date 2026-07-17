@@ -207,15 +207,6 @@ export default function MazeRunner() {
     };
   }, [movePlayer, gameState]);
 
-  const handleShare = async () => {
-    const text = `I solved ${difficulty} maze in ${timer}s with ${moves} moves! Can you beat me? https://playmini.fun/maze`;
-    if (navigator.share) {
-      try { await navigator.share({ text }); } catch {}
-    } else {
-      try { await navigator.clipboard.writeText(text); alert("Copied!"); } catch {}
-    }
-  };
-
   return (
     <div className="flex flex-col items-center gap-6 py-8">
       {/* Difficulty Selector */}
@@ -269,12 +260,6 @@ export default function MazeRunner() {
               <span className="block text-yellow-400 font-bold mt-1">New Personal Best! 🏆</span>
             )}
           </p>
-          <button
-            onClick={handleShare}
-            className="bg-purple-500 hover:bg-purple-600 text-ink px-6 py-3 rounded-lg font-semibold transition-colors"
-          >
-            Share Score
-          </button>
         </div>
       )}
 

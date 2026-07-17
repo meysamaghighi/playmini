@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import WordSearchPlay from "./WordSearchPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Word Search Online Free - Puzzle Game | PlayMini",
@@ -128,8 +127,6 @@ export default function WordSearchPage() {
           }),
         }}
       />
-
-      <MoreGames />
     </main>
   );
 }

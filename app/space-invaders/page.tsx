@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import SpaceInvadersPlay from "./SpaceInvadersPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Space Invaders Online Free - 10 Levels & Power-Ups | PlayMini",
@@ -62,8 +61,6 @@ export default function SpaceInvadersPage() {
           }),
         }}
       />
-
-      <MoreGames />
     </main>
   );
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import PacManPlay from "./PacManPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Pac-Man Online Free - Browser Pac-Man | PlayMini",
@@ -37,8 +36,6 @@ export default function PacManPage() {
           </p>
         </div>
         <PacManPlay />
-
-        <MoreGames />
       </div>
     </main>
   );

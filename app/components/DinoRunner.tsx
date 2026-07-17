@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import DownloadButton from "./DownloadButton";
 import { useGameLoop } from "./useGameLoop";
 
 const CANVAS_WIDTH = 800;
@@ -291,8 +290,6 @@ export default function DinoRunner() {
           Duck
         </button>
       </div>
-
-      <DownloadButton canvasRef={canvasRef} filename="dino-runner" />
     </div>
   );
 }

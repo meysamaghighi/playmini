@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import TicTacToePlay from "./TicTacToePlay";
-import MoreGames from '../components/MoreGames';
 
 export const metadata: Metadata = {
   title: 'Play Tic-Tac-Toe Online Free - vs AI or Friend | PlayMini',
@@ -73,11 +72,6 @@ export default function TicTacToePage() {
 
         {/* Game */}
         <TicTacToePlay />
-
-        {/* More Games */}
-        <div className="mt-12">
-          <MoreGames />
-        </div>
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import DownloadButton from "./DownloadButton";
 import { useGameLoop } from "./useGameLoop";
 
 const CANVAS_W = 360;
@@ -239,8 +238,6 @@ export default function CarRacer() {
           →
         </button>
       </div>
-
-      <DownloadButton canvasRef={canvasRef} filename="car-racer" />
     </div>
   );
 }

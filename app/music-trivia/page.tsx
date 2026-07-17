@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import MusicTriviaPlay from "./MusicTriviaPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Music Trivia Online Free - Song Quiz Game | PlayMini",
@@ -111,8 +110,6 @@ export default function MusicTriviaPage() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

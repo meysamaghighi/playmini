@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import SolitairePlay from "./SolitairePlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Solitaire Online Free - Klondike Card Game | PlayMini",
@@ -137,8 +136,6 @@ export default function SolitairePage() {
           }),
         }}
       />
-
-      <MoreGames />
     </main>
   );
 }

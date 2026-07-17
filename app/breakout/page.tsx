@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import BreakoutPlay from "./BreakoutPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Breakout Online Free - Classic Brick Breaker | PlayMini",
@@ -52,8 +51,6 @@ export default function BreakoutPage() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

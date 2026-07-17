@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import MemoryPlay from "./MemoryPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Memory Match Online Free - Card Game | PlayMini",
@@ -56,8 +55,6 @@ export default function MemoryMatchPage() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import CarRacerPlay from "./CarRacerPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Car Racing Game Online Free - Dodge Traffic | PlayMini",
@@ -136,8 +135,6 @@ export default function CarRacerPage() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

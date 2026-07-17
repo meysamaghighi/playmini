@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ReversiPlay from "./ReversiPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Reversi / Othello Online Free vs Computer | PlayMini",
@@ -37,8 +36,6 @@ export default function ReversiPage() {
           </p>
         </div>
         <ReversiPlay />
-
-        <MoreGames />
       </div>
     </main>
   );

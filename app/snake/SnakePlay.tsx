@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import GameShell from "../components/GameShell";
 import SnakeGame, { type SnakeGameHandle } from "../components/SnakeGame";
 import { useProgress } from "../hooks/useProgress";
-import { generateShareCard, shareCard } from "../lib/shareCard";
 
 const HOW_TO = (
   <div>
@@ -41,16 +40,6 @@ export default function SnakePlay() {
     gameRef.current?.start();
   };
 
-  const handleShare = async () => {
-    if (finalScore === null) return;
-    const dataUrl = generateShareCard({
-      headline: `Snake · ${finalScore} points`,
-      subline: isNewBest ? "New personal best" : "Beat me",
-    });
-    if (!dataUrl) return;
-    await shareCard(dataUrl, `playmini-snake-${finalScore}.png`);
-  };
-
   return (
     <GameShell
       id="snake"
@@ -71,7 +60,6 @@ export default function SnakePlay() {
           : undefined
       }
       onRestart={handleRestart}
-      onShare={finalScore !== null ? handleShare : undefined}
     >
       <div className="flex-1 flex items-center justify-center min-h-[440px] bg-gray-950 text-white">
         <SnakeGame ref={gameRef} onGameOver={handleGameOver} />

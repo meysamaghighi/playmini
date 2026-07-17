@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import CrosswordPlay from "./CrosswordPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Crossword Puzzle Online Free - Word Game | PlayMini",
@@ -162,8 +161,6 @@ export default function CrosswordPage() {
             }),
           }}
         />
-
-        <MoreGames />
       </div>
     </main>
   );

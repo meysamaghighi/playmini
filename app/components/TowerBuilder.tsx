@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import DownloadButton from "./DownloadButton";
 
 type GameState = "start" | "playing" | "gameover";
 
@@ -331,16 +330,6 @@ export default function TowerBuilder() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const handleShare = async () => {
-    const text = `I stacked ${scoreRef.current} blocks in Tower Builder! Can you beat me?`;
-    const url = "https://playmini.fun/tower-builder";
-    if (navigator.share) {
-      try { await navigator.share({ text, url }); } catch {}
-    } else {
-      try { await navigator.clipboard.writeText(`${text} ${url}`); alert("Copied!"); } catch {}
-    }
-  };
-
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="relative">
@@ -386,13 +375,6 @@ export default function TowerBuilder() {
               >
                 Play Again
               </button>
-              <button
-                onClick={handleShare}
-                className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-ink font-bold rounded-xl transition-all hover:scale-105 active:scale-95"
-              >
-                Share
-              </button>
-              <DownloadButton canvasRef={canvasRef} filename="tower-score" label="Save" />
             </div>
           </div>
         )}

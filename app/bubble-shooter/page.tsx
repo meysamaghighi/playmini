@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import BubbleShooterPlay from "./BubbleShooterPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Play Bubble Shooter Online Free - Match 3 Puzzle | PlayMini",
@@ -144,8 +143,6 @@ export default function BubbleShooterPage() {
           }),
         }}
       />
-
-      <MoreGames />
     </main>
   );
 }

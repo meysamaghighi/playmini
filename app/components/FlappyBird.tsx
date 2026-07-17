@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import DownloadButton from "./DownloadButton";
 import { useGameLoop } from "./useGameLoop";
 
 const CANVAS_WIDTH = 400;
@@ -247,8 +246,6 @@ export default function FlappyBird() {
           </div>
         )}
       </div>
-
-      <DownloadButton canvasRef={canvasRef} filename="flappy-bird" />
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import MinesweeperPlay from "./MinesweeperPlay";
-import MoreGames from "../components/MoreGames";
 
 export const metadata: Metadata = {
   title: "Minesweeper Game Online Free - Classic Logic Puzzle | PlayMini",
@@ -148,9 +147,6 @@ export default function MinesweeperPage() {
           </div>
         </div>
       </section>
-
-
-      <MoreGames />
     </>
   );
 }
