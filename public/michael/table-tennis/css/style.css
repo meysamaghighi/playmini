@@ -128,6 +128,55 @@ body {
     align-items: center;
 }
 
+/* Difficulty selector (Easy / Medium / Hard segmented control) */
+.difficulty-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 30px;
+}
+
+.difficulty-label {
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.segmented-control {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.segment-btn {
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #999;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+}
+
+.segment-btn:hover {
+    color: #ddd;
+    background: rgba(255,255,255,0.08);
+}
+
+.segment-btn.selected {
+    background: linear-gradient(135deg, #ff6b35, #e55a2b);
+    color: #fff;
+}
+
 /* Buttons */
 .btn {
     padding: 14px 48px;
@@ -306,36 +355,42 @@ body {
     border: 1px solid rgba(255,255,255,0.05);
 }
 
+/* Round racket preview: the blade (this element) is a circle, the rubber is
+   a slightly smaller circular overlay (::before), and the handle is a small
+   rectangle hanging off the bottom (::after). Overall visual footprint is
+   ~120px wide x ~170px tall (120px blade + 50px handle) to match the real
+   3D paddle shape and stay within the .equipment-preview layout. */
 #paddle-preview {
     width: 120px;
-    height: 160px;
+    height: 120px;
     background: linear-gradient(135deg, #8B4513, #654321);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 50%;
     position: relative;
     flex-shrink: 0;
+    margin-bottom: 50px; /* reserves layout space for the handle below */
 }
 
 #paddle-preview::before {
     content: '';
     position: absolute;
-    width: 90%;
-    height: 70%;
-    background: #d32f2f;
-    border-radius: 4px;
-    top: 10%;
+    width: 82%;
+    height: 82%;
+    top: 9%;
+    left: 9%;
+    background: var(--rubber-color, #d32f2f);
+    border-radius: 50%;
 }
 
 #paddle-preview::after {
     content: '';
     position: absolute;
-    width: 25%;
-    height: 20%;
+    width: 24px;
+    height: 50px;
     background: #5c3a1e;
-    bottom: 0;
-    border-radius: 2px;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    border-radius: 0 0 6px 6px;
 }
 
 .selected-summary h4 {

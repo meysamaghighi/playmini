@@ -15,6 +15,13 @@ import { computeShot, solvePlayerShot, SWIPE_HIT_THRESHOLD } from './SwipeShot.j
 const WINNING_SCORE = 11;
 const SERVE_CHANGE_INTERVAL = 2;
 
+// Player-selected CPU difficulty (main-menu segmented control). Supersedes
+// the AutoTune opponentDifficulty knob — AutoTune.observePoint() still
+// records point history (harmless), but its win-rate-nudged output is no
+// longer read for opponent skill.
+const DIFFICULTY_MAP = { easy: 0.20, medium: 0.45, hard: 0.75 };
+const DIFFICULTY_STORAGE_KEY = 'tt3d.difficulty';
+
 // Swipe-to-hit tuning (Phase 3). The paddle is finger-controlled; a rally hit
 // fires when the ball is inside this reach sphere, moving toward the player,
 // and the finger is sweeping through it faster than SWIPE_HIT_THRESHOLD.
@@ -62,6 +69,12 @@ export class Game {
         this.equipment = new Equipment();
         this.debugger = new GameDebugger();
         this.autoTune = new AutoTune();
+
+        // Player-selected difficulty (Easy/Medium/Hard), persisted across
+        // sessions. Defaults to 'medium' if nothing was saved yet.
+        this.difficultyLevel = this._loadDifficulty();
+        this._difficultyValue = DIFFICULTY_MAP[this.difficultyLevel];
+
         this._lastEndReason = null;
         this.debug = new URLSearchParams(location.search).has('debug');
         
@@ -121,6 +134,29 @@ export class Game {
         }
     }
     
+    /**
+     * Set CPU difficulty from the main-menu Easy/Medium/Hard selector.
+     * Persists to localStorage so the choice survives a reload.
+     */
+    setDifficultyLevel(level) {
+        if (!DIFFICULTY_MAP[level]) return;
+        this.difficultyLevel = level;
+        this._difficultyValue = DIFFICULTY_MAP[level];
+        try {
+            if (typeof localStorage !== 'undefined') {
+                localStorage.setItem(DIFFICULTY_STORAGE_KEY, level);
+            }
+        } catch (_) { /* ignore */ }
+    }
+
+    _loadDifficulty() {
+        try {
+            const raw = (typeof localStorage !== 'undefined') && localStorage.getItem(DIFFICULTY_STORAGE_KEY);
+            if (raw && DIFFICULTY_MAP[raw]) return raw;
+        } catch (_) { /* ignore */ }
+        return 'medium';
+    }
+
     startMatch() {
         this.audio.init();
         this.debugger.resetSession();
@@ -234,8 +270,10 @@ export class Game {
         // Update debug UI
         this.updateDebugUI(ballState, paddlePos, distToBall, this.input);
 
-        // Sync auto-tuned opponent difficulty, then update paddle (scaled swing).
-        this.opponent.setDifficulty(this.autoTune.get('opponentDifficulty'));
+        // Opponent difficulty is the player-selected Easy/Medium/Hard value
+        // (see setDifficultyLevel), not the old AutoTune win-rate knob. Then
+        // update paddle (scaled swing).
+        this.opponent.setDifficulty(this._difficultyValue);
         this.paddle.update(this.input, this.swipeInput, sdt, ballState, canHitBall, this.autoTune);
 
         // Update effects (scaled)
