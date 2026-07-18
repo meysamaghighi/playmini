@@ -26,7 +26,10 @@ export class UIManager {
         
         // Bind buttons
         this.bindButtons();
-        
+
+        // Setup difficulty selector (Easy / Medium / Hard)
+        this.setupDifficultyUI();
+
         // Setup equipment UI
         this.setupEquipmentUI();
         
@@ -95,6 +98,23 @@ export class UIManager {
         });
     }
     
+    setupDifficultyUI() {
+        document.querySelectorAll('#difficulty-control .segment-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.game.setDifficultyLevel(btn.dataset.level);
+                this.updateDifficultyUI();
+            });
+        });
+        // Reflect the persisted/current level on startup.
+        this.updateDifficultyUI();
+    }
+
+    updateDifficultyUI() {
+        document.querySelectorAll('#difficulty-control .segment-btn').forEach(btn => {
+            btn.classList.toggle('selected', btn.dataset.level === this.game.difficultyLevel);
+        });
+    }
+
     setupEquipmentUI() {
         // Blade list
         const bladeList = document.getElementById('blade-list');
@@ -178,6 +198,13 @@ export class UIManager {
         // Update paddle rubber color
         if (this.game.paddle) {
             this.game.paddle.setRubberColor(eq.rubberFH.color);
+        }
+
+        // Update the round paddle preview's rubber color to match (Equipment.js
+        // RUBBERS colors are already CSS hex strings, e.g. '#d32f2f').
+        const paddlePreview = document.getElementById('paddle-preview');
+        if (paddlePreview) {
+            paddlePreview.style.setProperty('--rubber-color', eq.rubberFH.color);
         }
     }
     
