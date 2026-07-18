@@ -104,10 +104,6 @@ export class Opponent {
         // Facing target (open-court x); actual shot is solved at contact time.
         this.targetX = 0;
         this.playerPaddleX = 0;
-
-        // Reaction delay (based on difficulty)
-        this.reactionTimer = 0;
-        this.reactionDelay = 0.2;
     }
     
     setDifficulty(level) {
@@ -126,7 +122,7 @@ export class Opponent {
         }
         
         // Smooth movement toward target
-        const moveSpeed = 2.8 + this.difficulty * 2.0;
+        const moveSpeed = 2.6 + this.difficulty * 3.4;
         this.position.x += (this.targetPosition.x - this.position.x) * moveSpeed * dt;
         this.position.y += (this.targetPosition.y - this.position.y) * moveSpeed * dt;
         this.position.z += (this.targetPosition.z - this.position.z) * moveSpeed * dt;
@@ -198,28 +194,62 @@ export class Opponent {
     }
     
     predictLanding(pos, vel, spin) {
-        // Simple trajectory prediction
-        // Using basic physics to find where ball crosses z = -TABLE_LENGTH/2 area
-        
+        // Trajectory prediction — mirrors Physics.js ball accel (gravity +
+        // quadratic air drag + Magnus spin, in that order) so the predicted
+        // landing matches what PhysicsEngine.step() will actually produce.
+        // Constants and formulas copied from Physics.js (BALL_RADIUS,
+        // BALL_MASS, AIR_DENSITY, DRAG_COEFF, magnusCoeff) since they aren't
+        // exported from that module.
+
         if (vel.z >= 0) return null;
-        
-        const g = 9.81;
-        let dt = 0;
+
+        const GRAVITY = 9.81;
+        const BALL_RADIUS = 0.02;
+        const BALL_MASS = 0.0027;
+        const BALL_AREA = Math.PI * BALL_RADIUS * BALL_RADIUS;
+        const AIR_DENSITY = 1.225;
+        const DRAG_COEFF = 0.4;
+        const MAGNUS_COEFF = 0.00008;
+
         let p = pos.clone();
         let v = vel.clone();
+        let s = (spin || new THREE.Vector3()).clone();
         const step = 0.01;
-        
+
         for (let t = 0; t < 2.0; t += step) {
-            v.y -= g * step;
+            // 1. Gravity
+            v.y -= GRAVITY * step;
+
+            // 2. Air drag (quadratic)
+            const vMag = v.length();
+            if (vMag > 0.01) {
+                const dragMag = 0.5 * AIR_DENSITY * BALL_AREA * DRAG_COEFF * vMag * vMag / BALL_MASS;
+                const dragForce = v.clone().multiplyScalar(-dragMag / vMag);
+                v.add(dragForce.multiplyScalar(step));
+            }
+
+            // 3. Magnus effect
+            const spinStrength = s.length();
+            if (spinStrength > 0.1 && vMag > 0.1) {
+                const magnusForce = new THREE.Vector3()
+                    .crossVectors(s, v)
+                    .multiplyScalar(MAGNUS_COEFF);
+                v.add(magnusForce.multiplyScalar(step / BALL_MASS));
+            }
+
+            // 4. Update position
             p.add(v.clone().multiplyScalar(step));
-            
-            if (p.y < 0.76 && p.z < 0 && Math.abs(p.x) < 1.0) {
+
+            // 5. Spin decay
+            s.multiplyScalar(1 - 0.02 * step);
+
+            if (p.y < TABLE_HEIGHT && p.z < 0 && Math.abs(p.x) < 1.0) {
                 return p.clone();
             }
-            
+
             if (p.z < -2) break;
         }
-        
+
         return null;
     }
     
@@ -239,7 +269,7 @@ export class Opponent {
         
         if (this.swingTimer >= currentDuration) {
             this.swingTimer = 0;
-            
+
             switch (this.swingState) {
                 case 'backswing':
                     this.swingState = 'forward';
@@ -255,25 +285,42 @@ export class Opponent {
                     this.hasHitBall = false;
                     break;
             }
+
+            // Re-arm: a whiffed swing (follow finished into recovery, or
+            // recovery finished into ready) shouldn't cost the whole rally.
+            // If contact never happened and the ball is still live and
+            // incoming toward the CPU, skip/shorten recovery and drop
+            // straight back to 'ready' so a fresh backswing can start.
+            if (!this.hasHitBall && ballState &&
+                (this.swingState === 'recovery' || this.swingState === 'ready') &&
+                ballState.velocity.z < -0.1 && ballState.position.z < 0.5) {
+                this.swingState = 'ready';
+                this.swingTimer = 0;
+                this.hasHitBall = false;
+            }
         }
     }
     
     shouldHit(ballState) {
-        // Check if ball is in hitting zone and swing is in forward phase
-        if (this.swingState !== 'forward') return false;
+        // Check if ball is in hitting zone and swing is in an active phase
+        // (forward or backswing — mirrors the player paddle's canHit pattern,
+        // which only gates on distance/reach, not a single narrow frame).
+        if (this.swingState !== 'forward' && this.swingState !== 'backswing') return false;
         if (this.hasHitBall) return false;
-        
+
         const ballPos = ballState.position;
         const paddlePos = this.position;
-        
-        // Check distance to ball
+
+        // Check distance to ball — hit radius grows with difficulty so a
+        // harder opponent actually makes contact instead of just aiming
+        // better once it does.
         const dist = Math.sqrt(
             (ballPos.x - paddlePos.x) ** 2 +
             (ballPos.y - paddlePos.y) ** 2 +
             (ballPos.z - paddlePos.z) ** 2
         );
-        
-        return dist < 0.25 && ballPos.z < 0.1 && ballPos.z > -1.2;
+
+        return dist < (0.24 + this.difficulty * 0.14) && ballPos.z < 0.1 && ballPos.z > -1.2;
     }
     
     /**
