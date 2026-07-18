@@ -87,31 +87,23 @@ export async function submitScore(args: {
     const prev = b.scores.get(playerId);
     if (prev === undefined || stored > prev) {
       b.scores.set(playerId, stored);
-      b.meta.set(playerId, { name: nickname, cc, ts: Date.now() });
       accepted = true;
     } else best = fromStored(game, prev);
+    // Display identity follows the player: name/country update on every
+    // submit (standard leaderboard behavior); only the score needs to improve.
+    b.meta.set(playerId, { name: nickname, cc, ts: Date.now() });
   } else {
     const prevRaw = (await redisCmd(["ZSCORE", key, playerId])) as string | null;
     const prev = prevRaw === null ? undefined : Number(prevRaw);
     if (prev === undefined || stored > prev) {
       await redisCmd(["ZADD", key, stored, playerId]);
-      await redisCmd(["HSET", `${key}:meta`, playerId, JSON.stringify({ name: nickname, cc, ts: Date.now() } satisfies Meta)]);
       accepted = true;
     } else best = fromStored(game, prev);
+    // Display identity follows the player (see memory-path comment).
+    await redisCmd(["HSET", `${key}:meta`, playerId, JSON.stringify({ name: nickname, cc, ts: Date.now() } satisfies Meta)]);
   }
 
-  // On a rejected resubmit, the player's own board entry still carries the
-  // OLD cc (stored meta wasn't overwritten), so ranking by the current
-  // call's cc would filter the player's own row out of the country board
-  // (countryRank 0). Use the cc actually on record for this player instead.
-  let effectiveCc = cc;
-  if (!accepted) {
-    const storedMeta = await readMeta(game, [playerId]);
-    const m = storedMeta.get(playerId);
-    if (m) effectiveCc = m.cc;
-  }
-
-  const ranks = await computeRanks(game, playerId, effectiveCc);
+  const ranks = await computeRanks(game, playerId, cc);
   return { accepted, best, ...ranks };
 }
 

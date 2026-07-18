@@ -59,12 +59,17 @@ test("higher-is-better ranking orders descending; country rank filters by cc", a
   assert.equal(board.top[0].rank, 1);
 });
 
-test("countryRank uses stored country on rejected resubmit", async () => {
+test("rejected resubmit updates display name/country but keeps best score", async () => {
   __resetMemoryStore();
-  await submitScore({ game: "2048", score: 300, nickname: "A", playerId: "p1", cc: "SE" });
-  const r = await submitScore({ game: "2048", score: 200, nickname: "A", playerId: "p1", cc: "US" });
+  await submitScore({ game: "2048", score: 300, nickname: "OldName", playerId: "p1", cc: "SE" });
+  const r = await submitScore({ game: "2048", score: 200, nickname: "NewName", playerId: "p1", cc: "US" });
   assert.equal(r.accepted, false);
-  assert.equal(r.countryRank, 1); // still ranked within SE (stored cc), not 0
+  assert.equal(r.best, 300);        // score unchanged (worse rejected)
+  assert.equal(r.countryRank, 1);   // ranked within the NEW country (US)
+  const board = await getBoard("2048", "p1");
+  assert.equal(board.top[0].name, "NewName"); // display identity follows the player
+  assert.equal(board.top[0].cc, "US");
+  assert.equal(board.top[0].score, 300);
 });
 
 test("rate limit allows 10 then blocks", async () => {
