@@ -37,51 +37,6 @@ export default function SnakePage() {
       <SnakePlay />
 
       <div className="container mx-auto px-4 pb-12 max-w-4xl">
-        {/* FAQ Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: [
-                {
-                  "@type": "Question",
-                  name: "How do I play snake game online?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Use arrow keys or W/A/S/D on desktop. On mobile, swipe to change direction. Eat food to grow longer. Avoid hitting walls or your own tail.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Does snake game get faster as I play?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Yes. The snake speeds up each time it eats, making the game progressively harder.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Can I play snake game on my phone?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Yes. Swipe up, down, left, or right to control the snake on touchscreen devices.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Is snake game free to play?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Yes. No download or sign-up needed. Runs in any modern browser. High score is saved locally.",
-                  },
-                },
-              ],
-            }),
-          }}
-        />
-
         {/* WebApplication Schema */}
         <script
           type="application/ld+json"
