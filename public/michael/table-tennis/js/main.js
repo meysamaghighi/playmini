@@ -57,7 +57,10 @@ class App {
                 this.input,
                 this.swipeInput
             );
-            
+
+            // Client-side game — exposed for playtesting/diagnostics.
+            window.__ttGame = this.game;
+
             // UI
             this.ui = new UIManager(this.game);
             

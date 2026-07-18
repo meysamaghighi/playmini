@@ -550,9 +550,9 @@ kbd {
     width: 100%;
     padding: 20px 30px;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 30px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 .score-board {
@@ -606,10 +606,6 @@ kbd {
 }
 
 #serve-indicator {
-    position: absolute;
-    top: 90px;
-    left: 50%;
-    transform: translateX(-50%);
     background: rgba(255,107,53,0.9);
     color: white;
     padding: 6px 20px;
@@ -623,7 +619,7 @@ kbd {
 
 #rally-info {
     position: absolute;
-    top: 90px;
+    top: 20px;
     right: 30px;
     text-align: right;
 }
