@@ -266,13 +266,17 @@ export default function Game2048() {
           >
             Play Again
           </button>
-          <LeaderboardPanel game="2048" score={score} />
         </div>
       )}
 
       <p className="text-sm text-ink-2 text-center max-w-md">
         Arrow keys / WASD / swipe to move tiles. Combine matching tiles to reach 2048.
       </p>
+
+      {/* Always-visible board (view-only mid-game; submit unlocks at game over) */}
+      <div className="w-full max-w-md">
+        <LeaderboardPanel game="2048" score={gameOver ? score : null} />
+      </div>
     </div>
   );
 }

@@ -127,7 +127,9 @@ export default function LeaderboardPanel({
   }
 
   return (
-    <div className="mt-6 rounded-xl border border-line bg-paper-2 p-4 text-left">
+    // Explicit text-ink so descendants never inherit a light color from a
+    // dark game-area ancestor (mirrors the speed-test fix).
+    <div className="mt-6 rounded-xl border border-line bg-paper-2 p-4 text-left text-ink">
       <h3 className="font-display text-lg text-ink mb-3" style={{ fontWeight: 800 }}>
         🌍 Global Leaderboard
       </h3>
