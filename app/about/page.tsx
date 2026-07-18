@@ -35,7 +35,8 @@ export default function AboutPage() {
         </p>
         <p className="text-ink-2">
           All games run directly in your browser. No downloads, no accounts, no
-          personal data collected.
+          personal data collected (opt-in leaderboard submissions are the one
+          exception).
         </p>
       </section>
 
@@ -75,7 +76,13 @@ export default function AboutPage() {
           <li className="flex gap-2">
             <span className="font-bold" style={{ color: "var(--accent)" }}>•</span>
             <span>
-              <strong className="text-ink">Local scores:</strong> High scores are saved in your browser&apos;s localStorage only. They never leave your device.
+              <strong className="text-ink">Local scores:</strong> High scores are saved in your browser&apos;s localStorage only. They never leave your device (opt-in leaderboard submissions are the one exception).
+            </span>
+          </li>
+          <li className="flex gap-2">
+            <span className="font-bold" style={{ color: "var(--accent)" }}>•</span>
+            <span>
+              <strong className="text-ink">Leaderboards:</strong> If you choose to submit a score, we store your chosen nickname, the score, and a two-letter country code derived from your IP address at submit time (the IP itself is never stored). Nickname, country flag, and score are shown publicly on that leaderboard.
             </span>
           </li>
           <li className="flex gap-2">

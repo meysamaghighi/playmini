@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import LeaderboardPanel from "./LeaderboardPanel";
 
 const SIZE = 4;
 type Board = number[][];
@@ -162,6 +163,10 @@ export default function Game2048() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Don't hijack keys while the user types in a form field (e.g. the
+      // leaderboard nickname input) — letters must reach the input.
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
       const map: Record<string, Dir> = {
         ArrowUp: "up",
         ArrowDown: "down",
@@ -261,6 +266,7 @@ export default function Game2048() {
           >
             Play Again
           </button>
+          <LeaderboardPanel game="2048" score={score} />
         </div>
       )}
 
