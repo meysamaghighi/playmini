@@ -2,9 +2,11 @@ import React from "react";
 
 export type FilterTag = "1 min" | "5 min" | "15+ min" | "Solo" | "2P" | "Word" | "Reflex" | "Memory" | "Logic";
 export type CuratedGroup = "classics" | "reflexes";
+export type Category = "Arcade" | "Puzzle" | "Board & Cards" | "Word" | "Brain & Memory";
 
 export type Game = {
   slug: string;
+  category: Category;
   title: string;
   description: string;
   icon: React.ReactNode;
@@ -12,9 +14,12 @@ export type Game = {
   curated?: CuratedGroup[];
 };
 
+export const CATEGORIES: Category[] = ["Arcade", "Puzzle", "Board & Cards", "Word", "Brain & Memory"];
+
 export const GAMES: Game[] = [
   {
     slug: "snake",
+    category: "Arcade",
     title: "Snake",
     description: "Classic arcade - eat food and grow longer",
     tags: ["5 min", "Solo", "Reflex"],
@@ -28,6 +33,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "2048",
+    category: "Puzzle",
     title: "2048",
     description: "Classic number puzzle - merge tiles to 2048",
     tags: ["5 min", "Solo", "Logic"],
@@ -47,6 +53,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "flappy",
+    category: "Arcade",
     title: "Flappy Bird",
     description: "Tap to flap through the pipes",
     tags: ["1 min", "Solo", "Reflex"],
@@ -63,6 +70,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "minesweeper",
+    category: "Puzzle",
     title: "Minesweeper",
     description: "Classic logic puzzle - clear board without mines",
     tags: ["5 min", "Solo", "Logic"],
@@ -80,6 +88,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "pac-man",
+    category: "Arcade",
     title: "Pac-Man",
     description: "Eat dots, dodge ghosts, grab power pellets",
     tags: ["5 min", "Solo", "Reflex"],
@@ -98,6 +107,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "breakout",
+    category: "Arcade",
     title: "Breakout",
     description: "Smash bricks with a bouncing ball",
     tags: ["5 min", "Solo", "Reflex"],
@@ -117,6 +127,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "space-invaders",
+    category: "Arcade",
     title: "Space Invaders",
     description: "Defend Earth from alien invaders",
     tags: ["5 min", "Solo", "Reflex"],
@@ -136,6 +147,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "block-drop",
+    category: "Puzzle",
     title: "Block Drop",
     description: "Classic falling blocks puzzle",
     tags: ["5 min", "Solo", "Logic"],
@@ -154,6 +166,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "whack-a-mole",
+    category: "Arcade",
     title: "Whack-a-Mole",
     description: "Whack moles as fast as you can!",
     tags: ["1 min", "Solo", "Reflex"],
@@ -172,6 +185,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "car-racer",
+    category: "Arcade",
     title: "Car Racer",
     description: "Dodge traffic on the endless highway",
     tags: ["1 min", "Solo", "Reflex"],
@@ -191,6 +205,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "dino-runner",
+    category: "Arcade",
     title: "Dino Runner",
     description: "Jump and duck in this endless runner",
     tags: ["1 min", "Solo", "Reflex"],
@@ -209,6 +224,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "frogger",
+    category: "Arcade",
     title: "Frogger",
     description: "Cross roads and rivers to reach home",
     tags: ["5 min", "Solo", "Reflex"],
@@ -229,6 +245,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "bubble-shooter",
+    category: "Arcade",
     title: "Bubble Shooter",
     description: "Match 3+ bubbles to pop them",
     tags: ["5 min", "Solo", "Reflex"],
@@ -248,6 +265,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "asteroids",
+    category: "Arcade",
     title: "Asteroids",
     description: "Shoot asteroids before they get you",
     tags: ["5 min", "Solo", "Reflex"],
@@ -262,6 +280,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "tower-builder",
+    category: "Arcade",
     title: "Tower Builder",
     description: "Stack swinging blocks to build high",
     tags: ["1 min", "Solo", "Reflex"],
@@ -279,6 +298,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "maze",
+    category: "Puzzle",
     title: "Maze Runner",
     description: "Navigate through generated mazes to the goal",
     tags: ["5 min", "Solo", "Logic"],
@@ -294,6 +314,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "chess",
+    category: "Board & Cards",
     title: "Chess",
     description: "Play chess against the computer",
     tags: ["15+ min", "Solo", "Logic"],
@@ -312,6 +333,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "checkers",
+    category: "Board & Cards",
     title: "Checkers",
     description: "Classic board game with kings and multi-jumps",
     tags: ["15+ min", "2P", "Logic"],
@@ -333,6 +355,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "reversi",
+    category: "Board & Cards",
     title: "Reversi",
     description: "Flip pieces and dominate the board",
     tags: ["15+ min", "2P", "Logic"],
@@ -348,6 +371,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "sudoku",
+    category: "Puzzle",
     title: "Sudoku",
     description: "9x9 number puzzle with 3 difficulty levels",
     tags: ["15+ min", "Solo", "Logic"],
@@ -368,6 +392,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "tic-tac-toe",
+    category: "Board & Cards",
     title: "Tic-Tac-Toe",
     description: "Classic X and O - play vs AI or a friend",
     tags: ["1 min", "2P", "Logic"],
@@ -387,6 +412,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "connect4",
+    category: "Board & Cards",
     title: "Connect 4",
     description: "Drop discs to connect four in a row",
     tags: ["5 min", "2P", "Logic"],
@@ -405,6 +431,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "memory",
+    category: "Brain & Memory",
     title: "Memory Match",
     description: "Flip cards and find matching pairs",
     tags: ["5 min", "Solo", "Memory"],
@@ -422,6 +449,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "simon",
+    category: "Brain & Memory",
     title: "Simon Says",
     description: "Repeat the color sequence pattern",
     tags: ["5 min", "Solo", "Memory"],
@@ -438,6 +466,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "sliding-puzzle",
+    category: "Puzzle",
     title: "Sliding Puzzle",
     description: "Arrange tiles 1-15 in order",
     tags: ["5 min", "Solo", "Logic", "Memory"],
@@ -458,6 +487,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "solitaire",
+    category: "Board & Cards",
     title: "Solitaire",
     description: "Klondike card game - build foundations",
     tags: ["15+ min", "Solo", "Logic"],
@@ -475,6 +505,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "pong",
+    category: "Arcade",
     title: "Pong",
     description: "Classic paddle game vs AI",
     tags: ["5 min", "2P", "Reflex"],
@@ -491,6 +522,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "hangman",
+    category: "Word",
     title: "Hangman",
     description: "Classic word guessing with 200+ words",
     tags: ["5 min", "Solo", "Word"],
@@ -510,6 +542,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "wordle",
+    category: "Word",
     title: "Word Guess",
     description: "Wordle-style - guess 5-letter word in 6 tries",
     tags: ["5 min", "Solo", "Word"],
@@ -529,6 +562,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "word-builder",
+    category: "Word",
     title: "Word Builder",
     description: "How many words can you make from one word?",
     tags: ["5 min", "Solo", "Word"],
@@ -548,6 +582,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "crossword",
+    category: "Word",
     title: "Crossword",
     description: "Fill in the crossword puzzle with clues",
     tags: ["15+ min", "Solo", "Word"],
@@ -569,6 +604,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "word-search",
+    category: "Word",
     title: "Word Search",
     description: "Find hidden words in a letter grid",
     tags: ["5 min", "Solo", "Word"],
@@ -590,6 +626,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "typing-race",
+    category: "Word",
     title: "Typing Race",
     description: "Type paragraphs as fast and accurately as you can",
     tags: ["5 min", "Solo", "Word"],
@@ -607,6 +644,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "music-trivia",
+    category: "Brain & Memory",
     title: "Music Trivia",
     description: "Song quiz and timeline challenge",
     tags: ["15+ min", "Solo", "Word"],
@@ -623,6 +661,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "soccer",
+    category: "Arcade",
     title: "Penalty Kicks",
     description: "Aim and shoot past the goalkeeper",
     tags: ["1 min", "Solo", "Reflex"],
@@ -640,6 +679,7 @@ export const GAMES: Game[] = [
   },
   {
     slug: "voxel",
+    category: "Puzzle",
     title: "Voxel Builder",
     description: "Build with blocks in 3D isometric view",
     tags: ["15+ min", "Solo"],
