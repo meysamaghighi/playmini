@@ -30,69 +30,6 @@ export default function SoccerPage() {
         </div>
         <SoccerPlay />
 
-        <section className="mt-12 bg-paper-2 rounded-lg p-6 border border-line">
-          <h2 className="text-2xl font-bold mb-4 text-green-400">How to Play</h2>
-          <div className="space-y-4 text-ink-2">
-            <div>
-              <h3 className="font-semibold text-ink mb-2">Controls:</h3>
-              <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>A crosshair moves automatically across the goal</li>
-                <li>Click or tap to shoot when the crosshair is where you want</li>
-                <li>Time your shot carefully to beat the goalkeeper</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-ink mb-2">Rules:</h3>
-              <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>You have 10 penalty kicks per round</li>
-                <li>The goalkeeper gets smarter as rounds progress</li>
-                <li>Try to score as many goals as possible out of 10</li>
-                <li>Share your results with friends!</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-8 bg-paper-2 rounded-lg p-6 border border-line">
-          <h2 className="text-2xl font-bold mb-4 text-green-400">About Penalty Kicks</h2>
-          <div className="text-ink-2 space-y-3">
-            <p>
-              Penalty kicks are one of the most exciting moments in football. The pressure of a one-on-one battle between striker and goalkeeper has decided countless matches and tournaments.
-            </p>
-            <p>
-              In this game, you face an increasingly skilled goalkeeper over 10 rounds. Early shots are easier to place, but as you progress, the keeper reads your aim faster and dives more accurately. Can you score a perfect 10/10?
-            </p>
-          </div>
-        </section>
-
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: [
-                {
-                  "@type": "Question",
-                  name: "How do I aim my penalty kick?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "A crosshair moves automatically across the goal. Click or tap at the right moment to shoot in that direction. Timing is key!",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Does the goalkeeper get harder?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Yes! The goalkeeper's reaction speed and accuracy improve with each round, making later penalties more challenging to score.",
-                  },
-                },
-              ],
-            }),
-          }}
-        />
-
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
