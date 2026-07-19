@@ -177,6 +177,40 @@ export default function CarRacer() {
     return () => window.removeEventListener("keydown", onKey);
   }, [move]);
 
+  // Swipe controls (primary on touch devices)
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    let sx = 0;
+    let tracking = false;
+    const THRESH = 30;
+    const onStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      sx = t.clientX;
+      tracking = true;
+    };
+    const onMove = (e: TouchEvent) => {
+      if (!tracking) return;
+      e.preventDefault(); // stop the page scrolling while steering
+      const t = e.touches[0];
+      const dx = t.clientX - sx;
+      if (Math.abs(dx) < THRESH) return;
+      move(dx > 0 ? 1 : -1);
+      sx = t.clientX; // reset origin so a continued drag can cross multiple lanes
+    };
+    const onEnd = () => {
+      tracking = false;
+    };
+    canvas.addEventListener("touchstart", onStart, { passive: false });
+    canvas.addEventListener("touchmove", onMove, { passive: false });
+    canvas.addEventListener("touchend", onEnd);
+    return () => {
+      canvas.removeEventListener("touchstart", onStart);
+      canvas.removeEventListener("touchmove", onMove);
+      canvas.removeEventListener("touchend", onEnd);
+    };
+  }, [move]);
+
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex items-center gap-6 text-ink text-lg">
@@ -202,7 +236,7 @@ export default function CarRacer() {
               {gameState === "ready" ? (
                 <>
                   <div className="text-2xl font-bold mb-2">Car Racer</div>
-                  <div className="text-sm text-ink-3 mb-4">Arrows / A / D to switch lanes</div>
+                  <div className="text-sm text-ink-3 mb-4">Arrows / A / D / Swipe</div>
                 </>
               ) : (
                 <>
@@ -222,21 +256,6 @@ export default function CarRacer() {
             </div>
           </div>
         )}
-      </div>
-
-      <div className="flex gap-3 md:hidden">
-        <button
-          onPointerDown={() => move(-1)}
-          className="px-8 py-4 bg-paper-2 text-ink text-2xl font-bold rounded"
-        >
-          ←
-        </button>
-        <button
-          onPointerDown={() => move(1)}
-          className="px-8 py-4 bg-paper-2 text-ink text-2xl font-bold rounded"
-        >
-          →
-        </button>
       </div>
     </div>
   );
