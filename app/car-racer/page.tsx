@@ -52,7 +52,7 @@ export default function CarRacerPage() {
             <div>
               <h3 className="font-semibold text-ink mb-2">Mobile:</h3>
               <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>On-screen left/right buttons under the game</li>
+                <li>Swipe left/right on the game to switch lanes</li>
               </ul>
             </div>
             <div>
@@ -90,7 +90,7 @@ export default function CarRacerPage() {
                   name: "How do I control the car?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Use left/right arrow keys or A/D to switch lanes on desktop. On mobile, use the on-screen left/right buttons shown below the game.",
+                    text: "Use left/right arrow keys or A/D to switch lanes on desktop. On mobile, swipe left or right anywhere on the game to switch lanes.",
                   },
                 },
                 {
