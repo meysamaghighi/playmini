@@ -28,37 +28,6 @@ export const metadata: Metadata = {
   },
 };
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "How do I play Tower Builder?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Tap or click the canvas to drop the swinging block. Try to align it perfectly with the previous block. The overlapping area becomes the next block's width. Stack as many blocks as you can!",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What happens if I drop a block perfectly?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "If you drop a block very close to perfect alignment (within a few pixels), you'll see a 'Perfect!' message and the block will keep its full width instead of shrinking. This helps you build taller towers!",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "When does the game end?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "The game ends when your block becomes too narrow (less than 10 pixels wide) or when you miss the previous block entirely. Your score is the number of blocks you successfully stacked.",
-      },
-    },
-  ],
-};
-
 const webAppSchema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
@@ -82,10 +51,6 @@ export default function TowerBuilderPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      <script
-        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
       />
 
@@ -94,97 +59,6 @@ export default function TowerBuilderPage() {
           <header className="text-center mb-8">
           </header>
         <TowerBuilderPlay />
-
-          <section className="max-w-3xl mx-auto mt-12 space-y-8">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h2 className="text-2xl font-bold mb-4">How to Play</h2>
-              <ol className="list-decimal list-inside space-y-2 text-ink">
-                <li>
-                  A block swings back and forth at the top of the screen
-                </li>
-                <li>
-                  Tap or click to drop the block onto the tower
-                </li>
-                <li>
-                  The overlapping area becomes the next block&apos;s width
-                </li>
-                <li>
-                  Perfect drops (very close alignment) keep the full width and show &quot;Perfect!&quot;
-                </li>
-                <li>
-                  Stack as many blocks as you can before they become too narrow
-                </li>
-                <li>
-                  The game gets faster every 5 blocks
-                </li>
-              </ol>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h2 className="text-2xl font-bold mb-4">
-                Frequently Asked Questions
-              </h2>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">
-                    How do I play Tower Builder?
-                  </h3>
-                  <p className="text-ink">
-                    Tap or click the canvas to drop the swinging block. Try to
-                    align it perfectly with the previous block. The overlapping
-                    area becomes the next block&apos;s width. Stack as many blocks as
-                    you can!
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">
-                    What happens if I drop a block perfectly?
-                  </h3>
-                  <p className="text-ink">
-                    If you drop a block very close to perfect alignment (within
-                    a few pixels), you&apos;ll see a &quot;Perfect!&quot; message and the block
-                    will keep its full width instead of shrinking. This helps
-                    you build taller towers!
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">
-                    When does the game end?
-                  </h3>
-                  <p className="text-ink">
-                    The game ends when your block becomes too narrow (less than
-                    10 pixels wide) or when you miss the previous block
-                    entirely. Your score is the number of blocks you
-                    successfully stacked.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-              <h2 className="text-2xl font-bold mb-4">About Tower Builder</h2>
-              <p className="text-ink mb-4">
-                Tower Builder is a precision-based stacking game where you build
-                a tower by dropping blocks from a swinging crane. The challenge
-                is to align each block as perfectly as possible with the one
-                below it. Misaligned blocks get cut off, making each successive
-                block narrower. Perfect drops reward you by keeping the full
-                width, allowing you to build taller towers.
-              </p>
-              <p className="text-ink mb-4">
-                The game progressively gets faster every 5 blocks, testing your
-                reaction time and precision. Your personal best is saved
-                locally, so you can always try to beat your high score. The
-                colorful blocks and smooth camera panning make for a satisfying
-                gameplay experience.
-              </p>
-              <p className="text-ink">
-                Tower Builder works on all devices with a modern web browser. No
-                download or installation required. Play for free right in your
-                browser!
-              </p>
-            </div>
-          </section>
         </div>
       </div>
     </>
