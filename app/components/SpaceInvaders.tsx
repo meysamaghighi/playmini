@@ -66,6 +66,11 @@ function getLevelConfig(level: number): LevelConfig {
   return { rows, cols: 11, startSpeed, alienShootInterval };
 }
 
+// Shared bounds clamp for the player ship — used by both keyboard and touch-drag input.
+function clampPlayerX(x: number) {
+  return Math.max(0, Math.min(CANVAS_WIDTH - PLAYER_WIDTH, x));
+}
+
 export default function SpaceInvaders() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -92,8 +97,6 @@ export default function SpaceInvaders() {
   const lastShotTimeRef = useRef(0);
   const lastAlienShotRef = useRef(0);
   const gameStateRef = useRef<"start" | "playing" | "gameover">("start");
-  const touchLeftRef = useRef(false);
-  const touchRightRef = useRef(false);
   const autoShootIntervalRef = useRef<number | null>(null);
   const activePowerUpRef = useRef<PowerUpType | null>(null);
   const powerUpTimerRef = useRef<number | null>(null);
@@ -396,12 +399,12 @@ export default function SpaceInvaders() {
       return;
     }
 
-    // Move player (keyboard or touch)
-    if (keysRef.current["arrowleft"] || keysRef.current["a"] || touchLeftRef.current) {
-      playerXRef.current = Math.max(0, playerXRef.current - PLAYER_SPEED);
+    // Move player (keyboard). Touch drag updates playerXRef directly via the touch listeners below.
+    if (keysRef.current["arrowleft"] || keysRef.current["a"]) {
+      playerXRef.current = clampPlayerX(playerXRef.current - PLAYER_SPEED);
     }
-    if (keysRef.current["arrowright"] || keysRef.current["d"] || touchRightRef.current) {
-      playerXRef.current = Math.min(CANVAS_WIDTH - PLAYER_WIDTH, playerXRef.current + PLAYER_SPEED);
+    if (keysRef.current["arrowright"] || keysRef.current["d"]) {
+      playerXRef.current = clampPlayerX(playerXRef.current + PLAYER_SPEED);
     }
 
     const now = Date.now();
@@ -717,17 +720,54 @@ export default function SpaceInvaders() {
     draw();
   }, [draw]);
 
-  const handleTouchStart = (direction: "left" | "right") => (e: React.PointerEvent) => {
-    e.preventDefault();
-    if (direction === "left") touchLeftRef.current = true;
-    else if (direction === "right") touchRightRef.current = true;
-  };
+  // Drag-to-move (touch): the ship tracks the finger 1:1, preserving whatever offset
+  // existed between finger and ship at touchstart so there's no jump on first touch.
+  // Firing is untouched — auto-shoot keeps running regardless of touch state.
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-  const handleTouchEnd = (direction: "left" | "right") => (e: React.PointerEvent) => {
-    e.preventDefault();
-    if (direction === "left") touchLeftRef.current = false;
-    else if (direction === "right") touchRightRef.current = false;
-  };
+    let dragging = false;
+    let dragAnchorTouchX = 0;
+    let dragAnchorPlayerX = 0;
+
+    const onTouchStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      dragAnchorTouchX = t.clientX;
+      dragAnchorPlayerX = playerXRef.current;
+      dragging = true;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!dragging) return;
+      e.preventDefault(); // stop the page scrolling while steering
+      const t = e.touches[0];
+      if (!t) return;
+      // Convert screen-pixel delta to game-space delta: the canvas element can be
+      // CSS-scaled (max-w-full) to a different size than its 600x600 drawing buffer.
+      const rect = canvas.getBoundingClientRect();
+      const scale = rect.width > 0 ? CANVAS_WIDTH / rect.width : 1;
+      const dx = (t.clientX - dragAnchorTouchX) * scale;
+      playerXRef.current = clampPlayerX(dragAnchorPlayerX + dx);
+    };
+
+    const onTouchEnd = () => {
+      dragging = false;
+    };
+
+    canvas.addEventListener("touchstart", onTouchStart, { passive: false });
+    canvas.addEventListener("touchmove", onTouchMove, { passive: false });
+    canvas.addEventListener("touchend", onTouchEnd);
+    canvas.addEventListener("touchcancel", onTouchEnd);
+
+    return () => {
+      canvas.removeEventListener("touchstart", onTouchStart);
+      canvas.removeEventListener("touchmove", onTouchMove);
+      canvas.removeEventListener("touchend", onTouchEnd);
+      canvas.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, []);
 
   return (
     <div ref={containerRef} className="flex flex-col items-center gap-4">
@@ -763,7 +803,7 @@ export default function SpaceInvaders() {
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/85 rounded-2xl backdrop-blur-sm">
             <div className="text-6xl mb-3">👾</div>
             <h2 className="text-3xl font-black text-red-400 mb-2">Space Invaders</h2>
-            <p className="text-ink-2 mb-2 text-sm">Arrow keys to move, auto-shooting enabled</p>
+            <p className="text-ink-2 mb-2 text-sm">Arrow keys or drag to move, auto-shooting enabled</p>
             <p className="text-ink-3 mb-6 text-xs">10 levels + endless mode</p>
             {highScore > 0 && (
               <p className="text-yellow-400 mb-4 text-sm font-bold">High Score: {highScore}</p>
@@ -800,29 +840,8 @@ export default function SpaceInvaders() {
         )}
       </div>
 
-      {/* Touch Controls */}
-      <div className="flex gap-3 w-full max-w-md justify-center items-center px-4">
-        <button
-          onPointerDown={handleTouchStart("left")}
-          onPointerUp={handleTouchEnd("left")}
-          className="flex-1 h-16 bg-paper-2/50 hover:bg-paper-2/50 active:bg-gray-600/50 text-ink font-bold rounded-xl transition-colors select-none flex items-center justify-center text-2xl border border-line"
-          style={{ touchAction: "none" }}
-        >
-          ←
-        </button>
-        <button
-          onPointerDown={handleTouchStart("right")}
-          onPointerUp={handleTouchEnd("right")}
-          className="flex-1 h-16 bg-paper-2/50 hover:bg-paper-2/50 active:bg-gray-600/50 text-ink font-bold rounded-xl transition-colors select-none flex items-center justify-center text-2xl border border-line"
-          style={{ touchAction: "none" }}
-        >
-          →
-        </button>
-      </div>
-
       <div className="text-center text-xs text-ink-3">
-        <p>Arrow keys or A/D to move • Auto-shooting enabled</p>
-        <p className="mt-1">Use touch controls on mobile</p>
+        <p>Arrow keys or drag to move · auto-shooting enabled</p>
         <p className="mt-1 text-ink-3">Collect power-ups: Shield (S), Rapid Fire (R), Spread Shot (F)</p>
       </div>
     </div>
