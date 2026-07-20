@@ -362,6 +362,69 @@ export default function BlockDrop() {
     return () => window.removeEventListener("keydown", onKey);
   }, [hardDrop, move, rotatePiece, softDrop, togglePause]);
 
+  // Touch controls (primary on touch devices): drag to move, tap to rotate, swipe down to hard-drop
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const H_THRESH = 30; // px of horizontal drag per column step
+    const V_THRESH = 50; // px of downward drag to trigger a hard drop
+    const TAP_MAX_DIST = 10;
+    const TAP_MAX_MS = 250;
+    let fx = 0;
+    let fy = 0;
+    let ox = 0;
+    let startTime = 0;
+    let tracking = false;
+    let dropped = false;
+
+    const onStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      fx = t.clientX;
+      fy = t.clientY;
+      ox = t.clientX;
+      startTime = Date.now();
+      dropped = false;
+      tracking = true;
+    };
+    const onMove = (e: TouchEvent) => {
+      if (!tracking) return;
+      e.preventDefault(); // stop the page scrolling while playing
+      const t = e.touches[0];
+      const dx = t.clientX - fx;
+      const dy = t.clientY - fy;
+      if (dropped) return;
+      // predominantly-vertical downward swipe = hard drop
+      if (dy >= V_THRESH && Math.abs(dy) > Math.abs(dx)) {
+        hardDrop();
+        dropped = true;
+        return;
+      }
+      // horizontal drag: every H_THRESH px = one column step
+      const stepDx = t.clientX - ox;
+      if (Math.abs(stepDx) >= H_THRESH) {
+        move(stepDx > 0 ? 1 : -1, 0);
+        ox = t.clientX; // reset origin so a continued drag can cross multiple columns
+      }
+    };
+    const onEnd = (e: TouchEvent) => {
+      if (tracking && !dropped) {
+        const t = e.changedTouches[0];
+        const dist = Math.hypot(t.clientX - fx, t.clientY - fy);
+        const dur = Date.now() - startTime;
+        if (dist < TAP_MAX_DIST && dur < TAP_MAX_MS) rotatePiece();
+      }
+      tracking = false;
+    };
+    canvas.addEventListener("touchstart", onStart, { passive: false });
+    canvas.addEventListener("touchmove", onMove, { passive: false });
+    canvas.addEventListener("touchend", onEnd);
+    return () => {
+      canvas.removeEventListener("touchstart", onStart);
+      canvas.removeEventListener("touchmove", onMove);
+      canvas.removeEventListener("touchend", onEnd);
+    };
+  }, [hardDrop, move, rotatePiece]);
+
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex flex-wrap items-center justify-center gap-6 text-ink">
@@ -393,7 +456,12 @@ export default function BlockDrop() {
         {gameState !== "playing" && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-lg">
             <div className="bg-white text-gray-900 px-8 py-6 rounded-lg text-center">
-              {gameState === "ready" && <div className="text-2xl font-bold mb-2">Block Drop</div>}
+              {gameState === "ready" && (
+                <>
+                  <div className="text-2xl font-bold mb-2">Block Drop</div>
+                  <div className="text-sm text-ink-3 mb-4">Arrows / Swipe · Tap to rotate</div>
+                </>
+              )}
               {gameState === "paused" && <div className="text-2xl font-bold mb-2">Paused</div>}
               {gameState === "gameover" && (
                 <>
@@ -413,39 +481,6 @@ export default function BlockDrop() {
             </div>
           </div>
         )}
-      </div>
-
-      <div className="flex flex-wrap justify-center gap-2 md:hidden">
-        <button
-          onPointerDown={() => move(-1, 0)}
-          className="px-4 py-3 bg-paper-2 text-ink rounded font-bold"
-        >
-          ←
-        </button>
-        <button
-          onPointerDown={() => rotatePiece()}
-          className="px-4 py-3 bg-paper-2 text-ink rounded font-bold"
-        >
-          ⟳
-        </button>
-        <button
-          onPointerDown={() => move(1, 0)}
-          className="px-4 py-3 bg-paper-2 text-ink rounded font-bold"
-        >
-          →
-        </button>
-        <button
-          onPointerDown={() => softDrop()}
-          className="px-4 py-3 bg-paper-2 text-ink rounded font-bold"
-        >
-          ↓
-        </button>
-        <button
-          onPointerDown={() => hardDrop()}
-          className="px-4 py-3 bg-purple-700 text-ink rounded font-bold"
-        >
-          Drop
-        </button>
       </div>
     </div>
   );
