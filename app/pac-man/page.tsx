@@ -36,6 +36,29 @@ export default function PacManPage() {
           </p>
         </div>
         <PacManPlay />
+
+        {/* WebApplication Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "Pac-Man",
+              description:
+                "Play Pac-Man online free — eat dots, dodge ghosts, and grab power pellets in this classic maze game.",
+              url: "https://playmini.fun/pac-man",
+              applicationCategory: "Game",
+              operatingSystem: "Any",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+              },
+              browserRequirements: "Requires JavaScript. Works on all modern browsers.",
+            }),
+          }}
+        />
       </div>
     </main>
   );

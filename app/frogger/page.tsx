@@ -35,6 +35,29 @@ export default function FroggerPage() {
           </p>
         </div>
         <FroggerPlay />
+
+        {/* WebApplication Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "Frogger",
+              description:
+                "Play Frogger online free — hop across busy roads and rivers to reach home in this classic arcade game.",
+              url: "https://playmini.fun/frogger",
+              applicationCategory: "Game",
+              operatingSystem: "Any",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+              },
+              browserRequirements: "Requires JavaScript. Works on all modern browsers.",
+            }),
+          }}
+        />
       </div>
     </main>
   );

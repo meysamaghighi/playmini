@@ -36,6 +36,29 @@ export default function AsteroidsPage() {
           </p>
         </div>
         <AsteroidsPlay />
+
+        {/* WebApplication Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "Asteroids",
+              description:
+                "Play Asteroids online free — shoot asteroids, dodge debris, and survive wave after wave in this classic arcade shooter.",
+              url: "https://playmini.fun/asteroids",
+              applicationCategory: "Game",
+              operatingSystem: "Any",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+              },
+              browserRequirements: "Requires JavaScript. Works on all modern browsers.",
+            }),
+          }}
+        />
       </div>
     </main>
   );
