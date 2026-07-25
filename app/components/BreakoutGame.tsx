@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useGameLoop } from "./useGameLoop";
+import LeaderboardPanel from "./LeaderboardPanel";
 
 const CANVAS_W = 600;
 const CANVAS_H = 480;
@@ -218,6 +219,10 @@ export default function BreakoutGame() {
 
   useEffect(() => {
     const onDown = (e: KeyboardEvent) => {
+      // Don't hijack keys while the user types in a form field (e.g. the
+      // leaderboard nickname input) — letters must reach the input.
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
       if (e.key === "ArrowLeft" || e.key === "a") {
         e.preventDefault();
         keysRef.current.left = true;
@@ -298,6 +303,11 @@ export default function BreakoutGame() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Always-visible board (view-only mid-game; submit unlocks at game over) */}
+      <div className="w-full max-w-md">
+        <LeaderboardPanel game="breakout" score={gameState === "gameover" ? score : null} />
       </div>
     </div>
   );

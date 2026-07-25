@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import LeaderboardPanel from "./LeaderboardPanel";
 
 type AlienType = "normal" | "tough" | "elite";
 
@@ -684,6 +685,10 @@ export default function SpaceInvaders() {
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't hijack keys while the user types in a form field (e.g. the
+      // leaderboard nickname input) — letters must reach the input.
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
       const key = e.key.toLowerCase();
       if (["arrowleft", "arrowright", "a", "d"].includes(key)) {
         e.preventDefault();
@@ -843,6 +848,11 @@ export default function SpaceInvaders() {
       <div className="text-center text-xs text-ink-3">
         <p>Arrow keys or drag to move · auto-shooting enabled</p>
         <p className="mt-1 text-ink-3">Collect power-ups: Shield (S), Rapid Fire (R), Spread Shot (F)</p>
+      </div>
+
+      {/* Always-visible board (view-only mid-game; submit unlocks at game over) */}
+      <div className="w-full max-w-md">
+        <LeaderboardPanel game="space-invaders" score={gameState === "gameover" ? score : null} />
       </div>
     </div>
   );

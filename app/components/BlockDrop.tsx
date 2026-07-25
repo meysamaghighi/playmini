@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useGameLoop } from "./useGameLoop";
+import LeaderboardPanel from "./LeaderboardPanel";
 
 const COLS = 10;
 const ROWS = 20;
@@ -337,6 +338,10 @@ export default function BlockDrop() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Don't hijack keys while the user types in a form field (e.g. the
+      // leaderboard nickname input) — letters must reach the input.
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
       if (stateRef.current === "ready" || stateRef.current === "gameover") return;
       if (e.key === "ArrowLeft") {
         e.preventDefault();
@@ -481,6 +486,11 @@ export default function BlockDrop() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Always-visible board (view-only mid-game; submit unlocks at game over) */}
+      <div className="w-full max-w-md">
+        <LeaderboardPanel game="block-drop" score={gameState === "gameover" ? score : null} />
       </div>
     </div>
   );

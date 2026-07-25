@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useGameLoop } from "./useGameLoop";
+import LeaderboardPanel from "./LeaderboardPanel";
 
 const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 600;
@@ -190,6 +191,10 @@ export default function FlappyBird() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Don't hijack keys while the user types in a form field (e.g. the
+      // leaderboard nickname input) — letters must reach the input.
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
       if (e.code === "Space" || e.key === " " || e.key === "ArrowUp") {
         e.preventDefault();
         flap();
@@ -245,6 +250,11 @@ export default function FlappyBird() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Always-visible board (view-only mid-game; submit unlocks at game over) */}
+      <div className="w-full max-w-md">
+        <LeaderboardPanel game="flappy" score={gameState === "gameover" ? score : null} />
       </div>
     </div>
   );
