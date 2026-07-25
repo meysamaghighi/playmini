@@ -6,7 +6,8 @@ import DinoRunner from "../components/DinoRunner";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Dino Runner free in your browser — full guide in the section below.
+      Jump over cacti, duck under pterodactyls. Tap or Space to jump; swipe down
+      or ↓ to duck.
     </p>
   </div>
 );
