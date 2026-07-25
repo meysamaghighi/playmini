@@ -36,6 +36,29 @@ export default function ChessPage() {
           </p>
         </div>
         <ChessPlay />
+
+        {/* WebApplication Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "Chess",
+              description:
+                "Play chess online free against the computer with full chess rules: castling, en passant, promotion.",
+              url: "https://playmini.fun/chess",
+              applicationCategory: "Game",
+              operatingSystem: "Any",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+              },
+              browserRequirements: "Requires JavaScript. Works on all modern browsers.",
+            }),
+          }}
+        />
       </div>
     </main>
   );

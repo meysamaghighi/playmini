@@ -36,6 +36,29 @@ export default function ReversiPage() {
           </p>
         </div>
         <ReversiPlay />
+
+        {/* WebApplication Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "Reversi",
+              description:
+                "Play Reversi (Othello) online free against the computer — flip your opponent's pieces and control the board.",
+              url: "https://playmini.fun/reversi",
+              applicationCategory: "Game",
+              operatingSystem: "Any",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+              },
+              browserRequirements: "Requires JavaScript. Works on all modern browsers.",
+            }),
+          }}
+        />
       </div>
     </main>
   );
