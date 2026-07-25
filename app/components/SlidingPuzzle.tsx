@@ -37,7 +37,10 @@ function isSolved(tiles: number[]): boolean {
 
 export default function SlidingPuzzle() {
   const [size, setSize] = useState<Size>(3);
-  const [tiles, setTiles] = useState<number[]>(() => shuffle(3));
+  // Deterministic initial render (solved board) so server and client hydration match;
+  // the mount effect below immediately shuffles client-side, avoiding a Math.random()
+  // mismatch between SSR and hydration (React error #418).
+  const [tiles, setTiles] = useState<number[]>(() => solved(3));
   const [moves, setMoves] = useState(0);
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(false);
