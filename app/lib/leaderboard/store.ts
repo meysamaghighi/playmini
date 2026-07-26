@@ -109,7 +109,8 @@ export async function submitScore(args: {
 
 // ---------- Ranks & board reads ----------
 // Boards are pilot-scale (spec caps interest at top 100; total players are
-// low), so reading the full ZSET for country rank is fine at this size.
+// low), so reading the full ZSET for country rank (computeRanks, on submit
+// only) is fine at this size.
 async function fullBoard(game: string): Promise<{ playerId: string; stored: number }[]> {
   const key = boardKey(game);
   if (useMemory()) {
@@ -121,6 +122,48 @@ async function fullBoard(game: string): Promise<{ playerId: string; stored: numb
   const out: { playerId: string; stored: number }[] = [];
   for (let i = 0; i < flat.length; i += 2) out.push({ playerId: flat[i], stored: Number(flat[i + 1]) });
   return out;
+}
+
+// getBoard() (every board *view*, not just submits) must NOT pay for the
+// whole sorted set — payload has to stay constant regardless of board size:
+// top 100 via ZRANGE, total via ZCARD, and (only when asked) the requesting
+// player's rank/score via ZREVRANK+ZSCORE, instead of scanning a JS array.
+async function topBoard(game: string): Promise<{ playerId: string; stored: number }[]> {
+  const key = boardKey(game);
+  if (useMemory()) {
+    return [...memBoard(key).scores.entries()]
+      .map(([playerId, stored]) => ({ playerId, stored }))
+      .sort((a, b) => b.stored - a.stored)
+      .slice(0, 100);
+  }
+  const flat = (await redisCmd(["ZRANGE", key, 0, 99, "REV", "WITHSCORES"])) as string[];
+  const out: { playerId: string; stored: number }[] = [];
+  for (let i = 0; i < flat.length; i += 2) out.push({ playerId: flat[i], stored: Number(flat[i + 1]) });
+  return out;
+}
+
+async function boardSize(game: string): Promise<number> {
+  const key = boardKey(game);
+  if (useMemory()) return memBoard(key).scores.size;
+  return (await redisCmd(["ZCARD", key])) as number;
+}
+
+// Rank is 0-based from ZREVRANK; convert to the 1-based rank the API returns.
+async function findPlayer(game: string, playerId: string): Promise<{ rank: number; stored: number } | null> {
+  const key = boardKey(game);
+  if (useMemory()) {
+    const b = memBoard(key);
+    if (!b.scores.has(playerId)) return null;
+    const all = [...b.scores.entries()]
+      .map(([id, stored]) => ({ id, stored }))
+      .sort((a, b2) => b2.stored - a.stored);
+    const idx = all.findIndex((e) => e.id === playerId);
+    return { rank: idx + 1, stored: all[idx].stored };
+  }
+  const rankRaw = (await redisCmd(["ZREVRANK", key, playerId])) as number | null;
+  const scoreRaw = (await redisCmd(["ZSCORE", key, playerId])) as string | null;
+  if (rankRaw === null || scoreRaw === null) return null;
+  return { rank: rankRaw + 1, stored: Number(scoreRaw) };
 }
 
 async function readMeta(game: string, ids: string[]): Promise<Map<string, Meta>> {
@@ -147,18 +190,19 @@ async function computeRanks(game: string, playerId: string, cc: string) {
 }
 
 export async function getBoard(game: string, playerId?: string) {
-  const all = await fullBoard(game);
-  const meta = await readMeta(game, all.map((e) => e.playerId));
-  const top: Row[] = all.slice(0, 100).map((e, i) => ({
+  const slice = await topBoard(game);
+  const totalPlayers = await boardSize(game);
+  let you: { rank: number; score: number } | null = null;
+  if (playerId) {
+    const found = await findPlayer(game, playerId);
+    if (found) you = { rank: found.rank, score: fromStored(game, found.stored) };
+  }
+  const meta = await readMeta(game, slice.map((e) => e.playerId));
+  const top: Row[] = slice.map((e, i) => ({
     rank: i + 1,
     name: meta.get(e.playerId)?.name ?? "Player",
     cc: meta.get(e.playerId)?.cc ?? "",
     score: fromStored(game, e.stored),
   }));
-  let you: { rank: number; score: number } | null = null;
-  if (playerId) {
-    const idx = all.findIndex((e) => e.playerId === playerId);
-    if (idx >= 0) you = { rank: idx + 1, score: fromStored(game, all[idx].stored) };
-  }
-  return { top, you, totalPlayers: all.length };
+  return { top, you, totalPlayers };
 }
