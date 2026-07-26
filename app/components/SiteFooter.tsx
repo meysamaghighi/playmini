@@ -29,6 +29,14 @@ export default function SiteFooter() {
             >
               BenchMyBrain · Cognitive tests
             </Link>
+            <Link
+              href="https://play.google.com/store/apps/details?id=com.meydev.stacktower&utm_source=playmini&utm_medium=crosspromo&utm_content=footer"
+              target="_blank"
+              rel="noopener"
+              className="px-4 py-1.5 border border-line rounded-full text-sm text-ink hover:bg-paper-2 transition-colors"
+            >
+              🗼 Stack Tower · Free Android game
+            </Link>
           </div>
         </div>
         <p className="mt-6 text-xs text-ink-3 font-mono">© 2026 · made by Meysam</p>
