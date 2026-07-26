@@ -6,8 +6,13 @@ import SlidingPuzzle from "../components/SlidingPuzzle";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Sliding Puzzle free in your browser — full guide in the section below.
+      Slide numbered tiles into the empty space until they&apos;re arranged in
+      order.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Tap/click a tile next to the empty space to slide it, or use arrow keys</li>
+    </ul>
   </div>
 );
 

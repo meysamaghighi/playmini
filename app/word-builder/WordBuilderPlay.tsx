@@ -6,8 +6,13 @@ import WordBuilder from "../components/WordBuilder";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Word Builder free in your browser — full guide in the section below.
+      Spell as many valid words as you can using only the letters in the
+      source word, before the 2-minute timer runs out.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Type a word, then press Enter or tap Submit</li>
+    </ul>
   </div>
 );
 

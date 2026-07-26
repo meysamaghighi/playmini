@@ -6,8 +6,13 @@ import TypingRace from "../components/TypingRace";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Typing Race free in your browser — full guide in the section below.
+      Type the given passage as fast and accurately as you can — your
+      words-per-minute and accuracy are tracked live.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Just start typing in the text box</li>
+    </ul>
   </div>
 );
 

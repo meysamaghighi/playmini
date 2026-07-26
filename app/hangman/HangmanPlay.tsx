@@ -6,8 +6,12 @@ import HangmanGame from "../components/HangmanGame";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Hangman free in your browser — full guide in the section below.
+      Guess the hidden word one letter at a time before you run out of tries.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Type a letter, or tap the on-screen keyboard</li>
+    </ul>
   </div>
 );
 

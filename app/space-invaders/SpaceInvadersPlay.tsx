@@ -6,8 +6,14 @@ import SpaceInvaders from "../components/SpaceInvaders";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Space Invaders free in your browser — full guide in the section below.
+      Clear each wave of aliens before they reach the bottom. Grab power-ups
+      for a shield, rapid fire, or a spread shot.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Arrow keys or A/D to move (the ship fires automatically)</li>
+      <li>On mobile, drag left/right to move</li>
+    </ul>
   </div>
 );
 

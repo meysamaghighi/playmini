@@ -6,8 +6,13 @@ import CheckersGame from "../components/CheckersGame";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Checkers free in your browser — full guide in the section below.
+      Capture all of the AI&apos;s pieces, or block every legal move it has
+      left. Kings and mandatory captures apply.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Tap/click a piece, then tap/click a highlighted square to move it</li>
+    </ul>
   </div>
 );
 

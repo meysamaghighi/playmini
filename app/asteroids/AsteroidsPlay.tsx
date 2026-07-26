@@ -6,8 +6,13 @@ import AsteroidsGame from "../components/AsteroidsGame";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Asteroids free in your browser — full guide in the section below.
+      Pilot your ship through drifting asteroids, blasting them apart while
+      dodging debris wave after wave.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Arrow keys or WASD to move and rotate, Space to fire</li>
+    </ul>
   </div>
 );
 

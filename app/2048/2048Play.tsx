@@ -6,8 +6,14 @@ import Game2048 from "../components/Game2048";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play 2048 Game free in your browser — full guide in the section below.
+      Slide numbered tiles to combine matching pairs. Reach the 2048 tile to
+      win — keep going after that for a higher score.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Arrow keys or WASD to slide tiles</li>
+      <li>On mobile, swipe in any direction</li>
+    </ul>
   </div>
 );
 

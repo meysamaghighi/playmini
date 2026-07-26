@@ -6,8 +6,13 @@ import TicTacToe from "../components/TicTacToe";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Tic-Tac-Toe free in your browser — full guide in the section below.
+      Get three of your marks in a row — horizontally, vertically, or
+      diagonally — before your opponent does.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Tap/click an empty square</li>
+    </ul>
   </div>
 );
 

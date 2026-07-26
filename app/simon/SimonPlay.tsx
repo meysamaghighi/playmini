@@ -6,8 +6,13 @@ import SimonSays from "../components/SimonSays";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Simon Says free in your browser — full guide in the section below.
+      Watch the color sequence light up, then repeat it back. Each round adds
+      one more step — how long a pattern can you remember?
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Tap/click the colored pads in the order shown</li>
+    </ul>
   </div>
 );
 

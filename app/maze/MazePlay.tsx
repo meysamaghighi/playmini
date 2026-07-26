@@ -6,8 +6,14 @@ import MazeRunner from "../components/MazeRunner";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Maze Runner free in your browser — full guide in the section below.
+      Navigate from the start to the target through a freshly generated maze
+      each time.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Arrow keys or WASD to move</li>
+      <li>On mobile, swipe in the direction you want to go</li>
+    </ul>
   </div>
 );
 

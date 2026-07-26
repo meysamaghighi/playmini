@@ -6,8 +6,13 @@ import BreakoutGame from "../components/BreakoutGame";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Breakout free in your browser — full guide in the section below.
+      Bounce the ball with your paddle to break every brick without letting
+      the ball fall past you.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Move your mouse/finger, or use Arrow Left/Right or A/D, to steer the paddle</li>
+    </ul>
   </div>
 );
 

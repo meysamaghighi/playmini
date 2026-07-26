@@ -6,8 +6,12 @@ import SoccerGame from "../components/SoccerGame";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Penalty Kicks free in your browser — full guide in the section below.
+      Take 10 penalty kicks and beat the goalkeeper as many times as you can.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Drag the Aim and Power sliders, then tap Shoot!</li>
+    </ul>
   </div>
 );
 
