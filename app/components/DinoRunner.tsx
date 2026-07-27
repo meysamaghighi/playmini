@@ -12,6 +12,7 @@ const DINO_HEIGHT = 44;
 const DINO_DUCK_HEIGHT = 26;
 const GRAVITY = 0.7;
 const JUMP_VELOCITY = -13;
+const DUCK_SWIPE_THRESHOLD = 28; // px of downward touch drag before it counts as a duck swipe
 
 type GameState = "ready" | "playing" | "gameover";
 type Obstacle = { x: number; y: number; w: number; h: number; kind: "cactus" | "bird" };
@@ -45,6 +46,8 @@ export default function DinoRunner() {
   const scoreRef = useRef(0);
   const stateRef = useRef<GameState>("ready");
   const groundOffsetRef = useRef(0);
+  // Touch-only gesture tracking: tap = jump (on release), press-and-drag-down = duck (while held).
+  const touchGestureRef = useRef<{ startY: number; isSwipe: boolean } | null>(null);
 
   const reset = useCallback(() => {
     dinoYRef.current = GROUND_Y - DINO_HEIGHT;
@@ -235,7 +238,41 @@ export default function DinoRunner() {
         className="relative cursor-pointer touch-none select-none w-full max-w-4xl"
         onPointerDown={(e) => {
           e.preventDefault();
-          jump();
+          // Mouse/pen: unchanged — jump immediately on press.
+          if (e.pointerType !== "touch") {
+            jump();
+            return;
+          }
+          // Touch: defer the jump to release so a swipe-down can duck instead.
+          touchGestureRef.current = { startY: e.clientY, isSwipe: false };
+        }}
+        onPointerMove={(e) => {
+          if (e.pointerType !== "touch") return;
+          const gesture = touchGestureRef.current;
+          if (!gesture || gesture.isSwipe) return;
+          const deltaY = e.clientY - gesture.startY;
+          if (deltaY > DUCK_SWIPE_THRESHOLD) {
+            gesture.isSwipe = true;
+            setDuck(true);
+          }
+        }}
+        onPointerUp={(e) => {
+          if (e.pointerType !== "touch") return;
+          const gesture = touchGestureRef.current;
+          touchGestureRef.current = null;
+          setDuck(false);
+          if (gesture && !gesture.isSwipe) jump();
+        }}
+        onPointerCancel={(e) => {
+          if (e.pointerType !== "touch") return;
+          touchGestureRef.current = null;
+          setDuck(false);
+        }}
+        onPointerLeave={(e) => {
+          if (e.pointerType !== "touch") return;
+          if (!touchGestureRef.current) return;
+          touchGestureRef.current = null;
+          setDuck(false);
         }}
       >
         <canvas
@@ -266,29 +303,6 @@ export default function DinoRunner() {
             </div>
           </div>
         )}
-      </div>
-
-      <div className="flex gap-4 md:hidden">
-        <button
-          onPointerDown={(e) => {
-            e.preventDefault();
-            jump();
-          }}
-          className="px-6 py-3 bg-paper-2 text-ink rounded font-bold"
-        >
-          Jump
-        </button>
-        <button
-          onPointerDown={(e) => {
-            e.preventDefault();
-            setDuck(true);
-          }}
-          onPointerUp={() => setDuck(false)}
-          onPointerLeave={() => setDuck(false)}
-          className="px-6 py-3 bg-paper-2 text-ink rounded font-bold"
-        >
-          Duck
-        </button>
       </div>
     </div>
   );
