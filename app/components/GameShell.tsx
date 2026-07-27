@@ -142,7 +142,7 @@ export default function GameShell({
         <div
           role="status"
           aria-live="polite"
-          className="absolute inset-x-0 bottom-0 mx-auto mb-6 max-w-md rounded-2xl border border-line bg-paper-2 p-5 text-center shadow-lg"
+          className="relative z-10 mx-auto my-4 max-w-md rounded-2xl border border-line bg-paper-2 p-5 text-center shadow-lg"
         >
           <p className="font-mono text-xs uppercase tracking-wider text-ink-3">
             Result
