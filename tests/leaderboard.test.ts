@@ -146,6 +146,71 @@ test("redis path: submitScore happy path issues correctly-shaped commands", asyn
   );
 });
 
+test("redis path: getBoard (anonymous) reads a bounded top-100 slice, not the whole ZSET", async () => {
+  await withFakeRedis(
+    [
+      ["p1", "300", "p2", "250"], // ZRANGE 0 99 REV WITHSCORES (top slice)
+      2, // ZCARD (totalPlayers)
+      [JSON.stringify({ name: "A", cc: "SE", ts: 1 }), JSON.stringify({ name: "B", cc: "US", ts: 2 })], // HMGET (readMeta)
+    ],
+    async (calls) => {
+      const board = await getBoard("2048");
+      assert.equal(board.totalPlayers, 2);
+      assert.equal(board.you, null);
+      assert.deepEqual(board.top.map((r) => r.name), ["A", "B"]);
+
+      assert.deepEqual(calls[0].cmd, ["ZRANGE", "lb:pm:2048", 0, 99, "REV", "WITHSCORES"]);
+      assert.deepEqual(calls[1].cmd, ["ZCARD", "lb:pm:2048"]);
+      assert.equal(calls[2].cmd[0], "HMGET");
+      // Only 3 commands total — payload is bounded regardless of board size,
+      // and the full-board ZRANGE ("0, -1") must never appear on a read.
+      assert.equal(calls.length, 3);
+    }
+  );
+});
+
+test("redis path: getBoard (with playerId) adds ZREVRANK+ZSCORE, converting 0-based rank to 1-based", async () => {
+  await withFakeRedis(
+    [
+      ["p1", "300"], // ZRANGE 0 99 REV WITHSCORES
+      1, // ZCARD
+      1, // ZREVRANK lb:pm:2048 p2 -> 0-based rank 1 (2nd place)
+      "250", // ZSCORE lb:pm:2048 p2
+      [JSON.stringify({ name: "A", cc: "SE", ts: 1 })], // HMGET for the top-100 slice only
+    ],
+    async (calls) => {
+      const board = await getBoard("2048", "p2");
+      assert.deepEqual(board.you, { rank: 2, score: 250 });
+
+      assert.deepEqual(calls[0].cmd, ["ZRANGE", "lb:pm:2048", 0, 99, "REV", "WITHSCORES"]);
+      assert.deepEqual(calls[1].cmd, ["ZCARD", "lb:pm:2048"]);
+      assert.deepEqual(calls[2].cmd, ["ZREVRANK", "lb:pm:2048", "p2"]);
+      assert.deepEqual(calls[3].cmd, ["ZSCORE", "lb:pm:2048", "p2"]);
+      assert.equal(calls[4].cmd[0], "HMGET");
+      assert.equal(calls.length, 5);
+    }
+  );
+});
+
+test("redis path: getBoard with playerId not on the board yields you: null", async () => {
+  await withFakeRedis(
+    [
+      [], // ZRANGE — empty board
+      0, // ZCARD
+      null, // ZREVRANK — not a member
+      null, // ZSCORE — not a member
+    ],
+    async (calls) => {
+      const board = await getBoard("2048", "ghost");
+      assert.equal(board.you, null);
+      assert.equal(board.totalPlayers, 0);
+      assert.deepEqual(board.top, []);
+      assert.deepEqual(calls[2].cmd, ["ZREVRANK", "lb:pm:2048", "ghost"]);
+      assert.deepEqual(calls[3].cmd, ["ZSCORE", "lb:pm:2048", "ghost"]);
+    }
+  );
+});
+
 test("redis path: checkRateLimit issues INCR/EXPIRE and blocks over the cap", async () => {
   await withFakeRedis([1, 1, 11], async (calls) => {
     const first = await checkRateLimit(["rk1"]);
