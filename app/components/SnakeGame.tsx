@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback, useImperativeHandle, forwardRef } from "react";
 import { useGameLoop } from "./useGameLoop";
+import LeaderboardPanel from "./LeaderboardPanel";
 
 const GRID = 20;
 const CELL = 20;
@@ -194,6 +195,10 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
       d: "right",
     };
     const onKey = (e: KeyboardEvent) => {
+      // Don't hijack keys while the user types in a form field (e.g. the
+      // leaderboard nickname input) — letters must reach the input.
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
       const dir = map[e.key] || map[e.key.toLowerCase()];
       if (!dir) return;
       e.preventDefault();
@@ -294,6 +299,11 @@ const SnakeGame = forwardRef<SnakeGameHandle, SnakeGameProps>(function SnakeGame
             </div>
           </div>
         )}
+      </div>
+
+      {/* Always-visible board (view-only mid-game; submit unlocks at game over) */}
+      <div className="w-full max-w-md">
+        <LeaderboardPanel game="snake" score={gameState === "gameover" ? score : null} />
       </div>
     </div>
   );
