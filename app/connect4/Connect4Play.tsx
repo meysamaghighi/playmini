@@ -6,8 +6,13 @@ import Connect4Game from "../components/Connect4Game";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Connect 4 free in your browser — full guide in the section below.
+      Drop pieces to connect four of your color in a row — horizontally,
+      vertically, or diagonally — before your opponent does.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Tap/click a column to drop a piece into it</li>
+    </ul>
   </div>
 );
 

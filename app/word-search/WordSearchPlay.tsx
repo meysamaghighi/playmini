@@ -6,8 +6,13 @@ import WordSearchGame from "../components/WordSearchGame";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Word Search free in your browser — full guide in the section below.
+      Find every word from the list hidden in the letter grid. Words can run
+      horizontally, vertically, or diagonally, in either direction.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Click or tap the first letter and drag to the last letter to select a word</li>
+    </ul>
   </div>
 );
 

@@ -6,8 +6,12 @@ import Pong from "../components/Pong";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Pong free in your browser — full guide in the section below.
+      Classic paddle battle against the computer — first to 7 points wins.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Arrow Up/Down or W/S to move your paddle</li>
+    </ul>
   </div>
 );
 

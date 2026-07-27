@@ -6,8 +6,13 @@ import MemoryMatch from "../components/MemoryMatch";
 const HOW_TO = (
   <div>
     <p className="mb-3">
-      Play Memory Match free in your browser — full guide in the section below.
+      Flip two cards at a time to find matching pairs. Clear the board in as
+      few moves as possible.
     </p>
+    <p className="mb-1 font-semibold text-ink">Controls</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Tap/click a card to flip it</li>
+    </ul>
   </div>
 );
 
