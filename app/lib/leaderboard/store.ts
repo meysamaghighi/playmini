@@ -189,6 +189,14 @@ async function computeRanks(game: string, playerId: string, cc: string) {
   return { worldRank, countryRank, totalPlayers: all.length };
 }
 
+// Personal-only lookup (no board slice, no total count) — lean enough to be
+// called on its own without paying for a shared-cacheable board read.
+export async function getPlayerRank(game: string, playerId: string): Promise<{ rank: number; score: number } | null> {
+  const found = await findPlayer(game, playerId);
+  if (!found) return null;
+  return { rank: found.rank, score: fromStored(game, found.stored) };
+}
+
 export async function getBoard(game: string, playerId?: string) {
   const slice = await topBoard(game);
   const totalPlayers = await boardSize(game);

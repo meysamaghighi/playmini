@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { sanitizeNickname, validateScore } from "../app/lib/leaderboard/validate.ts";
-import { submitScore, getBoard, checkRateLimit, __resetMemoryStore } from "../app/lib/leaderboard/store.ts";
+import { submitScore, getBoard, getPlayerRank, checkRateLimit, __resetMemoryStore } from "../app/lib/leaderboard/store.ts";
 
 test("sanitizeNickname trims, caps at 20, collapses whitespace", () => {
   assert.equal(sanitizeNickname("  Meysam   A  "), "Meysam A");
@@ -76,6 +76,20 @@ test("rate limit allows 10 then blocks", async () => {
   __resetMemoryStore();
   for (let i = 0; i < 10; i++) assert.equal(await checkRateLimit(["k1"]), true);
   assert.equal(await checkRateLimit(["k1"]), false);
+});
+
+test("getPlayerRank returns null for a player not on the board", async () => {
+  __resetMemoryStore();
+  await submitScore({ game: "2048", score: 300, nickname: "A", playerId: "p1", cc: "SE" });
+  assert.equal(await getPlayerRank("2048", "ghost"), null);
+});
+
+test("getPlayerRank returns {rank, score} for a player on the board", async () => {
+  __resetMemoryStore();
+  await submitScore({ game: "2048", score: 250, nickname: "Swede", playerId: "s1", cc: "SE" });
+  await submitScore({ game: "2048", score: 180, nickname: "Yank", playerId: "u1", cc: "US" });
+  const r = await getPlayerRank("2048", "u1");
+  assert.deepEqual(r, { rank: 2, score: 180 });
 });
 
 // ---------------------------------------------------------------------
@@ -211,6 +225,24 @@ test("redis path: getBoard with playerId not on the board yields you: null", asy
   );
 });
 
+test("redis path: getPlayerRank issues only ZREVRANK+ZSCORE, not a board read", async () => {
+  await withFakeRedis(
+    [
+      1, // ZREVRANK lb:pm:2048 p2 -> 0-based rank 1 (2nd place)
+      "250", // ZSCORE lb:pm:2048 p2
+    ],
+    async (calls) => {
+      const r = await getPlayerRank("2048", "p2");
+      assert.deepEqual(r, { rank: 2, score: 250 });
+
+      assert.deepEqual(calls[0].cmd, ["ZREVRANK", "lb:pm:2048", "p2"]);
+      assert.deepEqual(calls[1].cmd, ["ZSCORE", "lb:pm:2048", "p2"]);
+      // Exactly 2 commands — no ZRANGE/ZCARD board-read commands at all.
+      assert.equal(calls.length, 2);
+    }
+  );
+});
+
 test("redis path: checkRateLimit issues INCR/EXPIRE and blocks over the cap", async () => {
   await withFakeRedis([1, 1, 11], async (calls) => {
     const first = await checkRateLimit(["rk1"]);
@@ -228,6 +260,7 @@ test("redis path: checkRateLimit issues INCR/EXPIRE and blocks over the cap", as
 
 import { GET as boardGET } from "../app/api/leaderboard/route.ts";
 import { POST as submitPOST } from "../app/api/leaderboard/submit/route.ts";
+import { GET as meGET } from "../app/api/leaderboard/me/route.ts";
 
 function postReq(body: unknown, headers: Record<string, string> = {}) {
   return new Request("http://x/api/leaderboard/submit", {
@@ -247,9 +280,19 @@ test("submit route: happy path stores country from vercel header", async () => {
   const j = await res.json();
   assert.equal(j.accepted, true);
   assert.equal(j.worldRank, 1);
-  const b = await (await boardGET(new Request("http://x/api/leaderboard?game=2048&playerId=pz"))).json();
+  const withPlayerRes = await boardGET(new Request("http://x/api/leaderboard?game=2048&playerId=pz"));
+  assert.equal(withPlayerRes.headers.get("Cache-Control"), "private, no-store");
+  const b = await withPlayerRes.json();
   assert.equal(b.top[0].cc, "SE");
   assert.equal(b.you.rank, 1);
+});
+
+test("board route: Cache-Control is shared/cacheable without playerId, private with it", async () => {
+  __resetMemoryStore();
+  const anon = await boardGET(new Request("http://x/api/leaderboard?game=2048"));
+  assert.equal(anon.headers.get("Cache-Control"), "s-maxage=30, stale-while-revalidate=60");
+  const personal = await boardGET(new Request("http://x/api/leaderboard?game=2048&playerId=pz"));
+  assert.equal(personal.headers.get("Cache-Control"), "private, no-store");
 });
 
 test("submit route: rejects garbage", async () => {
@@ -263,6 +306,34 @@ test("submit route: rejects garbage", async () => {
 
 test("board route: 400 on unknown game", async () => {
   assert.equal((await boardGET(new Request("http://x/api/leaderboard?game=nope"))).status, 400);
+});
+
+test("me route: 400 on unknown game", async () => {
+  assert.equal((await meGET(new Request("http://x/api/leaderboard/me?game=nope&playerId=p1"))).status, 400);
+});
+
+test("me route: 400 when playerId missing", async () => {
+  assert.equal((await meGET(new Request("http://x/api/leaderboard/me?game=2048"))).status, 400);
+});
+
+test("me route: {you: null} for an unknown player", async () => {
+  __resetMemoryStore();
+  const res = await meGET(new Request("http://x/api/leaderboard/me?game=2048&playerId=ghost"));
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get("Cache-Control"), "private, no-store");
+  const j = await res.json();
+  assert.equal(j.you, null);
+});
+
+test("me route: {you: {rank, score}} for a known player", async () => {
+  __resetMemoryStore();
+  await submitScore({ game: "2048", score: 250, nickname: "Swede", playerId: "s1", cc: "SE" });
+  await submitScore({ game: "2048", score: 180, nickname: "Yank", playerId: "u1", cc: "US" });
+  const res = await meGET(new Request("http://x/api/leaderboard/me?game=2048&playerId=u1"));
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get("Cache-Control"), "private, no-store");
+  const j = await res.json();
+  assert.deepEqual(j.you, { rank: 2, score: 180 });
 });
 
 test("prototype property names are not valid games", async () => {

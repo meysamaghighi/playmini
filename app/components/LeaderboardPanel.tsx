@@ -66,8 +66,22 @@ export default function LeaderboardPanel({
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch(`/api/leaderboard?game=${game}&playerId=${encodeURIComponent(pid())}`);
-      if (res.ok) setBoard((await res.json()) as Board);
+      // No playerId here — this must be the shared, CDN-cacheable board
+      // request (identical URL across all visitors). Personal rank comes
+      // from a separate, always-uncached lookup below.
+      const res = await fetch(`/api/leaderboard?game=${game}`);
+      if (!res.ok) return;
+      const b = (await res.json()) as Board;
+      try {
+        const meRes = await fetch(`/api/leaderboard/me?game=${game}&playerId=${encodeURIComponent(pid())}`);
+        if (meRes.ok) {
+          const { you } = (await meRes.json()) as { you: Board["you"] };
+          b.you = you;
+        }
+      } catch {
+        /* personal rank is optional — board still renders without it */
+      }
+      setBoard(b);
     } catch {
       /* board is optional — never break the game */
     }
