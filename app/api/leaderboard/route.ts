@@ -10,9 +10,12 @@ export async function GET(req: Request) {
   const playerId = (url.searchParams.get("playerId") ?? undefined)?.slice(0, 64);
   try {
     const board = await getBoard(game, playerId);
-    return Response.json(board, {
-      headers: { "Cache-Control": "s-maxage=30, stale-while-revalidate=60" },
-    });
+    // A personalized response (playerId present) must never be marked
+    // publicly cacheable — only the anonymous, shared board is CDN-cacheable.
+    const headers = playerId
+      ? { "Cache-Control": "private, no-store" }
+      : { "Cache-Control": "s-maxage=30, stale-while-revalidate=60" };
+    return Response.json(board, { headers });
   } catch {
     return Response.json({ error: "leaderboard unavailable" }, { status: 503 });
   }
