@@ -64,12 +64,21 @@ export default function LeaderboardPanel({
   const [scope, setScope] = useState<"world" | "country">("world");
   const viewed = useRef(false);
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (fresh = false) => {
     try {
       // No playerId here — this must be the shared, CDN-cacheable board
       // request (identical URL across all visitors). Personal rank comes
       // from a separate, always-uncached lookup below.
-      const res = await fetch(`/api/leaderboard?game=${game}`);
+      //
+      // `fresh` appends a cache-busting param and is used ONLY right after a
+      // submit. The shared board is served with s-maxage=30 +
+      // stale-while-revalidate=60, so without this the player is handed a copy
+      // cached before their score landed and concludes it was lost. Ordinary
+      // loads keep the canonical URL so all visitors still share one cache
+      // entry — do NOT fix this by making the shared board uncacheable.
+      const res = await fetch(
+        fresh ? `/api/leaderboard?game=${game}&t=${Date.now()}` : `/api/leaderboard?game=${game}`,
+      );
       if (!res.ok) return;
       const b = (await res.json()) as Board;
       try {
@@ -102,11 +111,18 @@ export default function LeaderboardPanel({
 
   const rows = useMemo(() => board?.top ?? [], [board]);
 
-  // Country scope needs the viewer's cc; derive it from their own row if present.
-  const myCc = useMemo(() => {
-    const mine = rows.find((r) => board?.you && r.rank === board.you.rank);
-    return mine?.cc ?? "";
+  // Match the player's own row on rank AND score. Rank alone is not enough:
+  // the shared board is CDN-cached while /me is not, so the two can disagree
+  // for up to ~90s after a submit — and matching on rank alone then highlights
+  // whichever stranger currently occupies that position as "you".
+  const myRow = useMemo(() => {
+    const you = board?.you;
+    if (!you) return null;
+    return rows.find((r) => r.rank === you.rank && r.score === you.score) ?? null;
   }, [rows, board]);
+
+  // Country scope needs the viewer's cc; derive it from their own row if present.
+  const myCc = myRow?.cc ?? "";
 
   const visible = scope === "world" ? rows : rows.filter((r) => r.cc === myCc);
 
@@ -132,7 +148,7 @@ export default function LeaderboardPanel({
         /* ignore */
       }
       window.gtag?.("event", "leaderboard_submit", { game });
-      void load();
+      void load(true);
     } catch {
       setError("offline — try again later");
     } finally {
@@ -213,7 +229,7 @@ export default function LeaderboardPanel({
       ) : (
         <ol className="max-h-64 overflow-y-auto text-sm">
           {visible.map((r) => {
-            const isMe = board?.you?.rank === r.rank;
+            const isMe = myRow !== null && r === myRow;
             return (
               <li
                 key={`${r.rank}-${r.name}`}
@@ -231,7 +247,12 @@ export default function LeaderboardPanel({
           })}
         </ol>
       )}
-      {board && board.you && board.you.rank > 100 && (
+      {board?.you && !myRow && (
+        // Shown whenever the player's own entry isn't in the list above —
+        // either they rank below the top 100, or the CDN-cached board hasn't
+        // caught up with a just-submitted score. Previously this was gated on
+        // `rank > 100`, so a player who placed INSIDE the top 100 saw neither
+        // their row nor this line and reasonably concluded the score was lost.
         <p className="text-sm text-ink-2 mt-1">
           … your best: #{board.you.rank} ({board.you.score}
           {unit})
