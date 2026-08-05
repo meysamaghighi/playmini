@@ -1,6 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import FamilyBoard from "./FamilyBoard";
+import { GAMES } from "../lib/leaderboard/config";
+import { loadFamily } from "../lib/family/storage";
 
 declare global {
   interface Window {
@@ -62,7 +65,15 @@ export default function LeaderboardPanel({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [scope, setScope] = useState<"world" | "country">("world");
+  const [tab, setTab] = useState<"family" | "world">("world");
   const viewed = useRef(false);
+
+  // Default to the Family tab once this device has players — that's the
+  // scoreboard those visitors actually care about. Runs in an effect because
+  // localStorage is unavailable during SSR.
+  useEffect(() => {
+    if (loadFamily().profiles.length > 0) setTab("family");
+  }, []);
 
   const load = useCallback(async (fresh = false) => {
     try {
@@ -160,103 +171,139 @@ export default function LeaderboardPanel({
     // Explicit text-ink so descendants never inherit a light color from a
     // dark game-area ancestor (mirrors the speed-test fix).
     <div className="mt-6 rounded-xl border border-line bg-paper-2 p-4 text-left text-ink">
-      <h3 className="font-display text-lg text-ink mb-3" style={{ fontWeight: 800 }}>
-        🌍 Global Leaderboard
-      </h3>
-
-      {score !== null && !result && (
-        <div className="flex flex-wrap items-center gap-2 mb-3">
-          <label htmlFor="lb-nick" className="sr-only">
-            Your name
-          </label>
-          <input
-            id="lb-nick"
-            value={nick}
-            onChange={(e) => setNick(e.target.value)}
-            maxLength={20}
-            placeholder="Your name"
-            className="px-3 py-2 rounded-lg border border-line bg-paper text-ink text-sm w-40"
-          />
-          <button
-            onClick={submit}
-            disabled={busy}
-            className="px-4 py-2 rounded-lg text-sm font-bold text-ink bg-amber-600 hover:bg-amber-700 disabled:opacity-50"
-          >
-            {busy ? "Submitting…" : `Submit ${score}${unit}`}
-          </button>
-        </div>
-      )}
-
-      {result && (
-        <p className="text-sm text-ink mb-3">
-          You&apos;re <strong>#{result.worldRank}</strong> in the world
-          {result.countryRank > 0 && myCc ? (
-            <>
-              {" "}
-              · <strong>#{result.countryRank}</strong> in your country
-            </>
-          ) : null}
-          {!result.accepted ? (
-            <>
-              {" "}
-              (kept your best: {result.best}
-              {unit})
-            </>
-          ) : null}
-        </p>
-      )}
-      {error && (
-        <p role="alert" className="text-sm text-red-500 mb-3">
-          {error}
-        </p>
-      )}
-
-      <div className="flex gap-2 mb-2">
-        {(["world", "country"] as const).map((s) => (
-          <button
-            key={s}
-            onClick={() => setScope(s)}
-            aria-pressed={scope === s}
-            className={`px-3 py-1 rounded-full text-xs border border-line ${scope === s ? "font-bold" : "text-ink-3"}`}
-          >
-            {s === "world" ? "Global" : "My country"}
-          </button>
-        ))}
+      <div className="flex gap-1 mb-3" role="tablist">
+        <button
+          role="tab"
+          aria-selected={tab === "family"}
+          onClick={() => setTab("family")}
+          className={`rounded-lg px-3 py-1 text-sm border ${
+            tab === "family" ? "border-ink text-ink font-semibold" : "border-line text-ink-2"
+          }`}
+        >
+          Family
+        </button>
+        <button
+          role="tab"
+          aria-selected={tab === "world"}
+          onClick={() => setTab("world")}
+          className={`rounded-lg px-3 py-1 text-sm border ${
+            tab === "world" ? "border-ink text-ink font-semibold" : "border-line text-ink-2"
+          }`}
+        >
+          World
+        </button>
       </div>
 
-      {visible.length === 0 ? (
-        <p className="text-sm text-ink-3">No scores yet — be the first!</p>
-      ) : (
-        <ol className="max-h-64 overflow-y-auto text-sm">
-          {visible.map((r) => {
-            const isMe = myRow !== null && r === myRow;
-            return (
-              <li
-                key={`${r.rank}-${r.name}`}
-                className={`flex items-center gap-2 py-1 px-2 rounded ${isMe ? "bg-paper font-bold" : ""}`}
-              >
-                <span className="w-8 text-right text-ink-3">#{r.rank}</span>
-                <Flag cc={r.cc} />
-                <span className="flex-1 truncate">{r.name}</span>
-                <span>
-                  {r.score}
-                  {unit}
-                </span>
-              </li>
-            );
-          })}
-        </ol>
+      {tab === "family" && (
+        <FamilyBoard
+          boardId={game}
+          score={score}
+          lowerIsBetter={GAMES[game]?.lowerIsBetter ?? false}
+          unit={unit}
+        />
       )}
-      {board?.you && !myRow && (
-        // Shown whenever the player's own entry isn't in the list above —
-        // either they rank below the top 100, or the CDN-cached board hasn't
-        // caught up with a just-submitted score. Previously this was gated on
-        // `rank > 100`, so a player who placed INSIDE the top 100 saw neither
-        // their row nor this line and reasonably concluded the score was lost.
-        <p className="text-sm text-ink-2 mt-1">
-          … your best: #{board.you.rank} ({board.you.score}
-          {unit})
-        </p>
+
+      {tab === "world" && (
+        <>
+          <h3 className="font-display text-lg text-ink mb-3" style={{ fontWeight: 800 }}>
+            🌍 Global Leaderboard
+          </h3>
+
+          {score !== null && !result && (
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <label htmlFor="lb-nick" className="sr-only">
+                Your name
+              </label>
+              <input
+                id="lb-nick"
+                value={nick}
+                onChange={(e) => setNick(e.target.value)}
+                maxLength={20}
+                placeholder="Your name"
+                className="px-3 py-2 rounded-lg border border-line bg-paper text-ink text-sm w-40"
+              />
+              <button
+                onClick={submit}
+                disabled={busy}
+                className="px-4 py-2 rounded-lg text-sm font-bold text-ink bg-amber-600 hover:bg-amber-700 disabled:opacity-50"
+              >
+                {busy ? "Submitting…" : `Submit ${score}${unit}`}
+              </button>
+            </div>
+          )}
+
+          {result && (
+            <p className="text-sm text-ink mb-3">
+              You&apos;re <strong>#{result.worldRank}</strong> in the world
+              {result.countryRank > 0 && myCc ? (
+                <>
+                  {" "}
+                  · <strong>#{result.countryRank}</strong> in your country
+                </>
+              ) : null}
+              {!result.accepted ? (
+                <>
+                  {" "}
+                  (kept your best: {result.best}
+                  {unit})
+                </>
+              ) : null}
+            </p>
+          )}
+          {error && (
+            <p role="alert" className="text-sm text-red-500 mb-3">
+              {error}
+            </p>
+          )}
+
+          <div className="flex gap-2 mb-2">
+            {(["world", "country"] as const).map((s) => (
+              <button
+                key={s}
+                onClick={() => setScope(s)}
+                aria-pressed={scope === s}
+                className={`px-3 py-1 rounded-full text-xs border border-line ${scope === s ? "font-bold" : "text-ink-3"}`}
+              >
+                {s === "world" ? "Global" : "My country"}
+              </button>
+            ))}
+          </div>
+
+          {visible.length === 0 ? (
+            <p className="text-sm text-ink-3">No scores yet — be the first!</p>
+          ) : (
+            <ol className="max-h-64 overflow-y-auto text-sm">
+              {visible.map((r) => {
+                const isMe = myRow !== null && r === myRow;
+                return (
+                  <li
+                    key={`${r.rank}-${r.name}`}
+                    className={`flex items-center gap-2 py-1 px-2 rounded ${isMe ? "bg-paper font-bold" : ""}`}
+                  >
+                    <span className="w-8 text-right text-ink-3">#{r.rank}</span>
+                    <Flag cc={r.cc} />
+                    <span className="flex-1 truncate">{r.name}</span>
+                    <span>
+                      {r.score}
+                      {unit}
+                    </span>
+                  </li>
+                );
+              })}
+            </ol>
+          )}
+          {board?.you && !myRow && (
+            // Shown whenever the player's own entry isn't in the list above —
+            // either they rank below the top 100, or the CDN-cached board hasn't
+            // caught up with a just-submitted score. Previously this was gated on
+            // `rank > 100`, so a player who placed INSIDE the top 100 saw neither
+            // their row nor this line and reasonably concluded the score was lost.
+            <p className="text-sm text-ink-2 mt-1">
+              … your best: #{board.you.rank} ({board.you.score}
+              {unit})
+            </p>
+          )}
+        </>
       )}
     </div>
   );
