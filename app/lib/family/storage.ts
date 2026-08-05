@@ -1,4 +1,5 @@
-import { emptyState, type FamilyState, type Profile } from "./profiles.ts";
+import { emptyState, mergeFamilyState, type FamilyState, type Profile } from "./profiles.ts";
+import { LOWER_BOARDS } from "../leaderboard/config.ts";
 
 export const FAMILY_KEY = "pm.family.v1";
 
@@ -37,12 +38,21 @@ export function loadFamily(store: MiniStorage | null = defaultStore()): FamilySt
   const obj = (parsed ?? {}) as Partial<FamilyState>;
   const profiles = Array.isArray(obj.profiles) ? obj.profiles.filter(isProfile) : [];
 
+  // Skip "__proto__" board/player keys rather than letting them through to
+  // the bracket-assignment [[Set]] path below: on a plain object,
+  // `acc["__proto__"] = x` doesn't create an own property, it reassigns the
+  // object's prototype. JSON.parse itself is safe (it defines "__proto__" as
+  // an ordinary own property), but a hand-edited blob can still carry the
+  // key through to here, and this accumulator is built with plain `{}`
+  // (not Object.create(null)) so it stays deep-equal-comparable with plain
+  // object literals in tests.
   const bests: FamilyState["bests"] = {};
   if (obj.bests && typeof obj.bests === "object" && !Array.isArray(obj.bests)) {
     for (const [boardId, byPlayer] of Object.entries(obj.bests)) {
-      if (!byPlayer || typeof byPlayer !== "object") continue;
+      if (boardId === "__proto__" || !byPlayer || typeof byPlayer !== "object") continue;
       const clean: Record<string, number> = {};
       for (const [pid, score] of Object.entries(byPlayer as Record<string, unknown>)) {
+        if (pid === "__proto__") continue;
         if (typeof score === "number" && Number.isFinite(score)) clean[pid] = score;
       }
       if (Object.keys(clean).length > 0) bests[boardId] = clean;
@@ -60,7 +70,14 @@ export function loadFamily(store: MiniStorage | null = defaultStore()): FamilySt
 export function saveFamily(state: FamilyState, store: MiniStorage | null = defaultStore()): void {
   if (!store) return;
   try {
-    store.setItem(FAMILY_KEY, JSON.stringify(state));
+    // Read-modify-write: `state` is this tab's in-memory snapshot, which may
+    // already be stale by the time we get here (another tab could have saved
+    // a new best in between). Reload what's actually on disk and merge
+    // rather than blindly overwriting it — see mergeFamilyState in
+    // profiles.ts for the merge rule.
+    const disk = loadFamily(store);
+    const merged = mergeFamilyState(disk, state, LOWER_BOARDS);
+    store.setItem(FAMILY_KEY, JSON.stringify(merged));
   } catch {
     /* quota or private mode — the in-memory board still works this session */
   }

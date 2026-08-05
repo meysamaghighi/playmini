@@ -132,3 +132,51 @@ export function houseChampions(
     }))
     .sort((a, b) => b.firsts - a.firsts || b.played - a.played);
 }
+
+/**
+ * Every profile tied for the most firsts — standings() and houseChampions()
+ * both share ranks/firsts across ties, so the UI must show all of them, not
+ * just whichever one sorted first. Empty when nobody has a first yet.
+ */
+export function topChampions(rows: ChampionRow[]): ChampionRow[] {
+  const max = rows.reduce((m, r) => Math.max(m, r.firsts), 0);
+  if (max === 0) return [];
+  return rows.filter((r) => r.firsts === max);
+}
+
+/**
+ * Merge two snapshots of family state — typically "what's on disk right now"
+ * and "what this tab is about to write" — so a read-modify-write save never
+ * clobbers a score another tab wrote in between. Used by storage.ts.
+ *
+ * - Profiles: union by id. When both sides know an id, `incoming`'s copy of
+ *   that profile wins (in practice this never differs — a profile's
+ *   name/color are set once at creation and never mutated — but a
+ *   deterministic tie-break is still needed).
+ * - Bests: union by board+player, keeping the better score per `lowerBoards`
+ *   direction. Reuses recordBest so "better" has exactly one definition in
+ *   the codebase — this function does not re-implement that comparison.
+ * - activeId: `incoming`'s choice wins (it reflects the most recent
+ *   interaction on the tab doing the saving), falling back to `disk`'s.
+ */
+export function mergeFamilyState(
+  disk: FamilyState,
+  incoming: FamilyState,
+  lowerBoards: ReadonlySet<string>,
+): FamilyState {
+  const byId = new Map<string, Profile>();
+  for (const p of disk.profiles) byId.set(p.id, p);
+  for (const p of incoming.profiles) byId.set(p.id, p);
+
+  let merged: FamilyState = {
+    profiles: [...byId.values()],
+    activeId: incoming.activeId ?? disk.activeId,
+    bests: disk.bests,
+  };
+  for (const [boardId, byPlayer] of Object.entries(incoming.bests)) {
+    for (const [profileId, score] of Object.entries(byPlayer)) {
+      merged = recordBest(merged, boardId, profileId, score, lowerBoards.has(boardId));
+    }
+  }
+  return merged;
+}

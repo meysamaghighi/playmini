@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import FamilyBoard from "./FamilyBoard";
-import { GAMES } from "../lib/leaderboard/config";
 import { loadFamily } from "../lib/family/storage";
 
 declare global {
@@ -66,14 +65,10 @@ export default function LeaderboardPanel({
   const [error, setError] = useState("");
   const [scope, setScope] = useState<"world" | "country">("world");
   const [tab, setTab] = useState<"family" | "world">("world");
-  const viewed = useRef(false);
-
-  // Default to the Family tab once this device has players — that's the
-  // scoreboard those visitors actually care about. Runs in an effect because
-  // localStorage is unavailable during SSR.
-  useEffect(() => {
-    if (loadFamily().profiles.length > 0) setTab("family");
-  }, []);
+  const worldFetched = useRef(false);
+  const worldViewed = useRef(false);
+  const familyViewed = useRef(false);
+  const tabDefaulted = useRef(false);
 
   const load = useCallback(async (fresh = false) => {
     try {
@@ -107,18 +102,53 @@ export default function LeaderboardPanel({
     }
   }, [game]);
 
+  const activateTab = useCallback(
+    (t: "family" | "world") => {
+      if (t === "world") {
+        // Everything the World tab needs — nickname, the shared board fetch,
+        // the /me lookup inside it, and the view event — is gated on
+        // actually showing World, so a Family-only visitor never pays for
+        // any of it (the /me route in particular hits Redis on every call).
+        if (!worldFetched.current) {
+          worldFetched.current = true;
+          try {
+            setNick(localStorage.getItem("lb.nick") ?? "");
+          } catch {
+            /* ignore */
+          }
+          void load();
+        }
+        if (!worldViewed.current) {
+          worldViewed.current = true;
+          window.gtag?.("event", "leaderboard_view", { game });
+        }
+      } else if (!familyViewed.current) {
+        familyViewed.current = true;
+        window.gtag?.("event", "family_board_view", { game });
+      }
+    },
+    [game, load],
+  );
+
+  // Default to the Family tab once this device has players — that's the
+  // scoreboard those visitors actually care about — and activate whichever
+  // tab that resolves to. Both live in this one effect (rather than a
+  // separate tab-keyed effect) so a device that defaults to Family never
+  // fires the World fetch/view from the one-tick "world" value `tab` starts
+  // at before the default below is applied: `resolved` is computed
+  // synchronously here instead of being read back from `tab` state, which
+  // wouldn't reflect the setTab call below until a later render.
   useEffect(() => {
-    try {
-      setNick(localStorage.getItem("lb.nick") ?? "");
-    } catch {
-      /* ignore */
+    let resolved = tab;
+    if (!tabDefaulted.current) {
+      tabDefaulted.current = true;
+      if (loadFamily().profiles.length > 0) {
+        resolved = "family";
+        setTab("family");
+      }
     }
-    void load();
-    if (!viewed.current) {
-      viewed.current = true;
-      window.gtag?.("event", "leaderboard_view", { game });
-    }
-  }, [game, load]);
+    activateTab(resolved);
+  }, [tab, activateTab]);
 
   const rows = useMemo(() => board?.top ?? [], [board]);
 
@@ -194,14 +224,14 @@ export default function LeaderboardPanel({
         </button>
       </div>
 
-      {tab === "family" && (
-        <FamilyBoard
-          boardId={game}
-          score={score}
-          lowerIsBetter={GAMES[game]?.lowerIsBetter ?? false}
-          unit={unit}
-        />
-      )}
+      {/* Always mounted (visibility toggled via class, not conditional
+          rendering) so switching to World and back never remounts it — a
+          remount would reset the ref FamilyBoard uses to let an active-player
+          switch move a still-showing game-over score to the new player. See
+          FamilyBoard's preRecordState comment. */}
+      <div className={tab === "family" ? "" : "hidden"}>
+        <FamilyBoard boardId={game} score={score} unit={unit} />
+      </div>
 
       {tab === "world" && (
         <>
