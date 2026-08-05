@@ -473,23 +473,23 @@ export default function TypingRace() {
 
       {/* Stats Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
-        <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+        <div className="bg-paper-2 rounded-lg p-3 text-center border border-line">
           <div className="text-xs text-ink-3 uppercase tracking-wider">Level</div>
           <div className="text-2xl font-black text-blue-400 tabular-nums">{level}</div>
         </div>
-        <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+        <div className="bg-paper-2 rounded-lg p-3 text-center border border-line">
           <div className="text-xs text-ink-3 uppercase tracking-wider">Score</div>
           <div className="text-2xl font-black text-green-400 tabular-nums">{score}</div>
         </div>
-        <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+        <div className="bg-paper-2 rounded-lg p-3 text-center border border-line">
           <div className="text-xs text-ink-3 uppercase tracking-wider">Best</div>
           <div className="text-2xl font-black text-yellow-400 tabular-nums">{highScore}</div>
         </div>
-        <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+        <div className="bg-paper-2 rounded-lg p-3 text-center border border-line">
           <div className="text-xs text-ink-3 uppercase tracking-wider">Lives</div>
           <div className="text-2xl font-black text-red-400 tabular-nums">{lives}</div>
         </div>
-        <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+        <div className="bg-paper-2 rounded-lg p-3 text-center border border-line">
           <div className="text-xs text-ink-3 uppercase tracking-wider">Time</div>
           <div className={`text-2xl font-black tabular-nums ${timeRemaining <= 10 ? "text-red-400" : "text-purple-400"}`}>
             {formatTime(timeRemaining)}
@@ -503,7 +503,7 @@ export default function TypingRace() {
       )}
 
       {gameState === "start" && (
-        <div className="bg-slate-800 rounded-lg p-8 mb-6 border border-line text-center">
+        <div className="bg-paper-2 rounded-lg p-8 mb-6 border border-line text-center">
           <div className="text-6xl mb-4">⌨️</div>
           <h2 className="text-3xl font-black text-purple-400 mb-2">Typing Race</h2>
           <p className="text-ink-2 mb-4">
@@ -536,7 +536,7 @@ export default function TypingRace() {
       {gameState === "playing" && (
         <>
           {/* Level Info */}
-          <div className="bg-slate-800 rounded-lg p-4 mb-4 border border-line">
+          <div className="bg-paper-2 rounded-lg p-4 mb-4 border border-line">
             <div className="flex flex-wrap justify-between items-center gap-4">
               <div>
                 <span className="text-ink-2 text-sm">Level {level}</span>
@@ -557,17 +557,17 @@ export default function TypingRace() {
 
           {/* Current Stats */}
           <div className="grid grid-cols-3 gap-3 mb-4">
-            <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+            <div className="bg-paper-2 rounded-lg p-3 text-center border border-line">
               <div className="text-2xl font-bold text-blue-400">{wpm}</div>
               <div className="text-ink-2 text-xs">Current WPM</div>
             </div>
-            <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+            <div className="bg-paper-2 rounded-lg p-3 text-center border border-line">
               <div className={`text-2xl font-bold ${accuracy >= config.minAccuracy ? "text-green-400" : "text-red-400"}`}>
                 {accuracy}%
               </div>
               <div className="text-ink-2 text-xs">Accuracy</div>
             </div>
-            <div className="bg-slate-800 rounded-lg p-3 text-center border border-line">
+            <div className="bg-paper-2 rounded-lg p-3 text-center border border-line">
               <div className="text-2xl font-bold text-purple-400">{correctStreak}</div>
               <div className="text-ink-2 text-xs">Streak</div>
             </div>
@@ -575,7 +575,7 @@ export default function TypingRace() {
 
           {/* Power-Ups */}
           {powerUps.length > 0 && (
-            <div className="bg-slate-800 rounded-lg p-4 mb-4 border border-line">
+            <div className="bg-paper-2 rounded-lg p-4 mb-4 border border-line">
               <div className="text-ink-2 text-xs mb-2">Power-Ups:</div>
               <div className="flex gap-2 flex-wrap">
                 {powerUps.map((powerUp) => (
@@ -604,7 +604,7 @@ export default function TypingRace() {
           )}
 
           {/* Target Text Display */}
-          <div className="bg-slate-800 rounded-lg p-6 mb-4 border border-line max-h-64 overflow-y-auto">
+          <div className="bg-paper-2 rounded-lg p-6 mb-4 border border-line max-h-64 overflow-y-auto">
             <div className="font-mono text-base leading-relaxed whitespace-pre-wrap break-words">
               {targetText.split("").map((char, index) => (
                 <span key={index} className={getCharClass(index)}>
@@ -615,12 +615,12 @@ export default function TypingRace() {
           </div>
 
           {/* Input Area */}
-          <div className="bg-slate-800 rounded-lg p-6 mb-6 border border-line">
+          <div className="bg-paper-2 rounded-lg p-6 mb-6 border border-line">
             <textarea
               ref={inputRef}
               value={userInput}
               onChange={handleInputChange}
-              className="w-full bg-slate-900 text-ink font-mono text-base p-4 rounded-lg border-2 border-line focus:border-purple-500 outline-none resize-none leading-relaxed"
+              className="w-full bg-paper text-ink font-mono text-base p-4 rounded-lg border-2 border-line focus:border-purple-500 outline-none resize-none leading-relaxed"
               rows={4}
               placeholder="Start typing here..."
               spellCheck={false}
@@ -636,7 +636,7 @@ export default function TypingRace() {
       )}
 
       {gameState === "gameover" && (
-        <div className="bg-slate-800 rounded-lg p-8 mb-6 border border-line text-center">
+        <div className="bg-paper-2 rounded-lg p-8 mb-6 border border-line text-center">
           <h2 className="text-3xl font-black text-red-400 mb-4">Game Over</h2>
           <div className="mb-6">
             <div className="text-center mb-2">
