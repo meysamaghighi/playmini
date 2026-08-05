@@ -64,7 +64,20 @@ export function loadFamily(store: MiniStorage | null = defaultStore()): FamilySt
       ? obj.activeId
       : null;
 
-  return { profiles, activeId, bests };
+  // Tombstones are a newer field — any blob written by the current code
+  // always has it, but this must still tolerate one that doesn't (an older
+  // save, or a hand-edited value) rather than throwing. Missing/malformed
+  // just means "no tombstones," same degrade-not-throw contract as the rest
+  // of this function.
+  const tombstones: FamilyState["tombstones"] = {};
+  if (obj.tombstones && typeof obj.tombstones === "object" && !Array.isArray(obj.tombstones)) {
+    for (const [id, ts] of Object.entries(obj.tombstones as Record<string, unknown>)) {
+      if (id === "__proto__") continue;
+      if (typeof ts === "number" && Number.isFinite(ts)) tombstones[id] = ts;
+    }
+  }
+
+  return { profiles, activeId, bests, tombstones };
 }
 
 export function saveFamily(state: FamilyState, store: MiniStorage | null = defaultStore()): void {

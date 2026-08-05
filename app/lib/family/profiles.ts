@@ -10,6 +10,14 @@ export type FamilyState = {
   activeId: string | null;
   /** bests[boardId][profileId] = raw score, always the player's best so far. */
   bests: Record<string, Record<string, number>>;
+  /**
+   * tombstones[profileId] = ms timestamp of removal. A plain union merge
+   * (mergeFamilyState) can't otherwise represent "this id was deleted" — a
+   * later merge would just resurrect it from whichever side still has it.
+   * One id->timestamp map is proportionate for a single-device family
+   * scoreboard; no pruning/GC is needed since MAX_PROFILES keeps this tiny.
+   */
+  tombstones: Record<string, number>;
 };
 
 export const MAX_PROFILES = 6;
@@ -21,7 +29,7 @@ export const PROFILE_COLORS = [
 ];
 
 export function emptyState(): FamilyState {
-  return { profiles: [], activeId: null, bests: {} };
+  return { profiles: [], activeId: null, bests: {}, tombstones: {} };
 }
 
 function cleanName(raw: string): string {
@@ -35,7 +43,16 @@ export function addProfile(state: FamilyState, name: string, id: string): Family
   if (state.profiles.some((p) => p.id === id)) return state;
   const color = PROFILE_COLORS[state.profiles.length % PROFILE_COLORS.length];
   const profiles = [...state.profiles, { id, name: clean, color }];
-  return { ...state, profiles, activeId: state.activeId ?? id };
+  // Re-adding a previously-removed id (in practice only possible if a caller
+  // reuses an id rather than calling newProfileId()) must un-tombstone it —
+  // otherwise the very next merge would delete the profile the caller just
+  // added.
+  let tombstones = state.tombstones;
+  if (id in tombstones) {
+    tombstones = { ...tombstones };
+    delete tombstones[id];
+  }
+  return { ...state, profiles, tombstones, activeId: state.activeId ?? id };
 }
 
 export function removeProfile(state: FamilyState, id: string): FamilyState {
@@ -47,7 +64,8 @@ export function removeProfile(state: FamilyState, id: string): FamilyState {
     if (Object.keys(kept).length > 0) bests[board] = kept;
   }
   const activeId = state.activeId === id ? (profiles[0]?.id ?? null) : state.activeId;
-  return { profiles, activeId, bests };
+  const tombstones = { ...state.tombstones, [id]: Date.now() };
+  return { profiles, activeId, bests, tombstones };
 }
 
 export function setActive(state: FamilyState, id: string | null): FamilyState {
@@ -75,6 +93,37 @@ export function recordBest(
     ...state,
     bests: { ...state.bests, [boardId]: { ...board, [profileId]: score } },
   };
+}
+
+/**
+ * Restore (or clear) a single board+player best to a previous value.
+ * `prevBest === undefined` means the player had no best on this board before,
+ * so the entry is deleted outright (and the board key pruned if that was its
+ * only player) rather than stored as `undefined` — same convention
+ * `removeProfile` uses for pruning empty boards.
+ *
+ * Used by FamilyBoard.tsx to undo an auto-recorded score when the active
+ * player changes while that score is still showing: restore the outgoing
+ * player's prior best with this, then recordBest the score onto the new
+ * player against the current state.
+ */
+export function restoreBest(
+  state: FamilyState,
+  boardId: string,
+  profileId: string,
+  prevBest: number | undefined,
+): FamilyState {
+  const board = state.bests[boardId] ?? {};
+  if (prevBest === undefined) {
+    if (!(profileId in board)) return state;
+    const kept = { ...board };
+    delete kept[profileId];
+    const bests = { ...state.bests };
+    if (Object.keys(kept).length > 0) bests[boardId] = kept;
+    else delete bests[boardId];
+    return { ...state, bests };
+  }
+  return { ...state, bests: { ...state.bests, [boardId]: { ...board, [profileId]: prevBest } } };
 }
 
 export function standings(
@@ -158,23 +207,54 @@ export function topChampions(rows: ChampionRow[]): ChampionRow[] {
  *   the codebase — this function does not re-implement that comparison.
  * - activeId: `incoming`'s choice wins (it reflects the most recent
  *   interaction on the tab doing the saving), falling back to `disk`'s.
+ * - Tombstones: union by id, keeping the later timestamp when both sides
+ *   recorded one. Any profile (and any bests entry) whose id is tombstoned
+ *   on either side is dropped from the result — a plain union of profiles
+ *   has no way to represent "this one was deleted," so without this step a
+ *   removal made on one side always gets resurrected by the other side's
+ *   copy on the very next merge.
  */
 export function mergeFamilyState(
   disk: FamilyState,
   incoming: FamilyState,
   lowerBoards: ReadonlySet<string>,
 ): FamilyState {
+  const tombstones: Record<string, number> = { ...disk.tombstones };
+  for (const [id, ts] of Object.entries(incoming.tombstones)) {
+    tombstones[id] = Math.max(tombstones[id] ?? 0, ts);
+  }
+
   const byId = new Map<string, Profile>();
   for (const p of disk.profiles) byId.set(p.id, p);
   for (const p of incoming.profiles) byId.set(p.id, p);
+  for (const id of Object.keys(tombstones)) byId.delete(id);
+
+  const stripTombstoned = (bests: FamilyState["bests"]): FamilyState["bests"] => {
+    const out: FamilyState["bests"] = {};
+    for (const [boardId, byPlayer] of Object.entries(bests)) {
+      const kept: Record<string, number> = {};
+      for (const [profileId, score] of Object.entries(byPlayer)) {
+        if (!(profileId in tombstones)) kept[profileId] = score;
+      }
+      if (Object.keys(kept).length > 0) out[boardId] = kept;
+    }
+    return out;
+  };
+
+  let activeId = incoming.activeId ?? disk.activeId;
+  if (activeId !== null && !byId.has(activeId)) {
+    activeId = [...byId.values()][0]?.id ?? null;
+  }
 
   let merged: FamilyState = {
     profiles: [...byId.values()],
-    activeId: incoming.activeId ?? disk.activeId,
-    bests: disk.bests,
+    activeId,
+    bests: stripTombstoned(disk.bests),
+    tombstones,
   };
   for (const [boardId, byPlayer] of Object.entries(incoming.bests)) {
     for (const [profileId, score] of Object.entries(byPlayer)) {
+      if (profileId in tombstones) continue;
       merged = recordBest(merged, boardId, profileId, score, lowerBoards.has(boardId));
     }
   }

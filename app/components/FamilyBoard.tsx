@@ -6,6 +6,7 @@ import {
   houseChampions,
   recordBest,
   removeProfile,
+  restoreBest,
   setActive,
   standings,
   topChampions,
@@ -63,14 +64,20 @@ export default function FamilyBoard({
   const [hydrated, setHydrated] = useState(false);
   // Guards against re-recording the same score on every re-render.
   const recorded = useRef<number | null>(null);
-  // Snapshot of state as it was immediately BEFORE `recorded.current` got
-  // auto-recorded, and who it was recorded for. While the same game-over
-  // score is still showing, switching the active player re-applies the
-  // score to the new player starting from this snapshot — so the previous
-  // player reverts to exactly what they had before (no phantom best) and a
-  // fresh recordBest decides whether it actually improves the new player's
-  // record.
-  const preRecordState = useRef<FamilyState | null>(null);
+  // What the auto-record touched — NOT a whole-state snapshot. While the
+  // same game-over score is still showing, switching the active player must
+  // move the score without undoing any add/remove that happened after the
+  // auto-record (e.g. removing a different player mid-display). Recording
+  // against a full prior-state snapshot would silently resurrect anything
+  // that changed since — this record is just enough to (a) put the outgoing
+  // player's best back the way it was and (b) apply the score to the new
+  // player, both against the CURRENT state.
+  const preRecordState = useRef<{
+    boardId: string;
+    profileId: string;
+    prevBest: number | undefined;
+    score: number;
+  } | null>(null);
 
   useEffect(() => {
     setState(loadFamily());
@@ -85,7 +92,12 @@ export default function FamilyBoard({
   useEffect(() => {
     if (!hydrated || score === null || recorded.current === score) return;
     if (!state.activeId) return;
-    preRecordState.current = state;
+    preRecordState.current = {
+      boardId,
+      profileId: state.activeId,
+      prevBest: state.bests[boardId]?.[state.activeId],
+      score,
+    };
     recorded.current = score;
     update(recordBest(state, boardId, state.activeId, score, lowerIsBetter));
   }, [hydrated, score, state, boardId, lowerIsBetter, update]);
@@ -114,16 +126,19 @@ export default function FamilyBoard({
 
   // Switching players while this run's score is still on screen moves the
   // score instead of leaving it stuck on whoever was active at game-over
-  // (see preRecordState above). Any other switch (no live score, or the
-  // player clicked is already active) is a plain setActive.
+  // (see preRecordState above). Both steps run against the CURRENT state, so
+  // any add/remove that happened after the auto-record is preserved. Any
+  // other switch (no live score, or the player clicked is already active) is
+  // a plain setActive.
   const switchPlayer = (id: string) => {
     if (id === state.activeId) return;
-    if (score !== null && recorded.current === score && preRecordState.current) {
-      const next = setActive(
-        recordBest(preRecordState.current, boardId, id, score, lowerIsBetter),
-        id,
-      );
-      update(next);
+    const pre = preRecordState.current;
+    if (score !== null && recorded.current === score && pre && pre.score === score) {
+      const restored = restoreBest(state, pre.boardId, pre.profileId, pre.prevBest);
+      const newPrevBest = restored.bests[pre.boardId]?.[id];
+      const applied = recordBest(restored, pre.boardId, id, pre.score, lowerIsBetter);
+      preRecordState.current = { boardId: pre.boardId, profileId: id, prevBest: newPrevBest, score: pre.score };
+      update(setActive(applied, id));
       return;
     }
     update(setActive(state, id));

@@ -11,6 +11,7 @@ import {
   houseChampions,
   topChampions,
   mergeFamilyState,
+  restoreBest,
 } from "../app/lib/family/profiles.ts";
 
 test("emptyState has no profiles and no active player", () => {
@@ -336,6 +337,125 @@ test("mergeFamilyState: a genuinely better incoming score does overwrite disk", 
   const incoming = recordBest(s, "snake", "p1", 400, false);
   const merged = mergeFamilyState(disk, incoming, new Set());
   assert.equal(merged.bests.snake.p1, 400);
+});
+
+// --- Regression tests: removal must be permanent (Bug A) and must survive
+// an in-session player switch (Bug B). Both bugs shipped because
+// mergeFamilyState and the switch-player snapshot each rebuild state from an
+// earlier copy with no way to represent "this profile was deleted."
+
+test("restoreBest restores a previous value, or deletes the entry entirely when there was none", () => {
+  let s = addProfile(emptyState(), "Mira", "p1");
+  s = recordBest(s, "snake", "p1", 100, false);
+
+  // Restoring a previous value overwrites whatever is there now.
+  let restored = restoreBest(s, "snake", "p1", 50);
+  assert.equal(restored.bests.snake.p1, 50);
+
+  // Restoring "no previous value" (undefined) deletes the entry, and prunes
+  // the board key entirely when it was the only player on it.
+  restored = restoreBest(s, "snake", "p1", undefined);
+  assert.equal(restored.bests.snake, undefined, "board key is pruned when its last entry is removed");
+
+  // A no-op when there was nothing to restore in the first place.
+  const untouched = restoreBest(emptyState(), "snake", "p1", undefined);
+  assert.deepEqual(untouched, emptyState());
+});
+
+test("mergeFamilyState drops a tombstoned profile and its bests even when the other side still has them", () => {
+  let disk = addProfile(emptyState(), "Mira", "p1");
+  disk = addProfile(disk, "Dad", "p2");
+  disk = recordBest(disk, "snake", "p2", 300, false);
+
+  // incoming tombstoned p2 (simulating removeProfile having run on that tab) —
+  // disk's copy of p2 and their score must not survive the merge.
+  const incoming = removeProfile(disk, "p2");
+
+  const merged = mergeFamilyState(disk, incoming, new Set());
+  assert.deepEqual(merged.profiles.map((p) => p.id), ["p1"], "p2 does not come back from disk's copy");
+  assert.equal(merged.bests.snake, undefined, "p2's score does not come back either");
+});
+
+test("mergeFamilyState still merges to the better score across tabs when nobody was removed", () => {
+  let s = addProfile(emptyState(), "Mira", "p1");
+  s = addProfile(s, "Dad", "p2");
+  const diskState = recordBest(s, "snake", "p1", 150, false);
+  const incomingState = recordBest(s, "snake", "p1", 400, false);
+  const merged = mergeFamilyState(diskState, incomingState, new Set());
+  assert.equal(merged.bests.snake.p1, 400, "better score still wins; tombstone handling doesn't regress this");
+});
+
+test("a removed profile stays removed across save/load, even after a second save (Bug A regression)", () => {
+  const store = fakeStore();
+  let s = addProfile(emptyState(), "Mira", "p1");
+  s = addProfile(s, "Dad", "p2");
+  s = recordBest(s, "snake", "p1", 300, false);
+  s = recordBest(s, "snake", "p2", 100, false);
+  saveFamily(s, store); // disk now has p1 and p2
+
+  // Fresh tab loads disk, then removes p2 on it.
+  let tab = loadFamily(store);
+  tab = removeProfile(tab, "p2");
+  saveFamily(tab, store); // read-modify-write against a disk copy that still lists p2
+
+  let loaded = loadFamily(store);
+  assert.deepEqual(loaded.profiles.map((p) => p.id), ["p1"], "p2 must not come back");
+  assert.equal(loaded.bests.snake?.p2, undefined, "p2's score must not come back");
+  assert.equal(loaded.bests.snake?.p1, 300, "p1's score survives untouched");
+
+  // A second, unrelated save must not resurrect p2 either.
+  saveFamily(loaded, store);
+  loaded = loadFamily(store);
+  assert.deepEqual(loaded.profiles.map((p) => p.id), ["p1"], "second save still doesn't resurrect p2");
+});
+
+test("a re-added player (new id) after a tombstone persists normally through save/load", () => {
+  const store = fakeStore();
+  let s = addProfile(emptyState(), "Mira", "p1");
+  s = addProfile(s, "Dad", "p2");
+  saveFamily(s, store);
+
+  let tab = loadFamily(store);
+  tab = removeProfile(tab, "p2"); // tombstones p2
+  saveFamily(tab, store);
+
+  // Re-add "Dad" under a fresh id, exactly as newProfileId() would generate.
+  let tab2 = loadFamily(store);
+  tab2 = addProfile(tab2, "Dad", "p2-new");
+  saveFamily(tab2, store);
+
+  const loaded = loadFamily(store);
+  assert.deepEqual(loaded.profiles.map((p) => p.id).sort(), ["p1", "p2-new"]);
+  assert.equal(loaded.profiles.find((p) => p.id === "p2-new")?.name, "Dad");
+});
+
+test("switching players after a mid-display remove/add doesn't resurrect the removed player or lose the interleaved add (Bug B regression)", () => {
+  let state = addProfile(emptyState(), "Mira", "p1");
+  state = addProfile(state, "Dad", "p2");
+  state = addProfile(state, "Kid", "p3");
+
+  // Simulate FamilyBoard's auto-record effect: game over, score 300 lands on
+  // the active player (p1). preRecordState now only captures what the
+  // auto-record touched, not the whole state.
+  const pre = { boardId: "snake", profileId: "p1", prevBest: state.bests.snake?.p1, score: 300 };
+  state = recordBest(state, "snake", "p1", 300, false);
+  assert.equal(state.bests.snake.p1, 300);
+
+  // While the score is still showing, a THIRD player (p3, unrelated to the
+  // auto-record) is removed, and a new player (p4) is added.
+  state = removeProfile(state, "p3");
+  state = addProfile(state, "Grandma", "p4");
+
+  // Now replay FamilyBoard's switchPlayer to p2: restore p1's prior best,
+  // then record the score for p2 against the CURRENT state — which already
+  // reflects p3's removal and p4's addition.
+  const restored = restoreBest(state, pre.boardId, pre.profileId, pre.prevBest);
+  const applied = recordBest(restored, pre.boardId, "p2", pre.score, false);
+
+  assert.equal(applied.bests.snake?.p1, undefined, "no phantom best left on p1");
+  assert.equal(applied.bests.snake?.p2, 300, "the score lands on the newly selected player");
+  assert.equal(applied.profiles.some((p) => p.id === "p3"), false, "p3 stays removed after the switch");
+  assert.equal(applied.profiles.some((p) => p.id === "p4"), true, "p4 (added mid-display) survives the switch");
 });
 
 test("saveFamily merges instead of clobbering when another tab wrote a score first", () => {
