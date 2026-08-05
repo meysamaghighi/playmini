@@ -352,8 +352,11 @@ export default function AsteroidsGame() {
         onClick={() => { if (g.current.state === "start" || g.current.state === "gameover") startGame(); }}
       />
 
-      {/* Mobile controls */}
-      <div className="flex gap-3 sm:hidden select-none">
+      {/* Mobile controls — shown for any touch/coarse-pointer device (phone or
+          tablet), not gated by viewport width. A width breakpoint (sm:hidden)
+          previously hid this pad on tablets (>=640px), leaving zero controls
+          since the canvas has no touch/drag steering of its own. */}
+      <div className="flex gap-3 pointer-fine:hidden select-none">
         <button
           className="w-14 h-14 rounded-xl bg-paper-2 active:bg-gray-600 text-ink text-xl flex items-center justify-center"
           onTouchStart={() => touchBtn("ArrowLeft", true)} onTouchEnd={() => touchBtn("ArrowLeft", false)}
@@ -372,7 +375,7 @@ export default function AsteroidsGame() {
         >FIRE</button>
       </div>
 
-      <p className="text-xs text-ink-3 hidden sm:block">Arrow / WASD — rotate &amp; thrust &nbsp;|&nbsp; Space / X — fire</p>
+      <p className="text-xs text-ink-3 hidden pointer-fine:block">Arrow / WASD — rotate &amp; thrust &nbsp;|&nbsp; Space / X — fire</p>
     </div>
   );
 }
