@@ -100,3 +100,35 @@ export function standings(
     return { rank, profile: row.profile, score: row.score };
   });
 }
+
+export type ChampionRow = { profile: Profile; firsts: number; played: number };
+
+/**
+ * Cross-board tally: who holds the most #1 spots. `lowerBoards` is the set of
+ * board ids where a lower score wins; anything not in it is higher-is-better.
+ * Tied players each get a first — a shared win is still a win, and docking
+ * both players reads as broken.
+ */
+export function houseChampions(
+  state: FamilyState,
+  lowerBoards: ReadonlySet<string>,
+): ChampionRow[] {
+  const firsts = new Map<string, number>();
+  const played = new Map<string, number>();
+
+  for (const boardId of Object.keys(state.bests)) {
+    const rows = standings(state, boardId, lowerBoards.has(boardId));
+    for (const row of rows) {
+      played.set(row.profile.id, (played.get(row.profile.id) ?? 0) + 1);
+      if (row.rank === 1) firsts.set(row.profile.id, (firsts.get(row.profile.id) ?? 0) + 1);
+    }
+  }
+
+  return state.profiles
+    .map((profile) => ({
+      profile,
+      firsts: firsts.get(profile.id) ?? 0,
+      played: played.get(profile.id) ?? 0,
+    }))
+    .sort((a, b) => b.firsts - a.firsts || b.played - a.played);
+}

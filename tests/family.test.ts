@@ -8,6 +8,7 @@ import {
   MAX_PROFILES,
   recordBest,
   standings,
+  houseChampions,
 } from "../app/lib/family/profiles.ts";
 
 test("emptyState has no profiles and no active player", () => {
@@ -129,4 +130,41 @@ test("standings give tied scores the same rank", () => {
   s = recordBest(s, "snake", "p1", 100, false);
   s = recordBest(s, "snake", "p2", 100, false);
   assert.deepEqual(standings(s, "snake", false).map((r) => r.rank), [1, 1]);
+});
+
+test("houseChampions counts first places across boards, best first", () => {
+  let s = twoPlayers();
+  s = recordBest(s, "snake", "p1", 300, false);   // Mira #1
+  s = recordBest(s, "snake", "p2", 100, false);
+  s = recordBest(s, "pong", "p1", 5, false);
+  s = recordBest(s, "pong", "p2", 9, false);      // Dad #1
+  s = recordBest(s, "2048", "p1", 2048, false);   // Mira #1 (only player)
+  const rows = houseChampions(s, new Set());
+  assert.deepEqual(rows.map((r) => [r.profile.name, r.firsts, r.played]), [
+    ["Mira", 2, 3],
+    ["Dad", 1, 2],
+  ]);
+});
+
+test("houseChampions respects lower-is-better boards", () => {
+  let s = twoPlayers();
+  s = recordBest(s, "sudoku-hard", "p1", 500, true);
+  s = recordBest(s, "sudoku-hard", "p2", 200, true); // Dad is faster, so Dad is #1
+  const rows = houseChampions(s, new Set(["sudoku-hard"]));
+  assert.equal(rows[0].profile.name, "Dad");
+  assert.equal(rows[0].firsts, 1);
+});
+
+test("houseChampions awards a shared first to every tied player", () => {
+  let s = twoPlayers();
+  s = recordBest(s, "snake", "p1", 100, false);
+  s = recordBest(s, "snake", "p2", 100, false);
+  const rows = houseChampions(s, new Set());
+  assert.deepEqual(rows.map((r) => r.firsts), [1, 1]);
+});
+
+test("houseChampions lists every profile, including one who has never played", () => {
+  const rows = houseChampions(twoPlayers(), new Set());
+  assert.equal(rows.length, 2);
+  assert.deepEqual(rows.map((r) => [r.firsts, r.played]), [[0, 0], [0, 0]]);
 });
