@@ -41,3 +41,13 @@ export const GAMES: Record<string, GameCfg> = {
   // max=100000 (~50+ post-cap levels) generously exceeds elite human play.
   "space-invaders": { min: 1, max: 100000, lowerIsBetter: false },
 };
+
+// Single source of truth for score direction across the family scoreboard —
+// derived once here so FamilyBoard, storage's cross-tab merge, and any
+// future consumer read the same table instead of each keeping an
+// independently-derived copy that can silently drift from GAMES.
+export const LOWER_BOARDS: ReadonlySet<string> = new Set(
+  Object.entries(GAMES)
+    .filter(([, cfg]) => cfg.lowerIsBetter)
+    .map(([id]) => id),
+);
