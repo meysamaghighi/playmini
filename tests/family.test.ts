@@ -168,3 +168,60 @@ test("houseChampions lists every profile, including one who has never played", (
   assert.equal(rows.length, 2);
   assert.deepEqual(rows.map((r) => [r.firsts, r.played]), [[0, 0], [0, 0]]);
 });
+
+import { loadFamily, saveFamily, FAMILY_KEY } from "../app/lib/family/storage.ts";
+
+function fakeStore() {
+  const data = new Map<string, string>();
+  return {
+    data,
+    getItem: (k: string) => data.get(k) ?? null,
+    setItem: (k: string, v: string) => void data.set(k, v),
+  };
+}
+
+test("saveFamily then loadFamily round-trips state", () => {
+  const store = fakeStore();
+  let s = addProfile(emptyState(), "Mira", "p1");
+  s = recordBest(s, "snake", "p1", 250, false);
+  saveFamily(s, store);
+  const loaded = loadFamily(store);
+  assert.equal(loaded.profiles[0].name, "Mira");
+  assert.equal(loaded.bests.snake.p1, 250);
+  assert.equal(loaded.activeId, "p1");
+});
+
+test("loadFamily returns an empty state when nothing is stored", () => {
+  assert.deepEqual(loadFamily(fakeStore()), emptyState());
+});
+
+test("loadFamily survives corrupt or half-shaped JSON without throwing", () => {
+  const bad = fakeStore();
+  bad.data.set(FAMILY_KEY, "{not json");
+  assert.deepEqual(loadFamily(bad), emptyState());
+
+  const partial = fakeStore();
+  partial.data.set(FAMILY_KEY, JSON.stringify({ profiles: "nope" }));
+  const s = loadFamily(partial);
+  assert.deepEqual(s.profiles, []);
+  assert.deepEqual(s.bests, {});
+});
+
+test("loadFamily drops an activeId that no longer matches a profile", () => {
+  const store = fakeStore();
+  store.data.set(
+    FAMILY_KEY,
+    JSON.stringify({ profiles: [{ id: "p1", name: "Mira", color: "#E8734A" }], activeId: "ghost", bests: {} }),
+  );
+  assert.equal(loadFamily(store).activeId, null);
+});
+
+test("saveFamily never throws when storage rejects the write", () => {
+  const hostile = {
+    getItem: () => null,
+    setItem: () => {
+      throw new Error("QuotaExceededError");
+    },
+  };
+  assert.doesNotThrow(() => saveFamily(emptyState(), hostile));
+});
