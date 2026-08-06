@@ -51,7 +51,7 @@ export default function VoxelPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }}
       />
 
-      <div className="min-h-screen bg-slate-900 text-ink py-8 px-4">
+      <div className="min-h-screen bg-paper text-ink py-8 px-4">
         <div className="max-w-4xl mx-auto">
           <header className="text-center mb-8">
           </header>
